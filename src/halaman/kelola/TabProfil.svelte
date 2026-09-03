@@ -18,6 +18,7 @@
 
   let fotoSambutan = $state(null);
   let fotoStruktur = $state(null);
+  let fotoUsaha = $state(null);
   let sibuk = $state("");
 
   $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...sb, ...k }; });
@@ -149,8 +150,13 @@
   <div class="kepala-bagian"><h2>Katalog usaha warga</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("usaha", async () => {
     const label = (JENIS_USAHA.find((j) => j.nilai === uk.kat) || {}).label || "Lainnya";
-    await simpanDokumen(KOLEKSI.USAHA, keSlug(uk.nama) || "usaha", { ...uk, katLabel: label });
+    /* Foto lama dipertahankan kalau tidak ada berkas baru dipilih, supaya
+       membetulkan jam buka saja tidak ikut menghapus fotonya. */
+    const lamaFoto = (isi.usaha || []).find((x) => x.id === (keSlug(uk.nama) || "usaha"));
+    const foto = (await bacaFoto(fotoUsaha, 1000)) || (lamaFoto && lamaFoto.foto) || "";
+    await simpanDokumen(KOLEKSI.USAHA, keSlug(uk.nama) || "usaha", { ...uk, katLabel: label, foto });
     uk = { nama: "", kat: "siapsaji", ringkas: "", panjang: "", jam: "", wa: "" };
+    fotoUsaha = null;
     muatKoleksi(KOLEKSI.USAHA);
   }); }}>
     <div class="isian"><label for="uk-nama">Nama usaha</label><input id="uk-nama" bind:value={uk.nama} required /></div>
@@ -159,6 +165,11 @@
     <div class="isian"><label for="uk-panjang">Keterangan lengkap</label><textarea id="uk-panjang" bind:value={uk.panjang}></textarea></div>
     <div class="isian"><label for="uk-jam">Jam buka</label><input id="uk-jam" bind:value={uk.jam} /></div>
     <div class="isian"><label for="uk-wa">Nomor pemesanan</label><input id="uk-wa" bind:value={uk.wa} inputmode="tel" /></div>
+    <div class="isian">
+      <label for="uk-foto">Foto produk</label>
+      <input id="uk-foto" type="file" accept="image/*" onchange={(e) => (fotoUsaha = e.target.files[0] || null)} />
+      <span class="petunjuk">Tampil di beranda dan halaman katalog. Kalau dikosongkan, foto yang lama tetap dipakai.</span>
+    </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "usaha"}>Tampilkan di katalog</button></div>
   </form>
   {#each isi.usaha || [] as o}
