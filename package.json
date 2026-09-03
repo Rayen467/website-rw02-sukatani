@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Situs informasi warga RW 02 Perum Permai Sukatani",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "periksa": "node alat/periksa-arsitektur.mjs",

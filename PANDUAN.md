@@ -187,6 +187,14 @@ npm run dev
 
 Buka alamat yang muncul, biasanya `http://localhost:5173`.
 
+**Versi Node.** Pakai Node 22, sesuai isi `.nvmrc`. GitHub Actions membaca
+berkas yang sama, jadi hasil di laptop dan hasil di server dijamin identik.
+Kalau pakai nvm, cukup `nvm use` di folder ini.
+
+Tidak perlu Docker. Situs ini statis dan tidak punya server sendiri; semua
+versi paket sudah terkunci di `package-lock.json`, dan `npm ci` memasang
+pohon yang sama persis di mesin mana pun.
+
 Jangan membuka `index.html` dengan klik dua kali — Firebase menolak alamat
 `file://`, jadi login tidak akan jalan.
 

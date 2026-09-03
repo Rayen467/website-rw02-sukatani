@@ -29,7 +29,8 @@ jobs:
       - name: Siapkan Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # Disamakan dengan .nvmrc supaya hasil di laptop dan di sini identik.
+          node-version-file: ".nvmrc"
           cache: npm
 
       - name: Pasang paket
