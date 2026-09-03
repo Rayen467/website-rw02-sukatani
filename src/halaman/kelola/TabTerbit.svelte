@@ -2,7 +2,7 @@
   import { KOLEKSI } from "../../inti/nama.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { tambahIsi } from "../../sumber/data.js";
+  import { tambahIsi, simpanAlbum, hapusAlbum } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { tanggalHariIni } from "../../inti/format.js";
   import { kecilkanFoto } from "../../inti/peramban.js";
@@ -10,7 +10,11 @@
 
   let k = $state({ tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
   let g = $state({ judul: "", fn: "", jml: "" });
-  let berkasFoto = $state(null);
+  /* Banyak foto sekaligus. Satu kegiatan kerja bakti biasanya belasan
+     sampai dua puluhan foto; memaksa pengurus mengunggah satu-satu berarti
+     tidak akan pernah diunggah sama sekali. */
+  let berkasFoto = $state([]);
+  let kemajuan = $state("");
   let sibuk = $state("");
 
   async function terbitkan(e) {
@@ -28,19 +32,44 @@
   async function tambahGaleri(e) {
     e.preventDefault();
     sibuk = "galeri";
-    let foto = "";
-    if (berkasFoto) {
-      beriTahu("Mengecilkan foto...");
-      try { foto = await kecilkanFoto(berkasFoto, 1000); }
-      catch (err) { beriTahu("Foto tidak dipakai: " + err.message); }
-    }
+    kemajuan = "";
     try {
-      await tambahIsi(KOLEKSI.GALERI, { ...g, foto });
-      beriTahu("Kegiatan tercatat di arsip.");
+      const fotoBesar = [];
+      let sampul = "";
+
+      /* Foto dikecilkan satu per satu, bukan berbarengan. Dua puluh foto
+         yang digambar ke kanvas sekaligus membekukan HP kelas menengah.
+         Kemajuannya ditampilkan supaya pengurus tahu situsnya tidak macet. */
+      for (let i = 0; i < berkasFoto.length; i++) {
+        kemajuan = "Mengecilkan foto " + (i + 1) + " dari " + berkasFoto.length + "...";
+        try {
+          const besar = await kecilkanFoto(berkasFoto[i], 1200);
+          fotoBesar.push(besar);
+          /* Sampul dibuat terpisah dan jauh lebih kecil. Sampul ikut
+             terunduh setiap pengunjung membuka situs, jadi harus ringan;
+             foto ukuran penuh baru diambil kalau albumnya dibuka. */
+          if (!sampul) sampul = await kecilkanFoto(berkasFoto[i], 400);
+        } catch (err) {
+          beriTahu("Foto ke-" + (i + 1) + " dilewati: " + err.message);
+        }
+      }
+
+      kemajuan = "Mengirim ke server...";
+      const hasil = await simpanAlbum(
+        { ...g, sampul, jumlahFoto: String(fotoBesar.length) },
+        fotoBesar
+      );
+
+      beriTahu(
+        fotoBesar.length
+          ? "Tersimpan dengan " + hasil.masuk + " foto."
+          : "Kegiatan tercatat, belum ada fotonya."
+      );
       g = { judul: "", fn: "", jml: "" };
-      berkasFoto = null;
+      berkasFoto = [];
       muatKoleksi(KOLEKSI.GALERI);
     } catch (err) { beriTahu(pesanRamah(err)); }
+    kemajuan = "";
     sibuk = "";
   }
 </script>
@@ -99,10 +128,22 @@
     <div class="isian"><label for="g-jml">Isi arsip</label><input id="g-jml" bind:value={g.jml} placeholder="22 foto, 1 notulen" /></div>
     <div class="isian">
       <label for="g-foto">Foto kegiatan</label>
-      <input id="g-foto" type="file" accept="image/*" onchange={(e) => (berkasFoto = e.target.files[0] || null)} />
-      <span class="petunjuk">Otomatis dikecilkan sebelum dikirim, jadi tidak boros kuota. Ambil mendatar supaya tidak terpotong.</span>
+      <input id="g-foto" type="file" accept="image/*" multiple onchange={(e) => (berkasFoto = [...e.target.files])} />
+      <span class="petunjuk">
+        Boleh pilih banyak sekaligus &mdash; tahan Ctrl di komputer, atau ketuk beberapa foto di HP.
+        Semuanya otomatis dikecilkan sebelum dikirim, jadi tidak boros kuota.
+        Ambil mendatar supaya tidak terpotong.
+      </span>
+      {#if berkasFoto.length}
+        <span class="petunjuk"><b>{berkasFoto.length} foto dipilih.</b> Yang pertama dipakai sebagai sampul album.</span>
+      {/if}
     </div>
-    <div><button class="tombol utama" type="submit" disabled={sibuk === "galeri"}>{sibuk === "galeri" ? "Menyimpan..." : "Tambahkan"}</button></div>
+    <div>
+      <button class="tombol utama" type="submit" disabled={sibuk === "galeri"}>
+        {sibuk === "galeri" ? "Menyimpan..." : "Tambahkan"}
+      </button>
+      {#if kemajuan}<span class="petunjuk" style="margin-left:12px">{kemajuan}</span>{/if}
+    </div>
   </form>
 
   {#if (isi.galeri || []).length}
@@ -111,13 +152,15 @@
       <BarisKelola
         koleksi={KOLEKSI.GALERI}
         id={o.id}
-        judul={o.judul} baris={[o.fn || "-", o.jml || ""]}
+        judul={o.judul}
+        baris={[o.fn || "-", (o.jumlahFoto || "0") + " foto" + (o.jml ? " · " + o.jml : "")]}
         nilai={o}
         kolom={[
           { nama: "judul", label: "Nama kegiatan" },
           { nama: "fn", label: "Keterangan" },
           { nama: "jml", label: "Isi arsip" }
         ]}
+        saatHapus={hapusAlbum}
       />
     {/each}
   {/if}

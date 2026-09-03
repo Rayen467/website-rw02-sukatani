@@ -60,6 +60,13 @@ export const KOLEKSI = Object.freeze({
      baru diambil kalau ada yang menekan Unduh. */
   BERKAS_ISI: "berkas_isi",
 
+  /* Foto galeri, satu dokumen satu foto, dengan alasan yang sama seperti
+     BERKAS_ISI. Koleksi "galeri" cuma menyimpan keterangan album dan satu
+     foto sampul kecil; foto ukuran penuhnya ada di sini dan baru diambil
+     kalau albumnya dibuka. Satu album kerja bakti bisa 20 foto, dan kalau
+     semuanya ikut dimuat di awal itu 14 MB per pengunjung. */
+  GALERI_FOTO: "galeri_foto",
+
   /* Pengaduan -- isi laporan terbuka, identitas pelapor terpisah */
   PENGADUAN: "pengaduan",
   PENGADUAN_KONTAK: "pengaduan_kontak",
@@ -94,6 +101,7 @@ export const KONTEN = Object.freeze({
   STATISTIK: "statistik",
   BANSOS: "bansos",
   IDENTITAS: "identitas",
+  BERANDA: "beranda",
   POLLING: "polling",
   TAMPILAN: "tampilan"
 });

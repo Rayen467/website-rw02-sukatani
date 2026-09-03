@@ -1,6 +1,7 @@
 <script>
   import { sesi, pengurus, namaPeran } from "../../keadaan/sesi.svelte.js";
   import TabKiriman from "./TabKiriman.svelte";
+  import TabBeranda from "./TabBeranda.svelte";
   import TabTerbit from "./TabTerbit.svelte";
   import TabAngka from "./TabAngka.svelte";
   import TabProfil from "./TabProfil.svelte";
@@ -12,6 +13,7 @@
 
   const TAB = [
     ["kiriman", "Kiriman warga", TabKiriman],
+    ["beranda", "Beranda", TabBeranda],
     ["terbit", "Berita & galeri", TabTerbit],
     ["angka", "Kas & program", TabAngka],
     ["profil", "Profil & katalog", TabProfil],

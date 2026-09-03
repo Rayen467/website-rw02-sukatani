@@ -105,6 +105,32 @@ Firebase. Tanpa itu, servernya menolak.
 > pun.** Kalau data sudah ada di konsol Firebase tapi di situs tidak
 > muncul, periksa `TANPA_URUTAN` duluan.
 
+### Menyimpan sesuatu yang besar (berkas, foto)
+
+Ada pola khusus, dan melanggarnya bikin situs lambat tanpa ada yang sadar.
+
+**Jangan pernah menaruh isi base64 di koleksi yang ada di `KOLEKSI_UMUM`.**
+Koleksi di daftar itu diambil PENUH setiap kali ada yang membuka situs.
+Sepuluh PDF berukuran 500 KB berarti 5 MB terunduh oleh setiap pengunjung,
+termasuk yang cuma mau baca pengumuman.
+
+Polanya: pisah keterangan dari isinya, dua koleksi, id yang sama.
+
+| Keterangan (ringan, dimuat di awal) | Isi (berat, diambil saat dibutuhkan) |
+|---|---|
+| `berkas` — judul, ukuran, jenis | `berkas_isi` — berkas base64 |
+| `galeri` — judul album, sampul kecil | `galeri_foto` — foto ukuran penuh |
+
+Yang berat diambil lewat `ambilDokumen()` atau `ambilCocok()` waktu tombol
+ditekan, bukan lewat `muatKoleksi()`.
+
+> **Menghapus harus mengurus keduanya.** Lihat `hapusBerkas()` dan
+> `hapusAlbum()` di `src/sumber/data.js` — isinya dihapus DULUAN. Kalau
+> urutannya dibalik dan langkah kedua gagal, isi yang tertinggal tidak
+> muncul di layar mana pun tapi tetap memakan kuota, dan cuma bisa dibuang
+> lewat konsol Firebase. Karena itu baris berkas dan album memakai
+> `saatHapus` sendiri, bukan penghapus bawaan `BarisKelola`.
+
 ### Menambah kolom di halaman Kelola
 
 1. Buka tab yang cocok di `src/halaman/kelola/`

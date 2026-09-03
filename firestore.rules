@@ -401,6 +401,15 @@ service cloud.firestore {
       allow write: if petugas();
     }
 
+    // Foto galeri ukuran penuh, satu dokumen satu foto. Koleksi "galeri" di
+    // atas cuma menyimpan keterangan album dan sampul kecilnya. Dipisah
+    // supaya album berisi dua puluh foto tidak ikut terunduh setiap
+    // pengunjung membuka situs.
+    match /galeri_foto/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
     // Jenis surat yang dilayani beserta syarat berkasnya.
     match /jenis_surat/{id} {
       allow read: if true;

@@ -150,6 +150,42 @@ export const IDENTITAS_BAWAAN = {
 export const KOORDINAT_BAWAAN = "-6.129217,106.497767";
 
 /**
+ * Tulisan di beranda.
+ *
+ * Sebelumnya semuanya tertanam di dalam Beranda.svelte, jadi mengganti satu
+ * kalimat sambutan pun harus lewat kode. Sekarang jadi bawaan yang bisa
+ * ditimpa pengurus lewat Kelola, seperti isi situs yang lain.
+ *
+ * Yang ditaruh di sini boleh berupa kalimat sungguhan, bukan contoh
+ * karangan, karena isinya menjelaskan situs ini sendiri -- bukan mengaku
+ * tahu keadaan RW mana pun.
+ */
+export const BERANDA_BAWAAN = {
+  judul: "Selamat datang di situs warga Permai Sukatani",
+  ringkas:
+    "Tempat mencari cara mengurus surat, nomor pengurus, jadwal kegiatan, laporan kas, dan usaha tetangga sendiri. Ditulis sekali, bisa dibuka kapan saja.",
+  alamat: "Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
+
+  judulLayanan: "Layanan yang sering dipakai",
+  layanan1Judul: "Pengajuan Surat",
+  layanan1Teks:
+    "Surat pengantar KTP, domisili, SKCK, keterangan tidak mampu, dan lainnya. Ada nomor antrean dan berkasnya bisa diunduh.",
+  layanan2Judul: "Pengaduan dan Aspirasi",
+  layanan2Teks:
+    "Laporkan sampah, lampu mati, saluran tersumbat, atau gangguan keamanan. Status laporan bisa dipantau.",
+  layanan3Judul: "Reservasi Fasilitas",
+  layanan3Teks:
+    "Pinjam balai warga, tenda, kursi, atau pengeras suara. Jadwal ketersediaan terlihat langsung.",
+
+  judulKas: "Laporan Kas RW",
+  teksKas:
+    "Pemasukan, pengeluaran, dan saldo kas dipublikasikan terbuka dan bisa diperiksa warga kapan saja.",
+  judulProgram: "Rencana dan Realisasi Program",
+  teksProgram:
+    "Apa yang sudah dikerjakan, apa yang sedang berjalan, dan apa yang direncanakan berikutnya."
+};
+
+/**
  * Pengelompokan berkas dan tautan di halaman Dokumen & Video.
  * Ditaruh terpisah dari nama koleksi karena ini pilihan isi, bukan nama
  * teknis: pengurus boleh menambah atau mengganti tanpa menyentuh Firestore.

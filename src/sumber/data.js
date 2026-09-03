@@ -304,3 +304,81 @@ export async function hapusBerkas(id) {
   }
   await deleteDoc(doc(db, KOLEKSI.BERKAS, id));
 }
+
+/**
+ * Mengambil dokumen yang salah satu kolomnya bernilai tertentu.
+ *
+ * Tanpa pengurutan, supaya Firestore tidak menuntut indeks gabungan yang
+ * harus dibuat manual di konsol. Urutan diatur di sisi tampilan lewat
+ * kolom "urut".
+ */
+export async function ambilCocok(koleksi, kolom, nilai) {
+  const cuplikan = await getDocs(query(collection(db, koleksi), where(kolom, "==", nilai)));
+  const hasil = [];
+  cuplikan.forEach((d) => hasil.push({ id: d.id, ...d.data() }));
+  return hasil;
+}
+
+/**
+ * Menyimpan satu album beserta foto-fotonya.
+ *
+ * Album ditulis duluan supaya id-nya lahir, lalu tiap foto menyusul sebagai
+ * dokumen sendiri. Foto ditulis SATU PER SATU, bukan sekaligus: satu album
+ * bisa dua puluh foto, dan mengirim semuanya berbarengan dari jaringan HP
+ * yang pelan lebih sering gagal di tengah daripada berhasil.
+ *
+ * Kalau ada foto yang gagal, yang sudah masuk tetap tersimpan dan albumnya
+ * tetap terbaca. Pengurus bisa menambahkan sisanya belakangan.
+ */
+export async function simpanAlbum(keterangan, fotoList) {
+  const acuan = await addDoc(collection(db, KOLEKSI.GALERI), {
+    ...bersihkan(keterangan),
+    dibuat: serverTimestamp()
+  });
+  let masuk = 0;
+  for (let i = 0; i < fotoList.length; i++) {
+    await addDoc(collection(db, KOLEKSI.GALERI_FOTO), {
+      album: acuan.id,
+      foto: String(fotoList[i]),
+      urut: String(i),
+      dibuat: serverTimestamp()
+    });
+    masuk += 1;
+  }
+  return { id: acuan.id, masuk };
+}
+
+/**
+ * Menambahkan foto ke album yang sudah ada.
+ * Nomor urutnya melanjutkan yang terakhir, bukan mulai dari nol lagi.
+ */
+export async function tambahFotoAlbum(albumId, fotoList, mulaiDari = 0) {
+  for (let i = 0; i < fotoList.length; i++) {
+    await addDoc(collection(db, KOLEKSI.GALERI_FOTO), {
+      album: albumId,
+      foto: String(fotoList[i]),
+      urut: String(mulaiDari + i),
+      dibuat: serverTimestamp()
+    });
+  }
+}
+
+/**
+ * Menghapus album beserta seluruh fotonya.
+ *
+ * Foto dihapus lebih dulu, dengan alasan yang sama seperti hapusBerkas():
+ * foto yang tertinggal tanpa albumnya tidak muncul di layar mana pun, tapi
+ * tetap memakan kuota dan cuma bisa dibuang lewat konsol Firebase.
+ */
+export async function hapusAlbum(albumId) {
+  const foto = await ambilCocok(KOLEKSI.GALERI_FOTO, "album", albumId);
+  for (const f of foto) {
+    await deleteDoc(doc(db, KOLEKSI.GALERI_FOTO, f.id));
+  }
+  await deleteDoc(doc(db, KOLEKSI.GALERI, albumId));
+}
+
+/** Menghapus satu foto dari album, tanpa mengganggu yang lain. */
+export function hapusFotoAlbum(fotoId) {
+  return deleteDoc(doc(db, KOLEKSI.GALERI_FOTO, fotoId));
+}

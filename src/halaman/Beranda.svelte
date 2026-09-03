@@ -1,7 +1,7 @@
 <script>
   import { KONTEN } from "../inti/nama.js";
   import { keDaftar } from "../inti/format.js";
-  import { SAMBUTAN_BAWAAN } from "../inti/bawaan.js";
+  import { SAMBUTAN_BAWAAN, BERANDA_BAWAAN } from "../inti/bawaan.js";
   import { isi, kontenNilai } from "../keadaan/isi.svelte.js";
   import Belum from "../komponen/Belum.svelte";
   import TombolSalin from "../komponen/TombolSalin.svelte";
@@ -17,12 +17,21 @@
   const kabar = $derived((isi.pengumuman || []).slice(0, 3));
   const usaha = $derived((isi.usaha || []).slice(0, 3));  
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", "RW 02"));
+
+  /* Seluruh tulisan beranda diambil dari konten/beranda, dengan naskah di
+     inti/bawaan.js sebagai cadangan per kolom. Pengurus mengubahnya lewat
+     Kelola, tab Beranda -- tanpa menyentuh berkas ini. */
+  const t = $derived(
+    Object.fromEntries(
+      Object.keys(BERANDA_BAWAAN).map((k) => [k, kontenNilai(KONTEN.BERANDA, k, BERANDA_BAWAAN[k])])
+    )
+  );
 </script>
 
 <section class="sorot blok">
-  <h1>Selamat datang di situs warga Permai Sukatani</h1>
-  <p>Tempat mencari cara mengurus surat, nomor pengurus, jadwal kegiatan, laporan kas, dan usaha tetangga sendiri. Ditulis sekali, bisa dibuka kapan saja.</p>
-  <span class="koordinat">{namaRW} · Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540</span>
+  <h1>{t.judul}</h1>
+  <p>{t.ringkas}</p>
+  <span class="koordinat">{namaRW} · {t.alamat}</span>
   <div class="aksi">
     <a href="#/surat">Ajukan surat</a>
     <a href="#/pengaduan">Sampaikan pengaduan</a>
@@ -64,11 +73,11 @@
 {/if}
 
 <section class="blok">
-  <div class="kepala-bagian"><h2>Layanan yang sering dipakai</h2></div>
+  <div class="kepala-bagian"><h2>{t.judulLayanan}</h2></div>
   <div class="petak petak-3">
-    <a class="kartu" href="#/surat"><h3>Pengajuan Surat</h3><p>Surat pengantar KTP, domisili, SKCK, keterangan tidak mampu, dan lainnya. Ada nomor antrean dan berkasnya bisa diunduh.</p></a>
-    <a class="kartu" href="#/pengaduan"><h3>Pengaduan dan Aspirasi</h3><p>Laporkan sampah, lampu mati, saluran tersumbat, atau gangguan keamanan. Status laporan bisa dipantau.</p></a>
-    <a class="kartu" href="#/reservasi"><h3>Reservasi Fasilitas</h3><p>Pinjam balai warga, tenda, kursi, atau pengeras suara. Jadwal ketersediaan terlihat langsung.</p></a>
+    <a class="kartu" href="#/surat"><h3>{t.layanan1Judul}</h3><p>{t.layanan1Teks}</p></a>
+    <a class="kartu" href="#/pengaduan"><h3>{t.layanan2Judul}</h3><p>{t.layanan2Teks}</p></a>
+    <a class="kartu" href="#/reservasi"><h3>{t.layanan3Judul}</h3><p>{t.layanan3Teks}</p></a>
   </div>
 </section>
 
@@ -97,8 +106,8 @@
 
 <section class="blok">
   <div class="petak petak-2">
-    <a class="kartu" href="#/kas"><p class="alis">Transparansi</p><h3>Laporan Kas RW</h3><p>Pemasukan, pengeluaran, dan saldo kas dipublikasikan terbuka dan bisa diperiksa warga kapan saja.</p></a>
-    <a class="kartu" href="#/program"><p class="alis">Transparansi</p><h3>Rencana dan Realisasi Program</h3><p>Apa yang sudah dikerjakan, apa yang sedang berjalan, dan apa yang direncanakan berikutnya.</p></a>
+    <a class="kartu" href="#/kas"><p class="alis">Transparansi</p><h3>{t.judulKas}</h3><p>{t.teksKas}</p></a>
+    <a class="kartu" href="#/program"><p class="alis">Transparansi</p><h3>{t.judulProgram}</h3><p>{t.teksProgram}</p></a>
   </div>
 </section>
 
@@ -114,7 +123,7 @@
           <span class="badan">
             <span class="jenis">{u.katLabel || ""}</span>
             <h3>{u.nama}</h3>
-            <span style="font-size:13.5px;color:var(--tinta-2);line-height:1.5">{u.ringkas || ""}</span>
+            <span class="usaha-ringkas">{u.ringkas || ""}</span>
           </span>
         </a>
       {/each}
