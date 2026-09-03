@@ -65,6 +65,27 @@
 .orang .nama { font-family: "Archivo", sans-serif; font-size: 16.5px; font-weight: 700; line-height: 1.25; margin: 2px 0 4px; display: block; }
 .orang .kontak { font-size: 13px; color: var(--tinta-2); display: block; }
 
+/* --- Sambutan Ketua RW di beranda -------------------------------------
+   Naskahnya panjang dan dibaca utuh, bukan dipindai seperti kartu lain.
+   Karena itu barisnya lebih renggang dan lebarnya dibatasi: baris yang
+   terlalu panjang membuat mata kehilangan barisnya waktu pindah ke kiri. */
+.sambutan .orang { margin-top: 6px; }
+/* Tanpa foto, slot 64px itu cuma memakan lebar. Di layar HP sisanya
+   tinggal sekitar 217px -- terlalu sempit untuk naskah sepanjang ini. */
+.sambutan .orang.tanpa-foto { grid-template-columns: minmax(0, 1fr); }
+.sambutan .alinea {
+  font-size: 15.5px;
+  color: var(--tinta);
+  line-height: 1.72;
+  /* Sekitar 70 huruf per baris. Satuan ch tidak dipakai karena nilainya
+     ikut berubah kalau pengurus mengganti jenis huruf lewat Kelola,
+     dan pernah menghasilkan baris 100 huruf yang susah diikuti. */
+  max-width: 560px;
+}
+.sambutan .alinea + .alinea { margin-top: 12px; }
+.sambutan .tanda-tangan { margin-top: 16px; }
+.sambutan .tanda-tangan b { font-size: 13px; }
+
 .gambar-penuh { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 .petabox {

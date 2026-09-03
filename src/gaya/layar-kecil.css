@@ -50,6 +50,12 @@
   .baris-kelola { grid-template-columns: 1fr; gap: 9px; }
   .tombol-kecil .teks { display: none; }
   .petabox iframe { height: 300px; }
+
+  /* Sambutan ketua RW: foto ditumpuk di atas naskah. Bersebelahan di
+     layar selebar ini menyisakan lebar baca sekitar 217px -- terlalu
+     sempit, dan sambutan justru bagian yang dibaca utuh sampai habis. */
+  .sambutan .orang { grid-template-columns: minmax(0, 1fr); }
+  .sambutan .alinea { font-size: 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

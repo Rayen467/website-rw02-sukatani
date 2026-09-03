@@ -1,10 +1,19 @@
 <script>
   import { KONTEN } from "../inti/nama.js";
-  import { isi, konten, kontenNilai } from "../keadaan/isi.svelte.js";
+  import { keDaftar } from "../inti/format.js";
+  import { SAMBUTAN_BAWAAN } from "../inti/bawaan.js";
+  import { isi, kontenNilai } from "../keadaan/isi.svelte.js";
   import Belum from "../komponen/Belum.svelte";
   import TombolSalin from "../komponen/TombolSalin.svelte";
 
-  const sambutan = $derived(konten(KONTEN.SAMBUTAN) || {});
+  /* Naskah dari Ketua RW dipakai sampai pengurus menyimpan gantinya lewat
+     Kelola. kontenNilai() jatuh ke bawaan per kolom, jadi mengganti nama
+     saja tidak ikut mengosongkan naskahnya. */
+  const sambutan = $derived({
+    teks: kontenNilai(KONTEN.SAMBUTAN, "teks", SAMBUTAN_BAWAAN.teks),
+    nama: kontenNilai(KONTEN.SAMBUTAN, "nama", SAMBUTAN_BAWAAN.nama),
+    foto: kontenNilai(KONTEN.SAMBUTAN, "foto", "")
+  });
   const kabar = $derived((isi.pengumuman || []).slice(0, 3));
   const usaha = $derived((isi.usaha || []).slice(0, 3));  
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", "RW 02"));
@@ -32,16 +41,21 @@
 
 {#if sambutan.teks}
   <section class="blok">
-    <div class="kartu">
+    <div class="kartu sambutan">
       <p class="alis">Sambutan Ketua RW</p>
-      <div class="orang" style="margin-top:6px">
-        <span class="foto">
-          {#if sambutan.foto}<img class="gambar-penuh" src={sambutan.foto} alt="" decoding="async" />{/if}
-        </span>
+      <div class="orang" class:tanpa-foto={!sambutan.foto}>
+        {#if sambutan.foto}
+          <span class="foto"><img class="gambar-penuh" src={sambutan.foto} alt="" decoding="async" /></span>
+        {/if}
         <div>
-          <p style="font-size:15.5px;color:var(--tinta);line-height:1.72">{sambutan.teks}</p>
-          <p style="margin-top:10px">
-            <b class="mono" style="font-size:13px">Ketua {namaRW}{sambutan.nama ? " — " + sambutan.nama : ""}</b>
+          <!-- Satu alinea satu paragraf. Kalau seluruh naskah ditaruh di satu
+               <p>, peramban menelan semua baris barunya dan sambutan berubah
+               jadi satu blok tembok yang tidak terbaca. -->
+          {#each keDaftar(sambutan.teks) as alinea}
+            <p class="alinea">{alinea}</p>
+          {/each}
+          <p class="tanda-tangan">
+            <b class="mono">Ketua {namaRW}{sambutan.nama ? " — " + sambutan.nama : ""}</b>
           </p>
         </div>
       </div>

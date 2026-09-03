@@ -149,6 +149,36 @@ export const IDENTITAS_BAWAAN = {
 
 export const KOORDINAT_BAWAAN = "-6.129217,106.497767";
 
+/**
+ * Sambutan Ketua RW.
+ *
+ * INI PENGECUALIAN dari aturan di kepala berkas. Isi lain di sini sengaja
+ * dibuat umum supaya cocok untuk RW mana pun; yang satu ini tidak. Ini
+ * naskah asli yang diberikan Ketua RW 02, Bapak Anto Carmanto, S.T., M.T.,
+ * jadi bukan contoh karangan -- justru satu-satunya isi di situs ini yang
+ * datang langsung dari yang berwenang.
+ *
+ * Ditaruh sebagai bawaan supaya sambutan langsung tampil sejak hari
+ * pertama. Begitu pengurus menyimpan sambutan lewat Kelola, isi dari
+ * server yang dipakai dan yang di sini diabaikan. Kalau nanti ketua RW
+ * berganti, GANTI LEWAT KELOLA, bukan lewat berkas ini.
+ *
+ * Baris kosong memisahkan alinea. Beranda memecahnya jadi paragraf sendiri.
+ */
+export const SAMBUTAN_BAWAAN = {
+  nama: "Anto Carmanto, S.T., M.T.",
+  foto: "",
+  teks: [
+    "Assalamu’alaikum Warahmatullahi Wabarakatuh,",
+    "Selamat datang di Website Resmi RW 02 Perum Pondok Sukatani Permai!",
+    "Puji syukur kehadirat Allah SWT, Tuhan Yang Maha Esa, atas rahmat dan karunia-Nya, sehingga kita dapat meluncurkan website resmi RW 02 Perumahan Pondok Sukatani Permai, Kecamatan Rajeg, Kabupaten Tangerang.",
+    "Website ini hadir sebagai jembatan informasi dan komunikasi antara Pengurus RW, para Ketua RT, dan seluruh warga. Melalui media ini, kami berharap segala informasi terkait kegiatan, pengumuman, program kerja, serta pelayanan publik dapat tersampaikan secara cepat, terbuka, dan transparan.",
+    "Kami menyadari bahwa kemajuan lingkungan kita tidak terlepas dari kerja sama, kekompakan, dan gotong royong seluruh warga. Oleh karena itu, kami mengajak Bapak, Ibu, dan seluruh warga untuk bersama-sama menjaga kebersihan, keamanan, ketentraman, dan kerukunan di lingkungan yang kita cintai ini.",
+    "Kami juga membuka ruang seluas-luasnya bagi seluruh warga untuk menyampaikan saran, masukan, dan aspirasi demi kemajuan dan kesejahteraan bersama. Sekali lagi, selamat berkunjung. Semoga website ini bermanfaat dan menjadi sarana yang mempererat tali silaturahmi kita semua.",
+    "Wassalamu’alaikum Warahmatullahi Wabarakatuh."
+  ].join("\n\n")
+};
+
 export const POLLING_BAWAAN = {
   id: "poll-2026-09",
   pertanyaan: "",
