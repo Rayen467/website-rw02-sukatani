@@ -7,7 +7,7 @@
   import { keSlug } from "../../inti/format.js";
   import { kecilkanFoto } from "../../inti/peramban.js";
   import { JENIS_USAHA } from "../../inti/bawaan.js";
-  import BarisHapus from "../../komponen/BarisHapus.svelte";
+  import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   let sb = $state({ nama: "", teks: "", foto: "" });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
@@ -81,7 +81,17 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "struktur"}>Tambahkan</button></div>
   </form>
   {#each isi.pengurus_tampil || [] as o}
-    <BarisHapus koleksi="pengurus_tampil" id={o.id} judul={o.jabatan || "-"} baris={[(o.nama || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]} />
+    <BarisKelola
+      koleksi={KOLEKSI.PENGURUS_TAMPIL}
+      id={o.id}
+      judul={o.jabatan || "-"} baris={[(o.nama || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]}
+      nilai={o}
+      kolom={[
+        { nama: "jabatan", label: "Jabatan" },
+        { nama: "nama", label: "Nama" },
+        { nama: "kontak", label: "Nomor kontak" }
+      ]}
+    />
   {/each}
 </section>
 
@@ -101,7 +111,19 @@
     <p class="catatan-borang">Dipakai di dua tempat: tabel Ketua RT pada halaman Struktur Pengurus, dan keterangan batas pada halaman Peta Wilayah.</p>
   </form>
   {#each isi.batas_rt || [] as o}
-    <BarisHapus koleksi="batas_rt" id={o.id} judul={o.rt || "-"} baris={[(o.blok || "-") + " \u00B7 " + (o.batas || "-"), (o.ketua || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]} />
+    <BarisKelola
+      koleksi={KOLEKSI.BATAS_RT}
+      id={o.id}
+      judul={o.rt || "-"} baris={[(o.blok || "-") + " \u00B7 " + (o.batas || "-"), (o.ketua || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]}
+      nilai={o}
+      kolom={[
+        { nama: "rt", label: "RT" },
+        { nama: "blok", label: "Blok" },
+        { nama: "batas", label: "Batas wilayah", jenis: "panjang" },
+        { nama: "ketua", label: "Ketua RT" },
+        { nama: "kontak", label: "Nomor kontak" }
+      ]}
+    />
   {/each}
 </section>
 
@@ -173,6 +195,18 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "usaha"}>Tampilkan di katalog</button></div>
   </form>
   {#each isi.usaha || [] as o}
-    <BarisHapus koleksi="usaha" id={o.id} judul={o.nama} baris={[(o.katLabel || "") + " \u00B7 " + (o.jam || ""), o.ringkas || ""]} />
+    <BarisKelola
+      koleksi={KOLEKSI.USAHA}
+      id={o.id}
+      judul={o.nama} baris={[(o.katLabel || "") + " \u00B7 " + (o.jam || ""), o.ringkas || ""]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama usaha" },
+        { nama: "ringkas", label: "Keterangan singkat" },
+        { nama: "panjang", label: "Keterangan lengkap", jenis: "panjang" },
+        { nama: "jam", label: "Jam buka" },
+        { nama: "wa", label: "Nomor pemesanan" }
+      ]}
+    />
   {/each}
 </section>

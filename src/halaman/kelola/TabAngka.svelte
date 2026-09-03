@@ -5,7 +5,7 @@
   import { tambahIsi, simpanKonten } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { rupiah, angkaDari } from "../../inti/format.js";
-  import BarisHapus from "../../komponen/BarisHapus.svelte";
+  import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   let c = $state({ periode: "", tgl: "", ket: "", jenis: "masuk", nominal: "" });
   let pr = $state({ nama: "", tahun: "", status: "rencana", anggaran: "", ket: "" });
@@ -54,7 +54,19 @@
     <p class="catatan-borang">Buku kas dan kuitansi fisik tetap jadi bukti utama. Yang di sini salinannya supaya warga bisa memeriksa.</p>
   </form>
   {#each kas as o}
-    <BarisHapus koleksi="kas" id={o.id} judul={o.ket} baris={[(o.periode || "") + " \u00B7 " + (o.tgl || "") + " \u00B7 " + (o.jenis === "masuk" ? "Masuk" : "Keluar") + " " + rupiah(o.nominal)]} />
+    <BarisKelola
+      koleksi={KOLEKSI.KAS}
+      id={o.id}
+      judul={o.ket} baris={[(o.periode || "") + " \u00B7 " + (o.tgl || "") + " \u00B7 " + (o.jenis === "masuk" ? "Masuk" : "Keluar") + " " + rupiah(o.nominal)]}
+      nilai={o}
+      kolom={[
+        { nama: "ket", label: "Keterangan" },
+        { nama: "periode", label: "Periode" },
+        { nama: "tgl", label: "Tanggal", jenis: "tanggal" },
+        { nama: "jenis", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "masuk", label: "Pemasukan" }, { nilai: "keluar", label: "Pengeluaran" }] },
+        { nama: "nominal", label: "Nominal", jenis: "angka" }
+      ]}
+    />
   {/each}
 </section>
 
@@ -69,7 +81,19 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "program"}>Tambahkan</button></div>
   </form>
   {#each isi.program || [] as o}
-    <BarisHapus koleksi="program" id={o.id} judul={o.nama} baris={[(o.tahun || "") + " \u00B7 " + o.status + " \u00B7 " + rupiah(o.anggaran), o.ket || ""]} />
+    <BarisKelola
+      koleksi={KOLEKSI.PROGRAM}
+      id={o.id}
+      judul={o.nama} baris={[(o.tahun || "") + " \u00B7 " + o.status + " \u00B7 " + rupiah(o.anggaran), o.ket || ""]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama program" },
+        { nama: "tahun", label: "Tahun" },
+        { nama: "status", label: "Status", jenis: "pilih", pilihan: [{ nilai: "rencana", label: "Rencana" }, { nilai: "proses", label: "Sedang berjalan" }, { nilai: "selesai", label: "Selesai" }] },
+        { nama: "anggaran", label: "Anggaran", jenis: "angka" },
+        { nama: "ket", label: "Keterangan", jenis: "panjang" }
+      ]}
+    />
   {/each}
 </section>
 

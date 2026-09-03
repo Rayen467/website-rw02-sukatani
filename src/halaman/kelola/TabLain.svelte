@@ -5,7 +5,7 @@
   import { tambahIsi, simpanKonten } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { IDENTITAS_BAWAAN } from "../../inti/bawaan.js";
-  import BarisHapus from "../../komponen/BarisHapus.svelte";
+  import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   let tt = $state({ nama: "", ket: "", url: "" });
   let bp = $state({ nama: "", syarat: "", jalur: "" });
@@ -43,7 +43,17 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "tautan"}>Tambahkan</button></div>
   </form>
   {#each isi.tautan || [] as o}
-    <BarisHapus koleksi="tautan" id={o.id} judul={o.nama} baris={[o.ket || "", o.url || "-"]} />
+    <BarisKelola
+      koleksi={KOLEKSI.TAUTAN}
+      id={o.id}
+      judul={o.nama} baris={[o.ket || "", o.url || "-"]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama laman" },
+        { nama: "ket", label: "Keterangan" },
+        { nama: "url", label: "Alamat" }
+      ]}
+    />
   {/each}
   {#if !(isi.tautan || []).length}
     <p class="verifikasi">Belum ada yang ditambahkan. Selama kosong, halaman publik memakai daftar bawaan.</p>
@@ -59,7 +69,17 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "bansos"}>Tambahkan</button></div>
   </form>
   {#each isi.bansos || [] as o}
-    <BarisHapus koleksi="bansos" id={o.id} judul={o.nama} baris={[o.jalur || "-"]} />
+    <BarisKelola
+      koleksi={KOLEKSI.BANSOS}
+      id={o.id}
+      judul={o.nama} baris={[o.jalur || "-"]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama program" },
+        { nama: "jalur", label: "Jalur pengajuan" },
+        { nama: "syarat", label: "Syarat", jenis: "panjang" }
+      ]}
+    />
   {/each}
 </section>
 

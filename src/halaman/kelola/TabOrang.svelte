@@ -3,12 +3,53 @@
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { sesi } from "../../keadaan/sesi.svelte.js";
-  import { ubahStatus, simpanDokumen, hapusDokumen } from "../../sumber/data.js";
+  import { ubahStatus, simpanDokumen, hapusDokumen, ubahDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
   let p = $state({ email: "", nama: "", jabatan: "", peran: "petugas" });
   let sibuk = $state("");
+
+  /* Baris pengurus mana yang sedang dibuka untuk diubah, dan isian sementaranya.
+     Email tidak ikut bisa diubah: email adalah ID dokumennya, jadi menggantinya
+     berarti membuat pengurus baru sekaligus meninggalkan yang lama. Kalau
+     alamatnya memang salah, cabut lalu tambahkan yang benar. */
+  let ubahEmail = $state("");
+  let u = $state({ nama: "", jabatan: "", peran: "petugas" });
+
+  function bukaUbah(o) {
+    ubahEmail = o.id;
+    u = { nama: o.nama || "", jabatan: o.jabatan || "", peran: o.peran === "master" ? "master" : "petugas" };
+  }
+
+  async function simpanUbah(e) {
+    e.preventDefault();
+    sibuk = "ubah";
+    try {
+      await ubahDokumen(KOLEKSI.PENGURUS, ubahEmail, { nama: u.nama, jabatan: u.jabatan, peran: u.peran });
+      beriTahu("Keterangan " + ubahEmail + " diperbarui.");
+      ubahEmail = "";
+      muatKoleksi(KOLEKSI.PENGURUS);
+    } catch (err) { beriTahu(pesanRamah(err)); }
+    sibuk = "";
+  }
+
+  /* Warga yang sudah ditolak menumpuk di daftar dan tidak pernah bisa hilang.
+     Menghapus catatannya TIDAK menghapus akunnya -- orangnya masih bisa
+     masuk dan mendaftar ulang kalau memang salah tolak. */
+  async function hapusWarga(o) {
+    const tanya =
+      "Hapus catatan warga " + (o.nama || o.email) + "?\n\n" +
+      "Akunnya tidak ikut terhapus; dia masih bisa mendaftar ulang.";
+    if (!confirm(tanya)) return;
+    sibuk = o.id;
+    try {
+      await hapusDokumen(KOLEKSI.WARGA, o.id);
+      beriTahu("Catatan warga dihapus.");
+      muatKoleksi(KOLEKSI.WARGA);
+    } catch (err) { beriTahu(pesanRamah(err)); }
+    sibuk = "";
+  }
 
   const warga = $derived(isi.warga || []);
   const pengurusList = $derived(isi.pengurus || []);
@@ -74,6 +115,7 @@
                   {#if o.status !== "ditolak"}
                     <button class="tombol" type="button" onclick={() => setStatusWarga(o.id, "ditolak")} disabled={sibuk === o.id}>Tolak</button>
                   {/if}
+                  <button class="tombol" type="button" onclick={() => hapusWarga(o)} disabled={sibuk === o.id}>Hapus</button>
                 </div>
               </td>
             </tr>
@@ -113,11 +155,16 @@
                 {/if}
               </td>
               <td>
-                {#if sesi.pengguna && o.id === sesi.pengguna.email}
-                  <span class="mono" style="font-size:11px;color:var(--tinta-3)">diri sendiri</span>
-                {:else}
-                  <button class="tombol" type="button" onclick={() => cabut(o.id)} disabled={sibuk === o.id}>Cabut</button>
-                {/if}
+                <div class="baris-tombol">
+                  <button class="tombol" type="button" onclick={() => (ubahEmail === o.id ? (ubahEmail = "") : bukaUbah(o))}>
+                    {ubahEmail === o.id ? "Batal" : "Ubah"}
+                  </button>
+                  {#if sesi.pengguna && o.id === sesi.pengguna.email}
+                    <span class="mono" style="font-size:11px;color:var(--tinta-3)">diri sendiri</span>
+                  {:else}
+                    <button class="tombol" type="button" onclick={() => cabut(o.id)} disabled={sibuk === o.id}>Cabut</button>
+                  {/if}
+                </div>
               </td>
             </tr>
           {/each}
@@ -126,6 +173,26 @@
     </div>
   {:else}
     <p class="kosong">Daftar pengurus belum termuat.</p>
+  {/if}
+
+  {#if ubahEmail}
+    <form class="ubah-panel" style="margin-top:14px" onsubmit={simpanUbah}>
+      <p class="alis">Mengubah keterangan {ubahEmail}</p>
+      <div class="isian"><label for="u-nama">Nama</label><input id="u-nama" bind:value={u.nama} required /></div>
+      <div class="isian"><label for="u-jabatan">Jabatan</label><input id="u-jabatan" bind:value={u.jabatan} required /></div>
+      <div class="isian">
+        <label for="u-peran">Sebutan</label>
+        <select id="u-peran" bind:value={u.peran}><option value="petugas">Petugas</option><option value="master">Master Admin</option></select>
+      </div>
+      <div class="baris-tombol">
+        <button class="tombol utama" type="submit" disabled={sibuk === "ubah"}>{sibuk === "ubah" ? "Menyimpan..." : "Simpan perubahan"}</button>
+        <button class="tombol" type="button" onclick={() => (ubahEmail = "")}>Batal</button>
+      </div>
+      <p class="catatan-borang">
+        Alamat email tidak bisa diubah karena alamat itulah yang menjadi kunci hak aksesnya.
+        Kalau alamatnya memang keliru, cabut dulu lalu tambahkan yang benar.
+      </p>
+    </form>
   {/if}
 
   <div class="kepala-bagian" style="margin-top:26px"><h2>Tambah pengurus</h2></div>

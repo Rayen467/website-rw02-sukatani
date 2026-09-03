@@ -267,3 +267,25 @@
 .berkas-kartu { display: flex; flex-direction: column; }
 .berkas-kartu .keterangan { margin-top: auto; padding-top: 10px; }
 .berkas-kartu .tombol { align-self: flex-start; margin-top: 10px; }
+
+/* --- Panel ubah di bawah baris kelola ---------------------------------
+   Menempel langsung di bawah barisnya, dengan garis kiri sewarna aksen,
+   supaya jelas isian ini milik baris yang mana. Tanpa penanda itu, daftar
+   panjang yang salah satunya sedang dibuka jadi membingungkan. */
+.baris-kelola.sedang-diubah {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 0;
+}
+.ubah-panel {
+  border: 1px solid var(--garis);
+  border-top: 0;
+  border-left: 3px solid var(--action);
+  border-radius: 0 0 5px 5px;
+  padding: 16px 18px 18px;
+  margin-bottom: 12px;
+  background: var(--permukaan-2);
+  display: grid;
+  gap: 13px;
+}
+.ubah-panel textarea { min-height: 90px; }

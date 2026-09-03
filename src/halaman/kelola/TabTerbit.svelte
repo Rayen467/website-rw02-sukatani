@@ -6,7 +6,7 @@
   import { pesanRamah } from "../../sumber/firebase.js";
   import { tanggalHariIni } from "../../inti/format.js";
   import { kecilkanFoto } from "../../inti/peramban.js";
-  import BarisHapus from "../../komponen/BarisHapus.svelte";
+  import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   let k = $state({ tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
   let g = $state({ judul: "", fn: "", jml: "" });
@@ -69,8 +69,20 @@
   {#if (isi.pengumuman || []).length}
     <div class="kepala-bagian" style="margin-top:26px"><h2>Sudah terbit</h2></div>
     {#each isi.pengumuman as o}
-      <BarisHapus koleksi="pengumuman" id={o.id} judul={o.judul}
-        baris={[o.ringkas || o.isi || "", (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " \u00B7 " + (o.tglText || o.tgl || "-")]} />
+      <BarisKelola
+        koleksi={KOLEKSI.PENGUMUMAN}
+        id={o.id}
+        judul={o.judul}
+        baris={[o.ringkas || o.isi || "", (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " \u00B7 " + (o.tglText || o.tgl || "-")]}
+        nilai={o}
+        kolom={[
+          { nama: "judul", label: "Judul" },
+          { nama: "tipe", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "pengumuman", label: "Pengumuman" }, { nilai: "agenda", label: "Agenda" }] },
+          { nama: "tglText", label: "Tanggal tampil" },
+          { nama: "ringkas", label: "Ringkasan", jenis: "panjang" },
+          { nama: "isi", label: "Isi lengkap", jenis: "panjang" }
+        ]}
+      />
     {/each}
   {/if}
 </section>
@@ -96,7 +108,17 @@
   {#if (isi.galeri || []).length}
     <div class="kepala-bagian" style="margin-top:26px"><h2>Sudah tercatat</h2></div>
     {#each isi.galeri as o}
-      <BarisHapus koleksi="galeri" id={o.id} judul={o.judul} baris={[o.fn || "-", o.jml || ""]} />
+      <BarisKelola
+        koleksi={KOLEKSI.GALERI}
+        id={o.id}
+        judul={o.judul} baris={[o.fn || "-", o.jml || ""]}
+        nilai={o}
+        kolom={[
+          { nama: "judul", label: "Nama kegiatan" },
+          { nama: "fn", label: "Keterangan" },
+          { nama: "jml", label: "Isi arsip" }
+        ]}
+      />
     {/each}
   {/if}
 </section>

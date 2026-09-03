@@ -204,6 +204,21 @@ export function ubahStatus(koleksi, id, status) {
   return updateDoc(doc(db, koleksi, id), { status });
 }
 
+/**
+ * Mengubah sebagian kolom sebuah dokumen yang sudah ada.
+ *
+ * Bedanya dengan simpanDokumen(): yang ini MENIMPA HANYA kolom yang
+ * diberikan, sisanya dibiarkan. Itu yang membuat tombol Ubah aman --
+ * mengganti jabatan seseorang tidak ikut mengosongkan namanya hanya karena
+ * kolom nama tidak disertakan.
+ *
+ * Kolom "dibuat" sengaja tidak disentuh, jadi urutan daftar tidak melompat
+ * setiap kali ada yang membetulkan salah ketik.
+ */
+export function ubahDokumen(koleksi, id, isi) {
+  return updateDoc(doc(db, koleksi, id), bersihkan(isi));
+}
+
 export function hapusDokumen(koleksi, id) {
   return deleteDoc(doc(db, koleksi, id));
 }

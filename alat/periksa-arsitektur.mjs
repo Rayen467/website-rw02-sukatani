@@ -147,6 +147,17 @@ for (const jalur of semuaBerkas(SRC)) {
         `server harus lewat src/sumber/data.js atau src/sumber/akun.js.`);
     }
 
+    /* --- 3b: nama koleksi sebagai atribut komponen ---------------------
+       Lolos dari pemeriksaan 3 karena bukan pemanggilan fungsi. Sempat
+       terjadi betulan: tiga belas baris <BarisHapus koleksi="pengumuman">
+       tersebar di lima tab tanpa ada yang menandai. */
+    const atribut = teks.match(/\bkoleksi="([a-z_]+)"/);
+    if (atribut && KOLEKSI.includes(atribut[1])) {
+      catat(rel, nomor,
+        `koleksi="${atribut[1]}" menulis nama koleksi sebagai teks di atribut. ` +
+        `Pakai koleksi={KOLEKSI.${atribut[1].toUpperCase()}} dari inti/nama.js.`);
+    }
+
     /* --- 3: nama koleksi ditulis langsung ------------------------------ */
     if (rel !== join("inti", "nama.js")) {
       for (const [fungsi, sah, tetapan] of BUTUH_TETAPAN) {

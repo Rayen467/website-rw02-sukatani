@@ -3,7 +3,7 @@
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { tambahIsi } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
-  import BarisHapus from "../../komponen/BarisHapus.svelte";
+  import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   let js = $state({ nama: "", estimasi: "", syarat: "" });
   let fs = $state({ nama: "", kapasitas: "", ket: "" });
@@ -36,7 +36,17 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "jenis_surat"}>Tambahkan</button></div>
   </form>
   {#each isi.jenis_surat || [] as o}
-    <BarisHapus koleksi="jenis_surat" id={o.id} judul={o.nama} baris={[o.estimasi || "-", String(o.syarat || "").split("\n").join(" \u00B7 ")]} />
+    <BarisKelola
+      koleksi={KOLEKSI.JENIS_SURAT}
+      id={o.id}
+      judul={o.nama} baris={[o.estimasi || "-", String(o.syarat || "").split("\n").join(" \u00B7 ")]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama surat" },
+        { nama: "estimasi", label: "Perkiraan waktu" },
+        { nama: "syarat", label: "Syarat", jenis: "panjang" }
+      ]}
+    />
   {/each}
   {#if !(isi.jenis_surat || []).length}
     <p class="verifikasi">Belum ada yang ditambahkan. Selama kosong, halaman publik memakai delapan jenis surat bawaan.</p>
@@ -52,7 +62,17 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "fasilitas"}>Tambahkan</button></div>
   </form>
   {#each isi.fasilitas || [] as o}
-    <BarisHapus koleksi="fasilitas" id={o.id} judul={o.nama} baris={[o.kapasitas || "-", o.ket || ""]} />
+    <BarisKelola
+      koleksi={KOLEKSI.FASILITAS}
+      id={o.id}
+      judul={o.nama} baris={[o.kapasitas || "-", o.ket || ""]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama fasilitas" },
+        { nama: "kapasitas", label: "Kapasitas" },
+        { nama: "ket", label: "Keterangan", jenis: "panjang" }
+      ]}
+    />
   {/each}
 </section>
 
@@ -66,7 +86,17 @@
     <p class="catatan-borang">Tampil di tabel halaman Peta Wilayah, di bawah peta.</p>
   </form>
   {#each isi.fasum || [] as o}
-    <BarisHapus koleksi="fasum" id={o.id} judul={o.nama} baris={[(o.jenis || "-") + " \u00B7 " + (o.rt || "-")]} />
+    <BarisKelola
+      koleksi={KOLEKSI.FASUM}
+      id={o.id}
+      judul={o.nama} baris={[(o.jenis || "-") + " \u00B7 " + (o.rt || "-")]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama fasilitas" },
+        { nama: "jenis", label: "Jenis" },
+        { nama: "rt", label: "Lokasi" }
+      ]}
+    />
   {/each}
 </section>
 
@@ -80,6 +110,16 @@
     <p class="catatan-borang">Cukup diisi sekali. Muncul di tabel Kegiatan Rutin pada halaman Kalender, jadi tidak perlu diumumkan berulang tiap bulan.</p>
   </form>
   {#each isi.rutin || [] as o}
-    <BarisHapus koleksi="rutin" id={o.id} judul={o.kegiatan} baris={[(o.waktu || "-") + " \u00B7 " + (o.tempat || "-")]} />
+    <BarisKelola
+      koleksi={KOLEKSI.RUTIN}
+      id={o.id}
+      judul={o.kegiatan} baris={[(o.waktu || "-") + " \u00B7 " + (o.tempat || "-")]}
+      nilai={o}
+      kolom={[
+        { nama: "kegiatan", label: "Kegiatan" },
+        { nama: "waktu", label: "Waktu" },
+        { nama: "tempat", label: "Tempat" }
+      ]}
+    />
   {/each}
 </section>
