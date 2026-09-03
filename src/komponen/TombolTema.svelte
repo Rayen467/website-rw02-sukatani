@@ -1,5 +1,5 @@
 <script>
-  import { URUTAN_TEMA, NAMA_TEMA, KET_TEMA, temaSekarang, pasangTema } from "../lib/gaya.js";
+  import { URUTAN_TEMA, NAMA_TEMA, KET_TEMA, temaSekarang, pasangTema } from "../keadaan/tampilan.js";
 
   let tema = $state(temaSekarang());
 

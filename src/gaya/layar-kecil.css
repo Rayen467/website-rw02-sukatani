@@ -1,0 +1,64 @@
+/* =======================================================================
+ *  Layar kecil
+ * =======================================================================
+ *
+ *  Bagian 8 dari 8. Dimuat lewat src/gaya/global.css.
+ *
+ *  HARUS TETAP PALING BAWAH.
+ *
+ *  Penyesuaian untuk HP ditulis sebagai timpaan, jadi harus datang
+ *  setelah semua aturan lain. Kalau berkas ini dipindah ke atas di
+ *  global.css, tampilan HP rusak tanpa ada pesan galat apa pun.
+ *
+ *  Sebagian besar warga membuka situs ini dari HP. Setiap perubahan
+ *  tampilan wajib dicoba di layar sempit, bukan hanya di laptop.
+ */
+
+@media (max-width: 960px) {
+  .deret-angka { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .usaha-rinci { grid-template-columns: 1fr; gap: 22px; }
+  .sisi { position: static; }
+  .kaki-petak { grid-template-columns: 1fr 1fr; }
+  .darurat { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .darurat .judul { grid-column: 1 / -1; }
+  .batang { grid-template-columns: 130px minmax(0, 1fr) 50px; }
+}
+
+@media (max-width: 860px) {
+  nav.menu-utama { display: none; }
+  .burger { display: inline-flex; }
+  .cari-kotak { max-width: none; }
+}
+
+@media (max-width: 680px) {
+  .situs-atas { flex-wrap: wrap; }
+  .cari-kotak { order: 3; width: 100%; margin-left: 0; }
+  .burger { margin-left: auto; }
+  .petak-2, .petak-3 { grid-template-columns: 1fr; }
+  .galeri { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .deret-angka { grid-template-columns: 1fr 1fr; }
+  .darurat { grid-template-columns: 1fr; gap: 11px; }
+  .kabar { grid-template-columns: 1fr; gap: 5px; }
+  .kabar .tanggal { padding-top: 0; }
+  .kaki-petak { grid-template-columns: 1fr; }
+  .foto-deret { grid-template-columns: repeat(2, 1fr); }
+  .foto-deret div:first-child { grid-column: span 2; }
+  .batang { grid-template-columns: 104px minmax(0, 1fr) 44px; font-size: 12.5px; }
+  .surat { padding: 26px 22px; }
+  .kalender-sel { min-height: 56px; padding: 4px; }
+  .kalender-sel .acara { font-size: 9px; padding: 1px 3px; }
+  .baris-kelola { grid-template-columns: 1fr; gap: 9px; }
+  .tombol-kecil .teks { display: none; }
+  .petabox iframe { height: 300px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .situs, footer, .pesan, .tanpa-cetak, .remah { display: none !important; }
+  body { background: #fff; }
+  main { padding: 0; }
+  .surat { border: 0; padding: 0; max-width: none; }
+}

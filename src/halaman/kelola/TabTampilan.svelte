@@ -1,12 +1,15 @@
 <script>
-  import { konten, beriTahu, muatKonten } from "../../lib/keadaan.svelte.js";
-  import { simpanKonten, pesanRamah } from "../../lib/firebase.js";
-  import { HURUF, PERPADUAN, BAWAAN, terapkanGaya } from "../../lib/gaya.js";
+  import { KONTEN } from "../../inti/nama.js";
+  import { konten, muatKonten } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { simpanKonten } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { HURUF, PERPADUAN, BAWAAN, terapkanGaya } from "../../keadaan/tampilan.js";
 
   let g = $state({ ...BAWAAN });
   let sibuk = $state(false);
 
-  $effect(() => { const k = konten("tampilan"); if (k) g = { ...BAWAAN, ...k }; });
+  $effect(() => { const k = konten(KONTEN.TAMPILAN); if (k) g = { ...BAWAAN, ...k }; });
 
   /* Pratinjau langsung: pengurus melihat hasilnya sebelum memutuskan. */
   $effect(() => { terapkanGaya(g); });
@@ -15,9 +18,9 @@
     e.preventDefault();
     sibuk = true;
     try {
-      await simpanKonten("tampilan", g);
+      await simpanKonten(KONTEN.TAMPILAN, g);
       beriTahu("Tampilan tersimpan. Berlaku untuk semua warga.");
-      muatKonten("tampilan");
+      muatKonten(KONTEN.TAMPILAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = false;
   }

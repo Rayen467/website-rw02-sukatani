@@ -1,8 +1,12 @@
 <script>
-  import { isi, sesi, beriTahu, muatKoleksi } from "../lib/keadaan.svelte.js";
-  import { KATEGORI_PENGADUAN } from "../lib/bawaan.js";
-  import { nomorAntrean, simpanan } from "../lib/bantu.js";
-  import { kirimWarga, tambahIsi, pesanRamah } from "../lib/firebase.js";
+  import { KOLEKSI } from "../inti/nama.js";
+  import { isi, muatKoleksi } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { KATEGORI_PENGADUAN } from "../inti/bawaan.js";
+  import { nomorAntrean, simpanan } from "../inti/peramban.js";
+  import { kirimWarga, tambahIsi } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
   import Lencana from "../komponen/Lencana.svelte";
 
   let saring = $state("all");
@@ -18,16 +22,16 @@
     mengirim = true;
     const tiket = nomorAntrean("ADU");
     try {
-      await kirimWarga("pengaduan", {
+      await kirimWarga(KOLEKSI.PENGADUAN, {
         tiket, kategori: form.kategori, lokasi: form.lokasi, isi: form.isi, catatan: ""
       });
       if (form.nama || form.wa) {
-        await tambahIsi("pengaduan_kontak", { tiket, nama: form.nama, wa: form.wa, uid: sesi.pengguna ? sesi.pengguna.uid : "" });
+        await tambahIsi(KOLEKSI.PENGADUAN_KONTAK, { tiket, nama: form.nama, wa: form.wa, uid: sesi.pengguna ? sesi.pengguna.uid : "" });
       }
       simpanan.tulis("aduan-saya", tiket);
       beriTahu("Laporan terkirim. Nomor tiket " + tiket + ".");
       form = { kategori: KATEGORI_PENGADUAN[0], lokasi: "", isi: "", nama: "", wa: "" };
-      muatKoleksi("pengaduan");
+      muatKoleksi(KOLEKSI.PENGADUAN);
     } catch (err) {
       beriTahu(pesanRamah(err));
     }

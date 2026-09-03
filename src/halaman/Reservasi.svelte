@@ -1,9 +1,13 @@
 <script>
-  import { isi, pakai, sesi, beriTahu } from "../lib/keadaan.svelte.js";
-  import { FASILITAS_BAWAAN } from "../lib/bawaan.js";
-  import { NAMA_BULAN, tanggalHariIni } from "../lib/bantu.js";
-  import { kirimWarga, pesanRamah } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { KOLEKSI } from "../inti/nama.js";
+  import { isi, pakai } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { FASILITAS_BAWAAN } from "../inti/bawaan.js";
+  import { NAMA_BULAN, tanggalHariIni } from "../inti/format.js";
+  import { kirimWarga } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
 
   const fasilitas = $derived(pakai("fasilitas", FASILITAS_BAWAAN));
   const jadwal = $derived(isi.jadwal || []);
@@ -42,7 +46,7 @@
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya permohonan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
     mengirim = true;
     try {
-      await kirimWarga("reservasi", form);
+      await kirimWarga(KOLEKSI.RESERVASI, form);
       beriTahu("Permohonan terkirim. Pengurus akan menghubungi lewat WhatsApp.");
       form = { ...form, jam: "", acara: "" };
     } catch (err) {

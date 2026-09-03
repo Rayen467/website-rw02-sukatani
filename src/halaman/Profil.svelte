@@ -1,9 +1,10 @@
 <script>
-  import { konten } from "../lib/keadaan.svelte.js";
-  import { keDaftar } from "../lib/bantu.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { konten } from "../keadaan/isi.svelte.js";
+  import { keDaftar } from "../inti/format.js";
   import Belum from "../komponen/Belum.svelte";
 
-  const p = $derived(konten("profil") || {});
+  const p = $derived(konten(KONTEN.PROFIL) || {});
   const misi = $derived(keDaftar(p.misi));
   const batas = $derived([
     ["Utara", p.batasUtara],

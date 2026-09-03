@@ -1,6 +1,6 @@
 <script>
-  import { pakai } from "../lib/keadaan.svelte.js";
-  import { TAUTAN_BAWAAN } from "../lib/bawaan.js";
+  import { pakai } from "../keadaan/isi.svelte.js";
+  import { TAUTAN_BAWAAN } from "../inti/bawaan.js";
   const daftar = $derived(pakai("tautan", TAUTAN_BAWAAN));
 </script>
 

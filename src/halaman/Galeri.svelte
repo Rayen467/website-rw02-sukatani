@@ -1,5 +1,5 @@
 <script>
-  import { isi } from "../lib/keadaan.svelte.js";
+  import { isi } from "../keadaan/isi.svelte.js";
   const daftar = $derived(isi.galeri || []);
   let terbuka = $state(null);
 </script>

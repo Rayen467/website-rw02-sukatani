@@ -1,7 +1,7 @@
 <script>
-  import { isi, pakai } from "../lib/keadaan.svelte.js";
-  import { RUTIN_BAWAAN } from "../lib/bawaan.js";
-  import { NAMA_BULAN } from "../lib/bantu.js";
+  import { isi, pakai } from "../keadaan/isi.svelte.js";
+  import { RUTIN_BAWAAN } from "../inti/bawaan.js";
+  import { NAMA_BULAN } from "../inti/format.js";
   import Belum from "../komponen/Belum.svelte";
 
   const kini = new Date();

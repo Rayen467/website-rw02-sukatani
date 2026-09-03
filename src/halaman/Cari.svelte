@@ -1,7 +1,7 @@
 <script>
-  import { isi, pakai } from "../lib/keadaan.svelte.js";
-  import { rute } from "../lib/rute.svelte.js";
-  import { JENIS_SURAT_BAWAAN, FASILITAS_BAWAAN, TAUTAN_BAWAAN } from "../lib/bawaan.js";
+  import { isi, pakai } from "../keadaan/isi.svelte.js";
+  import { rute } from "../keadaan/rute.svelte.js";
+  import { JENIS_SURAT_BAWAAN, FASILITAS_BAWAAN, TAUTAN_BAWAAN } from "../inti/bawaan.js";
 
   const HALAMAN = [
     ["Profil RW", "Sejarah, visi-misi, dan keterangan wilayah", "/profil", "profil sejarah visi misi wilayah batas luas"],

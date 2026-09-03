@@ -1,6 +1,7 @@
 <script>
-  import { pakai, kontenNilai } from "../lib/keadaan.svelte.js";
-  import { JENIS_SURAT_BAWAAN, IDENTITAS_BAWAAN } from "../lib/bawaan.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { pakai, kontenNilai } from "../keadaan/isi.svelte.js";
+  import { JENIS_SURAT_BAWAAN, IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import TidakAda from "./TidakAda.svelte";
 
   let { kunci } = $props();
@@ -16,7 +17,7 @@
   });
 
   const titik = "\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026";
-  const namaRW = $derived(kontenNilai("identitas", "namaRW", IDENTITAS_BAWAAN.namaRW));
+  const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
 </script>
 
 {#if !surat}

@@ -1,0 +1,231 @@
+/* =======================================================================
+ *  Bagian khusus
+ * =======================================================================
+ *
+ *  Bagian 6 dari 8. Dimuat lewat src/gaya/global.css.
+ *
+ *  Tampilan yang hanya dipakai satu atau dua halaman: nomor darurat,
+ *  kalender, galeri, polling, surat, peta.
+ */
+
+.darurat {
+  background: var(--bahaya-soft); border: 1px solid var(--bahaya); border-radius: 5px;
+  padding: 13px 18px; display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  gap: 16px; align-items: center;
+}
+.darurat .judul { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 13.5px; color: var(--bahaya); white-space: nowrap; }
+.darurat .butir { display: flex; flex-direction: column; }
+.darurat .butir .nama { font-size: 11.5px; color: var(--tinta-2); }
+.darurat .butir .nomor {
+  font-family: "IBM Plex Mono", monospace; font-size: 13.5px;
+  font-weight: 500; color: var(--bahaya);
+}
+
+.daftar-kabar { display: flex; flex-direction: column; }
+.kabar {
+  display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 20px;
+  padding: 16px 0; border-top: 1px solid var(--garis); align-items: start;
+}
+.kabar:first-child { border-top: 0; }
+.kabar .tanggal { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--tinta-3); line-height: 1.5; padding-top: 2px; }
+.kabar h3 { font-size: 17.5px; font-weight: 700; margin-bottom: 5px; }
+.kabar p { font-size: 14.5px; color: var(--tinta-2); }
+.kabar .baris { display: flex; gap: 9px; align-items: center; margin-top: 9px; flex-wrap: wrap; }
+
+.label-kecil {
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.09em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
+  background: var(--brand-soft); color: var(--brand);
+}
+.label-kecil.agenda { background: var(--action-soft); color: var(--action); }
+
+.langkah { display: flex; flex-direction: column; }
+.langkah-butir {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 15px;
+  padding: 14px 0; border-top: 1px solid var(--garis-2); align-items: start;
+}
+.langkah-butir:first-child { border-top: 0; padding-top: 2px; }
+.langkah-butir .nomor {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--brand-soft);
+  color: var(--brand); display: grid; place-items: center;
+  font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+}
+.langkah-butir b { font-family: "Archivo", sans-serif; font-size: 15.5px; font-weight: 700; display: block; margin-bottom: 3px; }
+.langkah-butir p { font-size: 14.5px; color: var(--tinta-2); }
+
+.orang { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: start; }
+.orang .foto {
+  width: 64px; height: 64px; border-radius: 5px; background: var(--permukaan-2);
+  border: 1px solid var(--garis); overflow: hidden; display: block;
+}
+.orang .jabatan {
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--tinta-3); display: block;
+}
+.orang .nama { font-family: "Archivo", sans-serif; font-size: 16.5px; font-weight: 700; line-height: 1.25; margin: 2px 0 4px; display: block; }
+.orang .kontak { font-size: 13px; color: var(--tinta-2); display: block; }
+
+.gambar-penuh { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.petabox {
+  border: 1px solid var(--garis); border-radius: 5px; overflow: hidden;
+  background: var(--permukaan-2); position: relative;
+}
+.petabox iframe { display: block; width: 100%; height: 420px; border: 0; }
+.petabox .cadangan {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: 24px;
+  text-align: center; font-size: 13.5px; color: var(--tinta-3); line-height: 1.6; pointer-events: none;
+}
+.petabox iframe:not([hidden]) + .cadangan { display: none; }
+
+.kalender { background: var(--permukaan); border: 1px solid var(--garis); border-radius: 5px; overflow: hidden; }
+.kalender-kepala {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 13px 16px; border-bottom: 1px solid var(--garis); flex-wrap: wrap;
+}
+.kalender-kepala b { font-family: "Archivo", sans-serif; font-size: 17px; font-weight: 700; }
+.kalender-petak { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.kalender-petak .hari {
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--tinta-3); text-align: center;
+  padding: 9px 2px; border-bottom: 1px solid var(--garis-2);
+}
+.kalender-sel {
+  min-height: 74px; border-right: 1px solid var(--garis-2); border-bottom: 1px solid var(--garis-2);
+  padding: 6px 7px; display: flex; flex-direction: column; gap: 3px;
+}
+.kalender-sel:nth-child(7n) { border-right: 0; }
+.kalender-sel .angka-hari { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--tinta-3); }
+.kalender-sel.redup { background: var(--permukaan-3); }
+.kalender-sel .acara {
+  font-size: 10.5px; line-height: 1.35; background: var(--brand-soft);
+  color: var(--brand); border-radius: 2px; padding: 2px 5px;
+}
+.kalender-sel .acara.agenda { background: var(--action-soft); color: var(--action); }
+
+.galeri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.galitem {
+  cursor: pointer; border: 1px solid var(--garis); border-radius: 5px; overflow: hidden;
+  background: var(--permukaan); padding: 0; text-align: left; display: flex; flex-direction: column;
+}
+.galitem .muka {
+  aspect-ratio: 4/3; background: var(--permukaan-2); display: grid; place-items: center;
+  color: var(--tinta-3); font-family: "IBM Plex Mono", monospace; font-size: 10px;
+  letter-spacing: 0.1em; border-bottom: 1px solid var(--garis); overflow: hidden;
+}
+.galitem .kepala { padding: 11px 13px 13px; }
+.galitem .kepala b { font-family: "Archivo", sans-serif; font-size: 14.5px; font-weight: 700; display: block; line-height: 1.3; }
+.galitem .kepala span { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--tinta-3); }
+.galitem:hover { border-color: var(--brand); }
+
+.tirai {
+  position: fixed; inset: 0; background: rgba(8, 16, 13, 0.86); z-index: 90;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.tirai .dalam {
+  background: var(--permukaan); border-radius: 6px; max-width: 660px; width: 100%;
+  padding: 22px 24px; display: flex; flex-direction: column; gap: 12px;
+  position: relative; z-index: 1;
+}
+
+.tirai-tutup {
+  position: absolute; inset: 0; border: 0; padding: 0; margin: 0;
+  background: transparent; cursor: pointer;
+}
+.tirai-tutup:focus-visible { outline: 2px solid var(--action); outline-offset: -4px; }
+.tirai .muka {
+  aspect-ratio: 16/10; background: var(--permukaan-2); border: 1px solid var(--garis);
+  border-radius: 5px; display: grid; place-items: center; overflow: hidden;
+  color: var(--tinta-3); font-family: "IBM Plex Mono", monospace; font-size: 11px;
+}
+
+.polling { display: flex; flex-direction: column; gap: 11px; }
+.polling-pilihan {
+  display: block; padding: 11px 14px; border: 1px solid var(--garis); border-radius: 5px;
+  background: var(--permukaan); cursor: pointer; text-align: left;
+  font-size: 14.5px; font-weight: 600; color: var(--tinta); width: 100%;
+}
+.polling-pilihan:hover { border-color: var(--brand); }
+.polling-hasil {
+  display: flex; flex-direction: column; gap: 4px; padding: 11px 14px;
+  border: 1px solid var(--garis); border-radius: 5px; background: var(--permukaan);
+}
+.polling-hasil .atas { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+.polling-hasil .atas span { font-family: "IBM Plex Mono", monospace; color: var(--tinta-2); font-size: 13px; white-space: nowrap; }
+.polling-hasil .jalur { height: 8px; background: var(--permukaan-2); border-radius: 2px; overflow: hidden; }
+.polling-hasil .isi { height: 100%; background: var(--brand); }
+.polling-hasil.milikku { border-color: var(--brand); }
+
+.surat {
+  background: #fff; color: #111; border: 1px solid var(--garis); border-radius: 5px;
+  padding: 44px 48px; max-width: 760px; margin: 0 auto; font-size: 15px; line-height: 1.75;
+}
+.surat .kop { text-align: center; border-bottom: 2.5px solid #111; padding-bottom: 12px; margin-bottom: 22px; }
+.surat .kop b { font-family: "Archivo", sans-serif; font-size: 19px; display: block; letter-spacing: 0.02em; }
+.surat .kop span { font-size: 12.5px; display: block; color: #444; }
+.surat h2 { font-family: "Archivo", sans-serif; text-align: center; font-size: 17px; margin: 16px 0 4px; text-decoration: underline; }
+.surat .nomor { text-align: center; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: #444; margin-bottom: 20px; }
+.surat table { width: 100%; font-size: 14.5px; margin: 12px 0 16px; }
+.surat table td { padding: 3px 0; vertical-align: top; }
+.surat table td:first-child { width: 180px; color: #333; }
+.surat .ttd { display: flex; justify-content: flex-end; margin-top: 34px; text-align: center; }
+.surat .ttd div { min-width: 230px; }
+.surat .ttd .ruang { height: 64px; }
+.surat .kaki { margin-top: 24px; font-size: 11.5px; color: #666; border-top: 1px solid #ddd; padding-top: 10px; }
+
+.usaha-kartu { padding: 0; overflow: hidden; }
+.usaha-kartu .muka {
+  aspect-ratio: 16/10; background: var(--permukaan-2); display: grid; place-items: center;
+  color: var(--tinta-3); font-family: "IBM Plex Mono", monospace; font-size: 10px;
+  letter-spacing: 0.1em; border-bottom: 1px solid var(--garis); overflow: hidden;
+}
+.usaha-kartu .badan { padding: 15px 17px 17px; display: flex; flex-direction: column; gap: 6px; }
+.usaha-kartu h3 { font-size: 16.5px; font-weight: 700; }
+.usaha-kartu .jenis { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--tinta-3); }
+
+.usaha-rinci { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 30px; align-items: start; }
+.foto-deret { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.foto-deret div {
+  aspect-ratio: 1; border-radius: 5px; background: var(--permukaan-2);
+  display: grid; place-items: center; color: var(--tinta-3);
+  font-family: "IBM Plex Mono", monospace; font-size: 9.5px;
+  border: 1px solid var(--garis); overflow: hidden;
+}
+.foto-deret div:first-child { grid-column: span 3; aspect-ratio: 16/9; }
+.sisi { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 104px; }
+.harga-kotak {
+  background: var(--permukaan); border: 1px solid var(--garis);
+  border-radius: 5px; padding: 16px 18px; display: flex; flex-direction: column;
+}
+.harga-kotak .baris {
+  display: flex; justify-content: space-between; gap: 14px;
+  padding: 8px 0; border-bottom: 1px solid var(--garis-2); font-size: 14px;
+}
+.harga-kotak .baris:last-of-type { border-bottom: 0; }
+
+.baris-kelola {
+  display: grid; grid-template-columns: minmax(0, 1fr) 190px auto; gap: 14px;
+  align-items: start; padding: 16px 0; border-bottom: 1px solid var(--garis);
+}
+.baris-kelola:last-child { border-bottom: 0; }
+.baris-kelola .isi b { font-family: "Archivo", sans-serif; font-size: 15.5px; display: block; margin-bottom: 3px; }
+.baris-kelola .isi p { font-size: 13.5px; color: var(--tinta-2); }
+.baris-kelola select {
+  font-family: inherit; font-size: 13.5px; color: var(--tinta);
+  background: var(--permukaan); border: 1px solid var(--garis);
+  border-radius: 4px; padding: 8px 10px; width: 100%;
+}
+
+.hasil-cari { display: block; padding: 15px 0; border-top: 1px solid var(--garis); color: inherit; }
+.hasil-cari:first-of-type { border-top: 0; }
+.hasil-cari:hover { text-decoration: none; }
+.hasil-cari .dimana {
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--tinta-3);
+}
+.hasil-cari h3 { font-size: 17px; font-weight: 700; margin: 3px 0; }
+.hasil-cari:hover h3 { color: var(--brand); }
+.hasil-cari p { font-size: 14px; color: var(--tinta-2); }
+
+.poin { margin: 4px 0 0; padding-left: 19px; display: flex; flex-direction: column; gap: 5px; }
+.poin li { font-size: 14px; color: var(--tinta-2); }

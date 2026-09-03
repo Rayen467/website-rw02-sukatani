@@ -1,7 +1,9 @@
 <script>
-  import { MENU, IDENTITAS_BAWAAN } from "../lib/bawaan.js";
-  import { sesi, pengurus, kontenNilai } from "../lib/keadaan.svelte.js";
-  import { rute, pergi } from "../lib/rute.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { MENU, IDENTITAS_BAWAAN } from "../inti/bawaan.js";
+  import { kontenNilai } from "../keadaan/isi.svelte.js";
+  import { sesi, pengurus } from "../keadaan/sesi.svelte.js";
+  import { rute, pergi } from "../keadaan/rute.svelte.js";
   import TombolTema from "./TombolTema.svelte";
   import TombolAkun from "./TombolAkun.svelte";
 
@@ -10,10 +12,10 @@
   let kataCari = $state("");
 
   const ident = $derived({
-    lambang: kontenNilai("identitas", "lambang", IDENTITAS_BAWAAN.lambang),
-    namaSitus: kontenNilai("identitas", "namaSitus", IDENTITAS_BAWAAN.namaSitus),
-    namaRW: kontenNilai("identitas", "namaRW", IDENTITAS_BAWAAN.namaRW),
-    wilayah: kontenNilai("identitas", "wilayah", IDENTITAS_BAWAAN.wilayah)
+    lambang: kontenNilai(KONTEN.IDENTITAS, "lambang", IDENTITAS_BAWAAN.lambang),
+    namaSitus: kontenNilai(KONTEN.IDENTITAS, "namaSitus", IDENTITAS_BAWAAN.namaSitus),
+    namaRW: kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW),
+    wilayah: kontenNilai(KONTEN.IDENTITAS, "wilayah", IDENTITAS_BAWAAN.wilayah)
   });
 
   /* Menu tambahan yang hanya muncul untuk orang tertentu. */

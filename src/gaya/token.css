@@ -1,0 +1,122 @@
+/* =======================================================================
+ *  Token warna dan jarak
+ * =======================================================================
+ *
+ *  Bagian 1 dari 8. Dimuat lewat src/gaya/global.css.
+ *
+ *  Semua warna situs ada di sini, tidak di tempat lain.
+ *
+ *  Halaman TIDAK BOLEH menulis warna langsung seperti color:#0F4D42.
+ *  Selalu lewat token: color:var(--brand). Alasannya dua:
+ *
+ *      1. Tampilan gelap. Token diberi nilai berbeda di blok gelap di
+ *         bawah. Warna yang ditulis langsung tidak ikut berubah, dan
+ *         hasilnya tulisan gelap di latar gelap.
+ *      2. Pengurus bisa mengganti warna situs lewat halaman Kelola.
+ *         Yang diganti adalah nilai token ini saat halaman berjalan --
+ *         lihat src/keadaan/tampilan.js.
+ *
+ *  Ada TIGA blok yang harus diisi bersamaan setiap menambah token:
+ *      :root                              tampilan terang
+ *      @media (prefers-color-scheme:dark) mengikuti setelan HP
+ *      :root[data-theme="dark"]           dipilih sendiri pengunjung
+ *  Lupa salah satu berarti ada warna yang salah di sebagian layar.
+ */
+
+:root {
+  --dasar: #eff2ed;
+  --permukaan: #ffffff;
+  --permukaan-2: #e4e9df;
+  --permukaan-3: #f6f8f4;
+
+  --tinta: #16211c;
+  --tinta-2: #55635a;
+  --tinta-3: #7c8a81;
+
+  --garis: #d4dcce;
+  --garis-2: #e6ebe1;
+
+  --brand: #0f4d42;
+  --brand-2: #146357;
+  --brand-soft: #dae8e2;
+  --brand-ink: #ffffff;
+
+  --action: #a5680c;
+  --action-soft: #f6e9ce;
+
+  --wa: #0f7a69;
+  --wa-soft: #ddf0ea;
+  --bahaya: #93281e;
+  --bahaya-soft: #f7e2de;
+  --info: #1f4e79;
+  --info-soft: #dce8f3;
+
+  --bayang: 0 1px 2px rgba(16, 40, 32, 0.05), 0 10px 28px -18px rgba(16, 40, 32, 0.35);
+  --bayang-kuat: 0 2px 6px rgba(16, 40, 32, 0.08), 0 20px 44px -22px rgba(16, 40, 32, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --dasar: #0d1411;
+    --permukaan: #151f1a;
+    --permukaan-2: #1d2a24;
+    --permukaan-3: #111a16;
+
+    --tinta: #e7eee8;
+    --tinta-2: #97a79d;
+    --tinta-3: #74847a;
+
+    --garis: #28362f;
+    --garis-2: #1f2c26;
+
+    --brand: #5fc0a7;
+    --brand-2: #7ed3bc;
+    --brand-soft: #133029;
+    --brand-ink: #08201b;
+
+    --action: #e2a845;
+    --action-soft: #35280f;
+
+    --wa: #3fc7aa;
+    --wa-soft: #123028;
+    --bahaya: #e88276;
+    --bahaya-soft: #3a1a16;
+    --info: #8fbee6;
+    --info-soft: #152b3c;
+
+    --bayang: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -18px rgba(0, 0, 0, 0.8);
+    --bayang-kuat: 0 2px 6px rgba(0, 0, 0, 0.5), 0 20px 44px -22px rgba(0, 0, 0, 0.9);
+  }
+}
+
+:root[data-theme="dark"] {
+  --dasar: #0d1411;
+  --permukaan: #151f1a;
+  --permukaan-2: #1d2a24;
+  --permukaan-3: #111a16;
+
+  --tinta: #e7eee8;
+  --tinta-2: #97a79d;
+  --tinta-3: #74847a;
+
+  --garis: #28362f;
+  --garis-2: #1f2c26;
+
+  --brand: #5fc0a7;
+  --brand-2: #7ed3bc;
+  --brand-soft: #133029;
+  --brand-ink: #08201b;
+
+  --action: #e2a845;
+  --action-soft: #35280f;
+
+  --wa: #3fc7aa;
+  --wa-soft: #123028;
+  --bahaya: #e88276;
+  --bahaya-soft: #3a1a16;
+  --info: #8fbee6;
+  --info-soft: #152b3c;
+
+  --bayang: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -18px rgba(0, 0, 0, 0.8);
+  --bayang-kuat: 0 2px 6px rgba(0, 0, 0, 0.5), 0 20px 44px -22px rgba(0, 0, 0, 0.9);
+}

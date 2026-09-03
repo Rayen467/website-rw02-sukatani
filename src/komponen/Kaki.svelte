@@ -1,10 +1,11 @@
 <script>
-  import { kontenNilai } from "../lib/keadaan.svelte.js";
-  import { IDENTITAS_BAWAAN } from "../lib/bawaan.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { kontenNilai } from "../keadaan/isi.svelte.js";
+  import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import Belum from "./Belum.svelte";
 
-  const namaRW = $derived(kontenNilai("identitas", "namaRW", IDENTITAS_BAWAAN.namaRW));
-  const alamatKaki = $derived(kontenNilai("identitas", "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
+  const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
+  const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
 </script>
 
 <footer class="tanpa-cetak">
@@ -38,9 +39,9 @@
       <div>
         <h4>Sekretariat</h4>
         <ul>
-          <li>Balai warga <Belum nilai={kontenNilai("kontak", "alamat")} /></li>
-          <li>Jam layanan <Belum nilai={kontenNilai("kontak", "jamSeninJumat")} /></li>
-          <li>Pos keamanan <Belum nilai={kontenNilai("kontak", "posKeamanan")} /></li>
+          <li>Balai warga <Belum nilai={kontenNilai(KONTEN.KONTAK, "alamat")} /></li>
+          <li>Jam layanan <Belum nilai={kontenNilai(KONTEN.KONTAK, "jamSeninJumat")} /></li>
+          <li>Pos keamanan <Belum nilai={kontenNilai(KONTEN.KONTAK, "posKeamanan")} /></li>
         </ul>
       </div>
     </div>

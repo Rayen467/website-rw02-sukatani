@@ -1,8 +1,12 @@
 <script>
-  import { isi, konten, beriTahu, muatKoleksi, muatKonten } from "../../lib/keadaan.svelte.js";
-  import { tambahIsi, simpanKonten, simpanDokumen, pesanRamah } from "../../lib/firebase.js";
-  import { kecilkanFoto, keSlug } from "../../lib/bantu.js";
-  import { JENIS_USAHA } from "../../lib/bawaan.js";
+  import { KOLEKSI, KONTEN } from "../../inti/nama.js";
+  import { isi, konten, muatKoleksi, muatKonten } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { tambahIsi, simpanKonten, simpanDokumen } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { keSlug } from "../../inti/format.js";
+  import { kecilkanFoto } from "../../inti/peramban.js";
+  import { JENIS_USAHA } from "../../inti/bawaan.js";
   import BarisHapus from "../../komponen/BarisHapus.svelte";
 
   let sb = $state({ nama: "", teks: "", foto: "" });
@@ -16,9 +20,9 @@
   let fotoStruktur = $state(null);
   let sibuk = $state("");
 
-  $effect(() => { const k = konten("sambutan"); if (k) sb = { ...sb, ...k }; });
-  $effect(() => { const k = konten("profil"); if (k) pf = { ...pf, ...k }; });
-  $effect(() => { const k = konten("kontak"); if (k) kn = { ...kn, ...k }; });
+  $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...sb, ...k }; });
+  $effect(() => { const k = konten(KONTEN.PROFIL); if (k) pf = { ...pf, ...k }; });
+  $effect(() => { const k = konten(KONTEN.KONTAK); if (k) kn = { ...kn, ...k }; });
 
   async function bacaFoto(berkas, sisi) {
     if (!berkas) return "";
@@ -38,8 +42,8 @@
   <div class="kepala-bagian"><h2>Sambutan Ketua RW</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("sambutan", async () => {
     const foto = (await bacaFoto(fotoSambutan, 600)) || sb.foto || "";
-    await simpanKonten("sambutan", { nama: sb.nama, teks: sb.teks, foto });
-    muatKonten("sambutan");
+    await simpanKonten(KONTEN.SAMBUTAN, { nama: sb.nama, teks: sb.teks, foto });
+    muatKonten(KONTEN.SAMBUTAN);
   }); }}>
     <div class="isian"><label for="sb-nama">Nama Ketua RW</label><input id="sb-nama" bind:value={sb.nama} /></div>
     <div class="isian"><label for="sb-teks">Isi sambutan</label><textarea id="sb-teks" bind:value={sb.teks} style="min-height:150px"></textarea></div>
@@ -60,10 +64,10 @@
   </div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("struktur", async () => {
     const foto = await bacaFoto(fotoStruktur, 600);
-    await tambahIsi("pengurus_tampil", { ...st, foto });
+    await tambahIsi(KOLEKSI.PENGURUS_TAMPIL, { ...st, foto });
     st = { jabatan: "", nama: "", kontak: "" };
     fotoStruktur = null;
-    muatKoleksi("pengurus_tampil");
+    muatKoleksi(KOLEKSI.PENGURUS_TAMPIL);
   }); }}>
     <div class="isian"><label for="st-jabatan">Jabatan</label><input id="st-jabatan" bind:value={st.jabatan} required placeholder="Ketua RW" /></div>
     <div class="isian"><label for="st-nama">Nama</label><input id="st-nama" bind:value={st.nama} required /></div>
@@ -83,9 +87,9 @@
 <section class="blok">
   <div class="kepala-bagian"><h2>Batas dan cakupan tiap RT</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("rt", async () => {
-    await simpanDokumen("batas_rt", keSlug(rt.rt) || "rt", rt, false);
+    await simpanDokumen(KOLEKSI.BATAS_RT, keSlug(rt.rt) || "rt", rt, false);
     rt = { rt: "", blok: "", batas: "", ketua: "", kontak: "" };
-    muatKoleksi("batas_rt");
+    muatKoleksi(KOLEKSI.BATAS_RT);
   }); }}>
     <div class="isian"><label for="rt-nama">RT</label><input id="rt-nama" bind:value={rt.rt} required placeholder="RT 03" /></div>
     <div class="isian"><label for="rt-blok">Cakupan blok</label><input id="rt-blok" bind:value={rt.blok} placeholder="Blok C dan D" /></div>
@@ -102,7 +106,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Profil RW</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("profil", async () => { await simpanKonten("profil", pf); muatKonten("profil"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("profil", async () => { await simpanKonten(KONTEN.PROFIL, pf); muatKonten(KONTEN.PROFIL); }); }}>
     <div class="isian"><label for="f-sejarah">Sejarah singkat</label><textarea id="f-sejarah" bind:value={pf.sejarah}></textarea></div>
     <div class="isian"><label for="f-visi">Visi</label><textarea id="f-visi" bind:value={pf.visi}></textarea></div>
     <div class="isian"><label for="f-misi">Misi</label><textarea id="f-misi" bind:value={pf.misi} placeholder="Satu misi per baris"></textarea><span class="petunjuk">Tulis satu misi per baris. Nanti tampil sebagai daftar bernomor.</span></div>
@@ -118,7 +122,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Kontak, jam layanan, dan iuran</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("kontak", async () => { await simpanKonten("kontak", kn); muatKonten("kontak"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("kontak", async () => { await simpanKonten(KONTEN.KONTAK, kn); muatKonten(KONTEN.KONTAK); }); }}>
     <div class="isian"><label for="n-pos">Nomor pos keamanan</label><input id="n-pos" bind:value={kn.posKeamanan} /></div>
     <div class="isian"><label for="n-rw">Nomor Ketua RW</label><input id="n-rw" bind:value={kn.ketuaRW} /></div>
     <div class="isian"><label for="n-sek">Nomor Sekretaris</label><input id="n-sek" bind:value={kn.sekretaris} /></div>
@@ -145,9 +149,9 @@
   <div class="kepala-bagian"><h2>Katalog usaha warga</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("usaha", async () => {
     const label = (JENIS_USAHA.find((j) => j.nilai === uk.kat) || {}).label || "Lainnya";
-    await simpanDokumen("usaha", keSlug(uk.nama) || "usaha", { ...uk, katLabel: label });
+    await simpanDokumen(KOLEKSI.USAHA, keSlug(uk.nama) || "usaha", { ...uk, katLabel: label });
     uk = { nama: "", kat: "siapsaji", ringkas: "", panjang: "", jam: "", wa: "" };
-    muatKoleksi("usaha");
+    muatKoleksi(KOLEKSI.USAHA);
   }); }}>
     <div class="isian"><label for="uk-nama">Nama usaha</label><input id="uk-nama" bind:value={uk.nama} required /></div>
     <div class="isian"><label for="uk-jenis">Jenis</label><select id="uk-jenis" bind:value={uk.kat}>{#each JENIS_USAHA as j}<option value={j.nilai}>{j.label}</option>{/each}</select></div>

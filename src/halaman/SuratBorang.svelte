@@ -1,9 +1,14 @@
 <script>
-  import { pakai, sesi, beriTahu, muatMilikSaya } from "../lib/keadaan.svelte.js";
-  import { JENIS_SURAT_BAWAAN, RT_BAWAAN } from "../lib/bawaan.js";
-  import { keDaftar, nomorAntrean } from "../lib/bantu.js";
-  import { kirimWarga, pesanRamah } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { KOLEKSI } from "../inti/nama.js";
+  import { pakai, muatMilikSaya } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { JENIS_SURAT_BAWAAN, RT_BAWAAN } from "../inti/bawaan.js";
+  import { keDaftar } from "../inti/format.js";
+  import { nomorAntrean } from "../inti/peramban.js";
+  import { kirimWarga } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
   import TidakAda from "./TidakAda.svelte";
 
   let { kunci } = $props();
@@ -25,7 +30,7 @@
     mengirim = true;
     const nomor = nomorAntrean("SP");
     try {
-      await kirimWarga("surat", { jenis: surat.nama, antrean: nomor, ...form });
+      await kirimWarga(KOLEKSI.SURAT, { jenis: surat.nama, antrean: nomor, ...form });
       antrean = nomor;
       try { localStorage.setItem("surat-terakhir", JSON.stringify({ jenis: kunci, antrean: nomor, ...form })); } catch (err) {}
       beriTahu("Pengajuan terkirim. Nomor antrean " + nomor + ".");

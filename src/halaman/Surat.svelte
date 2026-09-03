@@ -1,7 +1,7 @@
 <script>
-  import { pakai } from "../lib/keadaan.svelte.js";
-  import { JENIS_SURAT_BAWAAN } from "../lib/bawaan.js";
-  import { keDaftar } from "../lib/bantu.js";
+  import { pakai } from "../keadaan/isi.svelte.js";
+  import { JENIS_SURAT_BAWAAN } from "../inti/bawaan.js";
+  import { keDaftar } from "../inti/format.js";
 
   const daftar = $derived(
     pakai("jenis_surat", JENIS_SURAT_BAWAAN).map((s) => ({

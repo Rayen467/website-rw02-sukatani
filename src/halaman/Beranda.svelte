@@ -1,12 +1,13 @@
 <script>
-  import { isi, konten, kontenNilai } from "../lib/keadaan.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { isi, konten, kontenNilai } from "../keadaan/isi.svelte.js";
   import Belum from "../komponen/Belum.svelte";
   import TombolSalin from "../komponen/TombolSalin.svelte";
 
-  const sambutan = $derived(konten("sambutan") || {});
+  const sambutan = $derived(konten(KONTEN.SAMBUTAN) || {});
   const kabar = $derived((isi.pengumuman || []).slice(0, 3));
   const usaha = $derived((isi.usaha || []).slice(0, 3));  
-  const namaRW = $derived(kontenNilai("identitas", "namaRW", "RW 02"));
+  const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", "RW 02"));
 </script>
 
 <section class="sorot blok">
@@ -23,9 +24,9 @@
 <section class="blok">
   <div class="darurat">
     <span class="judul">Nomor penting</span>
-    <span class="butir"><span class="nama">Pos keamanan</span><span class="nomor"><Belum nilai={kontenNilai("kontak", "posKeamanan")} /></span></span>
-    <span class="butir"><span class="nama">Ketua RW</span><span class="nomor"><Belum nilai={kontenNilai("kontak", "ketuaRW")} /></span></span>
-    <span class="butir"><span class="nama">Ambulans desa</span><span class="nomor"><Belum nilai={kontenNilai("kontak", "ambulans")} /></span></span>
+    <span class="butir"><span class="nama">Pos keamanan</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "posKeamanan")} /></span></span>
+    <span class="butir"><span class="nama">Ketua RW</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "ketuaRW")} /></span></span>
+    <span class="butir"><span class="nama">Ambulans desa</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "ambulans")} /></span></span>
   </div>
 </section>
 

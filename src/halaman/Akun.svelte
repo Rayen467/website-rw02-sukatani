@@ -1,8 +1,13 @@
 <script>
-  import { sesi, isi, beriTahu, segarkanProfilWarga } from "../lib/keadaan.svelte.js";
-  import { RT_BAWAAN } from "../lib/bawaan.js";
-  import { daftarWarga, kirimUlangVerifikasi, pesanRamah } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { isi } from "../keadaan/isi.svelte.js";
+  import { segarkanProfilWarga } from "../keadaan/mulai.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { RT_BAWAAN } from "../inti/bawaan.js";
+  import { kirimUlangVerifikasi } from "../sumber/akun.js";
+  import { daftarWarga } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
   import Lencana from "../komponen/Lencana.svelte";
 
   let f = $state({ nama: "", blok: "", rt: RT_BAWAAN[0], wa: "" });

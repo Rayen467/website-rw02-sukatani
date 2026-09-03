@@ -1,13 +1,15 @@
 <script>
-  import { salinTeks } from "../lib/bantu.js";
-  import { beriTahu, kontenNilai } from "../lib/keadaan.svelte.js";
-  import { pangkalSitus } from "../lib/rute.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { salinTeks } from "../inti/peramban.js";
+  import { kontenNilai } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { pangkalSitus } from "../keadaan/rute.svelte.js";
 
   let { judul = "", jalur = "/" } = $props();
 
   async function salin() {
     const teks =
-      judul + " — selengkapnya di situs warga: " + pangkalSitus(kontenNilai("identitas", "alamatSitus")) + "#" + jalur;
+      judul + " — selengkapnya di situs warga: " + pangkalSitus(kontenNilai(KONTEN.IDENTITAS, "alamatSitus")) + "#" + jalur;
     const berhasil = await salinTeks(teks);
     beriTahu(
       berhasil

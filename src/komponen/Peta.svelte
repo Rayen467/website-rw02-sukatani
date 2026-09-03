@@ -1,10 +1,11 @@
 <script>
-  import { kontenNilai } from "../lib/keadaan.svelte.js";
-  import { KOORDINAT_BAWAAN } from "../lib/bawaan.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { kontenNilai } from "../keadaan/isi.svelte.js";
+  import { KOORDINAT_BAWAAN } from "../inti/bawaan.js";
 
   let { perbesaran = 17 } = $props();
 
-  const titik = $derived(kontenNilai("kontak", "koordinat", KOORDINAT_BAWAAN));
+  const titik = $derived(kontenNilai(KONTEN.KONTAK, "koordinat", KOORDINAT_BAWAAN));
   const sumber = $derived(
     "https://maps.google.com/maps?q=" + encodeURIComponent(titik) + "&z=" + perbesaran + "&hl=id&output=embed"
   );

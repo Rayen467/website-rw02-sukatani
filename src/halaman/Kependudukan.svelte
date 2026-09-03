@@ -1,10 +1,12 @@
 <script>
-  import { konten, pengurus, sesi } from "../lib/keadaan.svelte.js";
-  import { uraiBaris, angkaDari } from "../lib/bantu.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { konten } from "../keadaan/isi.svelte.js";
+  import { pengurus, sesi } from "../keadaan/sesi.svelte.js";
+  import { uraiBaris, angkaDari } from "../inti/format.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
 
-  const angka = $derived(konten("kependudukan") || {});
-  const st = $derived(konten("statistik") || {});
+  const angka = $derived(konten(KONTEN.KEPENDUDUKAN) || {});
+  const st = $derived(konten(KONTEN.STATISTIK) || {});
   const ringkas = $derived([
     ["Jumlah jiwa", angka.jiwa],
     ["Kepala keluarga", angka.kk],

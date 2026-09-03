@@ -1,5 +1,5 @@
 <script>
-  import { isi } from "../lib/keadaan.svelte.js";
+  import { isi } from "../keadaan/isi.svelte.js";
   import TombolSalin from "../komponen/TombolSalin.svelte";
   import TidakAda from "./TidakAda.svelte";
   let { kunci } = $props();

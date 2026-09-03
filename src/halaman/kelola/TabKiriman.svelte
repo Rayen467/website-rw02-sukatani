@@ -1,7 +1,10 @@
 <script>
-  import { isi, beriTahu, muatKoleksi } from "../../lib/keadaan.svelte.js";
-  import { ubahStatus, setujuiReservasi, simpanDokumen, pesanRamah } from "../../lib/firebase.js";
-  import { keSlug } from "../../lib/bantu.js";
+  import { KOLEKSI } from "../../inti/nama.js";
+  import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { ubahStatus, setujuiReservasi, simpanDokumen } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { keSlug } from "../../inti/format.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
   const pengaduan = $derived(isi.pengaduan || []);
@@ -15,9 +18,9 @@
   async function simpanStatus(id) {
     sibuk = id;
     try {
-      await ubahStatus("pengaduan", id, status[id] || "baru");
+      await ubahStatus(KOLEKSI.PENGADUAN, id, status[id] || "baru");
       beriTahu("Status diperbarui.");
-      muatKoleksi("pengaduan");
+      muatKoleksi(KOLEKSI.PENGADUAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -27,8 +30,8 @@
     try {
       await setujuiReservasi(r.id, r.tanggal, r.fasilitas);
       beriTahu("Disetujui. Tanggal " + r.tanggal + " terkunci di kalender warga.");
-      muatKoleksi("reservasi");
-      muatKoleksi("jadwal");
+      muatKoleksi(KOLEKSI.RESERVASI);
+      muatKoleksi(KOLEKSI.JADWAL);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -37,7 +40,7 @@
     sibuk = u.id;
     try {
       const kat = String(u.jenis || "").toLowerCase();
-      await simpanDokumen("usaha", keSlug(u.nama) || "usaha", {
+      await simpanDokumen(KOLEKSI.USAHA, keSlug(u.nama) || "usaha", {
         nama: u.nama,
         kat: kat.includes("siap") ? "siapsaji" : kat.includes("kemasan") ? "kemasan" : kat.includes("jasa") ? "jasa" : "retail",
         katLabel: u.jenis,
@@ -46,10 +49,10 @@
         wa: u.wa || "",
         alamat: u.alamat || ""
       });
-      await ubahStatus("usaha_baru", u.id, "selesai");
+      await ubahStatus(KOLEKSI.USAHA_BARU, u.id, "selesai");
       beriTahu("Usaha tampil di katalog warga.");
-      muatKoleksi("usaha");
-      muatKoleksi("usaha_baru");
+      muatKoleksi(KOLEKSI.USAHA);
+      muatKoleksi(KOLEKSI.USAHA_BARU);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }

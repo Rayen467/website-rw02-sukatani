@@ -1,6 +1,6 @@
 <script>
-  import { isi } from "../lib/keadaan.svelte.js";
-  import { rupiah } from "../lib/bantu.js";
+  import { isi } from "../keadaan/isi.svelte.js";
+  import { rupiah } from "../inti/format.js";
   import Lencana from "../komponen/Lencana.svelte";
 
   const daftar = $derived(isi.program || []);

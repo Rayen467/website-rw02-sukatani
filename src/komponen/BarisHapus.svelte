@@ -1,7 +1,9 @@
 <script>
   /** Satu baris daftar yang bisa dihapus pengurus. */
-  import { beriTahu, muatKoleksi } from "../lib/keadaan.svelte.js";
-  import { hapusDokumen, pesanRamah } from "../lib/firebase.js";
+  import { muatKoleksi } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { hapusDokumen } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
 
   let { koleksi, id, judul, baris = [] } = $props();
   let sibuk = $state(false);

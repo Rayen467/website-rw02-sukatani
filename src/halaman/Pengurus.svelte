@@ -1,6 +1,6 @@
 <script>
-  import { isi, pakai } from "../lib/keadaan.svelte.js";
-  import { RT_BAWAAN } from "../lib/bawaan.js";
+  import { isi, pakai } from "../keadaan/isi.svelte.js";
+  import { RT_BAWAAN } from "../inti/bawaan.js";
   import Belum from "../komponen/Belum.svelte";
 
   const daftar = $derived(isi.pengurus_tampil || []);

@@ -1,0 +1,136 @@
+/* =======================================================================
+ *  Kepala halaman dan menu
+ * =======================================================================
+ *
+ *  Bagian 3 dari 8. Dimuat lewat src/gaya/global.css.
+ *
+ *  Bagian paling atas: lambang, nama situs, menu, tombol tema dan akun.
+ *  Termasuk menu geser untuk layar kecil.
+ */
+
+.situs {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--permukaan);
+  border-bottom: 1px solid var(--garis);
+}
+
+.situs-atas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+}
+
+.merek { display: flex; align-items: center; gap: 11px; flex: none; color: inherit; }
+.merek:hover { text-decoration: none; }
+
+.lambang {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--brand);
+  color: var(--brand-ink);
+  display: grid;
+  place-items: center;
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.merek .nama {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  font-size: 16.5px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  display: block;
+}
+.merek .sub {
+  font-size: 11.5px;
+  color: var(--tinta-3);
+  line-height: 1.3;
+  display: block;
+}
+
+.cari-kotak {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--permukaan-3);
+  border: 1px solid var(--garis);
+  border-radius: 99px;
+  padding: 6px 8px 6px 13px;
+  min-width: 0;
+  max-width: 290px;
+  flex: 1;
+}
+.cari-kotak svg { width: 15px; height: 15px; stroke: var(--tinta-3); fill: none; stroke-width: 2; flex: none; }
+.cari-kotak input {
+  border: 0; background: none; font-family: inherit; font-size: 13.5px;
+  color: var(--tinta); width: 100%; min-width: 0; outline: none;
+}
+.cari-kotak input::placeholder { color: var(--tinta-3); }
+.cari-kotak button {
+  border: 0; background: var(--brand); color: var(--brand-ink); border-radius: 99px;
+  font-size: 12px; font-weight: 600; padding: 4px 12px; cursor: pointer; flex: none;
+}
+
+.tombol-kecil {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  border: 1px solid var(--garis); background: var(--permukaan); border-radius: 5px;
+  padding: 7px 11px; cursor: pointer; color: var(--tinta-2);
+  font-size: 13px; font-weight: 600; max-width: 230px;
+}
+.tombol-kecil:hover { border-color: var(--brand); color: var(--brand); }
+.tombol-kecil svg {
+  width: 16px; height: 16px; stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none;
+}
+.tombol-kecil .teks { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tombol-kecil.aktif { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+
+.burger { display: none; }
+
+nav.menu-utama { display: flex; gap: 2px; position: relative; }
+.menu-butir { position: relative; }
+.menu-butir > a,
+.menu-butir > button {
+  display: block; font-family: inherit; font-size: 14px; font-weight: 600;
+  color: var(--tinta-2); padding: 10px 13px 12px; border: 0; background: none;
+  cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+  border-radius: 3px 3px 0 0;
+}
+.menu-butir > a:hover,
+.menu-butir > button:hover { color: var(--tinta); text-decoration: none; background: var(--permukaan-3); }
+.menu-butir.terpilih > a,
+.menu-butir.terpilih > button { color: var(--brand); border-bottom-color: var(--brand); }
+.menu-butir > button::after {
+  content: ""; display: inline-block; width: 5px; height: 5px; margin-left: 7px;
+  vertical-align: 2px; border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor; transform: rotate(45deg);
+}
+
+.turunan {
+  position: absolute; top: 100%; left: 0; min-width: 252px;
+  background: var(--permukaan); border: 1px solid var(--garis);
+  border-radius: 0 0 6px 6px; box-shadow: var(--bayang-kuat);
+  padding: 7px; z-index: 60;
+}
+.turunan a {
+  display: block; padding: 9px 12px; border-radius: 4px;
+  font-size: 14px; font-weight: 600; color: var(--tinta-2);
+}
+.turunan a:hover { background: var(--permukaan-3); color: var(--brand); text-decoration: none; }
+.turunan a span { display: block; font-weight: 400; font-size: 12px; color: var(--tinta-3); line-height: 1.4; }
+
+.laci { border-top: 1px solid var(--garis); padding: 8px 0 16px; max-height: 70vh; overflow-y: auto; }
+.laci .kelompok {
+  padding: 10px 0 4px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--tinta-3);
+}
+.laci a { display: block; padding: 9px 10px; border-radius: 4px; font-size: 15px; font-weight: 600; color: var(--tinta-2); }
+.laci a:hover { background: var(--permukaan-3); text-decoration: none; }

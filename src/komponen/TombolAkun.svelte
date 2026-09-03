@@ -1,7 +1,8 @@
 <script>
-  import { sesi, pengurus, namaPeran, wargaAktif, beriTahu } from "../lib/keadaan.svelte.js";
-  import { keluar } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi, pengurus, namaPeran, wargaAktif } from "../keadaan/sesi.svelte.js";
+  import { keluar } from "../sumber/akun.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
 
   const label = $derived.by(() => {
     if (!sesi.pengguna) return "Masuk / Daftar";

@@ -1,6 +1,10 @@
 <script>
-  import { isi, sesi, beriTahu, muatKoleksi } from "../../lib/keadaan.svelte.js";
-  import { ubahStatus, simpanDokumen, hapusDokumen, pesanRamah } from "../../lib/firebase.js";
+  import { KOLEKSI } from "../../inti/nama.js";
+  import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { sesi } from "../../keadaan/sesi.svelte.js";
+  import { ubahStatus, simpanDokumen, hapusDokumen } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
   let p = $state({ email: "", nama: "", jabatan: "", peran: "petugas" });
@@ -12,9 +16,9 @@
   async function setStatusWarga(uid, status) {
     sibuk = uid;
     try {
-      await ubahStatus("warga", uid, status);
+      await ubahStatus(KOLEKSI.WARGA, uid, status);
       beriTahu(status === "aktif" ? "Warga disahkan." : "Warga ditolak.");
-      muatKoleksi("warga");
+      muatKoleksi(KOLEKSI.WARGA);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -25,10 +29,10 @@
     if (email.indexOf("@") < 1) { beriTahu("Alamat Gmail tidak sah."); return; }
     sibuk = "tambah";
     try {
-      await simpanDokumen("pengurus", email, { nama: p.nama, jabatan: p.jabatan, peran: p.peran }, false);
+      await simpanDokumen(KOLEKSI.PENGURUS, email, { nama: p.nama, jabatan: p.jabatan, peran: p.peran }, false);
       beriTahu(email + " ditambahkan sebagai " + (p.peran === "master" ? "master admin" : "petugas") + ".");
       p = { email: "", nama: "", jabatan: "", peran: "petugas" };
-      muatKoleksi("pengurus");
+      muatKoleksi(KOLEKSI.PENGURUS);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -37,9 +41,9 @@
     if (!confirm("Cabut hak akses " + email + "?\n\nOrang ini langsung tidak bisa membuka halaman pengurus.")) return;
     sibuk = email;
     try {
-      await hapusDokumen("pengurus", email);
+      await hapusDokumen(KOLEKSI.PENGURUS, email);
       beriTahu("Hak akses " + email + " dicabut.");
-      muatKoleksi("pengurus");
+      muatKoleksi(KOLEKSI.PENGURUS);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }

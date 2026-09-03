@@ -1,7 +1,11 @@
 <script>
-  import { isi, beriTahu, muatKoleksi } from "../../lib/keadaan.svelte.js";
-  import { tambahIsi, pesanRamah } from "../../lib/firebase.js";
-  import { kecilkanFoto, tanggalHariIni } from "../../lib/bantu.js";
+  import { KOLEKSI } from "../../inti/nama.js";
+  import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { tambahIsi } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { tanggalHariIni } from "../../inti/format.js";
+  import { kecilkanFoto } from "../../inti/peramban.js";
   import BarisHapus from "../../komponen/BarisHapus.svelte";
 
   let k = $state({ tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
@@ -13,10 +17,10 @@
     e.preventDefault();
     sibuk = "konten";
     try {
-      await tambahIsi("pengumuman", { ...k, tgl: k.tanggal || tanggalHariIni() });
+      await tambahIsi(KOLEKSI.PENGUMUMAN, { ...k, tgl: k.tanggal || tanggalHariIni() });
       beriTahu("Terbit. Sudah muncul di halaman Berita.");
       k = { tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" };
-      muatKoleksi("pengumuman");
+      muatKoleksi(KOLEKSI.PENGUMUMAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -31,11 +35,11 @@
       catch (err) { beriTahu("Foto tidak dipakai: " + err.message); }
     }
     try {
-      await tambahIsi("galeri", { ...g, foto });
+      await tambahIsi(KOLEKSI.GALERI, { ...g, foto });
       beriTahu("Kegiatan tercatat di arsip.");
       g = { judul: "", fn: "", jml: "" };
       berkasFoto = null;
-      muatKoleksi("galeri");
+      muatKoleksi(KOLEKSI.GALERI);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }

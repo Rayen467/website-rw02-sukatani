@@ -1,6 +1,6 @@
 <script>
-  import { isi } from "../lib/keadaan.svelte.js";
-  import { JENIS_USAHA } from "../lib/bawaan.js";
+  import { isi } from "../keadaan/isi.svelte.js";
+  import { JENIS_USAHA } from "../inti/bawaan.js";
 
   let saring = $state("all");
   const semua = $derived(isi.usaha || []);

@@ -1,5 +1,5 @@
 <script>
-  import { sesi, pengurus, namaPeran } from "../../lib/keadaan.svelte.js";
+  import { sesi, pengurus, namaPeran } from "../../keadaan/sesi.svelte.js";
   import TabKiriman from "./TabKiriman.svelte";
   import TabTerbit from "./TabTerbit.svelte";
   import TabAngka from "./TabAngka.svelte";

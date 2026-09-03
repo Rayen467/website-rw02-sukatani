@@ -1,11 +1,22 @@
 /**
- * Isi awal situs.
+ * ===========================================================================
+ *  BAWAAN -- isi awal situs sebelum pengurus mengisi apa pun
+ * ===========================================================================
  *
- * Semua yang ada di sini bisa diganti pengurus lewat halaman Kelola.
- * Yang ditaruh di berkas ini hanya hal yang masuk akal sebagai titik mulai
- * untuk RW mana pun -- bukan berita palsu, bukan laporan kas karangan,
- * bukan pengaduan buatan. Halaman yang belum ada isinya menampilkan
- * keterangan kosong yang jujur, bukan contoh yang menyesatkan.
+ *  LAPIS 1 (inti). Tidak mengimpor apa pun.
+ *
+ *  Semua yang ada di sini bisa diganti pengurus lewat halaman Kelola tanpa
+ *  menyentuh kode. Yang ditaruh di berkas ini HANYA hal yang masuk akal
+ *  sebagai titik mulai untuk RW mana pun.
+ *
+ *  ATURAN YANG TIDAK BOLEH DILANGGAR:
+ *  jangan pernah menaruh berita palsu, laporan kas karangan, atau pengaduan
+ *  buatan di sini. Halaman yang belum ada isinya harus menampilkan
+ *  keterangan kosong yang jujur -- warga membaca situs ini untuk tahu
+ *  keadaan sebenarnya, bukan contoh yang menyesatkan.
+ *
+ *  Dipakai lewat fungsi pakai() di keadaan/isi.svelte.js, yang memilih isi
+ *  dari server bila ada dan jatuh ke daftar di sini bila belum ada.
  */
 
 export const RT_BAWAAN = ["RT 01", "RT 02", "RT 03", "RT 04", "RT 05"];

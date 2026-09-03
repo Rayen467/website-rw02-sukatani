@@ -1,14 +1,15 @@
 <script>
-  import { kontenNilai } from "../lib/keadaan.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { kontenNilai } from "../keadaan/isi.svelte.js";
   import Peta from "../komponen/Peta.svelte";
   import Belum from "../komponen/Belum.svelte";
 
   const baris = $derived([
-    ["Urusan surat dan administrasi", "Sekretaris RW", kontenNilai("kontak", "sekretaris")],
-    ["Keuangan dan iuran", "Bendahara RW", kontenNilai("kontak", "bendahara")],
-    ["Keamanan", "Pos keamanan", kontenNilai("kontak", "posKeamanan")],
-    ["Kebersihan dan sampah", "Seksi kebersihan", kontenNilai("kontak", "kebersihan")],
-    ["Keadaan darurat", "Ambulans desa", kontenNilai("kontak", "ambulans")]
+    ["Urusan surat dan administrasi", "Sekretaris RW", kontenNilai(KONTEN.KONTAK, "sekretaris")],
+    ["Keuangan dan iuran", "Bendahara RW", kontenNilai(KONTEN.KONTAK, "bendahara")],
+    ["Keamanan", "Pos keamanan", kontenNilai(KONTEN.KONTAK, "posKeamanan")],
+    ["Kebersihan dan sampah", "Seksi kebersihan", kontenNilai(KONTEN.KONTAK, "kebersihan")],
+    ["Keadaan darurat", "Ambulans desa", kontenNilai(KONTEN.KONTAK, "ambulans")]
   ]);
 </script>
 
@@ -24,15 +25,15 @@
   <div class="petak petak-2">
     <div class="kartu">
       <h3>Sekretariat RW</h3>
-      <p><Belum nilai={kontenNilai("kontak", "alamat")} panjang={true} /></p>
+      <p><Belum nilai={kontenNilai(KONTEN.KONTAK, "alamat")} panjang={true} /></p>
     </div>
     <div class="kartu">
       <h3>Jam pelayanan</h3>
       <div class="tabel-bungkus" style="border:0;background:none">
         <table class="data"><tbody>
-          <tr><th>Senin sampai Jumat</th><td><Belum nilai={kontenNilai("kontak", "jamSeninJumat")} /></td></tr>
-          <tr><th>Sabtu</th><td><Belum nilai={kontenNilai("kontak", "jamSabtu")} /></td></tr>
-          <tr><th>Keadaan darurat</th><td>Pos keamanan <Belum nilai={kontenNilai("kontak", "posKeamanan")} /></td></tr>
+          <tr><th>Senin sampai Jumat</th><td><Belum nilai={kontenNilai(KONTEN.KONTAK, "jamSeninJumat")} /></td></tr>
+          <tr><th>Sabtu</th><td><Belum nilai={kontenNilai(KONTEN.KONTAK, "jamSabtu")} /></td></tr>
+          <tr><th>Keadaan darurat</th><td>Pos keamanan <Belum nilai={kontenNilai(KONTEN.KONTAK, "posKeamanan")} /></td></tr>
         </tbody></table>
       </div>
     </div>

@@ -1,7 +1,10 @@
 <script>
-  import { isi, konten, beriTahu, muatKoleksi, muatKonten } from "../../lib/keadaan.svelte.js";
-  import { tambahIsi, simpanKonten, pesanRamah } from "../../lib/firebase.js";
-  import { IDENTITAS_BAWAAN } from "../../lib/bawaan.js";
+  import { KOLEKSI, KONTEN } from "../../inti/nama.js";
+  import { isi, konten, muatKoleksi, muatKonten } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { tambahIsi, simpanKonten } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { IDENTITAS_BAWAAN } from "../../inti/bawaan.js";
   import BarisHapus from "../../komponen/BarisHapus.svelte";
 
   let tt = $state({ nama: "", ket: "", url: "" });
@@ -10,8 +13,8 @@
   let idn = $state({ ...IDENTITAS_BAWAAN });
   let sibuk = $state("");
 
-  $effect(() => { const k = konten("polling"); if (k) pl = { ...pl, ...k }; });
-  $effect(() => { const k = konten("identitas"); if (k) idn = { ...idn, ...k }; });
+  $effect(() => { const k = konten(KONTEN.POLLING); if (k) pl = { ...pl, ...k }; });
+  $effect(() => { const k = konten(KONTEN.IDENTITAS); if (k) idn = { ...idn, ...k }; });
 
   async function jalan(tanda, aksi) {
     sibuk = tanda;
@@ -28,7 +31,7 @@
   </div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault();
     if (tt.url && tt.url.indexOf("http") !== 0) { beriTahu("Alamat harus diawali http:// atau https://"); return; }
-    jalan("tautan", async () => { await tambahIsi("tautan", tt); tt = { nama: "", ket: "", url: "" }; muatKoleksi("tautan"); });
+    jalan("tautan", async () => { await tambahIsi(KOLEKSI.TAUTAN, tt); tt = { nama: "", ket: "", url: "" }; muatKoleksi(KOLEKSI.TAUTAN); });
   }}>
     <div class="isian"><label for="tt-nama">Nama laman</label><input id="tt-nama" bind:value={tt.nama} required placeholder="Kantor Desa Sukatani" /></div>
     <div class="isian"><label for="tt-ket">Keterangan</label><input id="tt-ket" bind:value={tt.ket} placeholder="Layanan administrasi tingkat desa" /></div>
@@ -49,7 +52,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Program bantuan sosial</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("bansos", async () => { await tambahIsi("bansos", bp); bp = { nama: "", syarat: "", jalur: "" }; muatKoleksi("bansos"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("bansos", async () => { await tambahIsi(KOLEKSI.BANSOS, bp); bp = { nama: "", syarat: "", jalur: "" }; muatKoleksi(KOLEKSI.BANSOS); }); }}>
     <div class="isian"><label for="bp-nama">Nama program</label><input id="bp-nama" bind:value={bp.nama} required placeholder="Bantuan Pangan Non Tunai" /></div>
     <div class="isian"><label for="bp-syarat">Syarat umum</label><textarea id="bp-syarat" bind:value={bp.syarat}></textarea><span class="petunjuk">Satu syarat per baris.</span></div>
     <div class="isian"><label for="bp-jalur">Jalur pengajuan</label><input id="bp-jalur" bind:value={bp.jalur} placeholder="Diusulkan Ketua RT, diverifikasi RW" /></div>
@@ -66,8 +69,8 @@
     <b>Mengganti pertanyaan tidak menghapus suara lama.</b> Isi kode polling dengan yang baru setiap membuka polling baru, supaya suaranya terpisah.
   </div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("polling", async () => {
-    await simpanKonten("polling", { ...pl, id: pl.id.toLowerCase().replace(/[^a-z0-9-]/g, "-") });
-    muatKonten("polling");
+    await simpanKonten(KONTEN.POLLING, { ...pl, id: pl.id.toLowerCase().replace(/[^a-z0-9-]/g, "-") });
+    muatKonten(KONTEN.POLLING);
   }); }}>
     <div class="isian"><label for="pl-id">Kode polling</label><input id="pl-id" bind:value={pl.id} required /><span class="petunjuk">Huruf kecil dan tanda hubung. Ganti setiap membuka polling baru.</span></div>
     <div class="isian"><label for="pl-tanya">Pertanyaan</label><input id="pl-tanya" bind:value={pl.pertanyaan} required /></div>
@@ -82,7 +85,7 @@
   <div class="catatan" style="margin-bottom:18px">
     Yang tampil di kepala halaman, kaki halaman, dan kop surat. Berguna kalau situs ini nanti dipakai RW lain.
   </div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("identitas", async () => { await simpanKonten("identitas", idn); muatKonten("identitas"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("identitas", async () => { await simpanKonten(KONTEN.IDENTITAS, idn); muatKonten(KONTEN.IDENTITAS); }); }}>
     <div class="isian"><label for="id-lambang">Lambang singkat</label><input id="id-lambang" bind:value={idn.lambang} maxlength="4" /><span class="petunjuk">Dua sampai empat huruf, tampil di lingkaran pojok kiri atas.</span></div>
     <div class="isian"><label for="id-nama">Nama situs</label><input id="id-nama" bind:value={idn.namaSitus} /></div>
     <div class="isian"><label for="id-rw">Nama RW</label><input id="id-rw" bind:value={idn.namaRW} /></div>

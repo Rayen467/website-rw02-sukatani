@@ -1,6 +1,8 @@
 <script>
-  import { isi, beriTahu, muatKoleksi } from "../../lib/keadaan.svelte.js";
-  import { tambahIsi, pesanRamah } from "../../lib/firebase.js";
+  import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { tambahIsi } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
   import BarisHapus from "../../komponen/BarisHapus.svelte";
 
   let js = $state({ nama: "", estimasi: "", syarat: "" });

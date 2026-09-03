@@ -1,7 +1,8 @@
 <script>
-  import { pakai, konten } from "../lib/keadaan.svelte.js";
-  import { BANSOS_BAWAAN, RT_BAWAAN } from "../lib/bawaan.js";
-  import { keDaftar, uraiBaris } from "../lib/bantu.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { pakai, konten } from "../keadaan/isi.svelte.js";
+  import { BANSOS_BAWAAN, RT_BAWAAN } from "../inti/bawaan.js";
+  import { keDaftar, uraiBaris } from "../inti/format.js";
 
   const program = $derived(
     pakai("bansos", BANSOS_BAWAAN).map((b) => ({
@@ -9,7 +10,7 @@
       daftarSyarat: Array.isArray(b.syarat) ? b.syarat : keDaftar(b.syarat)
     }))
   );
-  const info = $derived(konten("bansos") || {});
+  const info = $derived(konten(KONTEN.BANSOS) || {});
   const penerima = $derived(uraiBaris(info.penerima));
   const barisRT = $derived(penerima.length ? penerima : RT_BAWAAN.map((r) => [r, ""]));
 </script>

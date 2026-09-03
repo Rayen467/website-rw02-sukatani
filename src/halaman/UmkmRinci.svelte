@@ -1,5 +1,6 @@
 <script>
-  import { isi, beriTahu } from "../lib/keadaan.svelte.js";
+  import { isi } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
   import TidakAda from "./TidakAda.svelte";
   import Belum from "../komponen/Belum.svelte";
 

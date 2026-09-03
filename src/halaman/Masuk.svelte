@@ -1,6 +1,8 @@
 <script>
-  import { sesi, beriTahu } from "../lib/keadaan.svelte.js";
-  import { masukEmail, masukGoogle, daftarAkun, lupaSandi, keluar, pesanRamah } from "../lib/firebase.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { masukEmail, masukGoogle, daftarAkun, lupaSandi, keluar } from "../sumber/akun.js";
+  import { pesanRamah } from "../sumber/firebase.js";
 
   let mode = $state("masuk");
   let sibuk = $state(false);

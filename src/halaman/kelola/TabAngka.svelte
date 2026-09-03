@@ -1,7 +1,10 @@
 <script>
-  import { isi, konten, beriTahu, muatKoleksi, muatKonten } from "../../lib/keadaan.svelte.js";
-  import { tambahIsi, simpanKonten, pesanRamah } from "../../lib/firebase.js";
-  import { rupiah, angkaDari } from "../../lib/bantu.js";
+  import { KOLEKSI, KONTEN } from "../../inti/nama.js";
+  import { isi, konten, muatKoleksi, muatKonten } from "../../keadaan/isi.svelte.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import { tambahIsi, simpanKonten } from "../../sumber/data.js";
+  import { pesanRamah } from "../../sumber/firebase.js";
+  import { rupiah, angkaDari } from "../../inti/format.js";
   import BarisHapus from "../../komponen/BarisHapus.svelte";
 
   let c = $state({ periode: "", tgl: "", ket: "", jenis: "masuk", nominal: "" });
@@ -11,9 +14,9 @@
   let bs = $state({ periode: "", penerima: "" });
   let sibuk = $state("");
 
-  $effect(() => { const k = konten("kependudukan"); if (k) d = { ...d, ...k }; });
-  $effect(() => { const k = konten("statistik"); if (k) st = { ...st, ...k }; });
-  $effect(() => { const k = konten("bansos"); if (k) bs = { ...bs, ...k }; });
+  $effect(() => { const k = konten(KONTEN.KEPENDUDUKAN); if (k) d = { ...d, ...k }; });
+  $effect(() => { const k = konten(KONTEN.STATISTIK); if (k) st = { ...st, ...k }; });
+  $effect(() => { const k = konten(KONTEN.BANSOS); if (k) bs = { ...bs, ...k }; });
 
   const kas = $derived(isi.kas || []);
   const ringkas = $derived.by(() => {
@@ -41,7 +44,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Catat transaksi kas</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("kas", async () => { await tambahIsi("kas", c); c = { periode: c.periode, tgl: "", ket: "", jenis: "masuk", nominal: "" }; muatKoleksi("kas"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("kas", async () => { await tambahIsi(KOLEKSI.KAS, c); c = { periode: c.periode, tgl: "", ket: "", jenis: "masuk", nominal: "" }; muatKoleksi(KOLEKSI.KAS); }); }}>
     <div class="isian"><label for="c-periode">Periode</label><input id="c-periode" bind:value={c.periode} required placeholder="September 2026" /></div>
     <div class="isian"><label for="c-tgl">Tanggal</label><input id="c-tgl" bind:value={c.tgl} required placeholder="14 Sep" /></div>
     <div class="isian"><label for="c-ket">Keterangan</label><input id="c-ket" bind:value={c.ket} required placeholder="Iuran warga bulan September" /></div>
@@ -57,7 +60,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Rencana dan realisasi program</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("program", async () => { await tambahIsi("program", pr); pr = { nama: "", tahun: "", status: "rencana", anggaran: "", ket: "" }; muatKoleksi("program"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("program", async () => { await tambahIsi(KOLEKSI.PROGRAM, pr); pr = { nama: "", tahun: "", status: "rencana", anggaran: "", ket: "" }; muatKoleksi(KOLEKSI.PROGRAM); }); }}>
     <div class="isian"><label for="pr-nama">Nama program</label><input id="pr-nama" bind:value={pr.nama} required /></div>
     <div class="isian"><label for="pr-tahun">Tahun</label><input id="pr-tahun" bind:value={pr.tahun} required placeholder="2026" /></div>
     <div class="isian"><label for="pr-status">Status</label><select id="pr-status" bind:value={pr.status}><option value="rencana">Rencana</option><option value="proses">Sedang berjalan</option><option value="selesai">Selesai</option></select></div>
@@ -72,7 +75,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Rekapitulasi kependudukan</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("penduduk", async () => { await simpanKonten("kependudukan", d); muatKonten("kependudukan"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("penduduk", async () => { await simpanKonten(KONTEN.KEPENDUDUKAN, d); muatKonten(KONTEN.KEPENDUDUKAN); }); }}>
     <div class="isian"><label for="d-jiwa">Jumlah jiwa</label><input id="d-jiwa" bind:value={d.jiwa} inputmode="numeric" /></div>
     <div class="isian"><label for="d-kk">Kepala keluarga</label><input id="d-kk" bind:value={d.kk} inputmode="numeric" /></div>
     <div class="isian"><label for="d-lk">Laki-laki</label><input id="d-lk" bind:value={d.lakilaki} inputmode="numeric" /></div>
@@ -88,7 +91,7 @@
     <b>Cara mengisi:</b> satu baris satu butir, bentuknya <span class="mono">nama : angka persen</span>.
     Contoh: <span class="mono">18-40 tahun : 34</span>
   </div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("statistik", async () => { await simpanKonten("statistik", st); muatKonten("statistik"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("statistik", async () => { await simpanKonten(KONTEN.STATISTIK, st); muatKonten(KONTEN.STATISTIK); }); }}>
     <div class="isian"><label for="sx-usia">Sebaran usia</label><textarea id="sx-usia" bind:value={st.usia}></textarea></div>
     <div class="isian"><label for="sx-pendidikan">Pendidikan terakhir</label><textarea id="sx-pendidikan" bind:value={st.pendidikan}></textarea></div>
     <div class="isian"><label for="sx-pekerjaan">Pekerjaan</label><textarea id="sx-pekerjaan" bind:value={st.pekerjaan}></textarea></div>
@@ -99,7 +102,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Penerima bantuan sosial</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("bansos", async () => { await simpanKonten("bansos", bs); muatKonten("bansos"); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("bansos", async () => { await simpanKonten(KONTEN.BANSOS, bs); muatKonten(KONTEN.BANSOS); }); }}>
     <div class="isian"><label for="bs-periode">Periode</label><input id="bs-periode" bind:value={bs.periode} placeholder="Tahap 2 tahun 2026" /></div>
     <div class="isian">
       <label for="bs-penerima">Jumlah penerima per RT</label>

@@ -1,14 +1,40 @@
 /**
- * Mesin tampilan.
+ * ===========================================================================
+ *  TAMPILAN -- warna, huruf, dan bentuk situs yang bisa diatur pengurus
+ * ===========================================================================
  *
- * Seluruh warna situs memakai token CSS, jadi mengubah tampilan cukup
- * menimpa tokennya saat halaman berjalan. Pengurus mengatur ini lewat
- * halaman Kelola, tanpa menyentuh satu baris kode pun.
+ *  LAPIS 3 (keadaan). Boleh mengimpor: inti/
  *
- * Warna pendamping dihitung dari warna utama, bukan dipilih terpisah.
- * Itu disengaja: mencegah perpaduan yang tidak terbaca.
+ *  Seluruh warna situs memakai token CSS -- lihat bagian 1 di
+ *  src/gaya/token.css. Karena itu mengubah tampilan cukup MENIMPA
+ *  TOKENNYA saat halaman berjalan, tidak perlu mengubah satu baris pun
+ *  di berkas CSS. Itulah yang membuat pengurus bisa mengganti warna situs
+ *  lewat halaman Kelola tanpa menyentuh kode.
+ *
+ *  KENAPA HANYA DUA WARNA YANG BISA DIPILIH
+ *  Warna pendamping -- warna terang, warna latar lembut, warna versi gelap
+ *  -- DIHITUNG dari dua warna yang dipilih, bukan dipilih terpisah. Itu
+ *  disengaja. Kalau semuanya bebas dipilih, cepat atau lambat akan ada
+ *  yang memilih tulisan kuning di latar putih, dan situs jadi tidak
+ *  terbaca sebagian warga. Dengan cara ini perpaduan yang tidak terbaca
+ *  tidak mungkin terjadi.
+ *
+ *  Ada dua hal berbeda di berkas ini, jangan tertukar:
+ *      bangunGaya / terapkanGaya   pilihan PENGURUS, berlaku untuk semua
+ *      temaSekarang / pasangTema   pilihan PENGUNJUNG, hanya di HP-nya
  */
 
+import { KUNCI_SIMPAN } from "../inti/nama.js";
+import { simpanan } from "../inti/peramban.js";
+
+/* -------------------------------------------------------------------------
+ *  Pilihan yang tersedia untuk pengurus
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Pasangan huruf. "muat" diisi nama berkas di Google Fonts; yang bernilai
+ * null tidak mengunduh apa-apa karena hurufnya sudah ikut di situs.
+ */
 export const HURUF = {
   bawaan: {
     nama: "Archivo + Plus Jakarta Sans",
@@ -36,6 +62,7 @@ export const HURUF = {
   }
 };
 
+/** Perpaduan warna siap pakai: [warna utama, warna aksen, namanya]. */
 export const PERPADUAN = [
   ["#0F4D42", "#A5680C", "Hijau tua & kunyit"],
   ["#1F4E79", "#B5651D", "Biru tua & jingga"],
@@ -45,6 +72,7 @@ export const PERPADUAN = [
   ["#4A3B76", "#B07C2A", "Ungu tua & madu"]
 ];
 
+/** Tampilan situs sebelum pengurus mengatur apa pun. */
 export const BAWAAN = {
   utama: "#0F4D42",
   aksen: "#A5680C",
@@ -54,6 +82,10 @@ export const BAWAAN = {
   lebar: "1120",
   tema: "sistem"
 };
+
+/* -------------------------------------------------------------------------
+ *  Hitungan warna
+ * ------------------------------------------------------------------------- */
 
 function keRGB(hex) {
   let h = String(hex || "").replace("#", "");
@@ -78,6 +110,11 @@ function keHex(r) {
   );
 }
 
+/**
+ * Mencampur dua warna. t = 0 menghasilkan warna a, t = 1 menghasilkan b.
+ * Warna yang tidak sah dikembalikan apa adanya, supaya salah ketik di
+ * halaman Kelola tidak membuat seluruh situs kehilangan warna.
+ */
 export function campur(a, b, t) {
   const x = keRGB(a);
   const y = keRGB(b);
@@ -85,7 +122,16 @@ export function campur(a, b, t) {
   return keHex([0, 1, 2].map((i) => x[i] + (y[i] - x[i]) * t));
 }
 
-/** Menyusun CSS timpaan dari pengaturan pengurus. */
+/* -------------------------------------------------------------------------
+ *  Menyusun dan memasang gaya
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Menyusun CSS timpaan dari pengaturan pengurus.
+ *
+ * Dipisah dari terapkanGaya() supaya hasilnya bisa diperiksa tanpa
+ * peramban: panggil, baca teksnya, bandingkan.
+ */
 export function bangunGaya(g) {
   const p = { ...BAWAAN, ...(g || {}) };
   const huruf = HURUF[p.huruf] || HURUF.bawaan;
@@ -97,6 +143,8 @@ export function bangunGaya(g) {
     "--action:" + p.aksen + ";" +
     "--action-soft:" + campur(p.aksen, "#ffffff", 0.86) + ";";
 
+  /* Di tampilan gelap warna utama dicerahkan, bukan dipakai apa adanya.
+     Warna tua di latar hitam tidak cukup terbaca. */
   const gelap =
     "--brand:" + campur(p.utama, "#ffffff", 0.55) + ";" +
     "--brand-2:" + campur(p.utama, "#ffffff", 0.7) + ";" +
@@ -118,7 +166,7 @@ export function bangunGaya(g) {
   ].join("\n");
 }
 
-/** Memasang gaya ke halaman. Aman dipanggil berulang. */
+/** Memasang gaya ke halaman. Aman dipanggil berulang kali. */
 export function terapkanGaya(g) {
   let el = document.getElementById("gaya-kustom");
   if (!el) {
@@ -128,7 +176,8 @@ export function terapkanGaya(g) {
   }
   el.textContent = bangunGaya(g);
 
-  /* Huruf tambahan hanya diunduh bila memang dipakai. */
+  /* Huruf tambahan hanya diunduh kalau memang dipakai. Pilihan bawaan
+     tidak mengunduh apa-apa, jadi situs tetap ringan di jaringan pelan. */
   const huruf = HURUF[(g && g.huruf) || "bawaan"];
   let tautan = document.getElementById("huruf-kustom");
   if (huruf && huruf.muat) {
@@ -144,20 +193,25 @@ export function terapkanGaya(g) {
     tautan.remove();
   }
 
-  /* Tema bawaan situs, hanya berlaku bila pengunjung belum memilih sendiri. */
-  try {
-    if (g && g.tema && g.tema !== "sistem" && localStorage.getItem("tema") === null) {
-      document.documentElement.setAttribute("data-theme", g.tema);
-    }
-  } catch (e) {}
+  /* Tema bawaan pilihan pengurus HANYA berlaku kalau pengunjung belum
+     memilih sendiri. Pilihan pengunjung selalu menang. */
+  if (g && g.tema && g.tema !== "sistem" && simpanan.baca(KUNCI_SIMPAN.TEMA) === null) {
+    document.documentElement.setAttribute("data-theme", g.tema);
+  }
 }
 
-/* ------------------------------------------------------------------ *
- * Tema terang / gelap yang dipilih pengunjung
- * ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------------
+ *  Tema terang / gelap yang dipilih PENGUNJUNG
+ *
+ *  Tersimpan di HP masing-masing, tidak dikirim ke server. Pemasangan
+ *  pertama dilakukan skrip pendek di index.html, sebelum halaman digambar,
+ *  supaya tidak ada kedipan putih di tampilan gelap.
+ * ------------------------------------------------------------------------- */
 
 export const URUTAN_TEMA = ["sistem", "light", "dark"];
+
 export const NAMA_TEMA = { sistem: "Sistem", light: "Terang", dark: "Gelap" };
+
 export const KET_TEMA = {
   sistem: "mengikuti setelan perangkat",
   light: "tampilan terang",
@@ -165,22 +219,16 @@ export const KET_TEMA = {
 };
 
 export function temaSekarang() {
-  try {
-    const t = localStorage.getItem("tema");
-    return t === "light" || t === "dark" ? t : "sistem";
-  } catch (e) {
-    return "sistem";
-  }
+  const t = simpanan.baca(KUNCI_SIMPAN.TEMA);
+  return t === "light" || t === "dark" ? t : "sistem";
 }
 
 export function pasangTema(t) {
-  try {
-    if (t === "sistem") {
-      document.documentElement.removeAttribute("data-theme");
-      localStorage.removeItem("tema");
-    } else {
-      document.documentElement.setAttribute("data-theme", t);
-      localStorage.setItem("tema", t);
-    }
-  } catch (e) {}
+  if (t === "sistem") {
+    document.documentElement.removeAttribute("data-theme");
+    simpanan.hapus(KUNCI_SIMPAN.TEMA);
+  } else {
+    document.documentElement.setAttribute("data-theme", t);
+    simpanan.tulis(KUNCI_SIMPAN.TEMA, t);
+  }
 }

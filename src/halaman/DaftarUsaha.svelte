@@ -1,8 +1,11 @@
 <script>
-  import { sesi, beriTahu } from "../lib/keadaan.svelte.js";
-  import { JENIS_USAHA } from "../lib/bawaan.js";
-  import { kirimWarga, pesanRamah } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { KOLEKSI } from "../inti/nama.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { JENIS_USAHA } from "../inti/bawaan.js";
+  import { kirimWarga } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
 
   let form = $state({ nama: "", pemilik: "", jenis: JENIS_USAHA[0].label, produk: "", wa: "", alamat: "" });
   let mengirim = $state(false);
@@ -12,7 +15,7 @@
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya pendaftaran bisa Anda lacak sendiri."); pergi("/masuk"); return; }
     mengirim = true;
     try {
-      await kirimWarga("usaha_baru", form);
+      await kirimWarga(KOLEKSI.USAHA_BARU, form);
       beriTahu("Pendaftaran terkirim. Pengurus akan meninjau sebelum ditampilkan.");
       form = { nama: "", pemilik: "", jenis: JENIS_USAHA[0].label, produk: "", wa: "", alamat: "" };
     } catch (err) {

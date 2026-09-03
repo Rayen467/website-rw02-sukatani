@@ -7,9 +7,10 @@
    * buka berkasnya langsung -- tidak perlu menyentuh berkas ini.
    */
   import { onMount } from "svelte";
-  import { mulaiRute, rute } from "./lib/rute.svelte.js";
-  import { mulaiPantauan, pengurus, sesi } from "./lib/keadaan.svelte.js";
-  import { terapkanGaya } from "./lib/gaya.js";
+  import { mulaiRute, rute } from "./keadaan/rute.svelte.js";
+  import { mulaiPantauan } from "./keadaan/mulai.js";
+  import { pengurus, sesi } from "./keadaan/sesi.svelte.js";
+  import { terapkanGaya } from "./keadaan/tampilan.js";
 
   import Kepala from "./komponen/Kepala.svelte";
   import Kaki from "./komponen/Kaki.svelte";

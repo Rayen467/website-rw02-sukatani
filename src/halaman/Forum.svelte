@@ -1,12 +1,16 @@
 <script>
-  import { isi, konten, sesi, beriTahu, muatSuara } from "../lib/keadaan.svelte.js";
-  import { POLLING_BAWAAN } from "../lib/bawaan.js";
-  import { keDaftar } from "../lib/bantu.js";
-  import { pilihPolling, pesanRamah } from "../lib/firebase.js";
-  import { pergi } from "../lib/rute.svelte.js";
+  import { KONTEN } from "../inti/nama.js";
+  import { isi, konten, muatSuara } from "../keadaan/isi.svelte.js";
+  import { beriTahu } from "../keadaan/pesan.svelte.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { POLLING_BAWAAN } from "../inti/bawaan.js";
+  import { keDaftar } from "../inti/format.js";
+  import { pilihPolling } from "../sumber/data.js";
+  import { pesanRamah } from "../sumber/firebase.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
 
   const polling = $derived.by(() => {
-    const k = konten("polling");
+    const k = konten(KONTEN.POLLING);
     if (k && k.pertanyaan) {
       return { id: k.id || POLLING_BAWAAN.id, pertanyaan: k.pertanyaan, keterangan: k.keterangan || "", opsi: keDaftar(k.opsi) };
     }

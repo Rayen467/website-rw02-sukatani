@@ -35,6 +35,12 @@ jobs:
       - name: Pasang paket
         run: npm ci
 
+      # Kalau ada impor yang melanggar susunan lapis, atau nama koleksi
+      # yang ditulis sebagai teks, unggahan berhenti di sini. Penjelasan
+      # aturannya ada di PANDUAN.md.
+      - name: Periksa arsitektur
+        run: npm run periksa
+
       - name: Bangun situs
         run: npm run build
 
