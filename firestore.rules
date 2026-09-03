@@ -1,0 +1,421 @@
+rules_version = '2';
+
+// ============================================================================
+// Aturan keamanan Firestore -- Situs Warga RW 02 Perum Permai Sukatani
+//
+// Prinsip: semua terkunci, lalu dibuka satu per satu seperlunya.
+//
+// TIGA AKTOR
+//
+//   warga    -- Siapa pun yang masuk dengan akun Google dan mendaftar.
+//               Mengirim pengaduan, mengajukan surat, meminjam fasilitas,
+//               mendaftarkan usaha, ikut polling.
+//               Hanya bisa melihat kiriman MILIKNYA SENDIRI.
+//
+//   petugas  -- Ketua RT, seksi keamanan dan kebersihan, kader.
+//               AKSES PENUH atas seluruh data dan isi situs:
+//               pengumuman, agenda, galeri, laporan kas, rencana program,
+//               katalog usaha, keterangan profil RW, pengaduan, reservasi,
+//               pendaftaran usaha, verifikasi warga, dan pengajuan surat.
+//
+//   master   -- "Master Admin". Ketua RW dan Sekretaris.
+//               KEWENANGANNYA SAMA PERSIS dengan petugas, termasuk mengatur
+//               siapa saja yang menjadi pengurus.
+//
+// CATATAN PENTING BAGI YANG MEMBACA ATURAN INI KEMUDIAN
+//   Field "peran" sekarang hanya penanda jabatan yang tampil di layar.
+//   Aturan di bawah TIDAK membedakan master dan petugas sama sekali.
+//   Konsekuensinya: siapa pun yang diberi peran petugas dapat mencabut hak
+//   pengurus lain, termasuk Ketua RW. Ini pilihan yang diambil sadar oleh
+//   pemilik situs, bukan kelalaian. Satu-satunya pengaman yang tersisa
+//   adalah larangan mencabut hak diri sendiri.
+//
+// Warga yang belum masuk tetap bisa MEMBACA seluruh isi terbuka -- berita,
+// kalender, laporan kas, direktori usaha, daftar pengaduan -- dan tetap bisa
+// mengirim pengaduan tanpa nama. Itu disengaja: melaporkan gangguan keamanan
+// tidak boleh mensyaratkan pendaftaran.
+//
+// CARA MEMASANG
+//   console.firebase.google.com/project/perumahansukatanirw02/firestore/rules
+//   Hapus isi yang ada, tempel seluruh berkas ini, klik Publish.
+//
+// CATATAN BOOTSTRAP
+//   Dokumen pengurus yang belum punya field "peran" dianggap master, supaya
+//   orang pertama yang didaftarkan lewat konsol tidak mengunci dirinya sendiri.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- pembantu ----------
+
+    function masuk() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function akuSendiri(uid) {
+      return masuk() && request.auth.uid == uid;
+    }
+
+    function jalurSaya() {
+      return /databases/$(database)/documents/pengurus/$(request.auth.token.email);
+    }
+
+    function petugas() {
+      return masuk() && exists(jalurSaya());
+    }
+
+    // Pemilik kiriman: dipakai supaya warga bisa melacak kirimannya sendiri
+    // tanpa bisa mengintip milik tetangga.
+    function pemilik() {
+      return masuk()
+        && 'uid' in resource.data
+        && resource.data.uid == request.auth.uid;
+    }
+
+    function teksWajar(nilai, maks) {
+      return nilai is string && nilai.size() > 0 && nilai.size() <= maks;
+    }
+
+    function teksBoleh(nilai, maks) {
+      return nilai == null || (nilai is string && nilai.size() <= maks);
+    }
+
+    // uid boleh kosong (kiriman tanpa akun), tetapi kalau diisi harus uid
+    // pengirimnya sendiri. Mencegah orang mengaku sebagai warga lain.
+    function uidJujur() {
+      return request.resource.data.uid == '' ||
+             (masuk() && request.resource.data.uid == request.auth.uid);
+    }
+
+    function waktuJujur() {
+      return request.resource.data.dibuat == request.time;
+    }
+
+    function statusSah(nilai) {
+      return nilai in ['baru', 'proses', 'selesai'];
+    }
+
+    // ---------- pendaftaran warga ----------
+    // Warga membuat sendiri catatannya saat pertama masuk. Status awal 'baru',
+    // menunggu pengurus mencocokkan dengan daftar kepala keluarga.
+    // Warga TIDAK bisa mengubah statusnya sendiri menjadi terverifikasi.
+
+    match /warga/{uid} {
+      allow read: if akuSendiri(uid) || petugas();
+
+      allow create: if akuSendiri(uid)
+        && teksWajar(request.resource.data.nama, 120)
+        && teksBoleh(request.resource.data.blok, 60)
+        && teksBoleh(request.resource.data.rt, 20)
+        && teksBoleh(request.resource.data.wa, 30)
+        && teksBoleh(request.resource.data.email, 160)
+        && request.resource.data.status == 'baru'
+        && waktuJujur()
+        && request.resource.data.keys().hasOnly(
+             ['nama', 'blok', 'rt', 'wa', 'email', 'status', 'dibuat']);
+
+      // Warga boleh memperbaiki keterangan dirinya, tetapi tidak statusnya.
+      allow update: if (akuSendiri(uid)
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly(['nama', 'blok', 'rt', 'wa'])
+                        && teksWajar(request.resource.data.nama, 120))
+                    || (petugas()
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly(['status'])
+                        && request.resource.data.status in ['baru', 'aktif', 'ditolak']);
+
+      allow delete: if false;
+    }
+
+    // ---------- daftar pengurus ----------
+
+    match /pengurus/{email} {
+      allow read: if masuk();
+
+      allow create, update: if petugas()
+        && teksWajar(request.resource.data.nama, 120)
+        && teksWajar(request.resource.data.jabatan, 120)
+        && request.resource.data.peran in ['master', 'petugas']
+        && request.resource.data.keys().hasOnly(['nama', 'jabatan', 'peran']);
+
+      // Satu-satunya pengaman: tidak ada yang bisa mencabut haknya sendiri,
+      // supaya tidak ada yang mengunci dirinya sendiri di luar.
+      allow delete: if petugas() && email != request.auth.token.email;
+    }
+
+    // ---------- pengaduan: bagian terbuka ----------
+    // Tanpa nama dan nomor pelapor. Terbuka supaya warga tahu laporan apa
+    // yang masuk dan sudah ditangani atau belum.
+
+    match /pengaduan/{id} {
+      allow read: if true;
+
+      allow create: if teksWajar(request.resource.data.kategori, 40)
+                    && teksWajar(request.resource.data.isi, 1500)
+                    && teksBoleh(request.resource.data.lokasi, 200)
+                    && request.resource.data.status == 'baru'
+                    && request.resource.data.catatan == ''
+                    && uidJujur()
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['kategori', 'lokasi', 'isi', 'status', 'catatan',
+                          'tiket', 'uid', 'dibuat']);
+
+      // Isi laporan asli tidak bisa diubah siapa pun, termasuk master admin.
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status', 'catatan'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // ---------- pengaduan: kontak pelapor ----------
+
+    match /pengaduan_kontak/{id} {
+      allow read: if petugas();
+
+      allow create: if teksBoleh(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && uidJujur()
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['nama', 'wa', 'tiket', 'uid', 'dibuat']);
+
+      allow update, delete: if false;
+    }
+
+    // ---------- pengajuan surat ----------
+    // Memuat NIK dan alamat lengkap.
+    // Dibaca seluruh pengurus, atau warga yang mengajukannya sendiri.
+
+    match /surat/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.jenis, 60)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksWajar(request.resource.data.nik, 32)
+                    && teksWajar(request.resource.data.alamat, 200)
+                    && teksBoleh(request.resource.data.ttl, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && teksBoleh(request.resource.data.keperluan, 500)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['jenis', 'nama', 'nik', 'ttl', 'alamat', 'rt', 'keperluan',
+                          'wa', 'antrean', 'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // ---------- reservasi fasilitas ----------
+
+    match /reservasi/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.fasilitas, 80)
+                    && teksWajar(request.resource.data.tanggal, 10)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.jam, 60)
+                    && teksBoleh(request.resource.data.acara, 200)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['fasilitas', 'tanggal', 'jam', 'acara', 'nama', 'wa',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // ---------- jadwal pemakaian fasilitas ----------
+
+    match /jadwal/{tanggal} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- pendaftaran usaha warga ----------
+
+    match /usaha_baru/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksWajar(request.resource.data.pemilik, 120)
+                    && teksWajar(request.resource.data.jenis, 60)
+                    && teksBoleh(request.resource.data.produk, 800)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && teksBoleh(request.resource.data.alamat, 200)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['nama', 'pemilik', 'jenis', 'produk', 'wa', 'alamat',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // ---------- polling warga ----------
+    // Satu akun satu suara, dijamin oleh ID dokumen = uid pemilih.
+    // Suara boleh diubah selama polling berjalan, tidak boleh dihapus.
+    // Isinya hanya nomor pilihan, tidak memuat nama.
+
+    match /polling/{pollId}/suara/{uid} {
+      allow read: if masuk();
+
+      allow create, update: if akuSendiri(uid)
+                            && request.resource.data.pilihan is int
+                            && request.resource.data.pilihan >= 0
+                            && request.resource.data.pilihan < 20
+                            && request.resource.data.keys().hasOnly(['pilihan', 'dibuat']);
+
+      allow delete: if false;
+    }
+
+    match /polling/{pollId} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+
+    // ---------- ISI SITUS YANG DIKELOLA PETUGAS ----------
+    // Semua di bawah ini: dibaca siapa pun tanpa perlu masuk, ditulis petugas.
+    // Inilah yang membuat situs bisa diperbarui tanpa mengubah kode.
+
+    function isiSah(maksJudul, maksIsi) {
+      return teksWajar(request.resource.data.judul, maksJudul)
+        && teksBoleh(request.resource.data.isi, maksIsi);
+    }
+
+    // Pengumuman dan agenda. Field tipe membedakan keduanya.
+    match /pengumuman/{id} {
+      allow read: if true;
+      allow create, update: if petugas()
+        && isiSah(200, 6000)
+        && request.resource.data.tipe in ['pengumuman', 'agenda']
+        && teksBoleh(request.resource.data.ringkas, 400)
+        && teksBoleh(request.resource.data.tglText, 80);
+      allow delete: if petugas();
+    }
+
+    // Dokumentasi kegiatan.
+    match /galeri/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Laporan kas bulanan. Satu dokumen per periode, misalnya "2026-08".
+    match /kas/{periode} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Rencana dan realisasi program.
+    match /program/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Katalog usaha yang sudah ditinjau dan ditampilkan.
+    match /usaha/{slug} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Keterangan tetap: profil RW, struktur pengurus yang ditampilkan,
+    // rekapitulasi kependudukan, kontak, jam layanan, nomor darurat.
+    // Satu dokumen per bagian, misalnya konten/profil dan konten/kontak.
+    match /konten/{bagian} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+
+    // Struktur pengurus yang DITAMPILKAN di halaman publik.
+    // Sengaja dipisah dari koleksi "pengurus" yang mengatur hak akses:
+    // yang ini boleh memuat nama dan foto siapa pun, termasuk pengurus yang
+    // tidak punya akun. Menambah baris di sini TIDAK memberi hak apa pun.
+    match /pengurus_tampil/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Keterangan batas tiap RT. Google Maps tidak bisa menggambar batas RT,
+    // jadi batasnya ditulis sebagai keterangan.
+    match /batas_rt/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+
+    // ---------- ISI HALAMAN YANG DULU KERAS DI KODE ----------
+    // Semua ini dibaca siapa pun tanpa masuk, ditulis petugas.
+    // Tujuannya satu: pengurus RW tidak pernah perlu menyentuh kode
+    // untuk mengubah apa pun yang tampil di situs.
+
+    // Tautan penting: kantor desa, kecamatan, Dukcapil, dan lainnya.
+    match /tautan/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Jenis surat yang dilayani beserta syarat berkasnya.
+    match /jenis_surat/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Fasilitas yang bisa dipinjam warga.
+    match /fasilitas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Fasilitas umum yang ada di kawasan.
+    match /fasum/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Kegiatan rutin: ronda, posyandu, pengajian, kerja bakti.
+    match /rutin/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Program bantuan sosial beserta syarat dan jalur pengajuannya.
+    match /bansos/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- penutup ----------
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+name: Bangun dan unggah ke GitHub Pages
+
+# Setiap kali ada perubahan yang didorong ke cabang main, situs dibangun
+# ulang lalu diunggah. Tidak ada langkah manual yang perlu diingat pengurus.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Kalau ada dua unggahan berbarengan, yang lama dibatalkan supaya tidak
+# saling menimpa di tengah jalan.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  bangun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Pasang paket
+        run: npm ci
+
+      - name: Bangun situs
+        run: npm run build
+
+      - name: Siapkan berkas untuk Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  unggah:
+    needs: bangun
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pasang.outputs.page_url }}
+    steps:
+      - name: Unggah ke GitHub Pages
+        id: pasang
+        uses: actions/deploy-pages@v4
