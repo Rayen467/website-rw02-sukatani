@@ -150,6 +150,33 @@ export const IDENTITAS_BAWAAN = {
 export const KOORDINAT_BAWAAN = "-6.129217,106.497767";
 
 /**
+ * Pengelompokan berkas dan tautan di halaman Dokumen & Video.
+ * Ditaruh terpisah dari nama koleksi karena ini pilihan isi, bukan nama
+ * teknis: pengurus boleh menambah atau mengganti tanpa menyentuh Firestore.
+ */
+export const KATEGORI_BERKAS = [
+  { nilai: "notulen", label: "Notulen rapat" },
+  { nilai: "keputusan", label: "Surat Keputusan & peraturan" },
+  { nilai: "formulir", label: "Formulir yang bisa diunduh" },
+  { nilai: "laporan", label: "Laporan & pertanggungjawaban" },
+  { nilai: "video", label: "Video kegiatan" },
+  { nilai: "lain", label: "Lainnya" }
+];
+
+/**
+ * Dua cara berkas masuk ke situs.
+ *
+ * "unggah" menyimpan berkasnya di dalam situs, tapi ada batas ukuran --
+ * lihat BATAS_BERKAS di inti/peramban.js. "tautan" cuma menyimpan alamat,
+ * jadi tanpa batas ukuran, tapi berkasnya hidup di tempat lain dan ikut
+ * mati kalau yang punya menghapusnya di sana.
+ */
+export const CARA_BERKAS = [
+  { nilai: "unggah", label: "Unggah berkas ke situs" },
+  { nilai: "tautan", label: "Tempel tautan Google Drive atau YouTube" }
+];
+
+/**
  * Sambutan Ketua RW.
  *
  * INI PENGECUALIAN dari aturan di kepala berkas. Isi lain di sini sengaja
@@ -212,6 +239,7 @@ export const MENU = [
       ["/berita", "Berita dan Pengumuman", "Kabar terbaru dari pengurus"],
       ["/kalender", "Kalender Kegiatan", "Jadwal rutin dan acara"],
       ["/galeri", "Galeri Foto", "Dokumentasi kegiatan"],
+      ["/berkas", "Dokumen dan Video", "Notulen, SK, formulir, rekaman"],
       ["/forum", "Forum dan Polling", "Musyawarah dan survei warga"]
     ]
   },

@@ -73,6 +73,19 @@ export async function ambilKonten(bagian) {
 }
 
 /**
+ * Mengambil SATU dokumen dari koleksi mana pun, saat itu juga.
+ *
+ * Dipakai untuk isi yang sengaja tidak ikut dimuat di awal karena besar --
+ * sekarang cuma isi berkas. Jangan dipakai untuk menampilkan daftar:
+ * memanggil ini berulang di dalam perulangan berarti satu permintaan
+ * jaringan per baris, dan itu jauh lebih lambat daripada ambilKoleksi().
+ */
+export async function ambilDokumen(koleksi, id) {
+  const d = await getDoc(doc(db, koleksi, id));
+  return d.exists() ? d.data() : null;
+}
+
+/**
  * Kiriman milik satu pengguna, untuk halaman Akun Saya.
  * Sengaja tanpa pengurutan supaya Firestore tidak menuntut indeks gabungan
  * yang harus dibuat manual di konsol.
@@ -236,4 +249,43 @@ export async function setujuiReservasi(id, tanggal, fasilitas) {
       dibuat: serverTimestamp()
     });
   }
+}
+
+/**
+ * Menyimpan satu berkas: keterangannya di koleksi berkas, isinya di
+ * koleksi berkas_isi dengan id yang sama.
+ *
+ * Keterangan ditulis DULUAN supaya id-nya lahir, lalu isinya menyusul.
+ * Kalau langkah kedua gagal, yang tertinggal adalah dokumen yang judulnya
+ * ada tapi isinya kosong -- halaman menampilkannya sebagai "berkasnya
+ * belum terpasang", dan pengurus bisa menghapusnya. Kebalikannya jauh
+ * lebih buruk: isi tanpa keterangan menjadi sampah yang tidak terlihat
+ * siapa pun dan tidak bisa dihapus lewat layar.
+ */
+export async function simpanBerkas(keterangan, isiBerkas) {
+  const acuan = await addDoc(collection(db, KOLEKSI.BERKAS), {
+    ...bersihkan(keterangan),
+    dibuat: serverTimestamp()
+  });
+  if (isiBerkas) {
+    await setDoc(doc(db, KOLEKSI.BERKAS_ISI, acuan.id), { data: String(isiBerkas) });
+  }
+  return acuan.id;
+}
+
+/**
+ * Menghapus berkas beserta isinya.
+ *
+ * Isinya dihapus lebih dulu. Kalau urutannya dibalik dan langkah kedua
+ * gagal, isi yang tertinggal tidak punya keterangan lagi -- tidak muncul
+ * di layar mana pun, tapi tetap memakan kuota dan tidak bisa dihapus
+ * tanpa membuka konsol Firebase.
+ */
+export async function hapusBerkas(id) {
+  try {
+    await deleteDoc(doc(db, KOLEKSI.BERKAS_ISI, id));
+  } catch (err) {
+    /* Berkas yang cara masuknya tautan memang tidak punya dokumen isi. */
+  }
+  await deleteDoc(doc(db, KOLEKSI.BERKAS, id));
 }

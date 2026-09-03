@@ -250,3 +250,20 @@
 
 .poin { margin: 4px 0 0; padding-left: 19px; display: flex; flex-direction: column; gap: 5px; }
 .poin li { font-size: 14px; color: var(--tinta-2); }
+
+/* --- Penyaring kelompok di halaman Dokumen & Video ---------------------
+   Tombolnya boleh melipat ke baris berikutnya. Di HP kelompoknya bisa ada
+   lima, dan memaksanya satu baris akan menggeser halaman ke samping. */
+.saring {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.saring .tombol { font-size: 13px; padding: 7px 13px; }
+
+/* Kartu berkas: tombol unduh selalu menempel di dasar kartu, supaya deretan
+   kartu dengan panjang keterangan berbeda tetap rata bawahnya. */
+.berkas-kartu { display: flex; flex-direction: column; }
+.berkas-kartu .keterangan { margin-top: auto; padding-top: 10px; }
+.berkas-kartu .tombol { align-self: flex-start; margin-top: 10px; }

@@ -54,6 +54,7 @@ export const isi = $state({
   fasum: null,
   rutin: null,
   bansos: null,
+  berkas: null,
 
   /* --- Hanya pengurus. Warga selalu ditolak server di sini ------------- */
   surat: null,

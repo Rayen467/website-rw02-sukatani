@@ -50,6 +50,15 @@ export const KOLEKSI = Object.freeze({
   FASUM: "fasum",
   RUTIN: "rutin",
   BANSOS: "bansos",
+  BERKAS: "berkas",
+
+  /* Isi berkas dipisah dari keterangannya, dan ini BUKAN kerapian belaka.
+     Koleksi "berkas" ikut diambil setiap kali situs dibuka. Kalau isi
+     base64-nya ikut di dokumen yang sama, sepuluh PDF berarti 5 MB
+     diunduh setiap pengunjung, termasuk yang cuma mau baca pengumuman.
+     Dengan dipisah, yang diambil di awal cuma judul dan ukurannya; isinya
+     baru diambil kalau ada yang menekan Unduh. */
+  BERKAS_ISI: "berkas_isi",
 
   /* Pengaduan -- isi laporan terbuka, identitas pelapor terpisah */
   PENGADUAN: "pengaduan",
@@ -109,7 +118,8 @@ export const KOLEKSI_UMUM = Object.freeze([
   KOLEKSI.FASILITAS,
   KOLEKSI.FASUM,
   KOLEKSI.RUTIN,
-  KOLEKSI.BANSOS
+  KOLEKSI.BANSOS,
+  KOLEKSI.BERKAS
 ]);
 
 /** Dimuat hanya setelah pengurus masuk. Warga akan ditolak aturan Firestore. */
@@ -177,6 +187,7 @@ export const JALUR = Object.freeze({
   DAFTAR_USAHA: "/daftar-usaha",
   BANSOS: "/bansos",
   TAUTAN: "/tautan",
+  BERKAS: "/berkas",
   KONTAK: "/kontak",
   MASUK: "/masuk",
   AKUN: "/akun",

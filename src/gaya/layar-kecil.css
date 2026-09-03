@@ -56,6 +56,10 @@
      sempit, dan sambutan justru bagian yang dibaca utuh sampai habis. */
   .sambutan .orang { grid-template-columns: minmax(0, 1fr); }
   .sambutan .alinea { font-size: 15px; }
+
+  /* Penyaring dokumen jadi sasaran sentuh utama di halaman itu. 32px
+     terlalu kecil untuk jempol; dinaikkan ke 40px. */
+  .saring .tombol { padding: 10px 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

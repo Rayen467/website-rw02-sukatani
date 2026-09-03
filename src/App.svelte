@@ -38,6 +38,7 @@
   import DaftarUsaha from "./halaman/DaftarUsaha.svelte";
   import Bansos from "./halaman/Bansos.svelte";
   import Tautan from "./halaman/Tautan.svelte";
+  import Berkas from "./halaman/Berkas.svelte";
   import Kontak from "./halaman/Kontak.svelte";
   import Masuk from "./halaman/Masuk.svelte";
   import Akun from "./halaman/Akun.svelte";
@@ -71,6 +72,7 @@
     "daftar-usaha": DaftarUsaha,
     bansos: Bansos,
     tautan: Tautan,
+    berkas: Berkas,
     kontak: Kontak,
     masuk: Masuk,
     akun: Akun,

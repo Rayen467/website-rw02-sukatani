@@ -6,6 +6,7 @@
   import TabProfil from "./TabProfil.svelte";
   import TabLayanan from "./TabLayanan.svelte";
   import TabLain from "./TabLain.svelte";
+  import TabBerkas from "./TabBerkas.svelte";
   import TabTampilan from "./TabTampilan.svelte";
   import TabOrang from "./TabOrang.svelte";
 
@@ -16,6 +17,7 @@
     ["profil", "Profil & katalog", TabProfil],
     ["layanan", "Layanan & fasilitas", TabLayanan],
     ["lain", "Tautan & polling", TabLain],
+    ["berkas", "Dokumen & video", TabBerkas],
     ["tampilan", "Tampilan situs", TabTampilan],
     ["orang", "Warga & pengurus", TabOrang]
   ];

@@ -86,6 +86,24 @@ export async function salinTeks(teks) {
   }
 }
 
+/**
+ * Batas panjang teks berkas yang boleh disimpan di satu dokumen Firestore.
+ *
+ * Firestore membatasi SATU DOKUMEN 1.048.576 huruf. Berkas disimpan sebagai
+ * teks base64, dan base64 membengkakkan ukuran asli sekitar sepertiga. Sisa
+ * ruangnya masih dipakai judul, keterangan, dan tanggal. Karena itu batasnya
+ * ditaruh di 700.000 huruf, yang setara berkas asli sekitar 510 KB.
+ *
+ * Angka ini yang menentukan apa yang muat dan apa yang tidak:
+ *      muat        PDF surat, SK, formulir, notulen ketikan, foto
+ *      tidak muat  video apa pun, PDF hasil pindaian tebal
+ * Yang tidak muat ditempel sebagai tautan Google Drive atau YouTube.
+ */
+export const BATAS_BERKAS = 700000;
+
+/** Berapa KB kira-kira berkas asli yang masih muat. Dipakai di keterangan. */
+export const BATAS_BERKAS_KB = Math.round((BATAS_BERKAS * 3) / 4 / 1024);
+
 /** Batas ukuran foto setelah dikecilkan, dihitung dari panjang teksnya. */
 const BATAS_FOTO = 700000;
 
@@ -128,6 +146,52 @@ export function kecilkanFoto(berkas, sisiMaks = 900) {
         }
       };
       img.src = pembaca.result;
+    };
+    pembaca.readAsDataURL(berkas);
+  });
+}
+
+/**
+ * Membaca berkas apa pun -- PDF, Word, Excel -- jadi teks yang bisa
+ * disimpan di Firestore, sama seperti foto.
+ *
+ * Berbeda dengan kecilkanFoto(), berkas TIDAK BISA dikecilkan: memampatkan
+ * PDF berarti membongkar isinya, dan itu bukan pekerjaan peramban. Jadi
+ * yang kelewat besar ditolak apa adanya, dengan pesan yang menyebut ukuran
+ * sebenarnya supaya pengurus tahu harus berbuat apa.
+ *
+ * Ukuran dicek DUA KALI. Yang pertama dari berkas.size, supaya berkas 50 MB
+ * ditolak seketika tanpa dibaca -- membaca berkas sebesar itu jadi teks
+ * bisa membekukan HP. Yang kedua setelah jadi teks, karena pembengkakan
+ * base64 tidak selalu tepat sepertiga.
+ */
+export function bacaBerkas(berkas) {
+  return new Promise((selesai, gagal) => {
+    if (!berkas) return gagal(new Error("tidak ada berkas dipilih"));
+
+    const kbAsli = Math.round(berkas.size / 1024);
+    if (berkas.size > (BATAS_BERKAS * 3) / 4) {
+      return gagal(
+        new Error(
+          "ukurannya " + kbAsli + " KB, batasnya " + BATAS_BERKAS_KB +
+          " KB. Unggah ke Google Drive lalu tempel tautannya."
+        )
+      );
+    }
+
+    const pembaca = new FileReader();
+    pembaca.onerror = () => gagal(new Error("berkas tidak terbaca"));
+    pembaca.onload = () => {
+      const hasil = String(pembaca.result || "");
+      if (hasil.length > BATAS_BERKAS) {
+        return gagal(
+          new Error(
+            "ukurannya " + kbAsli + " KB, masih terlalu besar. " +
+            "Unggah ke Google Drive lalu tempel tautannya."
+          )
+        );
+      }
+      selesai({ data: hasil, kb: kbAsli, nama: berkas.name || "berkas" });
     };
     pembaca.readAsDataURL(berkas);
   });

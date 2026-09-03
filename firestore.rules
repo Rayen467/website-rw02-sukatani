@@ -382,6 +382,25 @@ service cloud.firestore {
       allow write: if petugas();
     }
 
+    // Dokumen dan video: notulen, SK, formulir, laporan, rekaman kegiatan.
+    // Dua bentuk isi bercampur di koleksi ini. Yang "unggah" menyimpan
+    // berkasnya sebagai teks di kolom data; yang "tautan" cuma menyimpan
+    // alamat ke Google Drive atau YouTube. Keduanya boleh dibaca siapa pun
+    // karena memang diterbitkan untuk warga.
+    match /berkas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Isi berkas, dipisah dari keterangannya. Id-nya sama dengan dokumen di
+    // koleksi berkas. Dipisah bukan demi kerahasiaan -- isinya memang boleh
+    // dibaca siapa pun -- tapi supaya tidak ikut terunduh setiap situs
+    // dibuka. Penjelasannya di catatan BERKAS_ISI, src/inti/nama.js.
+    match /berkas_isi/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
     // Jenis surat yang dilayani beserta syarat berkasnya.
     match /jenis_surat/{id} {
       allow read: if true;
