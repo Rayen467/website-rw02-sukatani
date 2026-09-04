@@ -39,7 +39,7 @@
   </div>
 </section>
 
-<section class="blok">
+<section class="blok zona">
   <div class="darurat">
     <span class="judul">Nomor penting</span>
     <span class="butir"><span class="nama">Pos keamanan</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "posKeamanan")} /></span></span>
@@ -50,7 +50,7 @@
 
 {#if sambutan.teks}
   <section class="blok">
-    <div class="kartu sambutan">
+    <div class="sambutan">
       <p class="alis">Sambutan Ketua RW</p>
       <div class="orang" class:tanpa-foto={!sambutan.foto}>
         {#if sambutan.foto}
@@ -72,12 +72,12 @@
   </section>
 {/if}
 
-<section class="blok">
+<section class="blok zona">
   <div class="kepala-bagian"><h2>{t.judulLayanan}</h2></div>
   <div class="petak petak-3">
-    <a class="kartu" href="#/surat"><h3>{t.layanan1Judul}</h3><p>{t.layanan1Teks}</p></a>
-    <a class="kartu" href="#/pengaduan"><h3>{t.layanan2Judul}</h3><p>{t.layanan2Teks}</p></a>
-    <a class="kartu" href="#/reservasi"><h3>{t.layanan3Judul}</h3><p>{t.layanan3Teks}</p></a>
+    <a class="kartu tindakan" href="#/surat"><h3>{t.layanan1Judul}</h3><p>{t.layanan1Teks}</p></a>
+    <a class="kartu tindakan" href="#/pengaduan"><h3>{t.layanan2Judul}</h3><p>{t.layanan2Teks}</p></a>
+    <a class="kartu tindakan" href="#/reservasi"><h3>{t.layanan3Judul}</h3><p>{t.layanan3Teks}</p></a>
   </div>
 </section>
 
@@ -106,8 +106,8 @@
 
 <section class="blok">
   <div class="petak petak-2">
-    <a class="kartu" href="#/kas"><p class="alis">Transparansi</p><h3>{t.judulKas}</h3><p>{t.teksKas}</p></a>
-    <a class="kartu" href="#/program"><p class="alis">Transparansi</p><h3>{t.judulProgram}</h3><p>{t.teksProgram}</p></a>
+    <a class="kartu sunyi" href="#/kas"><p class="alis">Transparansi</p><h3>{t.judulKas}</h3><p>{t.teksKas}</p></a>
+    <a class="kartu sunyi" href="#/program"><p class="alis">Transparansi</p><h3>{t.judulProgram}</h3><p>{t.teksProgram}</p></a>
   </div>
 </section>
 
@@ -118,7 +118,7 @@
       {#each usaha as u}
         <a class="kartu usaha-kartu" href="#/umkm/{u.id}">
           <span class="muka">
-            {#if u.foto}<img class="gambar-penuh" src={u.foto} alt="" decoding="async" />{:else}FOTO PRODUK{/if}
+            {#if u.foto}<img class="gambar-penuh" src={u.foto} alt="" decoding="async" />{/if}
           </span>
           <span class="badan">
             <span class="jenis">{u.katLabel || ""}</span>

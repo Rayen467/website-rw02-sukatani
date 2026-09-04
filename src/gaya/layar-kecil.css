@@ -41,7 +41,10 @@
      kolomnya jadi 200px di wadah selebar 289px, dan seluruh halaman
      ikut bergeser ke samping. minmax(0, ...) mengizinkannya menyusut. */
   .deret-angka { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .darurat { grid-template-columns: 1fr; gap: 11px; }
+  /* Nomor penting jadi satu kolom, tapi angkanya TIDAK dikecilkan.
+     Justru di HP inilah nomor itu paling sering dibaca sambil berdiri
+     di depan pos, dan justru di sana layarnya paling sempit. */
+  .darurat { grid-template-columns: 1fr; gap: 15px; padding: 16px 18px 18px; }
   .kabar { grid-template-columns: 1fr; gap: 5px; }
   .kabar .tanggal { padding-top: 0; }
   .kaki-petak { grid-template-columns: 1fr; }

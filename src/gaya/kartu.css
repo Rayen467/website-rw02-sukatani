@@ -149,3 +149,37 @@ table.data tr.jumlah td { background: var(--brand-soft); font-weight: 700; color
   background: var(--permukaan-3); border: 1px dashed var(--garis); border-radius: 5px;
   padding: 28px 22px; text-align: center; color: var(--tinta-2); font-size: 14.5px;
 }
+
+/* --- TIGA BOBOT KARTU -------------------------------------------------
+   Sebelumnya semua kartu sama persis: bingkai 1px, sudut 5px, isi 17px.
+   Akibatnya kartu layanan yang harus ditekan warga terlihat sama beratnya
+   dengan kartu keterangan yang cuma dibaca sekilas, dan tidak ada yang
+   memimpin. Sekarang tiga tingkat, dipilih menurut apa yang diminta dari
+   pembaca -- bukan menurut selera. */
+
+/* Tingkat 1. Tindakan utama: layanan yang memang dibuka warga. Lebih
+   lapang, judul lebih besar, dan garis aksen di tepi kiri yang menebal
+   saat disentuh sehingga terasa bisa ditekan. */
+.kartu.tindakan {
+  padding: 22px 24px;
+  border-left: 3px solid var(--brand);
+  gap: 9px;
+}
+.kartu.tindakan h3 { font-size: 19px; letter-spacing: -0.02em; }
+.kartu.tindakan p { font-size: 14.5px; }
+a.kartu.tindakan::after {
+  content: "\2192";
+  font-size: 17px; color: var(--brand); line-height: 1; margin-top: 3px;
+  transition: transform .14s;
+}
+a.kartu.tindakan:hover::after { transform: translateX(4px); }
+
+/* Tingkat 2. Keterangan yang dibaca, bukan ditekan. Tanpa bingkai penuh,
+   hanya garis di kiri -- cukup untuk mengelompokkan, tanpa menuntut
+   perhatian sebanyak kartu tindakan. */
+.kartu.sunyi {
+  background: transparent; border: 0; border-left: 2px solid var(--garis);
+  border-radius: 0; padding: 4px 0 4px 18px;
+}
+
+/* Tingkat 3 adalah .kartu biasa, dipakai untuk butir daftar. */

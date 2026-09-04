@@ -8,17 +8,34 @@
  *  kalender, galeri, polling, surat, peta.
  */
 
+/* NOMOR PENTING
+   Ini satu-satunya bagian yang dibuka orang dalam keadaan panik, dan
+   nomornya harus terbaca dari jarak sejengkal tanpa memicingkan mata.
+   Dulu bentuknya strip tipis dengan angka 13,5px -- lebih kecil daripada
+   teks biasa di sekitarnya, padahal justru ini yang paling dicari.
+
+   Sekarang judul dan nomornya dipisah ke baris sendiri, dan angkanya
+   dibuat sebesar judul bagian. Yang tidak berubah: warnanya tetap merah
+   dan tetap satu-satunya bagian berwarna merah di halaman, supaya mata
+   menemukannya tanpa membaca apa pun. */
 .darurat {
-  background: var(--bahaya-soft); border: 1px solid var(--bahaya); border-radius: 5px;
-  padding: 13px 18px; display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr));
-  gap: 16px; align-items: center;
+  background: var(--bahaya-soft); border: 1px solid var(--bahaya);
+  border-left: 4px solid var(--bahaya); border-radius: 5px;
+  padding: 18px 22px 20px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 26px;
 }
-.darurat .judul { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 13.5px; color: var(--bahaya); white-space: nowrap; }
-.darurat .butir { display: flex; flex-direction: column; }
-.darurat .butir .nama { font-size: 11.5px; color: var(--tinta-2); }
+.darurat .judul {
+  grid-column: 1 / -1;
+  font-family: "Archivo", sans-serif; font-weight: 700; font-size: 12px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--bahaya);
+}
+.darurat .butir { display: flex; flex-direction: column; gap: 3px; }
+.darurat .butir .nama { font-size: 12.5px; color: var(--tinta-2); }
 .darurat .butir .nomor {
-  font-family: "IBM Plex Mono", monospace; font-size: 13.5px;
-  font-weight: 500; color: var(--bahaya);
+  font-family: "IBM Plex Mono", monospace; font-size: 21px;
+  font-weight: 500; letter-spacing: -0.02em; color: var(--bahaya);
+  line-height: 1.2;
 }
 
 .daftar-kabar { display: flex; flex-direction: column; }
@@ -444,3 +461,30 @@
    terpotong -- pengurus sudah memilih sendiri bagian mana yang tampil
    waktu menangkap layarnya. */
 .peta-gambar { display: block; width: 100%; height: auto; }
+
+/* Sambutan bukan lagi kartu berbingkai. Naskah sepanjang tujuh alinea di
+   dalam kotak terbaca seperti kutipan yang disisipkan; tanpa kotak ia
+   terbaca sebagai tulisan yang memang ditujukan kepada pembaca. */
+.sambutan {
+  border-left: 3px solid var(--brand);
+  padding: 2px 0 2px 22px;
+}
+
+/* --- Slot foto yang belum terisi --------------------------------------
+   Dulu berisi tulisan FOTO PRODUK dan FOTO KEGIATAN dalam huruf mono
+   berspasi renggang. Tulisan seperti itu adalah penanda rancangan yang
+   belum selesai -- pembaca membacanya sebagai situs yang belum jadi,
+   bukan sebagai keterangan.
+
+   Sekarang slotnya kosong, hanya bidang warna sedikit lebih gelap dari
+   kartunya, dengan garis diagonal samar. Cukup untuk menandai "di sini
+   akan ada foto" tanpa mengaku sedang menampilkan sesuatu. */
+.usaha-kartu .muka:empty,
+.galitem .muka:empty {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      var(--permukaan-2) 0 9px,
+      var(--permukaan-3) 9px 18px
+    );
+}

@@ -51,6 +51,23 @@
   --info: #1f4e79;
   --info-soft: #dce8f3;
 
+  /* ---- Tangga jarak -------------------------------------------------
+     Jarak yang seragam adalah tanda paling jelas tata letak tanpa niat:
+     kalau semua bagian berjarak sama, tidak ada yang memimpin dan mata
+     tidak tahu harus ke mana. Empat langkah ini yang membentuk iramanya.
+
+       rapat   di dalam satu kelompok, milik satu hal yang sama
+       dekat   antarbaris yang masih bersaudara
+       antar   antarbagian dalam satu halaman
+       zona    antarwilayah besar, tempat pembaca boleh berhenti sejenak
+
+     Loncatannya sengaja besar. Beda 38 dan 42 tidak terbaca siapa pun;
+     beda 22 dan 64 langsung terasa. */
+  --rapat: 10px;
+  --dekat: 22px;
+  --antar: 42px;
+  --zona: 72px;
+
   --bayang: 0 1px 2px rgba(16, 40, 32, 0.05), 0 10px 28px -18px rgba(16, 40, 32, 0.35);
   --bayang-kuat: 0 2px 6px rgba(16, 40, 32, 0.08), 0 20px 44px -22px rgba(16, 40, 32, 0.4);
 }

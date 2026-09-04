@@ -21,7 +21,7 @@
   <div class="usaha-rinci">
     <div>
       <div class="foto-deret">
-        <div>{#if u.foto}<img class="gambar-penuh" src={u.foto} alt="" />{:else}FOTO UTAMA{/if}</div>
+        <div>{#if u.foto}<img class="gambar-penuh" src={u.foto} alt="" />{/if}</div>
         <div>FOTO 2</div>
         <div>FOTO 3</div>
         <div>FOTO 4</div>

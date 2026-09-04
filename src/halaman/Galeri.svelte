@@ -65,8 +65,6 @@
         <span class="muka">
           {#if g.sampul || g.foto}
             <img class="gambar-penuh" src={g.sampul || g.foto} alt="" decoding="async" />
-          {:else}
-            FOTO KEGIATAN
           {/if}
         </span>
         <span class="kepala">
@@ -109,8 +107,6 @@
         {:else if album.foto}
           <!-- Album lama, dari sebelum satu album bisa berisi banyak foto. -->
           <img class="gambar-penuh" src={album.foto} alt="" />
-        {:else}
-          FOTO KEGIATAN
         {/if}
       </div>
 
