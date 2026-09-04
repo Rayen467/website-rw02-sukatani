@@ -73,6 +73,10 @@
      layar 375px menyisakan batang selebar 60px, tidak terbaca. */
   .grafik-baris { grid-template-columns: minmax(0, 1fr); gap: 5px; }
   .grafik-nilai { text-align: left; grid-auto-flow: column; justify-content: start; gap: 14px; }
+
+  /* Peta dipendekkan di HP supaya keterangan di bawahnya ikut terlihat
+     tanpa harus menggulung dua kali. */
+  .petabox iframe, .peta-sendiri { height: 300px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

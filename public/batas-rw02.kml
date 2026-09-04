@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Batas RW 02 Perum Permai Sukatani</name>
+    <description>Cadangan geometri batas wilayah RW 02, digambar pengurus di Google My Maps dan diekspor pada 4 September 2026. Empat RT: RT 01 sampai RT 04. Batas mengikuti garis jalan, kecuali ke arah PAUD yang melebar keluar jalan karena lahan kosong di sana milik RW. Berkas ini memuat geometrinya sendiri, jadi tetap berguna meskipun peta di Google My Maps terhapus.</description>
+    <Style id="merah">
+      <LineStyle><color>ff2121e0</color><width>3</width></LineStyle>
+      <PolyStyle><color>2d2121e0</color></PolyStyle>
+    </Style>
+    <Placemark>
+      <name>Batas RW 02</name>
+      <description>Empat RT: RT 01 sampai RT 04.</description>
+      <styleUrl>#merah</styleUrl>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>
+        106.4960183,-6.1292393,0
+        106.4960363,-6.1295185,0
+        106.4960493,-6.1296794,0
+        106.4960531,-6.1297619,0
+        106.4960551,-6.1297984,0
+        106.4960529,-6.1298363,0
+        106.4960655,-6.1302092,0
+        106.4962297,-6.130199,0
+        106.4962277,-6.1302662,0
+        106.4962394,-6.1304291,0
+        106.4962633,-6.1306509,0
+        106.4962673,-6.1308365,0
+        106.4962726,-6.1310047,0
+        106.4964026,-6.1309874,0
+        106.4966141,-6.130977,0
+        106.4972473,-6.1309292,0
+        106.4972408,-6.1306653,0
+        106.4974111,-6.1306582,0
+        106.4974956,-6.1306586,0
+        106.4975868,-6.1306537,0
+        106.497723,-6.1306466,0
+        106.4977931,-6.1306404,0
+        106.4978403,-6.1306408,0
+        106.4978464,-6.130627,0
+        106.4978457,-6.1305827,0
+        106.4978419,-6.1305066,0
+        106.4978439,-6.1304728,0
+        106.4978471,-6.1304216,0
+        106.4978446,-6.1302962,0
+        106.4978802,-6.1302922,0
+        106.4978702,-6.1301176,0
+        106.4977364,-6.1301163,0
+        106.4977317,-6.130063,0
+        106.4977205,-6.1299375,0
+        106.4977093,-6.1297213,0
+        106.497712,-6.1295235,0
+        106.4977046,-6.1294459,0
+        106.4977026,-6.129355,0
+        106.4977017,-6.1293059,0
+        106.4977036,-6.1292621,0
+        106.4976958,-6.1291874,0
+        106.4976878,-6.1291514,0
+        106.4976864,-6.1291221,0
+        106.4976878,-6.1290847,0
+        106.4976824,-6.1290411,0
+        106.4975026,-6.1290454,0
+        106.4973496,-6.1290567,0
+        106.4970301,-6.129066,0
+        106.4966565,-6.129074,0
+        106.4966547,-6.12923,0
+        106.4965323,-6.129234,0
+        106.4960183,-6.1292393,0
+      </coordinates></LinearRing></outerBoundaryIs></Polygon>
+    </Placemark>
+  </Document>
+</kml>
