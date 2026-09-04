@@ -17,7 +17,7 @@
      lingkarannya. */
   const AWAL_SB = { nama: "", teks: "", foto: "" };
   const AWAL_PF = { sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" };
-  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
+  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", petaBatas: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
@@ -167,6 +167,15 @@
       <label for="n-koordinat">Titik koordinat peta</label>
       <input id="n-koordinat" bind:value={kn.koordinat} placeholder="-6.129217,106.497767" />
       <span class="petunjuk">Buka Google Maps, tekan lama di titik balai warga, salin angka yang muncul. Tulis lintang dan bujur dipisah koma, tanpa spasi.</span>
+    </div>
+    <div class="isian">
+      <label for="n-batas">Peta batas wilayah RW 02</label>
+      <input id="n-batas" bind:value={kn.petaBatas} placeholder="https://www.google.com/maps/d/embed?mid=..." />
+      <span class="petunjuk">
+        Peta biasa tidak bisa menggambar garis batas. Buka google.com/mymaps, gambar batas RW 02 di atas
+        citra Google, lalu tempel tautan sematannya di sini. Boleh menempel seluruh kode iframe, bagian
+        yang dibutuhkan diambil sendiri. Dikosongkan berarti yang tampil hanya titik lokasi.
+      </span>
     </div>
     <div class="isian"><label for="n-jam1">Jam layanan Senin sampai Jumat</label><input id="n-jam1" bind:value={kn.jamSeninJumat} /></div>
     <div class="isian"><label for="n-jam2">Jam layanan Sabtu</label><input id="n-jam2" bind:value={kn.jamSabtu} /></div>

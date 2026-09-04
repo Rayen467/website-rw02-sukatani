@@ -19,7 +19,10 @@
  *  dari server bila ada dan jatuh ke daftar di sini bila belum ada.
  */
 
-export const RT_BAWAAN = ["RT 01", "RT 02", "RT 03", "RT 04", "RT 05"];
+/* RW 02 membawahi empat RT, bukan lima. Daftar ini mengisi borang surat,
+   pendataan warga, dan tabel fasilitas umum -- kalau ada RT yang tidak ada
+   di sini, warga bisa memilih RT yang tidak pernah ada. */
+export const RT_BAWAAN = ["RT 01", "RT 02", "RT 03", "RT 04"];
 
 export const JENIS_SURAT_BAWAAN = [
   {
@@ -86,7 +89,11 @@ export const FASUM_BAWAAN = [
   { id: "musala", nama: "Musala", jenis: "Ibadah", rt: "RT 01" },
   { id: "posyandu", nama: "Posyandu", jenis: "Kesehatan", rt: "RT 02" },
   { id: "taman", nama: "Taman Bermain Anak", jenis: "Ruang terbuka", rt: "RT 04" },
-  { id: "banksampah", nama: "Bank Sampah", jenis: "Kebersihan", rt: "RT 05" }
+  /* Lokasinya sengaja dikosongkan, bukan ditebak. RW 02 cuma punya empat
+     RT, dan sebelumnya baris ini menulis RT 05 -- RT yang tidak ada.
+     Menampilkan lokasi yang salah lebih buruk daripada menampilkan
+     keterangan kosong yang jujur. Pengurus mengisinya lewat Kelola. */
+  { id: "banksampah", nama: "Bank Sampah", jenis: "Kebersihan", rt: "" }
 ];
 
 export const RUTIN_BAWAAN = [
