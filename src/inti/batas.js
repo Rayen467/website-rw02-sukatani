@@ -7,8 +7,14 @@
  *
  *  ASALNYA
  *  Digambar pengurus di Google My Maps pada 4 September 2026, lalu diekspor
- *  sebagai KML. Berkas aslinya disimpan di data/batas-rw02.kml supaya bisa
- *  dibuka lagi di My Maps kalau perlu diubah.
+ *  sebagai KML. Berkas aslinya ada di public/batas-rw02.kml, jadi ikut
+ *  terbit bersama situs dan bisa diunduh siapa pun lewat
+ *  <alamat situs>/batas-rw02.kml -- lalu dibuka lagi di Google My Maps
+ *  kalau batasnya perlu diubah. Satu salinan saja, sengaja: dua salinan
+ *  berakhir dengan satu yang basi dan tidak ada yang tahu mana yang benar.
+ *
+ *  KALAU BATASNYA BERUBAH: sunting di My Maps, ekspor KML baru, timpa
+ *  berkas di public/, lalu perbarui titik di bawah dari berkas itu.
  *
  *  KENAPA DISALIN KE KODE, BUKAN CUKUP DISEMATKAN
  *  Sematan Google My Maps hidup di akun orang yang menggambarnya. Kalau
