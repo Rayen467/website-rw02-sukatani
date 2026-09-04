@@ -6,17 +6,37 @@
   import { pesanRamah } from "../../sumber/firebase.js";
   import { rupiah, angkaDari } from "../../inti/format.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
+  import TempelMassal from "../../komponen/TempelMassal.svelte";
+
+  /* Contoh tempelan, memakai TAB sebagai pemisah karena itu yang keluar
+     kalau baris disalin dari Excel atau Google Sheets. Disusun di sini,
+     bukan langsung di markup, supaya tanda tab dan ganti barisnya jelas
+     terbaca dan tidak berubah jadi spasi biasa waktu berkas ini disunting. */
+  const CONTOH_KAS = [
+    ["September 2026", "1 Sep", "Iuran warga blok A", "masuk", "2500000"].join("\t"),
+    ["September 2026", "3 Sep", "Beli lampu jalan", "keluar", "480000"].join("\t")
+  ].join("\n");
+
+  /* Nilai awal diangkat jadi tetapan karena dipakai di DUA tempat: di sini
+     dan di $effect yang memuat isi dari server. Kalau efek itu memakai
+     { ...keadaan, ...k }, ia membaca keadaan yang ia tulis sendiri, dan
+     Svelte berputar sampai melempar effect_update_depth_exceeded --
+     seluruh tab berhenti tergambar. Bergantung pada tetapan memutus
+     lingkarannya. */
+  const AWAL_D = { jiwa: "", kk: "", lakilaki: "", perempuan: "" };
+  const AWAL_ST = { usia: "", pendidikan: "", pekerjaan: "", agama: "" };
+  const AWAL_BS = { periode: "", penerima: "" };
 
   let c = $state({ periode: "", tgl: "", ket: "", jenis: "masuk", nominal: "" });
   let pr = $state({ nama: "", tahun: "", status: "rencana", anggaran: "", ket: "" });
-  let d = $state({ jiwa: "", kk: "", lakilaki: "", perempuan: "" });
-  let st = $state({ usia: "", pendidikan: "", pekerjaan: "", agama: "" });
-  let bs = $state({ periode: "", penerima: "" });
+  let d = $state({ ...AWAL_D });
+  let st = $state({ ...AWAL_ST });
+  let bs = $state({ ...AWAL_BS });
   let sibuk = $state("");
 
-  $effect(() => { const k = konten(KONTEN.KEPENDUDUKAN); if (k) d = { ...d, ...k }; });
-  $effect(() => { const k = konten(KONTEN.STATISTIK); if (k) st = { ...st, ...k }; });
-  $effect(() => { const k = konten(KONTEN.BANSOS); if (k) bs = { ...bs, ...k }; });
+  $effect(() => { const k = konten(KONTEN.KEPENDUDUKAN); if (k) d = { ...AWAL_D, ...k }; });
+  $effect(() => { const k = konten(KONTEN.STATISTIK); if (k) st = { ...AWAL_ST, ...k }; });
+  $effect(() => { const k = konten(KONTEN.BANSOS); if (k) bs = { ...AWAL_BS, ...k }; });
 
   const kas = $derived(isi.kas || []);
   const ringkas = $derived.by(() => {
@@ -53,6 +73,33 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === "kas"}>{sibuk === "kas" ? "Menyimpan..." : "Catat"}</button></div>
     <p class="catatan-borang">Buku kas dan kuitansi fisik tetap jadi bukti utama. Yang di sini salinannya supaya warga bisa memeriksa.</p>
   </form>
+  <div class="kepala-bagian" style="margin-top:26px">
+    <h3>Atau tempel banyak baris sekaligus</h3>
+  </div>
+  <div class="catatan" style="margin-bottom:16px">
+    <b>Buat memasukkan buku kas yang sudah ada.</b> Salin barisnya dari Excel atau
+    catatan, tempel di bawah, periksa pratinjaunya, lalu simpan sekaligus.
+    Mengetik enam puluh baris satu per satu lewat borang di atas tidak masuk akal.
+  </div>
+  <TempelMassal
+    kolom={[
+      { nama: "periode", label: "Periode", wajib: true },
+      { nama: "tgl", label: "Tanggal", wajib: true },
+      { nama: "ket", label: "Keterangan", wajib: true },
+      { nama: "jenis", label: "Jenis", wajib: true },
+      { nama: "nominal", label: "Nominal", jenis: "angka", wajib: true }
+    ]}
+    contoh={CONTOH_KAS}
+    petunjuk="Kolom Jenis diisi masuk atau keluar."
+    saatSimpan={async (baris) => {
+      await tambahIsi(KOLEKSI.KAS, {
+        ...baris,
+        jenis: String(baris.jenis).toLowerCase().startsWith("k") ? "keluar" : "masuk"
+      });
+      muatKoleksi(KOLEKSI.KAS);
+    }}
+  />
+
   {#each kas as o}
     <BarisKelola
       koleksi={KOLEKSI.KAS}

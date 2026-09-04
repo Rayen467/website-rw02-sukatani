@@ -7,14 +7,23 @@
   import { IDENTITAS_BAWAAN } from "../../inti/bawaan.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
+  /* Nilai awal diangkat jadi tetapan karena dipakai di DUA tempat: di sini
+     dan di $effect yang memuat isi dari server. Kalau efek itu memakai
+     { ...keadaan, ...k }, ia membaca keadaan yang ia tulis sendiri, dan
+     Svelte berputar sampai melempar effect_update_depth_exceeded --
+     seluruh tab berhenti tergambar. Bergantung pada tetapan memutus
+     lingkarannya. */
+  const AWAL_PL = { id: "poll-2026-09", pertanyaan: "", keterangan: "", opsi: "" };
+  const AWAL_IDN = { ...IDENTITAS_BAWAAN };
+
   let tt = $state({ nama: "", ket: "", url: "" });
   let bp = $state({ nama: "", syarat: "", jalur: "" });
-  let pl = $state({ id: "poll-2026-09", pertanyaan: "", keterangan: "", opsi: "" });
-  let idn = $state({ ...IDENTITAS_BAWAAN });
+  let pl = $state({ ...AWAL_PL });
+  let idn = $state({ ...AWAL_IDN });
   let sibuk = $state("");
 
-  $effect(() => { const k = konten(KONTEN.POLLING); if (k) pl = { ...pl, ...k }; });
-  $effect(() => { const k = konten(KONTEN.IDENTITAS); if (k) idn = { ...idn, ...k }; });
+  $effect(() => { const k = konten(KONTEN.POLLING); if (k) pl = { ...AWAL_PL, ...k }; });
+  $effect(() => { const k = konten(KONTEN.IDENTITAS); if (k) idn = { ...AWAL_IDN, ...k }; });
 
   async function jalan(tanda, aksi) {
     sibuk = tanda;

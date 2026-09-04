@@ -326,3 +326,52 @@
 }
 .baris-kelola.tegak .tindakan { display: grid; gap: 11px; }
 .baris-kelola.tegak .tindakan textarea { min-height: 72px; }
+
+/* --- Tempel banyak baris sekaligus ------------------------------------ */
+.tempel { display: grid; gap: 14px; margin-bottom: 20px; }
+.tempel textarea {
+  min-height: 130px;
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+/* Baris bermasalah diberi latar, bukan cuma tulisan merah: dalam tabel
+   tiga puluh baris, warna latar jauh lebih cepat ditemukan mata. */
+.baris-cacat { background: var(--bahaya-soft); }
+
+/* --- Daftar centang bagian laporan ------------------------------------ */
+.label-blok { font-size: 12px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--tinta-2); display: block; margin-bottom: 9px; }
+.centang-daftar { display: grid; gap: 9px; }
+.centang { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px;
+  align-items: start; cursor: pointer; padding: 9px 11px; border: 1px solid var(--garis);
+  border-radius: 5px; background: var(--permukaan); }
+.centang input { margin-top: 2px; }
+.centang b { display: block; font-size: 14px; }
+.centang .petunjuk { margin-top: 2px; }
+
+/* --- Grafik batang kas ------------------------------------------------
+   Digambar dengan div biasa, bukan pustaka grafik. Yang dibutuhkan cuma
+   persegi panjang dan tulisan; menarik pustaka ratusan kilobyte untuk itu
+   memperlambat situs bagi setiap warga, padahal yang memakai cuma pengurus. */
+.grafik { display: grid; gap: 11px; margin-top: 10px; }
+.grafik-baris { display: grid; grid-template-columns: 130px minmax(0, 1fr) 150px;
+  gap: 12px; align-items: center; }
+.grafik-nama { font-size: 12.5px; color: var(--tinta-2); }
+.grafik-batang { display: grid; gap: 3px; }
+.grafik-batang span { display: block; height: 11px; border-radius: 2px; min-width: 2px; }
+.grafik-batang .isi-masuk { background: var(--brand); }
+.grafik-batang .isi-keluar { background: var(--action); }
+.grafik-nilai { display: grid; gap: 3px; font-size: 11.5px; text-align: right;
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace; }
+.grafik-nilai .naik { color: var(--brand); }
+.grafik-nilai .turun { color: var(--action); }
+
+/* --- Laporan siap cetak ----------------------------------------------- */
+.laporan h3 { margin: 26px 0 10px; font-size: 16.5px; }
+.laporan h3:first-of-type { margin-top: 18px; }
+.laporan .deret-angka { margin-bottom: 6px; }
+.tanda-tangan-laporan { margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--garis); }
+.tanda-tangan-laporan p { margin: 3px 0; font-size: 13px; }

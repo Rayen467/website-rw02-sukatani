@@ -129,3 +129,52 @@ export function keCSV(daftar, kolom) {
 export function namaUnduhan(awalan, akhiran = "csv") {
   return awalan + "-" + tanggalHariIni() + "." + akhiran;
 }
+
+/**
+ * Mengurai tabel yang ditempel dari Excel, Google Sheets, atau WhatsApp.
+ *
+ * KENAPA INI ADA
+ * Bendahara RW menyimpan kasnya di buku atau di Excel, bukan mengetiknya
+ * satu-satu ke borang. Enam puluh baris lewat borang satu-satu tidak akan
+ * pernah dikerjakan, jadi fiturnya sama saja dengan tidak ada.
+ *
+ * PEMISAHNYA DITEBAK, BUKAN DITANYAKAN
+ * Menyalin dari Excel menghasilkan pemisah TAB. Menyalin dari berkas CSV
+ * Indonesia menghasilkan titik koma. Dari sumber lain kadang koma. Pengurus
+ * tidak perlu tahu bedanya, apalagi memilihnya dari menu -- yang paling
+ * banyak muncul di teksnya itulah pemisahnya.
+ *
+ * Koma sengaja jadi tebakan TERAKHIR: angka rupiah Indonesia sering
+ * mengandung koma, jadi menebak koma duluan akan memotong "Rp1.250,00"
+ * jadi dua kolom.
+ */
+export function uraiTabel(teks) {
+  const isiTeks = String(teks || "").replace(/\r\n?/g, "\n").trim();
+  if (!isiTeks) return [];
+
+  const hitung = (tanda) => (isiTeks.match(new RegExp("\\" + tanda, "g")) || []).length;
+  let pemisah = "\t";
+  if (hitung("\t") === 0) pemisah = hitung(";") > 0 ? ";" : ",";
+
+  return isiTeks
+    .split("\n")
+    .map((baris) => baris.split(pemisah).map((sel) => sel.trim()))
+    .filter((baris) => baris.some((sel) => sel !== ""));
+}
+
+/**
+ * Menebak apakah baris pertama adalah judul kolom, bukan data.
+ *
+ * Ditebak dari dua tanda: tidak ada satu pun sel yang berupa angka, dan
+ * ada sel yang isinya mirip nama kolom. Kalau salah tebak, pengurus tetap
+ * melihat pratinjaunya sebelum menyimpan -- karena itu tebakan di sini
+ * boleh sederhana, tidak perlu pintar.
+ */
+export function barisJudul(baris) {
+  if (!baris || !baris.length) return false;
+  const adaAngka = baris.some((s) => /^[\d.,\s-]+$/.test(s) && /\d/.test(s));
+  if (adaAngka) return false;
+  const kata = ["tanggal", "tgl", "ket", "uraian", "nominal", "jumlah", "masuk",
+                "keluar", "jenis", "nama", "periode", "tahun", "status", "anggaran"];
+  return baris.some((s) => kata.includes(s.toLowerCase()));
+}

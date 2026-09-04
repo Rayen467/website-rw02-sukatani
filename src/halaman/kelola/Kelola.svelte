@@ -2,6 +2,7 @@
   import { sesi, pengurus, namaPeran } from "../../keadaan/sesi.svelte.js";
   import TabKiriman from "./TabKiriman.svelte";
   import TabBeranda from "./TabBeranda.svelte";
+  import TabLaporan from "./TabLaporan.svelte";
   import TabTerbit from "./TabTerbit.svelte";
   import TabAngka from "./TabAngka.svelte";
   import TabProfil from "./TabProfil.svelte";
@@ -20,6 +21,7 @@
     ["layanan", "Layanan & fasilitas", TabLayanan],
     ["lain", "Tautan & polling", TabLain],
     ["berkas", "Dokumen & video", TabBerkas],
+    ["laporan", "Laporan", TabLaporan],
     ["tampilan", "Tampilan situs", TabTampilan],
     ["orang", "Warga & pengurus", TabOrang]
   ];

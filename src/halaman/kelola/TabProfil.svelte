@@ -9,11 +9,21 @@
   import { JENIS_USAHA } from "../../inti/bawaan.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
-  let sb = $state({ nama: "", teks: "", foto: "" });
+  /* Nilai awal diangkat jadi tetapan karena dipakai di DUA tempat: di sini
+     dan di $effect yang memuat isi dari server. Kalau efek itu memakai
+     { ...keadaan, ...k }, ia membaca keadaan yang ia tulis sendiri, dan
+     Svelte berputar sampai melempar effect_update_depth_exceeded --
+     seluruh tab berhenti tergambar. Bergantung pada tetapan memutus
+     lingkarannya. */
+  const AWAL_SB = { nama: "", teks: "", foto: "" };
+  const AWAL_PF = { sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" };
+  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
+
+  let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
   let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "" });
-  let pf = $state({ sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" });
-  let kn = $state({ posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" });
+  let pf = $state({ ...AWAL_PF });
+  let kn = $state({ ...AWAL_KN });
   let uk = $state({ nama: "", kat: "siapsaji", ringkas: "", panjang: "", jam: "", wa: "" });
 
   let fotoSambutan = $state(null);
@@ -21,9 +31,9 @@
   let fotoUsaha = $state(null);
   let sibuk = $state("");
 
-  $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...sb, ...k }; });
-  $effect(() => { const k = konten(KONTEN.PROFIL); if (k) pf = { ...pf, ...k }; });
-  $effect(() => { const k = konten(KONTEN.KONTAK); if (k) kn = { ...kn, ...k }; });
+  $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...AWAL_SB, ...k }; });
+  $effect(() => { const k = konten(KONTEN.PROFIL); if (k) pf = { ...AWAL_PF, ...k }; });
+  $effect(() => { const k = konten(KONTEN.KONTAK); if (k) kn = { ...AWAL_KN, ...k }; });
 
   async function bacaFoto(berkas, sisi) {
     if (!berkas) return "";

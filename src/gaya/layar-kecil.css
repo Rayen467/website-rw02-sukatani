@@ -36,7 +36,11 @@
   .burger { margin-left: auto; }
   .petak-2, .petak-3 { grid-template-columns: 1fr; }
   .galeri { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .deret-angka { grid-template-columns: 1fr 1fr; }
+  /* minmax(0, 1fr), bukan 1fr. Satuan 1fr punya batas bawah auto, yang
+     artinya selebar isi terpanjangnya -- tulisan Rp2.500.000 memaksa
+     kolomnya jadi 200px di wadah selebar 289px, dan seluruh halaman
+     ikut bergeser ke samping. minmax(0, ...) mengizinkannya menyusut. */
+  .deret-angka { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .darurat { grid-template-columns: 1fr; gap: 11px; }
   .kabar { grid-template-columns: 1fr; gap: 5px; }
   .kabar .tanggal { padding-top: 0; }
@@ -64,6 +68,11 @@
   /* Panel tindakan kiriman turun ke bawah keterangannya. Dua kolom di
      layar selebar ini menyisakan kotak catatan selebar 120px. */
   .baris-kelola.tegak { grid-template-columns: minmax(0, 1fr); }
+
+  /* Grafik kas: nama periode pindah ke atas batangnya. Tiga kolom di
+     layar 375px menyisakan batang selebar 60px, tidak terbaca. */
+  .grafik-baris { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+  .grafik-nilai { text-align: left; grid-auto-flow: column; justify-content: start; gap: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
