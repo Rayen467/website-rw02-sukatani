@@ -375,3 +375,46 @@
 .laporan .deret-angka { margin-bottom: 6px; }
 .tanda-tangan-laporan { margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--garis); }
 .tanda-tangan-laporan p { margin: 3px 0; font-size: 13px; }
+
+/* --- Halaman masuk ----------------------------------------------------
+   Tombol Google dibuat paling menonjol karena itu jalur tercepat bagi
+   hampir semua warga: akun Google-nya sudah masuk di HP, dan emailnya
+   sudah dipastikan Google sehingga langkah verifikasi email terlewati. */
+.masuk-utama { max-width: 460px; text-align: center; padding: 26px 22px; }
+
+.tombol-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #1f1f1f;
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: box-shadow .14s, background .14s;
+}
+.tombol-google:hover:not(:disabled) { background: #f8f9fa; box-shadow: 0 1px 3px rgba(60, 64, 67, .3); }
+.tombol-google:disabled { opacity: .6; cursor: default; }
+/* Tombolnya tetap putih di tampilan gelap. Warna dan bentuk tombol Google
+   sudah dikenali orang sebagai satu tanda; mengubahnya justru membuat
+   sebagian warga ragu itu benar-benar Google. */
+.tombol-google svg { flex: 0 0 auto; }
+
+.masuk-alasan { font-size: 13.5px; color: var(--tinta-2); line-height: 1.6; margin-top: 14px; }
+
+.pemisah-atau {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  max-width: 460px;
+  margin: 22px 0 18px;
+}
+.pemisah-atau::before,
+.pemisah-atau::after { content: ""; height: 1px; background: var(--garis); }
+.pemisah-atau span { font-size: 12.5px; color: var(--tinta-3); }
