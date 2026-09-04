@@ -39,6 +39,7 @@
 
   const titik = $derived(kontenNilai(KONTEN.KONTAK, "koordinat", KOORDINAT_BAWAAN));
   const namaTitik = $derived(kontenNilai(KONTEN.KONTAK, "namaTitik", ""));
+  const gambarPeta = $derived(kontenNilai(KONTEN.KONTAK, "gambarPeta", ""));
   const batasMentah = $derived(kontenNilai(KONTEN.KONTAK, "petaBatas", ""));
   const sematan = $derived(sematanPeta(batasMentah));
   const sematanKeliru = $derived(sematanSalah(batasMentah));
@@ -56,7 +57,7 @@
   }
 
   $effect(() => {
-    if (sematan || !wadah) return;
+    if (sematan || gambarPeta || !wadah) return;
 
     const penanda = uraiTitik(titik);
     let peta = null;
@@ -152,6 +153,11 @@
       referrerpolicy="no-referrer-when-downgrade"
       title="Peta batas wilayah RW 02"
     ></iframe>
+  {:else if gambarPeta}
+    <!-- Tangkapan layar peta Google yang diunggah pengurus. Tidak bisa
+         digeser, tapi tampilannya persis Google dan tidak bergantung pada
+         layanan mana pun selain situs ini sendiri. -->
+    <img class="peta-gambar" src={gambarPeta} alt="Peta batas wilayah RW 02" decoding="async" />
   {:else if gagalMuat}
     <div class="peta-gagal">
       Peta tidak dapat dimuat. Gunakan tombol di bawah untuk membukanya di aplikasi peta.
@@ -165,7 +171,7 @@
   <p class="keterangan-batas">
     <span class="contoh-garis" aria-hidden="true"></span>
     Garis merah adalah batas wilayah RW 02. Rumah di luar garis termasuk RW lain.
-    {#if !sematan}
+    {#if !sematan && !gambarPeta}
       Ketuk <b>Peta jalan</b> di pojok kanan atas bila ingin melihat nama jalan.
     {/if}
   </p>

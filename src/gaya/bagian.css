@@ -438,3 +438,9 @@
    di dalam komponen Svelte -- di sini semua pemilih memang sudah global. */
 .leaflet-container { font-family: inherit; }
 .leaflet-control-attribution { font-size: 10.5px; }
+
+/* Tangkapan layar peta yang diunggah pengurus. Tingginya dibiarkan
+   mengikuti gambar, bukan dipatok, supaya tidak ada bagian peta yang
+   terpotong -- pengurus sudah memilih sendiri bagian mana yang tampil
+   waktu menangkap layarnya. */
+.peta-gambar { display: block; width: 100%; height: auto; }

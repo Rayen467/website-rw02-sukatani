@@ -17,7 +17,7 @@
      lingkarannya. */
   const AWAL_SB = { nama: "", teks: "", foto: "" };
   const AWAL_PF = { sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" };
-  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", namaTitik: "", petaBatas: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
+  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", namaTitik: "", petaBatas: "", gambarPeta: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
@@ -29,6 +29,7 @@
   let fotoSambutan = $state(null);
   let fotoStruktur = $state(null);
   let fotoUsaha = $state(null);
+  let gambarPeta = $state(null);
   let sibuk = $state("");
 
   $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...AWAL_SB, ...k }; });
@@ -155,7 +156,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Kontak, jam layanan, dan iuran</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("kontak", async () => { await simpanKonten(KONTEN.KONTAK, kn); muatKonten(KONTEN.KONTAK); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("kontak", async () => { const g = (await bacaFoto(gambarPeta, 1400)) || kn.gambarPeta || ""; await simpanKonten(KONTEN.KONTAK, { ...kn, gambarPeta: g }); gambarPeta = null; muatKonten(KONTEN.KONTAK); }); }}>
     <div class="isian"><label for="n-pos">Nomor pos keamanan</label><input id="n-pos" bind:value={kn.posKeamanan} /></div>
     <div class="isian"><label for="n-rw">Nomor Ketua RW</label><input id="n-rw" bind:value={kn.ketuaRW} /></div>
     <div class="isian"><label for="n-sek">Nomor Sekretaris</label><input id="n-sek" bind:value={kn.sekretaris} /></div>
@@ -170,6 +171,17 @@
         Buka Google Maps, tekan lama tepat di bangunannya, lalu salin angka yang muncul.
         Tulis lintang dan bujur dipisah koma, tanpa spasi. Titik ini jadi bulatan biru
         di peta, dan jadi tujuan tombol Petunjuk arah.
+      </span>
+    </div>
+    <div class="isian">
+      <label for="n-gambarpeta">Gambar peta (cara paling gampang)</label>
+      <input id="n-gambarpeta" type="file" accept="image/*" onchange={(e) => (gambarPeta = e.target.files[0] || null)} />
+      <span class="petunjuk">
+        Buka peta batas wilayah di Google My Maps, atur tampilannya sampai pas,
+        lalu <b>tangkap layar</b> dan unggah gambarnya di sini. Yang tampil di situs
+        persis seperti yang Anda lihat di Google &mdash; tidak bisa digeser atau
+        diperbesar, tapi gambarnya tajam dan tidak butuh pengaturan apa pun.
+        Kosongkan bila ingin memakai peta yang bisa digeser.
       </span>
     </div>
     <div class="isian">
