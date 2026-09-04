@@ -92,8 +92,13 @@ service cloud.firestore {
       return request.resource.data.dibuat == request.time;
     }
 
+    // Nilai status yang boleh dipasang pengurus pada kiriman warga.
+    // 'ditolak' ada di sini supaya permohonan yang tidak bisa dipenuhi
+    // punya jalan keluar yang jujur. Tanpa itu satu-satunya cara menutup
+    // permohonan adalah menandainya 'selesai', yang berarti berbohong
+    // kepada warga yang memantau statusnya.
     function statusSah(nilai) {
-      return nilai in ['baru', 'proses', 'selesai'];
+      return nilai in ['baru', 'proses', 'selesai', 'ditolak'];
     }
 
     // ---------- pendaftaran warga ----------

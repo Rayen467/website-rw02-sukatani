@@ -216,6 +216,18 @@ export const STATUS = Object.freeze({
   AKTIF: "aktif"
 });
 
+/**
+ * Pilihan status yang boleh dipasang pengurus pada kiriman warga, beserta
+ * sebutannya di layar. Urutannya sengaja mengikuti perjalanan sebuah
+ * kiriman, bukan urutan abjad.
+ */
+export const PILIHAN_STATUS = Object.freeze([
+  { nilai: STATUS.BARU, label: "Diterima" },
+  { nilai: STATUS.PROSES, label: "Diproses" },
+  { nilai: STATUS.SELESAI, label: "Selesai" },
+  { nilai: STATUS.DITOLAK, label: "Ditolak" }
+]);
+
 /** Peran pengurus. Keduanya berwenang sama; ini hanya penanda jabatan. */
 export const PERAN = Object.freeze({
   MASTER: "master",

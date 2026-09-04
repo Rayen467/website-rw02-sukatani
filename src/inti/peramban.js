@@ -196,3 +196,22 @@ export function bacaBerkas(berkas) {
     pembaca.readAsDataURL(berkas);
   });
 }
+
+/**
+ * Menyimpan teks jadi berkas yang diunduh pengunjung.
+ *
+ * Diawali BOM UTF-8. Tanpa itu Excel di Windows membaca berkas sebagai
+ * ANSI, dan setiap huruf beraksen atau tanda kutip miring berubah jadi
+ * cacahan huruf aneh -- persis mojibake yang pernah bikin repot dulu.
+ */
+export function unduhTeks(namaBerkas, isiTeks, jenis = "text/csv") {
+  const gumpal = new Blob(["﻿" + isiTeks], { type: jenis + ";charset=utf-8" });
+  const alamat = URL.createObjectURL(gumpal);
+  const a = document.createElement("a");
+  a.href = alamat;
+  a.download = namaBerkas;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(alamat);
+}

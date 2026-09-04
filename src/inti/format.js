@@ -96,3 +96,36 @@ export function keSlug(teks) {
 export function tanggalHariIni() {
   return new Date().toISOString().slice(0, 10);
 }
+
+/**
+ * Menyusun tabel jadi teks CSV yang bisa dibuka Excel.
+ *
+ * DUA HAL YANG MUDAH SALAH, DAN KEDUANYA SUDAH DIURUS DI SINI:
+ *
+ * 1. Pemisahnya titik koma, bukan koma. Excel berbahasa Indonesia membaca
+ *    koma sebagai pemisah desimal, jadi berkas berkoma masuk semua ke satu
+ *    kolom dan pengurus mengira berkasnya rusak.
+ *
+ * 2. Nilai yang mengandung titik koma, tanda kutip, atau ganti baris
+ *    dibungkus tanda kutip, dan kutip di dalamnya digandakan. Tanpa itu,
+ *    satu pengaduan yang isinya dua alinea merusak seluruh kolom di
+ *    bawahnya.
+ *
+ * kolom berbentuk [["judul kolom", "namaKolom"], ...]
+ */
+export function keCSV(daftar, kolom) {
+  const bungkus = (v) => {
+    const t = v === null || v === undefined ? "" : String(v);
+    return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  };
+  const baris = [kolom.map(([judul]) => bungkus(judul)).join(";")];
+  for (const d of daftar) {
+    baris.push(kolom.map(([, nama]) => bungkus(d[nama])).join(";"));
+  }
+  return baris.join("\r\n");
+}
+
+/** Nama berkas unduhan dengan tanggal, misalnya "kas-2026-09-04.csv". */
+export function namaUnduhan(awalan, akhiran = "csv") {
+  return awalan + "-" + tanggalHariIni() + "." + akhiran;
+}

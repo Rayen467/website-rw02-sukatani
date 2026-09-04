@@ -314,3 +314,15 @@
 .jempol-satu img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .jempol-satu.terpilih { border-color: var(--action); }
 .usaha-kartu .usaha-ringkas { font-size: 13.5px; color: var(--tinta-2); line-height: 1.5; }
+
+/* --- Baris kiriman yang punya panel tindakan --------------------------
+   Kiriman warga butuh isian, bukan cuma tombol. Kolomnya jadi menumpuk
+   ke bawah, bukan tiga kolom seperti baris kelola biasa. */
+.baris-kelola.tegak {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+  gap: 18px;
+  align-items: start;
+}
+.baris-kelola.tegak .tindakan { display: grid; gap: 11px; }
+.baris-kelola.tegak .tindakan textarea { min-height: 72px; }

@@ -60,6 +60,10 @@
   /* Penyaring dokumen jadi sasaran sentuh utama di halaman itu. 32px
      terlalu kecil untuk jempol; dinaikkan ke 40px. */
   .saring .tombol { padding: 10px 15px; }
+
+  /* Panel tindakan kiriman turun ke bawah keterangannya. Dua kolom di
+     layar selebar ini menyisakan kotak catatan selebar 120px. */
+  .baris-kelola.tegak { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
