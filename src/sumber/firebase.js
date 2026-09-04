@@ -39,6 +39,10 @@ export const konfigurasi = {
 const app = initializeApp(konfigurasi);
 
 export const auth = getAuth(app);
+/* Email verifikasi, reset sandi, dan layar bawaan Firebase memakai Bahasa
+   Indonesia. Ini tidak mengubah bahasa akun Google milik pengguna. */
+auth.languageCode = "id";
+
 export const db = getFirestore(app);
 
 /* -------------------------------------------------------------------------
@@ -50,28 +54,47 @@ export const db = getFirestore(app);
  * ------------------------------------------------------------------------- */
 
 const TERJEMAHAN = [
-  ["popup-closed", "Jendela masuk ditutup sebelum selesai."],
-  ["cancelled-popup", "Jendela masuk ditutup sebelum selesai."],
-  ["popup-blocked", "Jendela masuk diblokir peramban. Izinkan pop-up untuk situs ini."],
-  ["unauthorized-domain", "Alamat situs ini belum didaftarkan di Firebase. Tambahkan di Authentication, bagian Settings, Authorized domains."],
+  ["popup-closed", "Jendela masuk Google ditutup sebelum proses selesai."],
+  ["cancelled-popup", "Jendela masuk Google ditutup sebelum proses selesai."],
+  ["popup-blocked", "Jendela masuk Google diblokir peramban. Izinkan pop-up untuk situs ini, lalu coba lagi."],
+  [
+    "unauthorized-domain",
+    "Alamat situs ini belum diizinkan di Firebase Authentication. Tambahkan rayen467.github.io pada Authentication > Settings > Authorized domains."
+  ],
+  [
+    "account-exists-with-different-credential",
+    "Email ini sudah terdaftar memakai cara masuk lain. Coba masuk dengan cara yang pertama kali dipakai."
+  ],
+  ["credential-already-in-use", "Akun Google ini sudah terhubung ke akun lain."],
+  ["user-disabled", "Akun ini sedang dinonaktifkan. Hubungi pengurus."],
   ["permission-denied", "Ditolak aturan keamanan. Pastikan aturan Firestore sudah dipasang dan akun Anda berhak."],
-  ["api-key-not-valid", "Kunci API tidak cocok. Periksa konfigurasi Firebase."],
+  ["api-key-not-valid", "Kunci API Firebase tidak cocok. Periksa konfigurasi Firebase."],
   ["email-already-in-use", "Alamat email itu sudah terdaftar. Coba masuk, atau pakai Lupa sandi."],
   ["invalid-email", "Alamat email tidak sah."],
+  ["missing-password", "Kata sandi belum diisi."],
   ["weak-password", "Kata sandi terlalu mudah ditebak. Pakai minimal 8 huruf atau angka."],
   ["invalid-credential", "Email atau kata sandi tidak cocok."],
   ["wrong-password", "Email atau kata sandi tidak cocok."],
   ["user-not-found", "Email atau kata sandi tidak cocok."],
   ["too-many-requests", "Terlalu banyak percobaan. Tunggu beberapa menit, lalu coba lagi."],
-  ["operation-not-allowed", "Cara masuk ini belum dinyalakan di pengaturan Firebase."],
-  ["network", "Sambungan ke server gagal. Periksa jaringan."]
+  ["operation-not-allowed", "Cara masuk ini belum dinyalakan di Firebase Authentication."],
+  ["network-request-failed", "Sambungan ke Firebase gagal. Periksa jaringan, lalu coba lagi."],
+  ["network", "Sambungan ke Firebase gagal. Periksa jaringan, lalu coba lagi."],
+  ["internal-error", "Firebase mengalami gangguan sementara. Coba lagi beberapa saat."]
 ];
 
 /** Menerjemahkan galat Firebase menjadi kalimat yang bisa dimengerti warga. */
 export function pesanRamah(err) {
-  const kode = (err && err.code) || "";
+  const kode = String((err && err.code) || "");
   for (const [kunci, pesan] of TERJEMAHAN) {
     if (kode.includes(kunci)) return pesan;
   }
+
+  /* Jangan menampilkan seluruh pesan mentah Firebase ke warga. Selain sulit
+     dibaca, sebagian pesan SDK memuat rincian teknis yang tidak berguna. */
+  if (kode.startsWith("auth/")) {
+    return "Gagal masuk ke Firebase (" + kode.replace("auth/", "") + "). Coba lagi atau gunakan cara masuk lain.";
+  }
+
   return "Gagal: " + (kode || (err && err.message) || "penyebab tidak diketahui");
 }
