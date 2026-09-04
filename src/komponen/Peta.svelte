@@ -5,28 +5,31 @@
    * TIGA LAPIS, DIPILIH BERURUTAN
    *
    *   1. Sematan Google My Maps, kalau pengurus mengisinya di Kelola.
-   *      Peramban warga menampilkan peta Google yang sudah dikenal, lengkap
-   *      dengan poligon yang digambar pengurus di sana.
    *   2. Kalau tidak ada, peta digambar sendiri: batas wilayah dari
-   *      src/inti/batas.js di atas peta jalan OpenStreetMap.
-   *   3. Kalau peta gagal dimuat sama sekali, tetap ada tombol membuka
-   *      Google Maps di aplikasi.
+   *      src/inti/batas.js di atas citra satelit.
+   *   3. Kalau peta gagal dimuat, tetap ada tombol membuka Google Maps.
    *
-   * KENAPA LAPIS KEDUA ADA, PADAHAL SUDAH ADA SEMATAN
-   * Sematan My Maps hidup di akun orang yang menggambarnya. Kalau akunnya
-   * hilang atau petanya dihapus, batas wilayah lenyap dari situs tanpa ada
-   * yang tahu penyebabnya. Titik-titik di batas.js milik situs sendiri.
+   * KENAPA SATELIT JADI TAMPILAN AWAL, BUKAN PETA JALAN
+   * Perumahan di Rajeg belum banyak terpetakan di OpenStreetMap: jalan-jalan
+   * di dalam kawasan sebagian besar belum ada garisnya, jadi peta jalannya
+   * tampil hampir kosong dan warga tidak mengenali apa pun. Citra satelit
+   * menampilkan atap rumah dan jalan yang sebenarnya, jadi warga bisa
+   * mencari rumahnya sendiri. Peta jalan tetap disediakan lewat tombol
+   * pindah lapisan, karena nama jalan cuma ada di sana.
    *
-   * PETANYA DIPANGKAS KE BATAS WILAYAH, BUKAN MEMAKAI PERBESARAN TETAP
-   * Wilayahnya cuma 206 x 218 meter. Perbesaran tetap membuat sebagian RW
-   * sebelah ikut tampil dan warga bingung mana yang dimaksud. fitBounds
-   * memangkasnya pas seluruh batas, apa pun ukuran layarnya -- inilah yang
-   * membuat tampilannya sama benar di HP dan di laptop.
+   * KENAPA BUKAN CITRA GOOGLE LANGSUNG
+   * Menggambar poligon di atas peta Google butuh Google Maps JavaScript API,
+   * yang mewajibkan kunci API dan akun bertagihan. Situs ini sengaja
+   * dijaga tanpa biaya. Satu-satunya cara memakai citra Google tanpa kunci
+   * adalah sematan My Maps -- itulah lapis pertama di atas.
+   *
+   * PETANYA DIPANGKAS KE BATAS, BUKAN MEMAKAI PERBESARAN TETAP
+   * Wilayahnya cuma 206 x 218 meter. fitBounds memangkasnya pas seluruh
+   * batas, apa pun ukuran layarnya.
    *
    * LEAFLET DIMUAT SAAT DIBUTUHKAN, BUKAN DI AWAL
    * Pustakanya 40-an KB. Warga yang cuma membaca pengumuman tidak perlu
-   * mengunduhnya, jadi impornya dinamis dan hanya jalan ketika komponen ini
-   * benar-benar terpasang.
+   * mengunduhnya, jadi impornya dinamis.
    */
   import { KONTEN } from "../inti/nama.js";
   import { kontenNilai } from "../keadaan/isi.svelte.js";
@@ -34,9 +37,8 @@
   import { sematanPeta, sematanSalah } from "../inti/peta.js";
   import { BATAS_RW, KOTAK_RW, LUAS_RW_HEKTAR, LEBAR_RW_M, TINGGI_RW_M } from "../inti/batas.js";
 
-  let { perbesaran = 17 } = $props();
-
   const titik = $derived(kontenNilai(KONTEN.KONTAK, "koordinat", KOORDINAT_BAWAAN));
+  const namaTitik = $derived(kontenNilai(KONTEN.KONTAK, "namaTitik", ""));
   const batasMentah = $derived(kontenNilai(KONTEN.KONTAK, "petaBatas", ""));
   const sematan = $derived(sematanPeta(batasMentah));
   const sematanKeliru = $derived(sematanSalah(batasMentah));
@@ -44,10 +46,19 @@
   let wadah = $state(null);
   let gagalMuat = $state(false);
 
+  /** Mengubah "-6.13,106.49" jadi [lintang, bujur], atau null bila tidak sah. */
+  function uraiTitik(teks) {
+    const bagian = String(teks || "").split(",").map((x) => Number(x.trim()));
+    if (bagian.length !== 2 || bagian.some((n) => !isFinite(n))) return null;
+    const [lintang, bujur] = bagian;
+    if (Math.abs(lintang) > 90 || Math.abs(bujur) > 180) return null;
+    return [lintang, bujur];
+  }
+
   $effect(() => {
-    /* Sematan Google menang; petanya sendiri tidak perlu digambar. */
     if (sematan || !wadah) return;
 
+    const penanda = uraiTitik(titik);
     let peta = null;
     let pengamat = null;
     let batal = false;
@@ -58,36 +69,62 @@
         await import("leaflet/dist/leaflet.css");
         if (batal || !wadah) return;
 
-        peta = L.map(wadah, { scrollWheelZoom: false, attributionControl: true });
+        peta = L.map(wadah, { scrollWheelZoom: false });
 
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        /* Citra satelit dari Esri. Bebas dipakai tanpa kunci API asalkan
+           sumbernya dicantumkan, dan cakupannya di Indonesia jauh lebih
+           baik daripada peta jalan sukarela. */
+        const satelit = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          { maxZoom: 19, attribution: "Citra &copy; Esri" }
+        );
+
+        const jalan = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
+        satelit.addTo(peta);
+        L.control.layers({ "Citra satelit": satelit, "Peta jalan": jalan }, null,
+          { collapsed: false }).addTo(peta);
+
+        /* Garis batas dibuat putih supaya tetap terbaca di atas citra
+           satelit yang gelap dan ramai. Merah di atas atap cokelat hilang. */
+        L.polygon(BATAS_RW, {
+          color: "#ffffff",
+          weight: 4,
+          opacity: 1,
+          fillColor: "#e03131",
+          fillOpacity: 0.14
         }).addTo(peta);
 
+        /* Garis merah tipis di dalam garis putih: gabungan keduanya terbaca
+           baik di citra terang maupun gelap. */
         L.polygon(BATAS_RW, {
           color: "#e03131",
-          weight: 3,
-          opacity: 0.95,
-          fillColor: "#e03131",
-          fillOpacity: 0.12
+          weight: 2,
+          opacity: 1,
+          fill: false
         }).addTo(peta);
 
-        /* Inilah pemangkasannya: peta menyesuaikan diri ke batas wilayah,
-           bukan sebaliknya. Sedikit sisa ruang supaya garisnya tidak
-           menempel persis di tepi kotak. */
+        if (penanda) {
+          L.circleMarker(penanda, {
+            radius: 7,
+            color: "#ffffff",
+            weight: 3,
+            fillColor: "#1971c2",
+            fillOpacity: 1
+          })
+            .addTo(peta)
+            .bindTooltip(namaTitik || "Titik utama RW 02", { permanent: false });
+        }
+
         peta.fitBounds(KOTAK_RW, { padding: [18, 18] });
 
         /* Leaflet mengukur wadahnya sekali, saat dipasang. Kalau saat itu
-           lebarnya masih nol -- tab yang belum tampil, tata letak yang
-           belum selesai, jendela yang baru dibuka -- petanya tergambar
-           salah dan TIDAK membetulkan diri sendiri waktu wadahnya
-           akhirnya punya ukuran. Yang tampil cuma sepotong garis, tanpa
-           galat apa pun di konsol.
-
-           Pengamat ini mengukur ulang setiap kali wadahnya berubah ukuran,
-           jadi memutar layar HP atau membuka peta dari tab tersembunyi
-           tetap menghasilkan tampilan yang benar. */
+           lebarnya masih nol, petanya tergambar salah dan TIDAK membetulkan
+           diri sendiri. Yang tampil cuma sepotong garis, tanpa galat apa pun
+           di konsol. Pengamat ini mengukur ulang tiap wadahnya berubah. */
         pengamat = new ResizeObserver(() => {
           if (!peta) return;
           peta.invalidateSize();
@@ -128,6 +165,9 @@
   <p class="keterangan-batas">
     <span class="contoh-garis" aria-hidden="true"></span>
     Garis merah adalah batas wilayah RW 02. Rumah di luar garis termasuk RW lain.
+    {#if !sematan}
+      Ketuk <b>Peta jalan</b> di pojok kanan atas bila ingin melihat nama jalan.
+    {/if}
   </p>
 {/if}
 

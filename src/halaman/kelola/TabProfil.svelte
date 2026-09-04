@@ -17,7 +17,7 @@
      lingkarannya. */
   const AWAL_SB = { nama: "", teks: "", foto: "" };
   const AWAL_PF = { sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" };
-  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", petaBatas: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
+  const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", namaTitik: "", petaBatas: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
@@ -164,9 +164,21 @@
     <div class="isian"><label for="n-amb">Nomor ambulans desa</label><input id="n-amb" bind:value={kn.ambulans} /></div>
     <div class="isian"><label for="n-alamat">Alamat sekretariat</label><input id="n-alamat" bind:value={kn.alamat} /></div>
     <div class="isian">
-      <label for="n-koordinat">Titik koordinat peta</label>
+      <label for="n-koordinat">Titik penanda di peta</label>
       <input id="n-koordinat" bind:value={kn.koordinat} placeholder="-6.129217,106.497767" />
-      <span class="petunjuk">Buka Google Maps, tekan lama di titik balai warga, salin angka yang muncul. Tulis lintang dan bujur dipisah koma, tanpa spasi.</span>
+      <span class="petunjuk">
+        Buka Google Maps, tekan lama tepat di bangunannya, lalu salin angka yang muncul.
+        Tulis lintang dan bujur dipisah koma, tanpa spasi. Titik ini jadi bulatan biru
+        di peta, dan jadi tujuan tombol Petunjuk arah.
+      </span>
+    </div>
+    <div class="isian">
+      <label for="n-namatitik">Nama titik penanda</label>
+      <input id="n-namatitik" bind:value={kn.namaTitik} placeholder="PAUD Anggrek" />
+      <span class="petunjuk">
+        Tampil kalau bulatan birunya disentuh. Pakai patokan yang paling dikenal warga,
+        misalnya PAUD, balai warga, atau pos keamanan.
+      </span>
     </div>
     <div class="isian">
       <label for="n-batas">Peta batas wilayah RW 02</label>
