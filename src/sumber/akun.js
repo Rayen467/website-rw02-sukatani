@@ -4,13 +4,6 @@
  * ===========================================================================
  *
  *  LAPIS 2 (sumber). Boleh mengimpor: inti/, sumber/firebase.js
- *
- *  Berkas ini hanya berurusan dengan SIAPA yang membuka situs. Apa yang
- *  boleh dia lakukan setelah masuk bukan urusan di sini -- itu ditentukan
- *  aturan Firestore di server, dan ditampilkan lewat keadaan/sesi.svelte.js.
- *
- *  Fungsi di sini melempar galat apa adanya. Yang memanggil bertugas
- *  menangkapnya dan menampilkannya lewat pesanRamah().
  */
 
 import {
@@ -26,11 +19,16 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase.js";
 
+function rapikanEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+function rapikanNama(nama) {
+  return String(nama || "").trim();
+}
+
 /**
  * Memantau siapa yang sedang masuk.
- * Dipanggil sekali saat situs dinyalakan. Fungsi yang diberikan akan
- * dipanggil ulang setiap kali ada yang masuk atau keluar, termasuk saat
- * halaman baru dibuka dan Firebase selesai memeriksa sesi lama.
  */
 export function pantauMasuk(saatBerubah) {
   return onAuthStateChanged(auth, saatBerubah);
@@ -50,25 +48,27 @@ export function masukGoogle() {
 }
 
 export function masukEmail(email, sandi) {
-  return signInWithEmailAndPassword(auth, email, sandi);
+  return signInWithEmailAndPassword(auth, rapikanEmail(email), sandi);
 }
 
 /**
  * Mendaftarkan akun baru, lalu langsung mengirim tautan pemastian email.
- *
- * Pendaftaran ini HANYA untuk warga. Hak pengurus tidak pernah didapat
- * lewat pendaftaran -- hanya pengurus yang sudah menjabat yang bisa
- * memberikannya, lewat halaman Kelola.
  */
 export async function daftarAkun(email, sandi, nama) {
-  const hasil = await createUserWithEmailAndPassword(auth, email, sandi);
-  if (nama) await updateProfile(hasil.user, { displayName: nama });
+  const emailBersih = rapikanEmail(email);
+  const namaBersih = rapikanNama(nama);
+  const hasil = await createUserWithEmailAndPassword(auth, emailBersih, sandi);
+
+  if (namaBersih) {
+    await updateProfile(hasil.user, { displayName: namaBersih });
+  }
+
   await sendEmailVerification(hasil.user);
   return hasil.user;
 }
 
 export function lupaSandi(email) {
-  return sendPasswordResetEmail(auth, email);
+  return sendPasswordResetEmail(auth, rapikanEmail(email));
 }
 
 /** Mengirim ulang tautan pemastian, untuk email yang tidak sampai. */
