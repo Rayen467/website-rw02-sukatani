@@ -8,12 +8,38 @@
  *  Termasuk menu geser untuk layar kecil.
  */
 
+/* GARIS RANGKAP DI BAWAH KEPALA
+   Satu garis tebal dengan satu garis tipis di bawahnya. Ini tanda paling
+   dikenal dari kop surat resmi di Indonesia: surat dari kelurahan, RW,
+   sekolah, dan kantor desa semuanya memakainya, dan orang Indonesia
+   membacanya sebagai "resmi" tanpa perlu membaca satu kata pun.
+
+   Dipilih justru karena tidak pernah muncul di templat situs buatan mesin,
+   yang selalu berhenti pada satu garis tipis abu-abu. Dan yang lebih
+   penting: bentuk ini memang benar untuk apa situs ini -- papan
+   pengumuman RW, bukan halaman jualan.
+
+   Digambar dengan border ganda, bukan dua elemen, supaya tetap menempel
+   waktu kepala halaman ikut menggulung. */
 .situs {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--permukaan);
-  border-bottom: 1px solid var(--garis);
+  padding-bottom: 6px;
+
+  /* Dua garis digambar sebagai latar, bukan sebagai border atau elemen
+     tambahan: border hanya bisa satu garis, dan elemen tambahan akan
+     tertinggal waktu kepala halaman menggulung.
+
+     Dihitung dari bawah ke atas: garis tipis 1px menempel di dasar, jeda
+     2px, lalu garis tebal 3px di atasnya. */
+  background-color: var(--permukaan);
+  background-image:
+    linear-gradient(var(--brand), var(--brand)),
+    linear-gradient(var(--brand), var(--brand));
+  background-size: 100% 1px, 100% 3px;
+  background-position: 0 100%, 0 calc(100% - 3px);
+  background-repeat: no-repeat;
 }
 
 .situs-atas {

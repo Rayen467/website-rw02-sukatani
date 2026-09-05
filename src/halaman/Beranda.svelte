@@ -39,6 +39,22 @@
   </div>
 </section>
 
+<!-- Foto warga RW 02 sendiri, kerja bakti di jalan kawasan. Ini satu-satunya
+     hal di halaman ini yang tidak bisa ditiru situs mana pun: tempatnya nyata,
+     orangnya nyata, dan spanduknya menyebut nama kawasan sendiri. Ditaruh
+     setinggi mungkin karena itulah yang membedakan halaman ini dari templat. -->
+<section class="blok pita-foto">
+  <figure>
+    <img
+      src="./foto/kerja-bakti-pita.jpg"
+      alt="Warga RW 02 kerja bakti membersihkan jalan kawasan, di bawah spanduk Kerja Bakti Permai Sukatani"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <figcaption>Kerja bakti warga RW 02 Perum Permai Sukatani</figcaption>
+  </figure>
+</section>
+
 <section class="blok zona">
   <div class="darurat">
     <span class="judul">Nomor penting</span>

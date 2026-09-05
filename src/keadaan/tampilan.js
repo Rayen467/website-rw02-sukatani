@@ -78,7 +78,11 @@ export const BAWAAN = {
   aksen: "#A5680C",
   huruf: "bawaan",
   ukuran: "16",
-  sudut: "5",
+  /* 5px adalah radius "aman" yang dipakai hampir semua templat, dan
+     justru karena itu tidak mengatakan apa-apa. 3px lebih dekat ke
+     sudut dokumen cetak, yang memang bentuk yang benar untuk papan
+     pengumuman RW. Pengurus tetap bisa menggantinya lewat Kelola. */
+  sudut: "3",
   lebar: "1120",
   tema: "sistem"
 };
