@@ -270,9 +270,11 @@ export const MENU = [
   {
     label: "Layanan",
     isi: [
+      ["/layanan", "Pusat Layanan Warga", "Semua layanan dan alur pengajuan"],
       ["/surat", "Pengajuan Surat", "Surat pengantar dan keterangan"],
       ["/pengaduan", "Pengaduan dan Aspirasi", "Lapor dan pantau statusnya"],
       ["/reservasi", "Reservasi Fasilitas", "Balai warga, tenda, kursi"],
+      ["/daftar-usaha", "Pendaftaran UMKM", "Daftarkan usaha warga"],
       ["/kependudukan", "Data Kependudukan", "Statistik warga"]
     ]
   },
