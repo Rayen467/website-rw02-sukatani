@@ -20,7 +20,7 @@
   import Profil from "./halaman/Profil.svelte";
   import Pengurus from "./halaman/Pengurus.svelte";
   import PetaWilayah from "./halaman/PetaWilayah.svelte";
-  import Surat from "./halaman/Surat.svelte";
+  import Surat from "./halaman/Surat.svelte";\n  import LayananWarga from "./halaman/LayananWarga.svelte";
   import SuratBorang from "./halaman/SuratBorang.svelte";
   import SuratCetak from "./halaman/SuratCetak.svelte";
   import Pengaduan from "./halaman/Pengaduan.svelte";
@@ -58,7 +58,7 @@
     profil: Profil,
     pengurus: Pengurus,
     peta: PetaWilayah,
-    surat: Surat,
+    layanan: LayananWarga,\n    surat: Surat,
     pengaduan: Pengaduan,
     reservasi: Reservasi,
     kependudukan: Kependudukan,
