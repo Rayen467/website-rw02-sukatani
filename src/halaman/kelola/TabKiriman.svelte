@@ -31,6 +31,7 @@
   import Lencana from "../../komponen/Lencana.svelte";
 
   const semuaPengaduan = $derived(isi.pengaduan || []);
+  const kontakPengaduan = $derived(isi.pengaduan_kontak || []);
   const semuaSurat = $derived(isi.surat || []);
   const semuaReservasi = $derived(isi.reservasi || []);
   const usahaBaru = $derived(isi.usaha_baru || []);
@@ -68,6 +69,29 @@
   const usaha = $derived(pilih(usahaBaru));
 
   const hitungBaru = (d) => d.filter((x) => (x.status || STATUS.BARU) === STATUS.BARU).length;
+
+  function kontakAduan(p) {
+    return kontakPengaduan.find((k) => k.tiket && p.tiket && k.tiket === p.tiket) || null;
+  }
+
+  function nomorWa(nomor) {
+    let n = String(nomor || "").replace(/\D/g, "");
+    if (!n) return "";
+    if (n.startsWith("0")) n = "62" + n.slice(1);
+    else if (n.startsWith("8")) n = "62" + n;
+    return n;
+  }
+
+  function tautanWa(nomor, pesan) {
+    const n = nomorWa(nomor);
+    return n ? "https://wa.me/" + n + "?text=" + encodeURIComponent(pesan) : "";
+  }
+
+  function pesanWa(jenis, nomor, status) {
+    const s = PILIHAN_STATUS.find((x) => x.nilai === status)?.label || status || "Diterima";
+    return "Halo, kami dari pengurus RW 02. Terkait " + jenis + " " + nomor +
+      ", status saat ini: " + s + ".";
+  }
 
   /* --- Tindakan ------------------------------------------------------- */
 
@@ -203,6 +227,16 @@
           <b>{p.kategori} &middot; {p.tiket || p.id}</b>
           <p>{p.isi}</p>
           {#if p.lokasi}<p class="keterangan">{p.lokasi}</p>{/if}
+          {@const kontak = kontakAduan(p)}
+          {#if kontak && kontak.wa}
+            <p class="keterangan">Pelapor: {kontak.nama || "Tanpa nama"} · {kontak.wa}</p>
+            <a
+              class="tombol wa"
+              href={tautanWa(kontak.wa, pesanWa("pengaduan", p.tiket || p.id, isian(p, "status")))}
+              target="_blank"
+              rel="noreferrer"
+            >Hubungi via WhatsApp</a>
+          {/if}
         </div>
         <div class="tindakan">
           <div class="isian">
@@ -245,6 +279,9 @@
           <p>{x.nama} &middot; {x.alamat || "-"} {x.rt || ""}</p>
           {#if x.keperluan}<p class="keterangan">Keperluan: {x.keperluan}</p>{/if}
           <p><Lencana status={x.status} /></p>
+          {#if x.wa}
+            <a class="tombol wa" href={tautanWa(x.wa, pesanWa("pengajuan surat", x.antrean || x.id, isian(x, "status")))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
+          {/if}
         </div>
         <div class="tindakan">
           <div class="isian">
@@ -281,6 +318,9 @@
           <b>{r.fasilitas}</b>
           <p>{r.tanggal} &middot; {r.jam || "-"} &middot; {r.acara || "-"}</p>
           <p>{r.nama}{r.wa ? " · " + r.wa : ""} <Lencana status={r.status} /></p>
+          {#if r.wa}
+            <a class="tombol wa" href={tautanWa(r.wa, pesanWa("permohonan fasilitas", r.fasilitas + " " + r.tanggal, r.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
+          {/if}
         </div>
         <div></div>
         <div class="baris-tombol">
@@ -314,6 +354,9 @@
           <b>{u.nama}</b>
           <p>{u.pemilik} &middot; {u.jenis}</p>
           <p>{u.produk || ""} <Lencana status={u.status} /></p>
+          {#if u.wa}
+            <a class="tombol wa" href={tautanWa(u.wa, pesanWa("pendaftaran UMKM", u.nama, u.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
+          {/if}
         </div>
         <div></div>
         <div class="baris-tombol">
