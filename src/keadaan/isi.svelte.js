@@ -57,6 +57,7 @@ export const isi = $state({
   berkas: null,
 
   /* --- Hanya pengurus. Warga selalu ditolak server di sini ------------- */
+  pengaduan_kontak: null,
   surat: null,
   reservasi: null,
   usaha_baru: null,
