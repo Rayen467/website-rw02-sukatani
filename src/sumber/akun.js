@@ -49,8 +49,12 @@ export function masukGoogle() {
   return signInWithPopup(auth, penyedia);
 }
 
+function emailBersih(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 export function masukEmail(email, sandi) {
-  return signInWithEmailAndPassword(auth, email, sandi);
+  return signInWithEmailAndPassword(auth, emailBersih(email), sandi);
 }
 
 /**
@@ -61,14 +65,14 @@ export function masukEmail(email, sandi) {
  * memberikannya, lewat halaman Kelola.
  */
 export async function daftarAkun(email, sandi, nama) {
-  const hasil = await createUserWithEmailAndPassword(auth, email, sandi);
+  const hasil = await createUserWithEmailAndPassword(auth, emailBersih(email), sandi);
   if (nama) await updateProfile(hasil.user, { displayName: nama });
   await sendEmailVerification(hasil.user);
   return hasil.user;
 }
 
 export function lupaSandi(email) {
-  return sendPasswordResetEmail(auth, email);
+  return sendPasswordResetEmail(auth, emailBersih(email));
 }
 
 /** Mengirim ulang tautan pemastian, untuk email yang tidak sampai. */
