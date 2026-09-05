@@ -222,12 +222,12 @@
   </div>
   {#if pengaduan.length}
     {#each pengaduan as p}
+      {@const kontak = kontakAduan(p)}
       <div class="baris-kelola tegak">
         <div class="isi">
           <b>{p.kategori} &middot; {p.tiket || p.id}</b>
           <p>{p.isi}</p>
           {#if p.lokasi}<p class="keterangan">{p.lokasi}</p>{/if}
-          {@const kontak = kontakAduan(p)}
           {#if kontak && kontak.wa}
             <p class="keterangan">Pelapor: {kontak.nama || "Tanpa nama"} · {kontak.wa}</p>
             <a
