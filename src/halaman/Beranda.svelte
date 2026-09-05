@@ -33,6 +33,7 @@
   <p>{t.ringkas}</p>
   <span class="koordinat">{namaRW} · {t.alamat}</span>
   <div class="aksi">
+    <a href="#/layanan">Buka layanan warga</a>
     <a href="#/surat">Ajukan surat</a>
     <a href="#/pengaduan">Sampaikan pengaduan</a>
     <a href="#/reservasi">Pinjam balai warga</a>
