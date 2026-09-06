@@ -50,7 +50,7 @@
   onMount(() => {
     terapkanGaya(null);
     mulaiRute();
-    mulaiPantauan();
+    return mulaiPantauan();
   });
 
   /** Halaman satu bagian, misalnya /berita. */
@@ -101,7 +101,7 @@
 
 <main id="utama">
   <div class="wadah">
-    {#key rute.jalur}
+    {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
       <pilihan.komponen kunci={pilihan.kunci} />
     {/key}
   </div>
