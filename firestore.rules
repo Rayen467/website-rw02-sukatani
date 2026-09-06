@@ -88,6 +88,14 @@ service cloud.firestore {
              (masuk() && request.resource.data.uid == request.auth.uid);
     }
 
+    // Khusus pengaduan, akun tidak perlu melewati pemeriksaan email_verified
+    // hanya untuk menyimpan laporan. Google/Firebase Auth sudah memberi UID
+    // yang dapat diverifikasi server; warga anonim juga tetap boleh melapor.
+    function uidPengaduanJujur() {
+      return request.resource.data.uid == '' ||
+             (request.auth != null && request.resource.data.uid == request.auth.uid);
+    }
+
     function waktuJujur() {
       return request.resource.data.dibuat == request.time;
     }
@@ -161,7 +169,7 @@ service cloud.firestore {
                     && teksBoleh(request.resource.data.lokasi, 200)
                     && request.resource.data.status == 'baru'
                     && request.resource.data.catatan == ''
-                    && uidJujur()
+                    && uidPengaduanJujur()
                     && waktuJujur()
                     && request.resource.data.keys().hasOnly(
                          ['kategori', 'lokasi', 'isi', 'status', 'catatan',
@@ -183,7 +191,7 @@ service cloud.firestore {
 
       allow create: if teksBoleh(request.resource.data.nama, 120)
                     && teksBoleh(request.resource.data.wa, 30)
-                    && uidJujur()
+                    && uidPengaduanJujur()
                     && waktuJujur()
                     && request.resource.data.keys().hasOnly(
                          ['nama', 'wa', 'tiket', 'uid', 'dibuat']);
