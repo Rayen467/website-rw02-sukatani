@@ -21,20 +21,47 @@
     e.preventDefault();
     mengirim = true;
     const tiket = nomorAntrean("ADU");
+
     try {
+      /*
+       * Laporan utama disimpan lebih dulu. Data kontak sengaja menjadi
+       * penulisan kedua yang terpisah karena koleksinya punya aturan
+       * keamanan berbeda. Kalau kontak gagal tersimpan, laporan utama
+       * tetap sah dan tidak boleh membuat warga mengirim ulang lalu
+       * menghasilkan laporan ganda.
+       */
       await kirimWarga(KOLEKSI.PENGADUAN, {
         tiket, kategori: form.kategori, lokasi: form.lokasi, isi: form.isi, catatan: ""
       });
+
+      let kontakTersimpan = true;
       if (form.nama || form.wa) {
-        await tambahIsi(KOLEKSI.PENGADUAN_KONTAK, { tiket, nama: form.nama, wa: form.wa, uid: sesi.pengguna ? sesi.pengguna.uid : "" });
+        try {
+          await tambahIsi(KOLEKSI.PENGADUAN_KONTAK, {
+            tiket,
+            nama: form.nama,
+            wa: form.wa,
+            uid: sesi.pengguna ? sesi.pengguna.uid : ""
+          });
+        } catch (errKontak) {
+          kontakTersimpan = false;
+          console.warn("Kontak pengaduan belum tersimpan:", errKontak);
+        }
       }
+
       simpanan.tulis("aduan-saya", tiket);
-      beriTahu("Laporan terkirim. Nomor tiket " + tiket + ".");
+      beriTahu(
+        kontakTersimpan
+          ? "Laporan terkirim. Nomor tiket " + tiket + "."
+          : "Laporan utama sudah terkirim dengan tiket " + tiket + ", tetapi data kontak belum bisa disimpan. Jangan kirim laporan yang sama lagi."
+      );
+
       form = { kategori: KATEGORI_PENGADUAN[0], lokasi: "", isi: "", nama: "", wa: "" };
       muatKoleksi(KOLEKSI.PENGADUAN);
     } catch (err) {
       beriTahu(pesanRamah(err));
     }
+
     mengirim = false;
   }
 </script>
