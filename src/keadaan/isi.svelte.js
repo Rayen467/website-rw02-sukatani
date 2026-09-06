@@ -71,6 +71,15 @@ export const isi = $state({
   suara: null
 });
 
+let generasiSesi = 0;
+
+/** Buang data pribadi dan batalkan hasil permintaan dari sesi sebelumnya. */
+export function kosongkanIsiPribadi() {
+  generasiSesi += 1;
+  for (const nama of KOLEKSI_PENGURUS) isi[nama] = null;
+  isi.suara = null;
+}
+
 /* -------------------------------------------------------------------------
  *  Membaca isi
  * ------------------------------------------------------------------------- */
@@ -106,8 +115,11 @@ export function kontenNilai(bagian, kolom, bawaan = "") {
 
 /** Mengambil ulang satu koleksi. Dipanggil setelah pengurus mengubah isi. */
 export async function muatKoleksi(nama) {
+  const generasi = generasiSesi;
   try {
-    isi[nama] = await ambilKoleksi(nama);
+    const hasil = await ambilKoleksi(nama);
+    if (KOLEKSI_PENGURUS.includes(nama) && generasi !== generasiSesi) return;
+    isi[nama] = hasil;
   } catch (err) {
     /* Ditolak karena memang bukan haknya. Lihat catatan di kepala berkas. */
   }
@@ -139,16 +151,22 @@ export async function muatPengurus() {
 
 /** Kiriman milik satu warga, untuk halaman Akun Saya. */
 export async function muatMilikSaya(uid) {
+  const generasi = generasiSesi;
   for (const nama of KOLEKSI_KIRIMAN) {
+    if (generasi !== generasiSesi) return;
     try {
-      isi[nama] = await ambilMilikSaya(nama, uid);
+      const hasil = await ambilMilikSaya(nama, uid);
+      if (generasi !== generasiSesi) return;
+      isi[nama] = hasil;
     } catch (err) {}
   }
 }
 
 export async function muatSuara() {
+  const generasi = generasiSesi;
   const pollId = kontenNilai(KONTEN.POLLING, "id", POLLING_BAWAAN.id);
   try {
-    isi.suara = await ambilSuara(pollId);
+    const hasil = await ambilSuara(pollId);
+    if (generasi === generasiSesi) isi.suara = hasil;
   } catch (err) {}
 }

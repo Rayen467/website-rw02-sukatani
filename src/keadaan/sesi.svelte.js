@@ -41,7 +41,7 @@ export const sesi = $state({
 
 /** Benar kalau yang masuk adalah pengurus, apa pun jabatannya. */
 export function pengurus() {
-  return !!sesi.peran;
+  return sesi.terverifikasi && (sesi.peran === PERAN.MASTER || sesi.peran === PERAN.PETUGAS);
 }
 
 /**

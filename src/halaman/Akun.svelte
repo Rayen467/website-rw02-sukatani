@@ -2,9 +2,9 @@
   import { isi } from "../keadaan/isi.svelte.js";
   import { segarkanProfilWarga } from "../keadaan/mulai.js";
   import { beriTahu } from "../keadaan/pesan.svelte.js";
-  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { sesi, pengurus, namaPeran } from "../keadaan/sesi.svelte.js";
   import { RT_BAWAAN } from "../inti/bawaan.js";
-  import { kirimUlangVerifikasi } from "../sumber/akun.js";
+  import { kirimUlangVerifikasi, periksaVerifikasi } from "../sumber/akun.js";
   import { daftarWarga } from "../sumber/data.js";
   import { pesanRamah } from "../sumber/firebase.js";
   import { pergi } from "../keadaan/rute.svelte.js";
@@ -12,6 +12,7 @@
 
   let f = $state({ nama: "", blok: "", rt: RT_BAWAAN[0], wa: "" });
   let sibuk = $state(false);
+  let sibukVerifikasi = $state(false);
 
   $effect(() => { if (sesi.pengguna && !f.nama) f.nama = sesi.pengguna.nama || ""; });
 
@@ -35,8 +36,21 @@
   }
 
   async function kirimUlang() {
+    if (sibukVerifikasi) return;
+    sibukVerifikasi = true;
     try { await kirimUlangVerifikasi(); beriTahu("Tautan pemastian dikirim ulang."); }
     catch (err) { beriTahu(pesanRamah(err)); }
+    finally { sibukVerifikasi = false; }
+  }
+
+  async function cekVerifikasi() {
+    if (sibukVerifikasi) return;
+    sibukVerifikasi = true;
+    try {
+      const sudah = await periksaVerifikasi();
+      beriTahu(sudah ? "Email sudah dipastikan." : "Email belum dipastikan. Buka tautan di email, lalu periksa lagi.");
+    } catch (err) { beriTahu(pesanRamah(err)); }
+    finally { sibukVerifikasi = false; }
   }
 </script>
 
@@ -47,7 +61,9 @@
   <p>Tempat melihat status pengajuan surat, laporan, dan permohonan pinjam yang Anda kirim.</p>
 </div>
 
-{#if !sesi.pengguna}
+{#if !sesi.siap}
+  <p class="catatan" role="status">Memeriksa sesi akun...</p>
+{:else if !sesi.pengguna}
   <div class="kunci">
     <h3>Masuk dulu</h3>
     <p>Dengan akun, Anda bisa melacak sendiri sampai mana pengajuan surat, laporan, dan permohonan pinjam fasilitas yang Anda kirim, tanpa perlu bertanya ke pengurus.</p>
@@ -57,15 +73,24 @@
 {:else}
   {#if !sesi.terverifikasi}
     <div class="catatan awas" style="margin-bottom:22px">
-      <b>Email belum dipastikan.</b> Kami sudah mengirim tautan ke <b>{sesi.pengguna.email}</b>.
-      Buka email itu dan tekan tautannya, lalu masuk kembali. Selama belum dipastikan, pengajuan dan laporan belum bisa dikirim.
+      <b>Email belum dipastikan.</b> Gunakan tautan pemastian untuk <b>{sesi.pengguna.email}</b>.
+      Buka email itu dan tekan tautannya, lalu pilih Saya sudah verifikasi. Pengajuan surat, pinjaman, dan pendaftaran warga memerlukan email yang sudah dipastikan.
       <div class="baris-tombol" style="margin-top:12px">
-        <button class="tombol" type="button" onclick={kirimUlang}>Kirim ulang tautan</button>
+        <button class="tombol utama" type="button" onclick={cekVerifikasi} disabled={sibukVerifikasi}>{sibukVerifikasi ? "Memproses..." : "Saya sudah verifikasi"}</button>
+        <button class="tombol" type="button" onclick={kirimUlang} disabled={sibukVerifikasi}>Kirim ulang tautan</button>
       </div>
     </div>
   {/if}
 
-  {#if !sesi.profilWarga}
+  {#if pengurus()}
+    <div class="catatan">
+      <b>{namaPeran()}</b> — {sesi.pengguna.email}
+      <p>Akun Anda terdaftar sebagai pengurus.</p>
+      <a class="tombol utama" href="#/kelola">Buka Kelola</a>
+    </div>
+  {:else if !sesi.terverifikasi}
+    <p class="verifikasi">Lengkapi pendaftaran warga setelah email dipastikan.</p>
+  {:else if !sesi.profilWarga}
     <div class="catatan" style="margin-bottom:22px">
       <b>Satu langkah lagi.</b> Lengkapi keterangan di bawah supaya pengurus dapat mencocokkan akun Anda dengan daftar warga. Cukup sekali, tidak diminta lagi.
     </div>

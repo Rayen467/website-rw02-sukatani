@@ -32,12 +32,13 @@
 
   async function jalankan(e) {
     e.preventDefault();
+    if (sibuk || sibukGoogle) return;
     sibuk = true;
     try {
       if (mode === "masuk") {
         const identitas = f.email.trim();
         if (!identitas.includes("@")) {
-          beriTahu("Untuk sementara masukkan Gmail/email akun Firebase. Nama akun bisa dipakai setelah alias login didaftarkan.");
+          beriTahu("Masukkan alamat email akun Anda.");
           sibuk = false;
           return;
         }
@@ -69,7 +70,9 @@
 
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Masuk</span></nav>
 
-{#if sesi.pengguna}
+{#if !sesi.siap}
+  <p class="catatan" role="status">Memeriksa sesi akun...</p>
+{:else if sesi.pengguna}
   <div class="kepala-halaman">
     <p class="alis">Akun</p>
     <h1>Anda sudah masuk</h1>
@@ -92,6 +95,7 @@
         class="pilihan"
         type="button"
         aria-pressed={mode === t[0]}
+        disabled={sibuk || sibukGoogle}
         onclick={() => (mode = t[0])}
       >{t[1]}</button>
     {/each}
@@ -106,17 +110,17 @@
     {/if}
 
     <div class="isian">
-      <label for="m-email">{mode === "masuk" ? "Nama akun / Gmail" : "Alamat email"}</label>
+      <label for="m-email">Alamat email</label>
       <input
         id="m-email"
-        type={mode === "masuk" ? "text" : "email"}
+        type="email"
         bind:value={f.email}
         required
         autocomplete={mode === "masuk" ? "username" : "email"}
-        placeholder={mode === "masuk" ? "Masukkan Gmail akun" : "nama@gmail.com"}
+        placeholder="nama@gmail.com"
       />
       {#if mode === "masuk"}
-        <span class="petunjuk">Akun Firebase saat ini masuk memakai Gmail/email. Tampilan nama akun disiapkan untuk alias login berikutnya.</span>
+        <span class="petunjuk">Gunakan alamat email yang terdaftar. Jika sebelumnya memakai Google, pilih Lanjutkan dengan Google.</span>
       {:else if mode === "daftar"}
         <span class="petunjuk">Pakai email yang benar-benar bisa dibuka. Tautan pemastian dikirim ke sana.</span>
       {/if}

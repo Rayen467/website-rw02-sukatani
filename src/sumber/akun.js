@@ -22,7 +22,9 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   signOut,
-  onAuthStateChanged
+  onIdTokenChanged,
+  reload,
+  getIdToken
 } from "firebase/auth";
 import { auth } from "./firebase.js";
 
@@ -33,7 +35,14 @@ import { auth } from "./firebase.js";
  * halaman baru dibuka dan Firebase selesai memeriksa sesi lama.
  */
 export function pantauMasuk(saatBerubah) {
-  return onAuthStateChanged(auth, saatBerubah);
+  let identitasSebelumnya;
+  return onIdTokenChanged(auth, (u) => {
+    const identitas = JSON.stringify(u ? [u.uid, u.email, u.emailVerified] : null);
+    // Penyegaran token rutin tidak boleh mengosongkan formulir yang sedang diisi.
+    if (identitas === identitasSebelumnya) return;
+    identitasSebelumnya = identitas;
+    return saatBerubah(u);
+  });
 }
 
 /** Siapa yang sedang masuk sekarang, atau null. Dipakai fungsi tulis. */
@@ -67,7 +76,13 @@ export function masukEmail(email, sandi) {
 export async function daftarAkun(email, sandi, nama) {
   const hasil = await createUserWithEmailAndPassword(auth, emailBersih(email), sandi);
   if (nama) await updateProfile(hasil.user, { displayName: nama });
-  await sendEmailVerification(hasil.user);
+  try {
+    await sendEmailVerification(hasil.user);
+  } catch (penyebab) {
+    const err = new Error("Akun sudah dibuat, tetapi tautan pemastian belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan.", { cause: penyebab });
+    err.code = "auth/verification-send-failed";
+    throw err;
+  }
   return hasil.user;
 }
 
@@ -79,6 +94,16 @@ export function lupaSandi(email) {
 export function kirimUlangVerifikasi() {
   if (!auth.currentUser) throw new Error("belum masuk");
   return sendEmailVerification(auth.currentUser);
+}
+
+/** Muat status email dan token server terbaru tanpa harus keluar dahulu. */
+export async function periksaVerifikasi() {
+  const u = auth.currentUser;
+  if (!u) throw new Error("Silakan masuk terlebih dahulu.");
+  await reload(u);
+  if (auth.currentUser !== u) return false;
+  await getIdToken(u, true);
+  return auth.currentUser === u && u.emailVerified;
 }
 
 export function keluar() {
