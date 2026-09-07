@@ -54,14 +54,14 @@
   <div class="surat">
     <div class="kop">
       <b>RUKUN WARGA {namaRW.replace(/^RW\s*/i, "")}</b>
-      <span>PERUM PERMAI SUKATANI &mdash; DESA SUKATANI, KECAMATAN RAJEG</span>
+      <span>PERUM PERMAI SUKATANI &mdash; KELURAHAN SUKATANI, KECAMATAN RAJEG</span>
       <span>KABUPATEN TANGERANG, PROVINSI BANTEN 15540</span>
     </div>
 
     <h2>{surat.nama.toUpperCase()}</h2>
     <div class="nomor">Nomor: {isian ? isian.antrean : titik}</div>
 
-    <p>Yang bertanda tangan di bawah ini, Ketua Rukun Warga Perum Permai Sukatani, Desa Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, menerangkan bahwa:</p>
+    <p>Yang bertanda tangan di bawah ini, Ketua Rukun Warga Perum Permai Sukatani, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, menerangkan bahwa:</p>
 
     <table><tbody>
       <tr><td>Nama</td><td>: {isian ? isian.nama : titik}</td></tr>
