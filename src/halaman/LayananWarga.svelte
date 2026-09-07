@@ -86,7 +86,7 @@
     <a class="kartu tindakan" href="#/tautan">
       <p class="alis">Layanan pemerintah</p>
       <h3>Tautan Penting</h3>
-      <p>Akses situs desa, kecamatan, Disdukcapil, informasi KTP-el, dan layanan pemerintah terkait.</p>
+      <p>Akses situs kelurahan, kecamatan, Disdukcapil, informasi KTP-el, dan layanan pemerintah terkait.</p>
     </a>
   </div>
 </section>
@@ -104,7 +104,7 @@
     </div>
     <div class="langkah-butir">
       <span class="nomor">3</span>
-      <div><b>Petugas menangani</b><p>Petugas dapat mencari kiriman, membuka detail, mengubah status, memberi catatan, dan menghubungi warga lewat WhatsApp bila diperlukan.</p></div>
+      <div><b>Petugas menangani</b><p>Petugas dapat mencari kiriman, membuka detail, mengubah status dan menghubungi warga lewat WhatsApp bila diperlukan. Catatan tindak lanjut tersedia pada layanan yang mendukungnya.</p></div>
     </div>
     <div class="langkah-butir">
       <span class="nomor">4</span>
