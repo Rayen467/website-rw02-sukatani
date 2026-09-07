@@ -1,6 +1,7 @@
 <script>
   import { KONTEN } from "../inti/nama.js";
-  import { pakai, konten } from "../keadaan/isi.svelte.js";
+  import { isi, pakai, konten } from "../keadaan/isi.svelte.js";
+  import { pengurus } from "../keadaan/sesi.svelte.js";
   import { BANSOS_BAWAAN, RT_BAWAAN } from "../inti/bawaan.js";
   import { keDaftar, uraiBaris } from "../inti/format.js";
 
@@ -58,3 +59,33 @@
     </table>
   </div>
 </section>
+
+
+{#if pengurus()}
+  <section class="blok">
+    <div class="kepala-bagian"><h2>Daftar rinci penerima — akses pengurus</h2></div>
+    <div class="catatan awas" style="margin-bottom:14px">
+      <b>Jangan dibagikan ke publik.</b> Bagian ini hanya muncul untuk akun pengurus dan berisi data operasional penerima bantuan.
+    </div>
+    {#if (isi.bansos_penerima || []).length}
+      <div class="tabel-bungkus">
+        <table class="data">
+          <thead><tr><th>Nama</th><th>RT</th><th>Program</th><th>Periode</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            {#each isi.bansos_penerima as p}
+              <tr>
+                <td><b>{p.nama}</b></td>
+                <td>{p.rt || "-"}</td>
+                <td>{p.program || "-"}</td>
+                <td>{p.periode || "-"}</td>
+                <td>{p.keterangan || "-"}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+    {:else}
+      <p class="kosong">Belum ada daftar rinci penerima yang disimpan pengurus.</p>
+    {/if}
+  </section>
+{/if}
