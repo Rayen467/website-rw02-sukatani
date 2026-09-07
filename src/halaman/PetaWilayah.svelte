@@ -41,7 +41,7 @@
   />
   {/if}
   <p class="verifikasi">
-    Batas RT ditulis sebagai keterangan karena peta umum tidak menggambar batas RT.
+    Batas RT tetap ditampilkan sebagai keterangan. Jika pengurus mengisi titik koordinat batas RT lewat Kelola, garis batasnya juga digambar langsung pada peta di atas.
   </p>
 </section>
 
