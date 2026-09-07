@@ -23,7 +23,7 @@
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
-  let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "" });
+  let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "" });
   let pf = $state({ ...AWAL_PF });
   let kn = $state({ ...AWAL_KN });
   let mt = $state({ ...AWAL_MT });
@@ -32,6 +32,7 @@
 
   let fotoSambutan = $state(null);
   let fotoStruktur = $state(null);
+  let fotoRT = $state(null);
   let fotoUsaha = $state(null);
   let gambarPeta = $state(null);
   let sibuk = $state("");
@@ -115,8 +116,10 @@
 <section class="blok">
   <div class="kepala-bagian"><h2>Batas dan cakupan tiap RT</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("rt", async () => {
-    await simpanDokumen(KOLEKSI.BATAS_RT, keSlug(rt.rt) || "rt", rt, false);
-    rt = { rt: "", blok: "", batas: "", ketua: "", kontak: "" };
+    const foto = (await bacaFoto(fotoRT, 500)) || rt.foto || "";
+    await simpanDokumen(KOLEKSI.BATAS_RT, keSlug(rt.rt) || "rt", { ...rt, foto }, false);
+    rt = { rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "" };
+    fotoRT = null;
     muatKoleksi(KOLEKSI.BATAS_RT);
   }); }}>
     <div class="isian"><label for="rt-nama">RT</label><input id="rt-nama" bind:value={rt.rt} required placeholder="RT 03" /></div>
@@ -124,6 +127,11 @@
     <div class="isian"><label for="rt-batas">Batas wilayah</label><input id="rt-batas" bind:value={rt.batas} placeholder="Dari gerbang sampai lapangan" /></div>
     <div class="isian"><label for="rt-ketua">Nama Ketua RT</label><input id="rt-ketua" bind:value={rt.ketua} /></div>
     <div class="isian"><label for="rt-kontak">Nomor Ketua RT</label><input id="rt-kontak" bind:value={rt.kontak} inputmode="tel" /></div>
+    <div class="isian">
+      <label for="rt-foto">Foto Ketua RT</label>
+      <input id="rt-foto" type="file" accept="image/*" onchange={(e) => (fotoRT = e.target.files[0] || null)} />
+      <span class="petunjuk">Ditampilkan di Struktur Pengurus. Pastikan ada izin dari yang bersangkutan.</span>
+    </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "rt"}>Simpan RT</button></div>
     <p class="catatan-borang">Dipakai di dua tempat: tabel Ketua RT pada halaman Struktur Pengurus, dan keterangan batas pada halaman Peta Wilayah.</p>
   </form>
