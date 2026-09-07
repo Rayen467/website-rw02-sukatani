@@ -82,6 +82,6 @@
       </div>
     </div>
 
-    <p class="kaki">Penomoran dan stempel mengikuti ketentuan yang berlaku di RW dan kantor desa.</p>
+    <p class="kaki">Penomoran dan stempel mengikuti ketentuan yang berlaku di RW dan kantor kelurahan.</p>
   </div>
 {/if}
