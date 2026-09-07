@@ -27,7 +27,8 @@
   const AWAL_ST = { usia: "", pendidikan: "", pekerjaan: "", agama: "" };
   const AWAL_BS = { periode: "", penerima: "" };
 
-  let c = $state({ periode: "", tgl: "", ket: "", jenis: "masuk", nominal: "" });
+  let c = $state({ periode: "", tgl: "", ket: "", jenis: "masuk", kategori: "iuran warga", nominal: "" });
+  let bp = $state({ nama: "", rt: "", program: "", periode: "", keterangan: "" });
   let pr = $state({ nama: "", tahun: "", status: "rencana", anggaran: "", ket: "" });
   let d = $state({ ...AWAL_D });
   let st = $state({ ...AWAL_ST });
@@ -64,11 +65,22 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Catat transaksi kas</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("kas", async () => { await tambahIsi(KOLEKSI.KAS, c); c = { periode: c.periode, tgl: "", ket: "", jenis: "masuk", nominal: "" }; muatKoleksi(KOLEKSI.KAS); }); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("kas", async () => { await tambahIsi(KOLEKSI.KAS, c); c = { periode: c.periode, tgl: "", ket: "", jenis: "masuk", kategori: c.kategori, nominal: "" }; muatKoleksi(KOLEKSI.KAS); }); }}>
     <div class="isian"><label for="c-periode">Periode</label><input id="c-periode" bind:value={c.periode} required placeholder="September 2026" /></div>
     <div class="isian"><label for="c-tgl">Tanggal</label><input id="c-tgl" bind:value={c.tgl} required placeholder="14 Sep" /></div>
     <div class="isian"><label for="c-ket">Keterangan</label><input id="c-ket" bind:value={c.ket} required placeholder="Iuran warga bulan September" /></div>
     <div class="isian"><label for="c-jenis">Jenis</label><select id="c-jenis" bind:value={c.jenis}><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select></div>
+    <div class="isian">
+      <label for="c-kategori">Kategori</label>
+      <select id="c-kategori" bind:value={c.kategori}>
+        <option value="iuran warga">Iuran warga</option>
+        <option value="bantuan">Bantuan / hibah</option>
+        <option value="operasional">Belanja operasional</option>
+        <option value="program">Program / pembangunan</option>
+        <option value="sosial">Kegiatan sosial</option>
+        <option value="lainnya">Lainnya</option>
+      </select>
+    </div>
     <div class="isian"><label for="c-nominal">Nominal</label><input id="c-nominal" bind:value={c.nominal} inputmode="numeric" required placeholder="250000" /><span class="petunjuk">Angka saja, tanpa titik atau Rp.</span></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "kas"}>{sibuk === "kas" ? "Menyimpan..." : "Catat"}</button></div>
     <p class="catatan-borang">Buku kas dan kuitansi fisik tetap jadi bukti utama. Yang di sini salinannya supaya warga bisa memeriksa.</p>
@@ -87,10 +99,11 @@
       { nama: "tgl", label: "Tanggal", wajib: true },
       { nama: "ket", label: "Keterangan", wajib: true },
       { nama: "jenis", label: "Jenis", wajib: true },
+      { nama: "kategori", label: "Kategori" },
       { nama: "nominal", label: "Nominal", jenis: "angka", wajib: true }
     ]}
     contoh={CONTOH_KAS}
-    petunjuk="Kolom Jenis diisi masuk atau keluar."
+    petunjuk="Kolom Jenis diisi masuk atau keluar. Kolom Kategori opsional: iuran warga, bantuan, operasional, program, sosial, atau lainnya."
     saatSimpan={async (baris) => {
       await tambahIsi(KOLEKSI.KAS, {
         ...baris,
@@ -111,6 +124,14 @@
         { nama: "periode", label: "Periode" },
         { nama: "tgl", label: "Tanggal", jenis: "tanggal" },
         { nama: "jenis", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "masuk", label: "Pemasukan" }, { nilai: "keluar", label: "Pengeluaran" }] },
+        { nama: "kategori", label: "Kategori", jenis: "pilih", pilihan: [
+          { nilai: "iuran warga", label: "Iuran warga" },
+          { nilai: "bantuan", label: "Bantuan / hibah" },
+          { nilai: "operasional", label: "Belanja operasional" },
+          { nilai: "program", label: "Program / pembangunan" },
+          { nilai: "sosial", label: "Kegiatan sosial" },
+          { nilai: "lainnya", label: "Lainnya" }
+        ] },
         { nama: "nominal", label: "Nominal", jenis: "angka" }
       ]}
     />
@@ -169,6 +190,41 @@
     <div class="isian"><label for="sx-agama">Pemeluk agama</label><textarea id="sx-agama" bind:value={st.agama}></textarea><span class="petunjuk">Untuk agama, isi jumlah jiwa, bukan persen.</span></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "statistik"}>Simpan sebaran</button></div>
   </form>
+</section>
+
+<section class="blok">
+  <div class="kepala-bagian"><h2>Daftar rinci penerima bansos — hanya pengurus</h2></div>
+  <div class="catatan awas" style="margin-bottom:18px">
+    <b>Data privat.</b> Nama penerima disimpan di koleksi yang hanya dapat dibaca pengurus. Warga umum tetap hanya melihat jumlah penerima per RT.
+  </div>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); simpan("bansos-rinci", async () => {
+    await tambahIsi(KOLEKSI.BANSOS_PENERIMA, bp);
+    bp = { nama: "", rt: "", program: "", periode: "", keterangan: "" };
+    muatKoleksi(KOLEKSI.BANSOS_PENERIMA);
+  }); }}>
+    <div class="isian"><label for="bp-nama">Nama penerima</label><input id="bp-nama" bind:value={bp.nama} required /></div>
+    <div class="isian"><label for="bp-rt">RT</label><input id="bp-rt" bind:value={bp.rt} required placeholder="RT 01" /></div>
+    <div class="isian"><label for="bp-program">Program bantuan</label><input id="bp-program" bind:value={bp.program} required placeholder="PKH / BPNT / bantuan beras" /></div>
+    <div class="isian"><label for="bp-periode">Periode</label><input id="bp-periode" bind:value={bp.periode} placeholder="Tahap 2 tahun 2026" /></div>
+    <div class="isian"><label for="bp-ket">Keterangan internal</label><input id="bp-ket" bind:value={bp.keterangan} /></div>
+    <div><button class="tombol utama" type="submit" disabled={sibuk === "bansos-rinci"}>Tambah penerima</button></div>
+  </form>
+  {#each isi.bansos_penerima || [] as o}
+    <BarisKelola
+      koleksi={KOLEKSI.BANSOS_PENERIMA}
+      id={o.id}
+      judul={o.nama || "-"}
+      baris={[(o.program || "-") + " · " + (o.rt || "-") + (o.periode ? " · " + o.periode : "")]}
+      nilai={o}
+      kolom={[
+        { nama: "nama", label: "Nama penerima" },
+        { nama: "rt", label: "RT" },
+        { nama: "program", label: "Program bantuan" },
+        { nama: "periode", label: "Periode" },
+        { nama: "keterangan", label: "Keterangan internal", jenis: "panjang" }
+      ]}
+    />
+  {/each}
 </section>
 
 <section class="blok">
