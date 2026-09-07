@@ -14,11 +14,10 @@
  *  Bedanya penting: halaman menampilkan "belum ada isi" hanya untuk []
  *  supaya warga tidak melihat tulisan itu berkedip saat situs baru dibuka.
  *
- *  KENAPA GALAT DIABAIKAN DIAM-DIAM
- *  Sebagian koleksi memang hanya boleh dibaca pengurus. Warga yang membuka
- *  situs pasti ditolak saat mencobanya, dan itu WAJAR -- bukan kerusakan
- *  yang perlu ditampilkan. Karena itu penangkap galat di berkas ini
- *  sengaja dibiarkan kosong.
+ *  GALAT PEMBACAAN
+ *  Koleksi umum memakai isi bawaan jika pembacaan gagal. Antrean pengurus
+ *  tetap null bila belum berhasil dimuat. Riwayat pribadi menyimpan galat
+ *  terpisah agar kegagalan tidak ditampilkan sebagai "belum ada kiriman".
  */
 
 import {
@@ -73,11 +72,17 @@ export const isi = $state({
 
 let generasiSesi = 0;
 
+/** Riwayat akun sendiri dipisah dari antrean seluruh warga di halaman Kelola. */
+export const milikSaya = $state({ uid: null, kiriman: {}, galat: {} });
+
 /** Buang data pribadi dan batalkan hasil permintaan dari sesi sebelumnya. */
 export function kosongkanIsiPribadi() {
   generasiSesi += 1;
   for (const nama of KOLEKSI_PENGURUS) isi[nama] = null;
   isi.suara = null;
+  milikSaya.uid = null;
+  milikSaya.kiriman = {};
+  milikSaya.galat = {};
 }
 
 /* -------------------------------------------------------------------------
@@ -121,7 +126,7 @@ export async function muatKoleksi(nama) {
     if (KOLEKSI_PENGURUS.includes(nama) && generasi !== generasiSesi) return;
     isi[nama] = hasil;
   } catch (err) {
-    /* Ditolak karena memang bukan haknya. Lihat catatan di kepala berkas. */
+    /* Pertahankan keadaan terakhir; hasil yang gagal bukan daftar kosong. */
   }
 }
 
@@ -152,13 +157,18 @@ export async function muatPengurus() {
 /** Kiriman milik satu warga, untuk halaman Akun Saya. */
 export async function muatMilikSaya(uid) {
   const generasi = generasiSesi;
+  milikSaya.uid = uid;
   for (const nama of KOLEKSI_KIRIMAN) {
     if (generasi !== generasiSesi) return;
     try {
       const hasil = await ambilMilikSaya(nama, uid);
       if (generasi !== generasiSesi) return;
-      isi[nama] = hasil;
-    } catch (err) {}
+      milikSaya.kiriman[nama] = hasil;
+      milikSaya.galat[nama] = false;
+    } catch (err) {
+      if (generasi !== generasiSesi) return;
+      milikSaya.galat[nama] = true;
+    }
   }
 }
 

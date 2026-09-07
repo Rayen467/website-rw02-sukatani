@@ -31,6 +31,7 @@ import {
   addDoc,
   setDoc,
   getDoc,
+  onSnapshot,
   getDocs,
   updateDoc,
   deleteDoc,
@@ -42,7 +43,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase.js";
 import { penggunaSekarang } from "./akun.js";
-import { KOLEKSI, TANPA_URUTAN, STATUS, PERAN } from "../inti/nama.js";
+import { KOLEKSI, TANPA_URUTAN, STATUS, peranPengurus, emailAkun } from "../inti/nama.js";
 
 /* =========================================================================
  *  MEMBACA
@@ -106,9 +107,15 @@ export async function ambilMilikSaya(nama, uid) {
  * belum ada pengurus mana pun yang bisa menambahkan.
  */
 export async function ambilPeran(email) {
-  const d = await getDoc(doc(db, KOLEKSI.PENGURUS, String(email || "").toLowerCase()));
-  if (!d.exists()) return null;
-  return d.data().peran === PERAN.PETUGAS ? PERAN.PETUGAS : PERAN.MASTER;
+  const d = await getDoc(doc(db, KOLEKSI.PENGURUS, emailAkun(email)));
+  return peranPengurus(d.exists() ? d.data() : null);
+}
+
+/** Ikuti pemberian, perubahan, dan pencabutan hak akun yang sedang masuk. */
+export function pantauPeran(email, saatBerubah, saatGagal) {
+  return onSnapshot(doc(db, KOLEKSI.PENGURUS, emailAkun(email)), (d) => {
+    saatBerubah(peranPengurus(d.exists() ? d.data() : null));
+  }, saatGagal);
 }
 
 /** Catatan warga milik satu pengguna. Kuncinya uid, bukan email. */

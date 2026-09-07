@@ -2,6 +2,8 @@
 
 Situs informasi warga. Svelte 5 + Vite, datanya di Firebase.
 
+**Dokumentasi autentikasi dan aktor:** [matriks akses, perbaikan, pengujian, dan penerapan](docs/AUTENTIKASI-DAN-AKTOR.md).
+
 **Live:** https://rayen467.github.io/website-rw02-sukatani/
 
 Seluruh isi situs diatur pengurus lewat halaman **Kelola** di situsnya
@@ -143,6 +145,10 @@ kecil. Menambah dokumen pengurus tidak membuat pengguna Authentication.
   `nama`, `jabatan`, dan `peran: "petugas"`.
 - Master Admin: seperti Petugas, dengan `peran: "master"`. Dokumen bootstrap
   lama tanpa kolom peran tetap dianggap Master Admin.
+
+Kolom peran yang ada tetapi bernilai null, kosong, atau tidak dikenal tidak
+memberi akses pengurus. Perubahan peran dipantau selama akun masuk. Riwayat
+Akun Saya terpisah dari antrean seluruh warga di Kelola.
 
 Petugas dan Master Admin tetap mempunyai kewenangan sama sesuai aturan proyek.
 Jangan membuat atau memberikan akun berhak istimewa hanya berdasarkan nama

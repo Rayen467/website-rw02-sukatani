@@ -36,11 +36,15 @@ import { auth } from "./firebase.js";
  */
 export function pantauMasuk(saatBerubah) {
   let identitasSebelumnya;
+  let penggunaSebelumnya;
   return onIdTokenChanged(auth, (u) => {
     const identitas = JSON.stringify(u ? [u.uid, u.email, u.emailVerified] : null);
     // Penyegaran token rutin tidak boleh mengosongkan formulir yang sedang diisi.
-    if (identitas === identitasSebelumnya) return;
+    // Login baru bisa mengganti objek User meskipun UID-nya sama. Teruskan
+    // perubahan itu supaya pantauan peran tidak terikat ke objek sesi lama.
+    if (identitas === identitasSebelumnya && u === penggunaSebelumnya) return;
     identitasSebelumnya = identitas;
+    penggunaSebelumnya = u;
     return saatBerubah(u);
   });
 }

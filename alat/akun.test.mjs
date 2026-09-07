@@ -39,11 +39,21 @@ const path = (p) => resolve(akar, p);
 async function lingkungan(pengganti = {}) {
   let pengguna = null;
   let pantau;
+  let pekerjaanPeran = Promise.resolve();
+  let ubahPeran;
+  let gagalPeran;
+  let berhenti = 0;
   const data = {
     ambilKoleksi: async () => [], ambilKonten: async () => null,
     ambilMilikSaya: async () => [], ambilSuara: async () => ({ hitung: [], milikSaya: null }),
     ambilPeran: async () => null, ambilProfilWarga: async () => null,
     ...pengganti
+  };
+  data.pantauPeran = (email, saatBerubah, saatGagal) => {
+    ubahPeran = saatBerubah;
+    gagalPeran = saatGagal;
+    pekerjaanPeran = Promise.resolve().then(() => data.ambilPeran(email)).then(saatBerubah, saatGagal);
+    return () => { berhenti += 1; };
   };
   const hasil = await muat('src/keadaan/mulai.js', {
     [path('src/sumber/data.js')]: data,
@@ -56,10 +66,19 @@ async function lingkungan(pengganti = {}) {
   });
   const keadaan = hasil.modul.get(path('src/keadaan/sesi.svelte.js')).namespace;
   const isi = hasil.modul.get(path('src/keadaan/isi.svelte.js')).namespace;
-  hasil.ekspor.mulaiPantauan();
+  const hentikan = hasil.ekspor.mulaiPantauan();
   return {
     ...keadaan, ...isi, ...hasil.ekspor,
-    masuk: (u) => { pengguna = u; return pantau(u); }
+    hentikan,
+    ubahPeran: (peran) => ubahPeran(peran),
+    gagalPeran: () => gagalPeran(),
+    jumlahBerhenti: () => berhenti,
+    masuk: (u) => {
+      pengguna = u;
+      pekerjaanPeran = Promise.resolve();
+      pantau(u);
+      return pekerjaanPeran;
+    }
   };
 }
 const akun = (uid, emailVerified = true) => ({ uid, email: `${uid}@example.test`, displayName: uid, emailVerified });
@@ -142,6 +161,8 @@ test('kiriman warga lama tidak ditampilkan pada akun berikutnya', async () => {
   tunggu.selesai([{ uid: 'lama' }]);
   await proses;
   assert.equal(l.isi.surat, null);
+  assert.equal(l.milikSaya.uid, null);
+  assert.equal(l.milikSaya.kiriman.surat, undefined);
 });
 
 test('peran asing dan akun belum terverifikasi tidak membuka menu Kelola', async () => {
@@ -221,4 +242,118 @@ test('penyegaran token rutin tidak mengulang sesi, perubahan verifikasi tetap di
   assert.equal(jumlah, 2);
   await pantau(null);
   assert.equal(jumlah, 3);
+});
+
+test('dokumen peran tidak valid tidak diwarisi sebagai Master Admin', async () => {
+  const { peranPengurus, emailAkun } = await import('../src/inti/nama.js');
+  assert.equal(peranPengurus(null), null);
+  assert.equal(peranPengurus({ nama: 'Bootstrap' }), 'master');
+  assert.equal(peranPengurus({ peran: 'petugas' }), 'petugas');
+  assert.equal(peranPengurus({ peran: 'master' }), 'master');
+  for (const peran of [null, '', 'warga', 'MASTER', 'master ', 1, false, [], {}]) {
+    assert.equal(peranPengurus({ peran }), null);
+  }
+  assert.equal(emailAkun('  Ketua+rw02@Example.test '), 'ketua+rw02@example.test');
+});
+
+test('objek User pengganti dengan identitas sama diteruskan ke pantauan sesi', async () => {
+  let pantau;
+  const l = await sumberAkun({ onIdTokenChanged: (auth, fn) => { pantau = fn; return () => {}; } });
+  const diterima = [];
+  l.pantauMasuk((u) => { diterima.push(u); });
+  const lama = l.auth.currentUser;
+  await pantau(lama);
+  const baru = { ...lama };
+  l.auth.currentUser = baru;
+  await pantau(baru);
+  await pantau(baru);
+  assert.equal(diterima.length, 2);
+  assert.equal(diterima[0], lama);
+  assert.equal(diterima[1], baru);
+});
+
+test('pemberian dan pencabutan peran aktif tanpa keluar masuk akun', async () => {
+  const l = await lingkungan();
+  await l.masuk(akun('uji'));
+  assert.equal(l.pengurus(), false);
+  await l.ubahPeran('petugas');
+  assert.equal(l.pengurus(), true);
+  assert.equal(l.namaPeran(), 'Petugas');
+  await l.ubahPeran('master');
+  assert.equal(l.pengurus(), true);
+  l.isi.warga = [{ nama: 'Data privat' }];
+  l.isi.pengaduan_kontak = [{ wa: 'Tidak boleh tersisa' }];
+  await l.ubahPeran(null);
+  assert.equal(l.pengurus(), false);
+  assert.equal(l.isi.warga, null);
+  assert.equal(l.isi.pengaduan_kontak, null);
+});
+
+test('respons data pengurus yang masih berjalan ditolak setelah peran dicabut', async () => {
+  const tunggu = jeda();
+  const l = await lingkungan({ ambilPeran: async () => 'master', ambilKoleksi: () => tunggu.janji });
+  await l.masuk(akun('uji'));
+  const proses = l.muatKoleksi('warga');
+  await l.ubahPeran(null);
+  tunggu.selesai([{ nama: 'Privat' }]);
+  await proses;
+  assert.equal(l.isi.warga, null);
+});
+
+test('galat pantauan peran mengosongkan data pribadi dan menutup Kelola', async () => {
+  const l = await lingkungan({ ambilPeran: async () => 'master' });
+  await l.masuk(akun('uji'));
+  l.isi.warga = [{ nama: 'Privat' }];
+  l.gagalPeran();
+  assert.equal(l.pengurus(), false);
+  assert.equal(l.isi.warga, null);
+});
+
+test('pantauan lama dilepas ketika ganti akun dan ketika aplikasi dilepas', async () => {
+  const l = await lingkungan();
+  await l.masuk(akun('satu'));
+  await l.masuk(akun('dua'));
+  assert.equal(l.jumlahBerhenti(), 1);
+  l.hentikan();
+  assert.equal(l.jumlahBerhenti(), 2);
+  assert.equal(l.sesi.pengguna, null);
+});
+
+test('profil yang terlambat tidak boleh menimpa peran baru yang sudah diberikan', async () => {
+  const tunggu = jeda();
+  const l = await lingkungan({ ambilProfilWarga: () => tunggu.janji });
+  const proses = l.masuk(akun('uji'));
+  await new Promise(setImmediate);
+  await l.ubahPeran('petugas');
+  tunggu.selesai({ nama: 'Warga lama' });
+  await proses;
+  assert.equal(l.sesi.peran, 'petugas');
+  assert.equal(l.sesi.profilWarga, null);
+  assert.equal(l.pengurus(), true);
+});
+
+test('memuat riwayat sendiri tidak menimpa antrean seluruh warga milik pengurus', async () => {
+  const l = await lingkungan({ ambilMilikSaya: async () => [{ uid: 'uji' }] });
+  l.isi.surat = [{ uid: 'tetangga' }];
+  await l.muatMilikSaya('uji');
+  assert.equal(l.isi.surat[0].uid, 'tetangga');
+  assert.equal(l.milikSaya.kiriman.surat[0].uid, 'uji');
+  l.kosongkanIsiPribadi();
+  assert.equal(l.milikSaya.uid, null);
+  assert.equal(l.milikSaya.kiriman.surat, undefined);
+});
+
+test('galat riwayat disimpan agar tidak disamarkan sebagai daftar kosong', async () => {
+  const l = await lingkungan({ ambilMilikSaya: async () => { throw new Error('offline'); } });
+  await l.muatMilikSaya('uji');
+  assert.equal(l.milikSaya.galat.surat, true);
+  assert.equal(l.milikSaya.kiriman.surat, undefined);
+});
+
+test('galat profil tidak disamakan dengan warga yang belum mendaftar', async () => {
+  const l = await lingkungan({ ambilProfilWarga: async () => { throw new Error('offline'); } });
+  await l.masuk(akun('uji'));
+  assert.equal(l.sesi.galatProfil, true);
+  assert.equal(l.sesi.profilWarga, null);
+  assert.equal(l.sesi.siap, true);
 });

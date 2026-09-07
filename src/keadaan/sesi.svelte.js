@@ -32,6 +32,10 @@ export const sesi = $state({
   /** Catatan warga milik pengguna ini, kalau sudah mendaftar. */
   profilWarga: null,
 
+  /** Galat pembacaan dibedakan dari akun warga yang memang belum punya profil. */
+  galatAkses: false,
+  galatProfil: false,
+
   /** Email sudah dipastikan lewat tautan. Selama false, server tolak tulisan. */
   terverifikasi: true,
 
@@ -41,7 +45,8 @@ export const sesi = $state({
 
 /** Benar kalau yang masuk adalah pengurus, apa pun jabatannya. */
 export function pengurus() {
-  return sesi.terverifikasi && (sesi.peran === PERAN.MASTER || sesi.peran === PERAN.PETUGAS);
+  return !!sesi.pengguna && sesi.siap && sesi.terverifikasi
+    && (sesi.peran === PERAN.MASTER || sesi.peran === PERAN.PETUGAS);
 }
 
 /**

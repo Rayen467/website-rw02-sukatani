@@ -20,7 +20,10 @@
 
   async function kirim(e) {
     e.preventDefault();
+    if (mengirim) return;
     mengirim = true;
+    const pengirim = sesi.pengguna;
+    const isianTerkirim = { ...form };
     const tiket = nomorAntrean("ADU");
 
     try {
@@ -32,23 +35,25 @@
        * menghasilkan laporan ganda.
        */
       await kirimWarga(KOLEKSI.PENGADUAN, {
-        tiket, kategori: form.kategori, lokasi: form.lokasi, isi: form.isi, catatan: ""
+        tiket, kategori: isianTerkirim.kategori, lokasi: isianTerkirim.lokasi, isi: isianTerkirim.isi, catatan: ""
       });
+      if (sesi.pengguna !== pengirim) return;
 
       let kontakTersimpan = true;
-      if (form.nama || form.wa) {
+      if (isianTerkirim.nama || isianTerkirim.wa) {
         try {
           await tambahIsi(KOLEKSI.PENGADUAN_KONTAK, {
             tiket,
-            nama: form.nama,
-            wa: form.wa,
-            uid: sesi.pengguna ? sesi.pengguna.uid : ""
+            nama: isianTerkirim.nama,
+            wa: isianTerkirim.wa,
+            uid: pengirim ? pengirim.uid : ""
           });
         } catch (errKontak) {
           kontakTersimpan = false;
           console.warn("Kontak pengaduan belum tersimpan:", errKontak);
         }
       }
+      if (sesi.pengguna !== pengirim) return;
 
       simpanan.tulis("aduan-saya", tiket);
       beriTahu(
@@ -60,10 +65,8 @@
       form = { kategori: KATEGORI_PENGADUAN[0], lokasi: "", isi: "", nama: "", wa: "" };
       muatKoleksi(KOLEKSI.PENGADUAN);
     } catch (err) {
-      beriTahu(pesanRamah(err));
-    }
-
-    mengirim = false;
+      if (sesi.pengguna === pengirim) beriTahu(pesanRamah(err));
+    } finally { mengirim = false; }
   }
 </script>
 
