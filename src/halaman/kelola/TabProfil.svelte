@@ -23,7 +23,7 @@
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
-  let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "" });
+  let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "", poligon: "" });
   let pf = $state({ ...AWAL_PF });
   let kn = $state({ ...AWAL_KN });
   let mt = $state({ ...AWAL_MT });
@@ -107,7 +107,8 @@
       kolom={[
         { nama: "jabatan", label: "Jabatan" },
         { nama: "nama", label: "Nama" },
-        { nama: "kontak", label: "Nomor kontak" }
+        { nama: "kontak", label: "Nomor kontak" },
+        { nama: "poligon", label: "Koordinat batas RT", jenis: "panjang" }
       ]}
     />
   {/each}
@@ -118,7 +119,7 @@
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("rt", async () => {
     const foto = (await bacaFoto(fotoRT, 500)) || rt.foto || "";
     await simpanDokumen(KOLEKSI.BATAS_RT, keSlug(rt.rt) || "rt", { ...rt, foto }, false);
-    rt = { rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "" };
+    rt = { rt: "", blok: "", batas: "", ketua: "", kontak: "", foto: "", poligon: "" };
     fotoRT = null;
     muatKoleksi(KOLEKSI.BATAS_RT);
   }); }}>
@@ -127,6 +128,11 @@
     <div class="isian"><label for="rt-batas">Batas wilayah</label><input id="rt-batas" bind:value={rt.batas} placeholder="Dari gerbang sampai lapangan" /></div>
     <div class="isian"><label for="rt-ketua">Nama Ketua RT</label><input id="rt-ketua" bind:value={rt.ketua} /></div>
     <div class="isian"><label for="rt-kontak">Nomor Ketua RT</label><input id="rt-kontak" bind:value={rt.kontak} inputmode="tel" /></div>
+    <div class="isian">
+      <label for="rt-poligon">Koordinat batas RT di peta</label>
+      <textarea id="rt-poligon" bind:value={rt.poligon} placeholder="-6.129100,106.497100&#10;-6.129200,106.497400&#10;-6.129500,106.497300"></textarea>
+      <span class="petunjuk">Opsional. Satu titik lintang,bujur per baris, minimal 3 titik. Jangan isi perkiraan; ambil titik sebenarnya dari peta lapangan/My Maps.</span>
+    </div>
     <div class="isian">
       <label for="rt-foto">Foto Ketua RT</label>
       <input id="rt-foto" type="file" accept="image/*" onchange={(e) => (fotoRT = e.target.files[0] || null)} />
