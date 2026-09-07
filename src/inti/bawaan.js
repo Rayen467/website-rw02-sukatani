@@ -124,6 +124,8 @@ export const BANSOS_BAWAAN = [
 
 export const TAUTAN_BAWAAN = [
   { id: "dukcapil", nama: "Dukcapil Kementerian Dalam Negeri", ket: "Informasi administrasi kependudukan nasional", url: "https://dukcapil.kemendagri.go.id" },
+  { id: "dukcapil-kab", nama: "Disdukcapil Kabupaten Tangerang", ket: "Jenis layanan, persyaratan, dan informasi administrasi kependudukan Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/" },
+  { id: "ktpel-kab", nama: "Informasi KTP-el Kabupaten Tangerang", ket: "Persyaratan dan informasi pencetakan KTP elektronik dari Disdukcapil Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/detail-menu-konten/632" },
   { id: "kabtangerang", nama: "Pemerintah Kabupaten Tangerang", ket: "Laman resmi pemerintah kabupaten", url: "https://www.tangerangkab.go.id" },
   { id: "desa", nama: "Kantor Desa Sukatani", ket: "Layanan administrasi tingkat desa", url: "" },
   { id: "kecamatan", nama: "Kecamatan Rajeg", ket: "Layanan administrasi tingkat kecamatan", url: "" },
@@ -263,7 +265,7 @@ export const BERANDA_BAWAAN = {
     "Laporkan sampah, lampu mati, saluran tersumbat, atau gangguan keamanan. Status laporan bisa dipantau.",
   layanan3Judul: "Reservasi Fasilitas",
   layanan3Teks:
-    "Pinjam balai warga, tenda, kursi, atau pengeras suara. Jadwal ketersediaan terlihat langsung.",
+    "Pinjam GOR Nurani, balai warga, tenda, kursi, atau fasilitas RW lain. Jadwal ketersediaan terlihat langsung.",
 
   judulKas: "Laporan Kas RW",
   teksKas:
@@ -354,7 +356,7 @@ export const MENU = [
       ["/layanan", "Pusat Layanan Warga", "Semua layanan dan alur pengajuan"],
       ["/surat", "Pengajuan Surat", "Surat pengantar dan keterangan"],
       ["/pengaduan", "Pengaduan dan Aspirasi", "Lapor dan pantau statusnya"],
-      ["/reservasi", "Reservasi Fasilitas", "Balai warga, tenda, kursi"],
+      ["/reservasi", "Reservasi Fasilitas", "GOR Nurani, balai warga, tenda, kursi"],
       ["/daftar-usaha", "Pendaftaran UMKM", "Daftarkan usaha warga"],
       ["/kependudukan", "Data Kependudukan", "Statistik warga"]
     ]
@@ -364,7 +366,7 @@ export const MENU = [
     isi: [
       ["/berita", "Berita dan Pengumuman", "Kabar terbaru dari pengurus"],
       ["/kalender", "Kalender Kegiatan", "Jadwal rutin dan acara"],
-      ["/galeri", "Galeri Foto", "Dokumentasi kegiatan"],
+      ["/galeri", "Galeri Foto & Video", "Dokumentasi kegiatan, pembangunan, dan acara warga"],
       ["/berkas", "Dokumen dan Video", "Notulen, SK, formulir, rekaman"],
       ["/forum", "Forum dan Polling", "Musyawarah dan survei warga"]
     ]
@@ -383,7 +385,7 @@ export const MENU = [
       ["/majelis-taklim", "Majelis Taklim Al-Ikhlas", "Profil, kegiatan, dan ringkasan AD/ART"],
       ["/gor-nurani", "GOR Nurani", "Profil, tujuan, dan pemanfaatan GOR RW 02"],
       ["/bansos", "Bantuan Sosial", "Syarat dan jalur pengajuan"],
-      ["/tautan", "Tautan Penting", "Desa, kecamatan, Dukcapil"]
+      ["/tautan", "Tautan Penting", "Desa, kecamatan, Dukcapil, KTP-el"]
     ]
   },
   { label: "Kontak", alamat: "/kontak" }
