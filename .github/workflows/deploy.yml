@@ -47,14 +47,11 @@ jobs:
       # bocor antarakun, jawaban server yang datang terlambat setelah orang
       # keluar, dan email yang harus dirapikan sebelum dikirim ke Firebase.
       # Tanpa langkah ini, uji itu akan pelan-pelan basi tanpa ada yang tahu.
-      - name: Jalankan uji
+      - name: Uji isolasi sesi dan autentikasi
         run: npm test
 
       - name: Bangun situs
         run: npm run build
-
-      - name: Uji isolasi sesi dan autentikasi
-        run: npm test
 
       - name: Siapkan berkas untuk Pages
         uses: actions/upload-pages-artifact@v3
