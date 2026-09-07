@@ -44,6 +44,7 @@
   async function kirim(e) {
     e.preventDefault();
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya permohonan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
+    if (!sesi.terverifikasi) { beriTahu("Verifikasi email dulu sebelum mengajukan reservasi."); pergi("/akun"); return; }
     mengirim = true;
     try {
       await kirimWarga(KOLEKSI.RESERVASI, form);
