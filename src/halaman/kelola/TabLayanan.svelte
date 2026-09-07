@@ -1,4 +1,5 @@
 <script>
+  import { KOLEKSI } from "../../inti/nama.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { tambahIsi } from "../../sumber/data.js";
