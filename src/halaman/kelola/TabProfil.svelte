@@ -6,7 +6,7 @@
   import { pesanRamah } from "../../sumber/firebase.js";
   import { keSlug } from "../../inti/format.js";
   import { kecilkanFoto } from "../../inti/peramban.js";
-  import { JENIS_USAHA } from "../../inti/bawaan.js";
+  import { JENIS_USAHA, MAJELIS_TAKLIM_BAWAAN, GOR_NURANI_BAWAAN } from "../../inti/bawaan.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
   /* Nilai awal diangkat jadi tetapan karena dipakai di DUA tempat: di sini
@@ -18,12 +18,16 @@
   const AWAL_SB = { nama: "", teks: "", foto: "" };
   const AWAL_PF = { sejarah: "", visi: "", misi: "", luas: "", jumlahRT: "", batasUtara: "", batasTimur: "", batasSelatan: "", batasBarat: "" };
   const AWAL_KN = { posKeamanan: "", ketuaRW: "", ambulans: "", sekretaris: "", bendahara: "", kebersihan: "", alamat: "", koordinat: "", namaTitik: "", petaBatas: "", gambarPeta: "", jamSeninJumat: "", jamSabtu: "", iuranNominal: "", iuranJatuhTempo: "", iuranSetor: "" };
+  const AWAL_MT = { ...MAJELIS_TAKLIM_BAWAAN };
+  const AWAL_GOR = { ...GOR_NURANI_BAWAAN };
 
   let sb = $state({ ...AWAL_SB });
   let st = $state({ jabatan: "", nama: "", kontak: "" });
   let rt = $state({ rt: "", blok: "", batas: "", ketua: "", kontak: "" });
   let pf = $state({ ...AWAL_PF });
   let kn = $state({ ...AWAL_KN });
+  let mt = $state({ ...AWAL_MT });
+  let gor = $state({ ...AWAL_GOR });
   let uk = $state({ nama: "", kat: "siapsaji", ringkas: "", panjang: "", jam: "", wa: "" });
 
   let fotoSambutan = $state(null);
@@ -35,6 +39,8 @@
   $effect(() => { const k = konten(KONTEN.SAMBUTAN); if (k) sb = { ...AWAL_SB, ...k }; });
   $effect(() => { const k = konten(KONTEN.PROFIL); if (k) pf = { ...AWAL_PF, ...k }; });
   $effect(() => { const k = konten(KONTEN.KONTAK); if (k) kn = { ...AWAL_KN, ...k }; });
+  $effect(() => { const k = konten(KONTEN.MAJELIS_TAKLIM); if (k) mt = { ...AWAL_MT, ...k }; });
+  $effect(() => { const k = konten(KONTEN.GOR_NURANI); if (k) gor = { ...AWAL_GOR, ...k }; });
 
   async function bacaFoto(berkas, sisi) {
     if (!berkas) return "";
@@ -155,6 +161,62 @@
 </section>
 
 <section class="blok">
+  <div class="kepala-bagian"><h2>Majelis Taklim Al-Ikhlas</h2></div>
+  <div class="catatan" style="margin-bottom:18px">
+    Data awal diisi dari SKT dan AD/ART yang diberikan. Perubahan di sini langsung dipakai halaman publik Majelis Taklim.
+  </div>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("majelis", async () => { await simpanKonten(KONTEN.MAJELIS_TAKLIM, mt); muatKonten(KONTEN.MAJELIS_TAKLIM); }); }}>
+    <div class="isian"><label for="mt-nama">Nama organisasi</label><input id="mt-nama" bind:value={mt.nama} /></div>
+    <div class="isian"><label for="mt-skt">Nomor SKT</label><input id="mt-skt" bind:value={mt.noSkt} /></div>
+    <div class="isian"><label for="mt-dasar">Dasar SKT</label><textarea id="mt-dasar" bind:value={mt.dasarSkt}></textarea></div>
+    <div class="isian"><label for="mt-tglskt">Tanggal SKT</label><input id="mt-tglskt" bind:value={mt.tanggalSkt} /></div>
+    <div class="isian"><label for="mt-masa">Masa berlaku</label><input id="mt-masa" bind:value={mt.masaBerlaku} /></div>
+    <div class="isian"><label for="mt-ketua">Ketua</label><input id="mt-ketua" bind:value={mt.ketua} /></div>
+    <div class="isian"><label for="mt-berdiri">Tanggal berdiri</label><input id="mt-berdiri" bind:value={mt.tanggalBerdiri} /></div>
+    <div class="isian"><label for="mt-periode">Periode</label><input id="mt-periode" bind:value={mt.periode} /></div>
+    <div class="isian"><label for="mt-alamat">Alamat</label><textarea id="mt-alamat" bind:value={mt.alamat}></textarea></div>
+    <div class="isian"><label for="mt-landasan">Landasan</label><textarea id="mt-landasan" bind:value={mt.landasan}></textarea></div>
+    <div class="isian"><label for="mt-visi">Visi</label><textarea id="mt-visi" bind:value={mt.visi}></textarea></div>
+    <div class="isian"><label for="mt-misi">Misi</label><textarea id="mt-misi" bind:value={mt.misi}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
+    <div class="isian"><label for="mt-tujuan">Tujuan</label><textarea id="mt-tujuan" bind:value={mt.tujuan}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
+    <div class="isian"><label for="mt-kegiatan">Kegiatan</label><textarea id="mt-kegiatan" bind:value={mt.kegiatan}></textarea><span class="petunjuk">Satu kegiatan per baris.</span></div>
+    <div class="isian"><label for="mt-anggota">Keanggotaan</label><textarea id="mt-anggota" bind:value={mt.keanggotaan}></textarea></div>
+    <div class="isian"><label for="mt-pengurus">Susunan kepengurusan</label><textarea id="mt-pengurus" bind:value={mt.kepengurusan}></textarea><span class="petunjuk">Satu jabatan per baris.</span></div>
+    <div class="isian"><label for="mt-bakti">Masa bakti</label><input id="mt-bakti" bind:value={mt.masaBakti} /></div>
+    <div class="isian"><label for="mt-musyawarah">Musyawarah</label><textarea id="mt-musyawarah" bind:value={mt.musyawarah}></textarea></div>
+    <div class="isian"><label for="mt-keuangan">Sumber keuangan</label><textarea id="mt-keuangan" bind:value={mt.keuangan}></textarea><span class="petunjuk">Satu sumber per baris.</span></div>
+    <div class="isian"><label for="mt-perubahan">Perubahan AD/ART</label><textarea id="mt-perubahan" bind:value={mt.perubahan}></textarea></div>
+    <div class="isian"><label for="mt-rapat">Rapat</label><textarea id="mt-rapat" bind:value={mt.rapat}></textarea></div>
+    <div><button class="tombol utama" type="submit" disabled={sibuk === "majelis"}>Simpan Majelis Taklim</button></div>
+  </form>
+</section>
+
+<section class="blok">
+  <div class="kepala-bagian"><h2>GOR Nurani RW 02</h2></div>
+  <div class="catatan" style="margin-bottom:18px">
+    Data awal diisi dari AD/ART Pengelolaan GOR Nurani. Tarif tidak diisi karena dokumen menyatakan tarif ditetapkan pengelola.
+  </div>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("gor", async () => { await simpanKonten(KONTEN.GOR_NURANI, gor); muatKonten(KONTEN.GOR_NURANI); }); }}>
+    <div class="isian"><label for="gor-nama">Nama fasilitas</label><input id="gor-nama" bind:value={gor.nama} /></div>
+    <div class="isian"><label for="gor-jenis">Jenis</label><input id="gor-jenis" bind:value={gor.jenis} /></div>
+    <div class="isian"><label for="gor-tahun">Pendirian</label><input id="gor-tahun" bind:value={gor.tahunPendirian} /></div>
+    <div class="isian"><label for="gor-operasional">Mulai operasional</label><input id="gor-operasional" bind:value={gor.mulaiOperasional} /></div>
+    <div class="isian"><label for="gor-alamat">Lokasi</label><textarea id="gor-alamat" bind:value={gor.alamat}></textarea></div>
+    <div class="isian"><label for="gor-luas">Luas</label><input id="gor-luas" bind:value={gor.luas} /></div>
+    <div class="isian"><label for="gor-riwayat">Riwayat singkat</label><textarea id="gor-riwayat" bind:value={gor.riwayat}></textarea></div>
+    <div class="isian"><label for="gor-visi">Visi</label><textarea id="gor-visi" bind:value={gor.visi}></textarea></div>
+    <div class="isian"><label for="gor-misi">Misi</label><textarea id="gor-misi" bind:value={gor.misi}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
+    <div class="isian"><label for="gor-landasan">Landasan</label><input id="gor-landasan" bind:value={gor.landasan} /></div>
+    <div class="isian"><label for="gor-sifat">Sifat</label><input id="gor-sifat" bind:value={gor.sifat} /></div>
+    <div class="isian"><label for="gor-asas">Asas</label><input id="gor-asas" bind:value={gor.asas} /></div>
+    <div class="isian"><label for="gor-tujuan">Tujuan</label><textarea id="gor-tujuan" bind:value={gor.tujuan}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
+    <div class="isian"><label for="gor-pemanfaatan">Pemanfaatan</label><textarea id="gor-pemanfaatan" bind:value={gor.pemanfaatan}></textarea></div>
+    <div class="isian"><label for="gor-logo">Makna lambang</label><textarea id="gor-logo" bind:value={gor.maknaLogo}></textarea></div>
+    <div><button class="tombol utama" type="submit" disabled={sibuk === "gor"}>Simpan GOR Nurani</button></div>
+  </form>
+</section>
+
+<section class="blok">
   <div class="kepala-bagian"><h2>Kontak, jam layanan, dan iuran</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("kontak", async () => { const g = (await bacaFoto(gambarPeta, 1400)) || kn.gambarPeta || ""; await simpanKonten(KONTEN.KONTAK, { ...kn, gambarPeta: g }); gambarPeta = null; muatKonten(KONTEN.KONTAK); }); }}>
     <div class="isian"><label for="n-pos">Nomor pos keamanan</label><input id="n-pos" bind:value={kn.posKeamanan} /></div>
@@ -162,7 +224,7 @@
     <div class="isian"><label for="n-sek">Nomor Sekretaris</label><input id="n-sek" bind:value={kn.sekretaris} /></div>
     <div class="isian"><label for="n-ben">Nomor Bendahara</label><input id="n-ben" bind:value={kn.bendahara} /></div>
     <div class="isian"><label for="n-ker">Nomor Seksi Kebersihan</label><input id="n-ker" bind:value={kn.kebersihan} /></div>
-    <div class="isian"><label for="n-amb">Nomor ambulans desa</label><input id="n-amb" bind:value={kn.ambulans} /></div>
+    <div class="isian"><label for="n-amb">Nomor transportasi warga</label><input id="n-amb" bind:value={kn.ambulans} /></div>
     <div class="isian"><label for="n-alamat">Alamat sekretariat</label><input id="n-alamat" bind:value={kn.alamat} /></div>
     <div class="isian">
       <label for="n-koordinat">Titik penanda di peta</label>
