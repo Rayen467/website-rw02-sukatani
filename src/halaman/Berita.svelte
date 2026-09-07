@@ -21,6 +21,7 @@
           <h3><a href="#/berita/{k.id}">{k.judul}</a></h3>
           <p>{k.ringkas || ""}</p>
           <div class="baris">
+            {#if k.penting === "true"}<span class="label-kecil">Penting</span>{/if}
             <span class="label-kecil {k.tipe === 'agenda' ? 'agenda' : ''}">{k.tipe === "agenda" ? "Agenda" : "Pengumuman"}</span>
             <TombolSalin judul={k.judul} jalur="/berita/{k.id}" />
           </div>
