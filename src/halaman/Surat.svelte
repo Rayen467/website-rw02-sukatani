@@ -45,7 +45,7 @@
       <div class="langkah-butir"><span class="nomor">1</span><div><b>Ajukan lewat situs</b><p>Pilih jenis surat, isi keterangan, kirim. Nomor antrean muncul seketika.</p></div></div>
       <div class="langkah-butir"><span class="nomor">2</span><div><b>Cetak berkasnya</b><p>Berkas sudah berisi keterangan yang diisi, tinggal dibawa.</p></div></div>
       <div class="langkah-butir"><span class="nomor">3</span><div><b>Tanda tangan Ketua RT</b><p>Bawa berkas beserta syarat yang diminta.</p></div></div>
-      <div class="langkah-butir"><span class="nomor">4</span><div><b>Pengesahan Ketua RW</b><p>Setelah disahkan, surat siap dibawa ke kantor desa bila diperlukan.</p></div></div>
+      <div class="langkah-butir"><span class="nomor">4</span><div><b>Pengesahan Ketua RW</b><p>Setelah disahkan, surat siap dibawa ke kantor kelurahan bila diperlukan.</p></div></div>
     </div>
   </div>
 </section>
