@@ -111,13 +111,13 @@ export const BANSOS_BAWAAN = [
   {
     id: "bpnt",
     nama: "Bantuan Pangan Non Tunai",
-    jalur: "Diusulkan Ketua RT, diverifikasi pengurus RW, diteruskan ke kantor desa",
+    jalur: "Diusulkan Ketua RT, diverifikasi pengurus RW, diteruskan ke kantor kelurahan",
     syarat: ["Terdaftar dalam data kesejahteraan sosial", "Kartu Keluarga dan KTP aktif", "Tidak sedang menerima bantuan sejenis"]
   },
   {
     id: "pkh",
     nama: "Program Keluarga Harapan",
-    jalur: "Pendataan melalui pendamping program dan pemerintah desa",
+    jalur: "Pendataan melalui pendamping program dan pemerintah kelurahan",
     syarat: ["Memiliki anggota keluarga sesuai kriteria program", "Kartu Keluarga dan KTP aktif", "Bersedia mengikuti pendampingan"]
   }
 ];
