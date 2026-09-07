@@ -16,6 +16,7 @@
     foto: kontenNilai(KONTEN.SAMBUTAN, "foto", "")
   });
   const kabar = $derived((isi.pengumuman || []).slice(0, 3));
+  const penting = $derived((isi.pengumuman || []).find((x) => x.penting === "true") || null);
   const usaha = $derived((isi.usaha || []).slice(0, 3));  
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", "RW 02"));
 
@@ -40,6 +41,19 @@
     <a href="#/reservasi">Pinjam balai warga</a>
   </div>
 </section>
+
+{#if penting}
+  <section class="blok">
+    <div class="catatan awas">
+      <p class="alis">Pengumuman penting</p>
+      <h3 style="margin:4px 0 8px"><a href="#/berita/{penting.id}">{penting.judul}</a></h3>
+      <p>{penting.ringkas || penting.isi || ""}</p>
+      <div class="baris-tombol" style="margin-top:10px">
+        <a class="tombol utama" href="#/berita/{penting.id}">Baca pengumuman</a>
+      </div>
+    </div>
+  </section>
+{/if}
 
 <!-- Foto warga RW 02 sendiri, kerja bakti di jalan kawasan. Ini satu-satunya
      hal di halaman ini yang tidak bisa ditiru situs mana pun: tempatnya nyata,
