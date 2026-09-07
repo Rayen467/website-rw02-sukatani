@@ -26,7 +26,7 @@
   async function kirim(e) {
     e.preventDefault();
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya pengajuan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
-    if (!sesi.terverifikasi) { beriTahu("Pastikan email Anda dulu lewat tautan yang kami kirim."); return; }
+    if (!sesi.terverifikasi) { beriTahu("Verifikasi email dulu sebelum mengajukan surat."); pergi("/akun"); return; }
     mengirim = true;
     const nomor = nomorAntrean("SP");
     try {
