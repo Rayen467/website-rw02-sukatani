@@ -24,6 +24,7 @@
 
   async function pilih(i) {
     if (!sesi.pengguna) { beriTahu("Masuk dulu untuk ikut memilih."); pergi("/masuk"); return; }
+    if (!sesi.terverifikasi) { beriTahu("Verifikasi email dulu sebelum ikut polling."); pergi("/akun"); return; }
     try {
       await pilihPolling(polling.id, i);
       beriTahu("Suara tercatat. Terima kasih.");
@@ -63,7 +64,13 @@
         </div>
       {/if}
 
-      {#if sesi.pengguna && pilihanku === null}
+      {#if sesi.pengguna && !sesi.terverifikasi}
+        <div class="kunci" style="margin-top:14px">
+          <h3>Verifikasi email sebelum memilih</h3>
+          <p>Akun sudah masuk, tetapi Firestore hanya menerima suara dari akun dengan email yang sudah diverifikasi.</p>
+          <div class="baris-tombol"><button class="tombol utama" type="button" onclick={() => pergi("/akun")}>Buka verifikasi akun</button></div>
+        </div>
+      {:else if sesi.pengguna && pilihanku === null}
         <div class="polling" style="margin-top:12px">
           {#each polling.opsi as o, i}
             <button class="polling-pilihan" type="button" onclick={() => pilih(i)}>{o}</button>
