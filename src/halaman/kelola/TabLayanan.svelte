@@ -7,7 +7,7 @@
 
   let js = $state({ nama: "", estimasi: "", syarat: "" });
   let fs = $state({ nama: "", kapasitas: "", ket: "" });
-  let fu = $state({ nama: "", jenis: "", rt: "" });
+  let fu = $state({ nama: "", jenis: "", rt: "", koordinat: "" });
   let ru = $state({ kegiatan: "", waktu: "", tempat: "" });
   let sibuk = $state("");
 
@@ -78,12 +78,17 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Fasilitas umum di kawasan</h2></div>
-  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); tambah("fasum", fu, () => (fu = { nama: "", jenis: "", rt: "" })); }}>
+  <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); tambah("fasum", fu, () => (fu = { nama: "", jenis: "", rt: "", koordinat: "" })); }}>
     <div class="isian"><label for="fu-nama">Nama fasilitas</label><input id="fu-nama" bind:value={fu.nama} required placeholder="Musala" /></div>
     <div class="isian"><label for="fu-jenis">Jenis</label><input id="fu-jenis" bind:value={fu.jenis} placeholder="Ibadah" /></div>
     <div class="isian"><label for="fu-rt">Lokasi</label><input id="fu-rt" bind:value={fu.rt} placeholder="RT 01" /></div>
+    <div class="isian">
+      <label for="fu-koordinat">Koordinat peta</label>
+      <input id="fu-koordinat" bind:value={fu.koordinat} placeholder="-6.129217,106.497767" />
+      <span class="petunjuk">Opsional. Kalau diisi, fasilitas akan muncul sebagai titik di peta wilayah.</span>
+    </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "fasum"}>Tambahkan</button></div>
-    <p class="catatan-borang">Tampil di tabel halaman Peta Wilayah, di bawah peta.</p>
+    <p class="catatan-borang">Tampil di tabel halaman Peta Wilayah. Jika koordinat diisi, titiknya juga muncul langsung di peta.</p>
   </form>
   {#each isi.fasum || [] as o}
     <BarisKelola
@@ -94,7 +99,8 @@
       kolom={[
         { nama: "nama", label: "Nama fasilitas" },
         { nama: "jenis", label: "Jenis" },
-        { nama: "rt", label: "Lokasi" }
+        { nama: "rt", label: "Lokasi" },
+        { nama: "koordinat", label: "Koordinat peta" }
       ]}
     />
   {/each}
