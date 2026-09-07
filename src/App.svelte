@@ -45,7 +45,7 @@
   import Akun from "./halaman/Akun.svelte";
   import Cari from "./halaman/Cari.svelte";
   import TidakAda from "./halaman/TidakAda.svelte";
-  import Kelola from "./halaman/kelola/Kelola.svelte";
+  import PintuKelola from "./halaman/kelola/Pintu.svelte";
 
   onMount(() => {
     terapkanGaya(null);
@@ -79,7 +79,7 @@
     masuk: Masuk,
     akun: Akun,
     cari: Cari,
-    kelola: Kelola
+    kelola: PintuKelola
   };
 
   const pilihan = $derived.by(() => {

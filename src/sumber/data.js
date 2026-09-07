@@ -39,7 +39,7 @@ import {
   orderBy,
   limit,
   serverTimestamp
-} from "firebase/firestore";
+} from "firebase/firestore/lite";
 import { db } from "./firebase.js";
 import { penggunaSekarang } from "./akun.js";
 import { KOLEKSI, TANPA_URUTAN, STATUS, PERAN } from "../inti/nama.js";

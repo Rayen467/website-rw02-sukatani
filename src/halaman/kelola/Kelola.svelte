@@ -1,5 +1,5 @@
 <script>
-  import { sesi, pengurus, namaPeran } from "../../keadaan/sesi.svelte.js";
+  import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
   import { rute } from "../../keadaan/rute.svelte.js";
   import TabKiriman from "./TabKiriman.svelte";
   import TabBeranda from "./TabBeranda.svelte";
@@ -48,12 +48,6 @@
   <p>Semua yang tampil di situs diisi dari sini. Perubahan langsung terlihat warga.</p>
 </div>
 
-{#if !pengurus()}
-  <div class="kunci">
-    <h3>Tidak tersedia</h3>
-    <p>Halaman ini hanya untuk pengurus yang sudah masuk dengan akun terdaftar.</p>
-  </div>
-{:else}
   <div class="catatan" style="margin-bottom:22px">
     <b>Masuk sebagai {namaPeran()}.</b> {sesi.pengguna.email}.
     Anda punya akses penuh atas seluruh data, isi situs, dan daftar pengurus.
@@ -66,4 +60,3 @@
   </div>
 
   <Terpilih />
-{/if}

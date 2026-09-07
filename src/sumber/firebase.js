@@ -25,7 +25,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore/lite";
 
 export const konfigurasi = {
   apiKey: "AIzaSyAWCz3z7RNnNZOoAs217AyRTZCLcysE08Q",
