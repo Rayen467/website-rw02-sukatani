@@ -8,7 +8,7 @@
   import { kecilkanFoto } from "../../inti/peramban.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
-  let k = $state({ tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
+  let k = $state({ tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
   let g = $state({ judul: "", fn: "", jml: "" });
   /* Banyak foto sekaligus. Satu kegiatan kerja bakti biasanya belasan
      sampai dua puluhan foto; memaksa pengurus mengunggah satu-satu berarti
@@ -23,7 +23,7 @@
     try {
       await tambahIsi(KOLEKSI.PENGUMUMAN, { ...k, tgl: k.tanggal || tanggalHariIni() });
       beriTahu("Terbit. Sudah muncul di halaman Berita.");
-      k = { tipe: "pengumuman", judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" };
+      k = { tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" };
       muatKoleksi(KOLEKSI.PENGUMUMAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
@@ -83,6 +83,10 @@
     <div class="isian"><label for="k-tipe">Jenis</label>
       <select id="k-tipe" bind:value={k.tipe}><option value="pengumuman">Pengumuman</option><option value="agenda">Agenda kegiatan</option></select>
     </div>
+    <label class="centang">
+      <input type="checkbox" bind:checked={k.penting} />
+      <span><b>Tandai sebagai pengumuman penting</b><span class="petunjuk">Akan disorot khusus di Beranda dan diberi label Penting.</span></span>
+    </label>
     <div class="isian"><label for="k-judul">Judul</label><input id="k-judul" bind:value={k.judul} required placeholder="Kerja bakti bulanan blok C dan D" /></div>
     <div class="isian"><label for="k-tglText">Tanggal dan waktu (tulisan)</label><input id="k-tglText" bind:value={k.tglText} placeholder="14 September 2026 pukul 08.00" /></div>
     <div class="isian">
@@ -107,6 +111,7 @@
         kolom={[
           { nama: "judul", label: "Judul" },
           { nama: "tipe", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "pengumuman", label: "Pengumuman" }, { nilai: "agenda", label: "Agenda" }] },
+          { nama: "penting", label: "Sorotan penting", jenis: "pilih", pilihan: [{ nilai: "false", label: "Biasa" }, { nilai: "true", label: "Penting" }] },
           { nama: "tglText", label: "Tanggal tampil" },
           { nama: "ringkas", label: "Ringkasan", jenis: "panjang" },
           { nama: "isi", label: "Isi lengkap", jenis: "panjang" }
