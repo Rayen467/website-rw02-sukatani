@@ -227,8 +227,15 @@ Jangan membuka `index.html` dengan klik dua kali — Firebase menolak alamat
 Sebelum push:
 
 ```bash
+npm test
 npm run build
 ```
+
+`npm test` menjaga perilaku sesi dan autentikasi: peran yang tidak boleh
+bocor antarakun, jawaban server yang datang terlambat setelah orang keluar,
+dan email yang harus dirapikan sebelum dikirim ke Firebase. Semuanya hal
+yang tidak terlihat di layar, jadi tidak akan ketahuan dengan mencoba
+sendiri. Keduanya ikut jalan di GitHub Actions.
 
 Perintah ini menjalankan pemeriksa dulu, baru membangun. Kalau lolos di
 komputer sendiri, dijamin lolos juga di GitHub.

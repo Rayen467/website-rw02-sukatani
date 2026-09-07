@@ -42,6 +42,14 @@ jobs:
       - name: Periksa arsitektur
         run: npm run periksa
 
+      # Uji perilaku sesi dan autentikasi. Ada empat belas berkas uji yang
+      # menjaga hal-hal yang tidak terlihat di layar: peran yang tidak boleh
+      # bocor antarakun, jawaban server yang datang terlambat setelah orang
+      # keluar, dan email yang harus dirapikan sebelum dikirim ke Firebase.
+      # Tanpa langkah ini, uji itu akan pelan-pelan basi tanpa ada yang tahu.
+      - name: Jalankan uji
+        run: npm test
+
       - name: Bangun situs
         run: npm run build
 
