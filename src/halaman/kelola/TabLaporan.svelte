@@ -220,13 +220,14 @@
 
           <div class="tabel-bungkus" style="margin-top:16px">
             <table class="data">
-              <thead><tr><th>Periode</th><th>Tanggal</th><th>Keterangan</th><th>Masuk</th><th>Keluar</th></tr></thead>
+              <thead><tr><th>Periode</th><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Masuk</th><th>Keluar</th></tr></thead>
               <tbody>
                 {#each kas as t}
                   <tr>
                     <td>{t.periode || "-"}</td>
                     <td>{t.tgl || "-"}</td>
                     <td>{t.ket}</td>
+                    <td>{t.kategori || "Lainnya"}</td>
                     <td>{t.jenis === "masuk" ? rupiah(t.nominal) : ""}</td>
                     <td>{t.jenis === "masuk" ? "" : rupiah(t.nominal)}</td>
                   </tr>
