@@ -1,126 +1,115 @@
 /**
- * ===========================================================================
- *  MULAI -- menyalakan situs dan menyambungkan tiga keadaan
- * ===========================================================================
- *
- *  LAPIS 3 (keadaan). Boleh mengimpor: inti/, sumber/, keadaan/ lainnya.
- *
- *  INI SATU-SATUNYA TEMPAT YANG MEMANTAU FIREBASE.
- *
- *  Tiga berkas keadaan sengaja tidak saling memanggil: sesi tidak tahu apa
- *  itu isi, isi tidak tahu apa itu pesan. Yang menyambungkan ketiganya
- *  cuma berkas ini. Untungnya, kalau ada yang salah dengan urutan menyala
- *  -- data kosong padahal sudah masuk, menu Kelola telat muncul --
- *  tempat mencarinya hanya satu.
- *
- *  URUTAN MENYALA
- *      1. Isi umum diambil duluan, tanpa menunggu siapa pun masuk.
- *      2. Firebase memeriksa sesi lama. Ini butuh waktu, dan selama itu
- *         sesi.siap masih false.
- *      3. Setelah tahu siapa yang masuk, baru data khususnya diambil.
+ * Menghubungkan sesi Authentication, hak pengurus, dan data di layar.
+ * Seluruh pantauan berhenti ketika akun berubah atau aplikasi dilepas.
  */
-
 import { pantauMasuk, penggunaSekarang } from "../sumber/akun.js";
-import { ambilPeran, ambilProfilWarga } from "../sumber/data.js";
+import { pantauPeran, ambilProfilWarga } from "../sumber/data.js";
+import { emailAkun } from "../inti/nama.js";
+import { hapusDrafSurat } from "../inti/draf-surat.js";
 import { sesi, namaPeran } from "./sesi.svelte.js";
 import { muatSemuaKonten, muatUmum, muatPengurus, muatMilikSaya, muatSuara, kosongkanIsiPribadi } from "./isi.svelte.js";
 import { beriTahu } from "./pesan.svelte.js";
 
 let generasiSesi = 0;
 
-/** Mengosongkan sesi. Dipakai saat keluar dan saat memang belum masuk. */
 function kosongkanSesi() {
+  hapusDrafSurat();
+  kosongkanIsiPribadi();
   sesi.pengguna = null;
   sesi.peran = null;
   sesi.profilWarga = null;
+  sesi.galatAkses = false;
+  sesi.galatProfil = false;
   sesi.terverifikasi = true;
   sesi.siap = true;
 }
 
-/**
- * Menyalakan situs. Dipanggil sekali dari App.svelte.
- */
 export function mulaiPantauan() {
-  /* Tanpa menunggu. Warga yang cuma mau membaca pengumuman tidak perlu
-     menunggu Firebase selesai memeriksa sesi lama. */
   muatSemuaKonten();
   muatUmum();
+  let hidup = true;
+  let hentikanPeran = () => {};
 
-  return pantauMasuk(async (u) => {
-    const generasi = ++generasiSesi;
-    const masihSama = () => generasi === generasiSesi && penggunaSekarang() === u;
-    kosongkanIsiPribadi();
-    sesi.peran = null;
-    sesi.profilWarga = null;
-    sesi.siap = false;
-    if (!u) {
-      kosongkanSesi();
-      return;
-    }
+  const hentikanMasuk = pantauMasuk((u) => {
+    hentikanPeran();
+    hentikanPeran = () => {};
+    ++generasiSesi;
+    kosongkanSesi();
+    if (!u || !hidup) return;
 
-    const dasar = {
-      email: String(u.email || "").toLowerCase(),
-      nama: u.displayName || u.email,
-      uid: u.uid
-    };
-
-    /* PENJAGA UTAMA. Daftar pengurus dikunci berdasarkan alamat email.
-       Tanpa kewajiban memastikan email, siapa pun bisa mendaftar memakai
-       alamat email Ketua RW dan langsung mendapat akses penuh. Selama
-       email belum dipastikan lewat tautan, aturan Firestore menolak semua
-       tulisan, dan di sini peran sengaja tidak diambil sama sekali. */
+    const akunIni = u;
+    let pantauanAktif = true;
+    const akunSama = () => hidup && pantauanAktif && penggunaSekarang() === akunIni;
+    sesi.pengguna = { email: emailAkun(u.email), nama: u.displayName || u.email, uid: u.uid };
+    sesi.terverifikasi = u.emailVerified;
     if (!u.emailVerified) {
-      sesi.pengguna = dasar;
-      sesi.peran = null;
-      sesi.profilWarga = null;
-      sesi.terverifikasi = false;
-      sesi.siap = true;
       beriTahu("Email belum dipastikan. Buka Akun Saya untuk mengirim atau memeriksa tautan pemastian.");
       return;
     }
+    sesi.siap = false;
+    let peranSebelumnya;
 
-    sesi.pengguna = dasar;
-    sesi.terverifikasi = true;
-
-    let peran = null;
-    try {
-      peran = await ambilPeran(u.email);
-    } catch (err) {
-      /* Gagal memeriksa berarti diperlakukan sebagai warga biasa. Lebih
-         aman salah menutup menu daripada salah membukanya. */
-    }
-    if (!masihSama()) return;
-    sesi.peran = peran;
-
-    if (peran) {
+    async function terapkanPeran(peran) {
+      if (!akunSama() || peran === peranSebelumnya) return;
+      peranSebelumnya = peran;
+      const generasi = ++generasiSesi;
+      const masihSama = () => akunSama() && generasi === generasiSesi;
+      kosongkanIsiPribadi();
+      sesi.peran = peran;
       sesi.profilWarga = null;
+      sesi.galatAkses = false;
+      sesi.galatProfil = false;
+      sesi.siap = false;
+
+      if (peran) {
+        sesi.siap = true;
+        muatPengurus();
+        muatMilikSaya(u.uid);
+        muatSuara();
+        beriTahu("Masuk sebagai " + namaPeran(peran) + ". Menu Kelola sudah terbuka.");
+        return;
+      }
+
+      let profil = null;
+      let gagalProfil = false;
+      try { profil = await ambilProfilWarga(u.uid); } catch (err) { gagalProfil = true; }
+      if (!masihSama()) return;
+      sesi.profilWarga = profil;
+      sesi.galatProfil = gagalProfil;
       sesi.siap = true;
-      muatPengurus();
+      muatMilikSaya(u.uid);
       muatSuara();
-      beriTahu("Masuk sebagai " + namaPeran(peran) + ". Menu Kelola sudah terbuka.");
-      return;
+      beriTahu(gagalProfil ? "Masuk. Profil belum berhasil dimuat; coba lagi di Akun Saya."
+        : profil ? "Masuk sebagai warga." : "Masuk. Lengkapi keterangan di halaman Akun Saya supaya pengurus bisa mencocokkan.");
     }
 
-    let profil = null;
-    try { profil = await ambilProfilWarga(u.uid); } catch (err) {}
-    if (!masihSama()) return;
-    sesi.profilWarga = profil;
-    sesi.siap = true;
-    muatMilikSaya(u.uid);
-    muatSuara();
-    beriTahu(
-      sesi.profilWarga
-        ? "Masuk sebagai warga."
-        : "Masuk. Lengkapi keterangan di halaman Akun Saya supaya pengurus bisa mencocokkan."
-    );
+    const berhenti = pantauPeran(u.email, terapkanPeran, () => {
+      if (!akunSama()) return;
+      // Listener berhenti saat galat. Tutup data pribadi sampai akses bisa diperiksa kembali.
+      ++generasiSesi;
+      kosongkanIsiPribadi();
+      sesi.peran = null;
+      sesi.profilWarga = null;
+      sesi.galatAkses = true;
+      sesi.siap = true;
+      beriTahu("Hak akses belum dapat diperiksa. Muat ulang halaman untuk mencoba lagi.");
+    });
+    hentikanPeran = () => {
+      pantauanAktif = false;
+      berhenti();
+    };
   });
+
+  return () => {
+    hidup = false;
+    ++generasiSesi;
+    hentikanPeran();
+    hentikanMasuk();
+    kosongkanSesi();
+  };
 }
 
-/**
- * Mengambil ulang catatan warga sendiri.
- * Dipanggil setelah warga baru mendaftarkan diri, supaya halaman Akun Saya
- * langsung menampilkan catatannya tanpa perlu memuat ulang halaman.
- */
+/** Ambil ulang catatan sendiri setelah pendaftaran warga. */
 export async function segarkanProfilWarga() {
   const u = penggunaSekarang();
   if (!u) return;
@@ -129,7 +118,10 @@ export async function segarkanProfilWarga() {
     const profil = await ambilProfilWarga(u.uid);
     if (generasi !== generasiSesi || penggunaSekarang() !== u) return;
     sesi.profilWarga = profil;
-  } catch (err) {}
+    sesi.galatProfil = false;
+  } catch (err) {
+    if (generasi === generasiSesi && penggunaSekarang() === u) sesi.galatProfil = true;
+  }
   if (generasi !== generasiSesi || penggunaSekarang() !== u) return;
   muatMilikSaya(u.uid);
 }

@@ -142,6 +142,7 @@ export const KOLEKSI_PENGURUS = Object.freeze([
 
 /** Kiriman yang bisa dilacak sendiri oleh warga yang mengirimnya. */
 export const KOLEKSI_KIRIMAN = Object.freeze([
+  KOLEKSI.PENGADUAN,
   KOLEKSI.SURAT,
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU
@@ -235,6 +236,18 @@ export const PERAN = Object.freeze({
   MASTER: "master",
   PETUGAS: "petugas"
 });
+
+/** Dokumen bootstrap tanpa kolom peran tetap sah; nilai salah tidak diberi akses. */
+export function peranPengurus(dokumen) {
+  if (!dokumen) return null;
+  if (!Object.hasOwn(dokumen, "peran")) return PERAN.MASTER;
+  return dokumen.peran === PERAN.MASTER || dokumen.peran === PERAN.PETUGAS
+    ? dokumen.peran : null;
+}
+
+export function emailAkun(email) {
+  return String(email || "").trim().toLowerCase();
+}
 
 /** Kunci penyimpanan di peramban pengunjung. */
 export const KUNCI_SIMPAN = Object.freeze({

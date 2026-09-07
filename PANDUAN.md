@@ -228,6 +228,7 @@ Sebelum push:
 
 ```bash
 npm test
+npm run test:rules
 npm run build
 ```
 
@@ -235,10 +236,14 @@ npm run build
 bocor antarakun, jawaban server yang datang terlambat setelah orang keluar,
 dan email yang harus dirapikan sebelum dikirim ke Firebase. Semuanya hal
 yang tidak terlihat di layar, jadi tidak akan ketahuan dengan mencoba
-sendiri. Keduanya ikut jalan di GitHub Actions.
+sendiri. `npm run test:rules` memeriksa hak tiap aktor dengan Firestore Emulator
+dan memerlukan Java 17 untuk versi Firebase CLI yang dikunci proyek ini.
+Ketiganya ikut jalan di GitHub Actions. Rincian hak dan penerapan ada di
+[Autentikasi dan aktor](docs/AUTENTIKASI-DAN-AKTOR.md).
 
-Perintah ini menjalankan pemeriksa dulu, baru membangun. Kalau lolos di
-komputer sendiri, dijamin lolos juga di GitHub.
+Perintah build menjalankan pemeriksa arsitektur dulu, baru membangun.
+Periksa juga hasil GitHub Actions karena lingkungan server dapat berbeda
+dari komputer pengembang.
 
 ---
 

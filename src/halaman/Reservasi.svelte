@@ -43,16 +43,19 @@
 
   async function kirim(e) {
     e.preventDefault();
+    if (mengirim) return;
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya permohonan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
+    if (!sesi.terverifikasi) { beriTahu("Pastikan email Anda dahulu lewat Akun Saya."); pergi("/akun"); return; }
     mengirim = true;
+    const pengirim = sesi.pengguna;
     try {
-      await kirimWarga(KOLEKSI.RESERVASI, form);
+      await kirimWarga(KOLEKSI.RESERVASI, { ...form });
+      if (sesi.pengguna !== pengirim) return;
       beriTahu("Permohonan terkirim. Pengurus akan menghubungi lewat WhatsApp.");
       form = { ...form, jam: "", acara: "" };
     } catch (err) {
-      beriTahu(pesanRamah(err));
-    }
-    mengirim = false;
+      if (sesi.pengguna === pengirim) beriTahu(pesanRamah(err));
+    } finally { mengirim = false; }
   }
 </script>
 

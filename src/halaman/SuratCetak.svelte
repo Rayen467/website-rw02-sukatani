@@ -1,5 +1,7 @@
 <script>
   import { KONTEN } from "../inti/nama.js";
+  import { ambilDrafSurat } from "../inti/draf-surat.js";
+  import { sesi } from "../keadaan/sesi.svelte.js";
   import { pakai, kontenNilai } from "../keadaan/isi.svelte.js";
   import { JENIS_SURAT_BAWAAN, IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import TidakAda from "./TidakAda.svelte";
@@ -9,11 +11,8 @@
 
   let isian = $state(null);
   $effect(() => {
-    try {
-      const mentah = localStorage.getItem("surat-terakhir");
-      const d = mentah ? JSON.parse(mentah) : null;
-      isian = d && d.jenis === kunci ? d : null;
-    } catch (e) { isian = null; }
+    isian = sesi.siap && sesi.terverifikasi
+      ? ambilDrafSurat(sesi.pengguna?.uid, kunci) : null;
   });
 
   const titik = "\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026";
@@ -33,7 +32,7 @@
         {#if isian}
           Nomor antrean <b class="mono">{isian.antrean}</b>. Cetak berkas ini, lalu bawa beserta syaratnya kepada Ketua RT.
         {:else}
-          Belum ada pengajuan tersimpan di perangkat ini, jadi berkas di bawah masih kosong. Isi formulirnya lebih dulu agar keterangannya terisi otomatis.
+          Tidak ada draf cetak untuk akun ini pada sesi sekarang. Draf dibersihkan saat keluar atau halaman dimuat ulang; pengajuan yang sudah dikirim tetap tercatat di Akun Saya.
         {/if}
       </p>
     </div>

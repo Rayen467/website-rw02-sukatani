@@ -48,7 +48,9 @@
   <p>Semua yang tampil di situs diisi dari sini. Perubahan langsung terlihat warga.</p>
 </div>
 
-{#if !pengurus()}
+{#if !sesi.siap}
+  <p class="catatan" role="status">Memeriksa hak akses...</p>
+{:else if !pengurus()}
   <div class="kunci">
     <h3>Tidak tersedia</h3>
     <p>Halaman ini hanya untuk pengurus yang sudah masuk dengan akun terdaftar.</p>

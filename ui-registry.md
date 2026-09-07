@@ -1,6 +1,6 @@
 # Pola komponen akun
 
-Dicatat 2026-09-06 dari komponen yang sudah ada; perubahan autentikasi memakai
+Dicatat 2026-09-06, diperbarui 2026-09-08 dari komponen yang sudah ada; perubahan autentikasi memakai
 kelas dan token yang sama tanpa mengubah palet atau tipografi situs.
 
 ### Masuk, verifikasi email, dan status aktor
@@ -12,6 +12,8 @@ src/halaman/kelola/TabOrang.svelte. Acuan: src/gaya/kartu.css dan dasar.css.
 | --- | --- |
 | Panel informasi | `.catatan`, `--info-soft`, garis `--info`, teks `--tinta` |
 | Verifikasi tertunda | `.catatan.awas`, `--action-soft`, garis `--action` |
+| Galat profil, peran, atau riwayat | `.catatan.awas` dengan tindakan muat ulang |
+| Peran pengurus tidak valid | `.status.tolak`, mengikuti lencana penolakan yang ada |
 | Panel | Radius 5px, padding 14px 17px, garis kiri 3px |
 | Tombol utama | `.tombol.utama`, `--brand`, teks `--brand-ink` |
 | Tombol sekunder | `.tombol`, `--permukaan`, garis `--garis`, teks `--tinta-2` |
@@ -24,3 +26,6 @@ src/halaman/kelola/TabOrang.svelte. Acuan: src/gaya/kartu.css dan dasar.css.
 Tindakan asynchronous memakai `disabled` selama memproses. Status sesi awal
 memakai `role="status"`. Tombol verifikasi mengikuti tombol utama; kirim ulang
 mengikuti tombol sekunder. Tidak ada bayangan tambahan atau warna literal baru.
+Riwayat Akun Saya memakai tabel dan bagian yang sama untuk semua aktor; data
+yang ditampilkan selalu milik akun tersebut. Draf cetak yang kosong menjelaskan
+bahwa draf dihapus ketika halaman dimuat ulang atau akun keluar.

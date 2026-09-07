@@ -23,8 +23,8 @@ rules_version = '2';
 //               siapa saja yang menjadi pengurus.
 //
 // CATATAN PENTING BAGI YANG MEMBACA ATURAN INI KEMUDIAN
-//   Field "peran" sekarang hanya penanda jabatan yang tampil di layar.
-//   Aturan di bawah TIDAK membedakan master dan petugas sama sekali.
+//   Field "peran" memakai nilai sah master atau petugas; kewenangannya sama.
+//   Nilai yang salah atau kosong tidak memberi hak pengurus.
 //   Konsekuensinya: siapa pun yang diberi peran petugas dapat mencabut hak
 //   pengurus lain, termasuk Ketua RW. Ini pilihan yang diambil sadar oleh
 //   pemilik situs, bukan kelalaian. Satu-satunya pengaman yang tersisa
@@ -50,7 +50,9 @@ service cloud.firestore {
     // ---------- pembantu ----------
 
     function masuk() {
-      return request.auth != null && request.auth.token.email_verified == true;
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email is string;
     }
 
     function akuSendiri(uid) {
@@ -58,11 +60,13 @@ service cloud.firestore {
     }
 
     function jalurSaya() {
-      return /databases/$(database)/documents/pengurus/$(request.auth.token.email);
+      return /databases/$(database)/documents/pengurus/$(request.auth.token.email.lower());
     }
 
     function petugas() {
-      return masuk() && exists(jalurSaya());
+      return masuk() && exists(jalurSaya())
+        && (!('peran' in get(jalurSaya()).data)
+            || get(jalurSaya()).data.peran in ['master', 'petugas']);
     }
 
     // Pemilik kiriman: dipakai supaya warga bisa melacak kirimannya sendiri
@@ -144,9 +148,13 @@ service cloud.firestore {
     // ---------- daftar pengurus ----------
 
     match /pengurus/{email} {
-      allow read: if masuk();
+      // Setiap akun membaca haknya sendiri; daftar email pengurus hanya untuk pengurus.
+      allow get: if masuk() && (email == request.auth.token.email.lower() || petugas());
+      allow list: if petugas();
 
       allow create, update: if petugas()
+        && email == email.lower()
+        && email.matches('[^@\\s]+@[^@\\s]+')
         && teksWajar(request.resource.data.nama, 120)
         && teksWajar(request.resource.data.jabatan, 120)
         && request.resource.data.peran in ['master', 'petugas']
@@ -154,7 +162,7 @@ service cloud.firestore {
 
       // Satu-satunya pengaman: tidak ada yang bisa mencabut haknya sendiri,
       // supaya tidak ada yang mengunci dirinya sendiri di luar.
-      allow delete: if petugas() && email != request.auth.token.email;
+      allow delete: if petugas() && email.lower() != request.auth.token.email.lower();
     }
 
     // ---------- pengaduan: bagian terbuka ----------

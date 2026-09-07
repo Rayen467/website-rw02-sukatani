@@ -14,6 +14,7 @@
 
   async function kirim(e) {
     e.preventDefault();
+    if (mengirim || !sesi.siap) return;
     if (!sesi.pengguna) {
       beriTahu("Masuk dulu supaya pendaftaran bisa Anda lacak sendiri.");
       pergi("/masuk");
@@ -25,14 +26,15 @@
       return;
     }
     mengirim = true;
+    const pengirim = sesi.pengguna;
     try {
-      await kirimWarga(KOLEKSI.USAHA_BARU, form);
+      await kirimWarga(KOLEKSI.USAHA_BARU, { ...form });
+      if (sesi.pengguna !== pengirim) return;
       beriTahu("Pendaftaran terkirim. Pengurus akan meninjau sebelum ditampilkan.");
       form = { nama: "", pemilik: "", jenis: JENIS_USAHA[0].label, produk: "", wa: "", alamat: "" };
     } catch (err) {
-      beriTahu(pesanRamah(err));
-    }
-    mengirim = false;
+      if (sesi.pengguna === pengirim) beriTahu(pesanRamah(err));
+    } finally { mengirim = false; }
   }
 
   async function kirimVerifikasi() {
@@ -40,7 +42,7 @@
     sibukVerifikasi = true;
     try {
       await kirimUlangVerifikasi();
-      beriTahu("Tautan verifikasi dikirim. Cek inbox Gmail, lalu kembali ke halaman ini.");
+      beriTahu("Tautan verifikasi dikirim. Cek kotak masuk atau folder spam email Anda, lalu kembali ke halaman ini.");
     } catch (err) {
       beriTahu(pesanRamah(err));
     } finally {
@@ -80,7 +82,7 @@
 {:else if !sesi.terverifikasi}
   <div class="catatan awas">
     <b>Email akun belum diverifikasi.</b>
-    <p>Firestore menolak pendaftaran UMKM sampai email <b>{sesi.pengguna.email}</b> dipastikan.</p>
+    <p>Pendaftaran UMKM tersedia setelah email <b>{sesi.pengguna.email}</b> dipastikan.</p>
     <div class="baris-tombol">
       <button class="tombol utama" type="button" onclick={kirimVerifikasi} disabled={sibukVerifikasi}>
         {sibukVerifikasi ? "Memproses..." : "Kirim email verifikasi"}

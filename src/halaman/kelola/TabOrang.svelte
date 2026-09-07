@@ -1,5 +1,5 @@
 <script>
-  import { KOLEKSI } from "../../inti/nama.js";
+  import { KOLEKSI, PERAN, peranPengurus, emailAkun } from "../../inti/nama.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { sesi } from "../../keadaan/sesi.svelte.js";
@@ -19,11 +19,12 @@
 
   function bukaUbah(o) {
     ubahEmail = o.id;
-    u = { nama: o.nama || "", jabatan: o.jabatan || "", peran: o.peran === "petugas" ? "petugas" : "master" };
+    u = { nama: o.nama || "", jabatan: o.jabatan || "", peran: peranPengurus(o) || "" };
   }
 
   async function simpanUbah(e) {
     e.preventDefault();
+    if (!peranPengurus(u)) { beriTahu("Pilih peran Petugas atau Master Admin yang sah."); return; }
     sibuk = "ubah";
     try {
       await ubahDokumen(KOLEKSI.PENGURUS, ubahEmail, { nama: u.nama, jabatan: u.jabatan, peran: u.peran });
@@ -49,8 +50,9 @@
 
   async function tambahPengurus(e) {
     e.preventDefault();
-    const email = p.email.trim().toLowerCase();
-    if (email.indexOf("@") < 1) { beriTahu("Alamat Gmail tidak sah."); return; }
+    const email = emailAkun(p.email);
+    if (email.indexOf("@") < 1) { beriTahu("Alamat email tidak sah."); return; }
+    if (pengurusList.some((o) => o.id === email)) { beriTahu("Pengurus sudah terdaftar. Gunakan Ubah pada baris yang sesuai."); return; }
     sibuk = "tambah";
     try {
       await simpanDokumen(KOLEKSI.PENGURUS, email, { nama: p.nama, jabatan: p.jabatan, peran: p.peran }, false);
@@ -130,10 +132,12 @@
               <td>{o.nama || "-"}</td>
               <td>{o.jabatan || "-"}</td>
               <td>
-                {#if o.peran === "petugas"}
+                {#if peranPengurus(o) === PERAN.PETUGAS}
                   <span class="status proses">Petugas</span>
-                {:else}
+                {:else if peranPengurus(o) === PERAN.MASTER}
                   <span class="status selesai">Master Admin</span>
+                {:else}
+                  <span class="status tolak">Peran tidak valid</span>
                 {/if}
               </td>
               <td>
@@ -141,7 +145,7 @@
                   <button class="tombol" type="button" onclick={() => (ubahEmail === o.id ? (ubahEmail = "") : bukaUbah(o))}>
                     {ubahEmail === o.id ? "Batal" : "Ubah"}
                   </button>
-                  {#if sesi.pengguna && o.id === sesi.pengguna.email}
+                  {#if sesi.pengguna && emailAkun(o.id) === sesi.pengguna.email}
                     <span class="mono" style="font-size:11px;color:var(--tinta-3)">diri sendiri</span>
                   {:else}
                     <button class="tombol" type="button" onclick={() => cabut(o.id)} disabled={sibuk === o.id}>Cabut</button>
@@ -164,7 +168,7 @@
       <div class="isian"><label for="u-jabatan">Jabatan</label><input id="u-jabatan" bind:value={u.jabatan} required /></div>
       <div class="isian">
         <label for="u-peran">Sebutan</label>
-        <select id="u-peran" bind:value={u.peran}><option value="petugas">Petugas</option><option value="master">Master Admin</option></select>
+        <select id="u-peran" bind:value={u.peran} required><option value="" disabled>Pilih peran</option><option value="petugas">Petugas</option><option value="master">Master Admin</option></select>
       </div>
       <div class="baris-tombol">
         <button class="tombol utama" type="submit" disabled={sibuk === "ubah"}>{sibuk === "ubah" ? "Menyimpan..." : "Simpan perubahan"}</button>

@@ -6,6 +6,7 @@
   import { JENIS_SURAT_BAWAAN, RT_BAWAAN } from "../inti/bawaan.js";
   import { keDaftar } from "../inti/format.js";
   import { nomorAntrean } from "../inti/peramban.js";
+  import { simpanDrafSurat } from "../inti/draf-surat.js";
   import { kirimWarga } from "../sumber/data.js";
   import { pesanRamah } from "../sumber/firebase.js";
   import { pergi } from "../keadaan/rute.svelte.js";
@@ -25,20 +26,23 @@
 
   async function kirim(e) {
     e.preventDefault();
+    if (mengirim) return;
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya pengajuan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
     if (!sesi.terverifikasi) { beriTahu("Pastikan email Anda dulu lewat tautan yang kami kirim."); return; }
     mengirim = true;
+    const pengirim = sesi.pengguna;
+    const isianTerkirim = { ...form };
     const nomor = nomorAntrean("SP");
     try {
-      await kirimWarga(KOLEKSI.SURAT, { jenis: surat.nama, antrean: nomor, ...form });
+      await kirimWarga(KOLEKSI.SURAT, { jenis: surat.nama, antrean: nomor, ...isianTerkirim });
+      if (sesi.pengguna !== pengirim) return;
       antrean = nomor;
-      try { localStorage.setItem("surat-terakhir", JSON.stringify({ jenis: kunci, antrean: nomor, ...form })); } catch (err) {}
+      simpanDrafSurat(pengirim.uid, { jenis: kunci, antrean: nomor, ...isianTerkirim });
       beriTahu("Pengajuan terkirim. Nomor antrean " + nomor + ".");
       if (sesi.pengguna) muatMilikSaya(sesi.pengguna.uid);
     } catch (err) {
-      beriTahu(pesanRamah(err));
-    }
-    mengirim = false;
+      if (sesi.pengguna === pengirim) beriTahu(pesanRamah(err));
+    } finally { mengirim = false; }
   }
 </script>
 

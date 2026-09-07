@@ -1,5 +1,7 @@
 <script>
-  import { isi } from "../keadaan/isi.svelte.js";
+  import { onMount } from "svelte";
+  import { milikSaya, muatMilikSaya } from "../keadaan/isi.svelte.js";
+  import { KOLEKSI } from "../inti/nama.js";
   import { segarkanProfilWarga } from "../keadaan/mulai.js";
   import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { sesi, pengurus, namaPeran } from "../keadaan/sesi.svelte.js";
@@ -15,25 +17,38 @@
   let sibuk = $state(false);
   let sibukVerifikasi = $state(false);
 
+  onMount(() => {
+    if (sesi.pengguna && sesi.siap && sesi.terverifikasi && !sesi.galatAkses) {
+      muatMilikSaya(sesi.pengguna.uid);
+    }
+  });
+
   $effect(() => { if (sesi.pengguna && !f.nama) f.nama = sesi.pengguna.nama || ""; });
 
   const riwayat = $derived([
-    ["Pengajuan surat", isi.surat || [], (x) => ({ judul: x.jenis, ket: "Nomor antrean " + (x.antrean || "-"), status: x.status })],
-    ["Permohonan pinjam fasilitas", isi.reservasi || [], (x) => ({ judul: x.fasilitas, ket: x.tanggal + (x.acara ? " \u00B7 " + x.acara : ""), status: x.status })],
-    ["Pendaftaran usaha", isi.usaha_baru || [], (x) => ({ judul: x.nama, ket: x.jenis, status: x.status })]
-  ]);
+    ["Pengaduan saya", KOLEKSI.PENGADUAN, (x) => ({ judul: x.kategori, ket: "Nomor tiket " + (x.tiket || "-"), status: x.status })],
+    ["Pengajuan surat", KOLEKSI.SURAT, (x) => ({ judul: x.jenis, ket: "Nomor antrean " + (x.antrean || "-"), status: x.status })],
+    ["Permohonan pinjam fasilitas", KOLEKSI.RESERVASI, (x) => ({ judul: x.fasilitas, ket: x.tanggal + (x.acara ? " \u00B7 " + x.acara : ""), status: x.status })],
+    ["Pendaftaran usaha", KOLEKSI.USAHA_BARU, (x) => ({ judul: x.nama, ket: x.jenis, status: x.status })]
+  ].map(([judul, koleksi, rincian]) => ({
+    judul, rincian, galat: milikSaya.galat[koleksi],
+    siap: Array.isArray(milikSaya.kiriman[koleksi]),
+    daftar: (milikSaya.kiriman[koleksi] || []).filter((x) => x.uid === sesi.pengguna?.uid)
+  })));
 
   async function daftar(e) {
     e.preventDefault();
+    if (sibuk || !sesi.pengguna || !sesi.terverifikasi || !sesi.siap) return;
     sibuk = true;
+    const pengirim = sesi.pengguna;
     try {
-      await daftarWarga(f);
+      await daftarWarga({ ...f });
+      if (sesi.pengguna !== pengirim) return;
       beriTahu("Pendaftaran tersimpan. Menunggu verifikasi pengurus.");
       await segarkanProfilWarga();
     } catch (err) {
-      beriTahu(pesanRamah(err));
-    }
-    sibuk = false;
+      if (sesi.pengguna === pengirim) beriTahu(pesanRamah(err));
+    } finally { sibuk = false; }
   }
 
   async function kirimUlang() {
@@ -71,6 +86,11 @@
     <div class="baris-tombol"><button class="tombol utama" type="button" onclick={() => pergi("/masuk")}>Masuk atau daftar</button></div>
     <p class="verifikasi">Melaporkan gangguan lewat halaman Pengaduan tetap bisa dilakukan tanpa akun.</p>
   </div>
+{:else if sesi.galatAkses}
+  <div class="catatan awas">
+    <b>Hak akses belum bisa diperiksa.</b> Akun Anda sudah masuk, tetapi perannya belum dapat dipastikan.
+    <div class="baris-tombol"><button class="tombol" type="button" onclick={() => window.location.reload()}>Muat ulang halaman</button></div>
+  </div>
 {:else}
   {#if !sesi.terverifikasi}
     <div class="catatan awas" style="margin-bottom:22px">
@@ -91,6 +111,11 @@
     </div>
   {:else if !sesi.terverifikasi}
     <p class="verifikasi">Lengkapi pendaftaran warga setelah email dipastikan.</p>
+  {:else if sesi.galatProfil}
+    <div class="catatan awas">
+      <b>Profil warga belum berhasil dimuat.</b> Coba lagi sebelum mendaftar ulang.
+      <div class="baris-tombol"><button class="tombol" type="button" onclick={segarkanProfilWarga}>Muat ulang profil</button></div>
+    </div>
   {:else if !sesi.profilWarga}
     <div class="catatan" style="margin-bottom:22px">
       <b>Satu langkah lagi.</b> Lengkapi keterangan di bawah supaya pengurus dapat mencocokkan akun Anda dengan daftar warga. Cukup sekali, tidak diminta lagi.
@@ -128,16 +153,23 @@
       </div>
     </section>
 
+  {/if}
+
+  {#if sesi.terverifikasi}
     {#each riwayat as bagian}
       <section class="blok">
-        <div class="kepala-bagian"><h2>{bagian[0]}</h2></div>
-        {#if bagian[1].length}
+        <div class="kepala-bagian"><h2>{bagian.judul}</h2></div>
+        {#if bagian.galat}
+          <p class="catatan awas">Kiriman belum berhasil dimuat. Coba muat ulang.</p>
+        {:else if !bagian.siap}
+          <p class="kosong" role="status">Memuat kiriman...</p>
+        {:else if bagian.daftar.length}
           <div class="tabel-bungkus">
             <table class="data">
               <thead><tr><th>Keterangan</th><th>Rincian</th><th>Status</th></tr></thead>
               <tbody>
-                {#each bagian[1] as x}
-                  {@const b = bagian[2](x)}
+                {#each bagian.daftar as x}
+                  {@const b = bagian.rincian(x)}
                   <tr><td><b>{b.judul}</b></td><td>{b.ket}</td><td><Lencana status={b.status} /></td></tr>
                 {/each}
               </tbody>
@@ -149,8 +181,10 @@
       </section>
     {/each}
 
+    <button class="tombol" type="button" onclick={() => muatMilikSaya(sesi.pengguna.uid)}>Muat ulang kiriman</button>
+
     <p class="verifikasi">
-      Daftar di atas hanya memuat kiriman dari akun ini. Warga lain tidak dapat melihatnya, dan Anda tidak dapat melihat milik warga lain.
+      Daftar di atas hanya memuat kiriman dari akun ini. Pengurus menangani kiriman warga melalui halaman Kelola.
     </p>
   {/if}
 {/if}
