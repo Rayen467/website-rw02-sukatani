@@ -50,6 +50,7 @@ export const KOLEKSI = Object.freeze({
   FASUM: "fasum",
   RUTIN: "rutin",
   BANSOS: "bansos",
+  BANSOS_PENERIMA: "bansos_penerima",
   BERKAS: "berkas",
 
   /* Isi berkas dipisah dari keterangannya, dan ini BUKAN kerapian belaka.
@@ -139,7 +140,8 @@ export const KOLEKSI_PENGURUS = Object.freeze([
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU,
   KOLEKSI.WARGA,
-  KOLEKSI.PENGURUS
+  KOLEKSI.PENGURUS,
+  KOLEKSI.BANSOS_PENERIMA
 ]);
 
 /** Kiriman yang bisa dilacak sendiri oleh warga yang mengirimnya. */
