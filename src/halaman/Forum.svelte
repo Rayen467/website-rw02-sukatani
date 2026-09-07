@@ -8,6 +8,7 @@
   import { pilihPolling } from "../sumber/data.js";
   import { pesanRamah } from "../sumber/firebase.js";
   import { pergi } from "../keadaan/rute.svelte.js";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const polling = $derived.by(() => {
     const k = konten(KONTEN.POLLING);
@@ -44,7 +45,12 @@
   <div class="kartu">
     <p class="alis">Polling berjalan</p>
     {#if !polling.pertanyaan || !polling.opsi.length}
-      <p class="kosong">Belum ada polling yang dibuka pengurus.</p>
+      <Kosong
+    judul="Belum ada polling dibuka"
+    ket="Pertanyaan musyawarah beserta pilihannya akan tampil di sini, dan hasilnya terlihat langsung setelah Anda memilih."
+    tab="lain"
+    aksi="Buka polling warga"
+  />
     {:else}
       <h3>{polling.pertanyaan}</h3>
       {#if polling.keterangan}<p>{polling.keterangan}</p>{/if}

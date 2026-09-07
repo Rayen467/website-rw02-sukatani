@@ -1,5 +1,6 @@
 <script>
   import { sesi, pengurus, namaPeran } from "../../keadaan/sesi.svelte.js";
+  import { rute } from "../../keadaan/rute.svelte.js";
   import TabKiriman from "./TabKiriman.svelte";
   import TabBeranda from "./TabBeranda.svelte";
   import TabLaporan from "./TabLaporan.svelte";
@@ -26,7 +27,17 @@
     ["orang", "Warga & pengurus", TabOrang]
   ];
 
-  let aktif = $state("kiriman");
+  /* Tab bisa dituju langsung lewat alamat, misalnya #/kelola/terbit.
+     Dipakai tombol pada keadaan kosong di halaman warga: pengurus yang
+     melihat "belum ada pengumuman" bisa langsung mendarat di tab yang
+     mengisinya, tanpa menebak tab mana yang benar.
+
+     Alamat yang tidak dikenali jatuh ke tab pertama, bukan layar kosong. */
+  const dariAlamat = $derived(
+    TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "kiriman"
+  );
+  let dipilih = $state("");
+  const aktif = $derived(dipilih || dariAlamat);
   const Terpilih = $derived((TAB.find((t) => t[0] === aktif) || TAB[0])[2]);
 </script>
 
@@ -50,7 +61,7 @@
 
   <div class="pilihan-baris">
     {#each TAB as t}
-      <button class="pilihan" type="button" aria-pressed={aktif === t[0]} onclick={() => (aktif = t[0])}>{t[1]}</button>
+      <button class="pilihan" type="button" aria-pressed={aktif === t[0]} onclick={() => (dipilih = t[0])}>{t[1]}</button>
     {/each}
   </div>
 

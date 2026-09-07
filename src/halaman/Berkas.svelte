@@ -11,6 +11,7 @@
   import { isi } from "../keadaan/isi.svelte.js";
   import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { ambilDokumen } from "../sumber/data.js";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const semua = $derived(isi.berkas || []);
   let kelompok = $state("semua");
@@ -103,8 +104,10 @@
     {/each}
   </div>
 {:else}
-  <p class="kosong">
-    Belum ada dokumen yang diterbitkan. Pengurus dapat menambahkannya lewat halaman Kelola,
-    di tab Dokumen &amp; video.
-  </p>
+  <Kosong
+    judul="Belum ada dokumen"
+    ket="Notulen rapat, surat keputusan, formulir yang bisa diunduh, dan rekaman kegiatan akan tampil di sini."
+    tab="berkas"
+    aksi="Tambah dokumen"
+  />
 {/if}

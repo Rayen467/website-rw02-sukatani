@@ -2,6 +2,7 @@
   import { isi } from "../keadaan/isi.svelte.js";
   import { rupiah, angkaDari } from "../inti/format.js";
   import Lencana from "../komponen/Lencana.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const kas = $derived(isi.kas || []);
   const ringkas = $derived.by(() => {
@@ -51,7 +52,12 @@
     </div>
   </section>
 {:else}
-  <p class="kosong">Bendahara belum mencatat transaksi kas. Susunan laporannya sudah disiapkan, tinggal diisi lewat halaman Kelola.</p>
+  <Kosong
+    judul="Belum ada catatan kas"
+    ket="Pemasukan, pengeluaran, dan saldo kas RW akan tampil terbuka di sini supaya warga dapat memeriksanya kapan saja."
+    tab="angka"
+    aksi="Catat transaksi kas"
+  />
 {/if}
 
 <section class="blok" style="margin-top:26px">

@@ -3,6 +3,7 @@
   import { FASUM_BAWAAN } from "../inti/bawaan.js";
   import Peta from "../komponen/Peta.svelte";
   import Belum from "../komponen/Belum.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const batas = $derived(isi.batas_rt || []);
   const fasum = $derived(pakai("fasum", FASUM_BAWAAN));
@@ -32,7 +33,12 @@
       </table>
     </div>
   {:else}
-    <p class="kosong">Batas tiap RT belum diisi pengurus.</p>
+    <Kosong
+    judul="Batas tiap RT belum diisi"
+    ket="Cakupan blok dan nama Ketua RT untuk masing-masing RT akan tampil di sini."
+    tab="profil"
+    aksi="Isi batas RT"
+  />
   {/if}
   <p class="verifikasi">
     Batas RT ditulis sebagai keterangan karena peta umum tidak menggambar batas RT.

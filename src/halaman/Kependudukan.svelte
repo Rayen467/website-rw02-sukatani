@@ -4,6 +4,7 @@
   import { pengurus, sesi } from "../keadaan/sesi.svelte.js";
   import { uraiBaris, angkaDari } from "../inti/format.js";
   import { pergi } from "../keadaan/rute.svelte.js";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const angka = $derived(konten(KONTEN.KEPENDUDUKAN) || {});
   const st = $derived(konten(KONTEN.STATISTIK) || {});
@@ -86,6 +87,11 @@
   {/if}
 
   {#if !bagian.some((b) => b[1].length) && !agama.length}
-    <p class="kosong">Sebaran warga belum diisi. Pengurus dapat mengisinya lewat halaman Kelola.</p>
+    <Kosong
+    judul="Sebaran warga belum diisi"
+    ket="Rincian menurut usia, pendidikan, pekerjaan, dan agama akan tampil di sini."
+    tab="angka"
+    aksi="Isi sebaran warga"
+  />
   {/if}
 {/if}

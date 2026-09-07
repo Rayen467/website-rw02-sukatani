@@ -2,6 +2,7 @@
   import { isi, pakai } from "../keadaan/isi.svelte.js";
   import { RT_BAWAAN } from "../inti/bawaan.js";
   import Belum from "../komponen/Belum.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const daftar = $derived(isi.pengurus_tampil || []);
   const barisRT = $derived(pakai("batas_rt", RT_BAWAAN.map((r) => ({ id: r, rt: r }))));
@@ -35,7 +36,12 @@
       {/each}
     </div>
   {:else}
-    <p class="kosong">Susunan pengurus belum diisi. Pengurus dapat menambahkannya lewat halaman Kelola.</p>
+    <Kosong
+    judul="Susunan pengurus belum diisi"
+    ket="Nama dan jabatan pengurus RW beserta para Ketua RT akan tampil di sini."
+    tab="profil"
+    aksi="Isi susunan pengurus"
+  />
   {/if}
 </section>
 

@@ -8,6 +8,7 @@
   import { kirimWarga, tambahIsi } from "../sumber/data.js";
   import { pesanRamah } from "../sumber/firebase.js";
   import Lencana from "../komponen/Lencana.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   let saring = $state("all");
   let form = $state({ kategori: KATEGORI_PENGADUAN[0], lokasi: "", isi: "", nama: "", wa: "" });
@@ -82,7 +83,12 @@
       </table>
     </div>
   {:else}
-    <p class="kosong">{semua.length ? "Tidak ada laporan pada status ini." : "Belum ada laporan yang masuk."}</p>
+    <Kosong
+      judul={semua.length ? "Tidak ada laporan pada status ini" : "Belum ada laporan masuk"}
+      ket={semua.length
+        ? "Coba pilih status lain di atas."
+        : "Laporan warga beserta status penanganannya akan tampil terbuka di sini."}
+    />
   {/if}
 </section>
 

@@ -12,6 +12,7 @@
   import { isi } from "../keadaan/isi.svelte.js";
   import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { ambilCocok } from "../sumber/data.js";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const daftar = $derived(isi.galeri || []);
 
@@ -81,7 +82,12 @@
     {/each}
   </div>
 {:else}
-  <p class="kosong">Belum ada dokumentasi kegiatan yang dicatat.</p>
+  <Kosong
+    judul="Belum ada dokumentasi kegiatan"
+    ket="Foto kerja bakti, posyandu, rapat warga, dan acara lain akan dikumpulkan di sini per kegiatan."
+    tab="terbit"
+    aksi="Unggah foto kegiatan"
+  />
 {/if}
 
 <svelte:window

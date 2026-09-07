@@ -9,6 +9,7 @@
   import { pesanRamah } from "../sumber/firebase.js";
   import { pergi } from "../keadaan/rute.svelte.js";
   import Lencana from "../komponen/Lencana.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   let f = $state({ nama: "", blok: "", rt: RT_BAWAAN[0], wa: "" });
   let sibuk = $state(false);
@@ -118,7 +119,7 @@
             </table>
           </div>
         {:else}
-          <p class="kosong">Belum ada.</p>
+          <Kosong judul="Belum ada" ket="Pengajuan yang Anda kirim akan tercatat di sini beserta statusnya." />
         {/if}
       </section>
     {/each}

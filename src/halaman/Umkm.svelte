@@ -1,6 +1,7 @@
 <script>
   import { isi } from "../keadaan/isi.svelte.js";
   import { JENIS_USAHA } from "../inti/bawaan.js";
+  import Kosong from "../komponen/Kosong.svelte";
 
   let saring = $state("all");
   const semua = $derived(isi.usaha || []);
@@ -38,7 +39,14 @@
     {/each}
   </div>
 {:else}
-  <p class="kosong">{semua.length ? "Belum ada usaha pada kategori ini." : "Direktori usaha belum diisi pengurus."}</p>
+  <Kosong
+    judul={semua.length ? "Tidak ada usaha pada kelompok ini" : "Direktori usaha belum diisi"}
+    ket={semua.length
+      ? "Coba pilih kelompok lain di atas."
+      : "Warung, katering, jasa, dan usaha lain milik warga akan tampil di sini beserta nomor pemesanannya."}
+    tab={semua.length ? "" : "profil"}
+    aksi="Isi katalog usaha"
+  />
 {/if}
 
 <div class="kartu" style="margin-top:26px">

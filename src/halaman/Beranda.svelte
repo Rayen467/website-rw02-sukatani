@@ -5,6 +5,7 @@
   import { isi, kontenNilai } from "../keadaan/isi.svelte.js";
   import Belum from "../komponen/Belum.svelte";
   import TombolSalin from "../komponen/TombolSalin.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   /* Naskah dari Ketua RW dipakai sampai pengurus menyimpan gantinya lewat
      Kelola. kontenNilai() jatuh ke bawaan per kolom, jadi mengganti nama
@@ -116,7 +117,12 @@
       {/each}
     </div>
   {:else}
-    <p class="kosong">Belum ada pengumuman. Pengurus dapat menerbitkannya lewat halaman Kelola.</p>
+    <Kosong
+      judul="Belum ada pengumuman"
+      ket="Tiga kabar terbaru dari pengurus akan tampil di sini."
+      tab="terbit"
+      aksi="Terbitkan pengumuman"
+    />
   {/if}
 </section>
 

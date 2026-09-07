@@ -1,6 +1,7 @@
 <script>
   import { isi } from "../keadaan/isi.svelte.js";
   import TombolSalin from "../komponen/TombolSalin.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
   const daftar = $derived(isi.pengumuman || []);
 </script>
 
@@ -28,5 +29,10 @@
     {/each}
   </div>
 {:else}
-  <p class="kosong">Belum ada pengumuman yang diterbitkan.</p>
+  <Kosong
+    judul="Belum ada pengumuman"
+    ket="Kabar, agenda, dan pengumuman dari pengurus RW akan tampil di sini, yang terbaru di atas."
+    tab="terbit"
+    aksi="Terbitkan pengumuman"
+  />
 {/if}

@@ -2,6 +2,7 @@
   import { isi } from "../keadaan/isi.svelte.js";
   import { rupiah } from "../inti/format.js";
   import Lencana from "../komponen/Lencana.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const daftar = $derived(isi.program || []);
   const hitung = $derived.by(() => {
@@ -47,5 +48,10 @@
     </div>
   </section>
 {:else}
-  <p class="kosong">Belum ada program yang dicatat pengurus.</p>
+  <Kosong
+    judul="Belum ada program tercatat"
+    ket="Rencana kerja beserta anggaran dan perkembangannya akan tampil di sini, supaya warga bisa mengikutinya."
+    tab="angka"
+    aksi="Catat program kerja"
+  />
 {/if}

@@ -3,6 +3,7 @@
   import { konten } from "../keadaan/isi.svelte.js";
   import { keDaftar } from "../inti/format.js";
   import Belum from "../komponen/Belum.svelte";
+  import Kosong from "../komponen/Kosong.svelte";
 
   const p = $derived(konten(KONTEN.PROFIL) || {});
   const misi = $derived(keDaftar(p.misi));
@@ -28,7 +29,12 @@
     {#if p.sejarah}
       <p style="font-size:15px">{p.sejarah}</p>
     {:else}
-      <p class="kosong">Sejarah RW belum ditulis pengurus.</p>
+      <Kosong
+        judul="Sejarah RW belum ditulis"
+        ket="Riwayat berdirinya kawasan dan perkembangannya akan tampil di sini."
+        tab="profil"
+        aksi="Tulis sejarah RW"
+      />
     {/if}
   </div>
 </section>
@@ -40,7 +46,7 @@
       {#if p.visi}
         <p style="font-size:16px;color:var(--tinta);line-height:1.65">{p.visi}</p>
       {:else}
-        <p class="kosong">Belum diisi.</p>
+        <Kosong judul="Visi belum diisi" tab="profil" aksi="Isi visi" />
       {/if}
     </div>
     <div class="kartu">
@@ -48,7 +54,7 @@
       {#if misi.length}
         <ol class="poin">{#each misi as m}<li>{m}</li>{/each}</ol>
       {:else}
-        <p class="kosong">Belum diisi.</p>
+        <Kosong judul="Misi belum diisi" tab="profil" aksi="Isi misi" />
       {/if}
     </div>
   </div>
