@@ -76,6 +76,7 @@ export const JENIS_SURAT_BAWAAN = [
 ];
 
 export const FASILITAS_BAWAAN = [
+  { id: "gor-nurani", nama: "GOR Nurani", kapasitas: "", ket: "GOR mini RW 02 untuk kegiatan olahraga dan sosial. Pemakaian menunggu persetujuan pengelola; tarif bila ada ditetapkan pengelola." },
   { id: "balai", nama: "Balai Warga", kapasitas: "80 orang", ket: "Termasuk kursi dan listrik. Kebersihan dikembalikan seperti semula." },
   { id: "tenda", nama: "Tenda dan Terpal", kapasitas: "2 unit", ket: "Pemasangan dibantu petugas, dijadwalkan sehari sebelumnya." },
   { id: "kursi", nama: "Kursi Plastik", kapasitas: "120 buah", ket: "Diambil dan dikembalikan sendiri oleh peminjam." },
@@ -83,6 +84,7 @@ export const FASILITAS_BAWAAN = [
 ];
 
 export const FASUM_BAWAAN = [
+  { id: "gor-nurani", nama: "GOR Nurani", jenis: "Olahraga dan sosial", rt: "Lingkungan RT 01/02" },
   { id: "balai", nama: "Balai Warga", jenis: "Pertemuan", rt: "RT 02" },
   { id: "pos", nama: "Pos Keamanan Utama", jenis: "Keamanan", rt: "Gerbang" },
   { id: "lapangan", nama: "Lapangan Serbaguna", jenis: "Olahraga", rt: "RT 03" },
@@ -155,6 +157,85 @@ export const IDENTITAS_BAWAAN = {
 };
 
 export const KOORDINAT_BAWAAN = "-6.129217,106.497767";
+
+
+export const MAJELIS_TAKLIM_BAWAAN = {
+  nama: "Majelis Taklim Al-Ikhlas RW 02 PSP",
+  noSkt: "MT025033603112026015",
+  dasarSkt: "Peraturan Menteri Agama Republik Indonesia Nomor 29 Tahun 2019 tentang Majelis Taklim",
+  tanggalSkt: "5 Agustus 2026",
+  masaBerlaku: "5 tahun sejak tanggal diterbitkan",
+  ketua: "Eti Suhaeti",
+  tahunBerdiri: "2026",
+  tanggalBerdiri: "18 Juli 2026",
+  periode: "2026–2029",
+  alamat: "Jl. Boulevard RW 02, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, Banten",
+  landasan: "Islam berdasarkan Al-Qur'an dan As-Sunnah serta berpedoman pada peraturan perundang-undangan yang berlaku di Negara Kesatuan Republik Indonesia.",
+  visi: "Terwujudnya masyarakat yang beriman, bertakwa, berilmu, berakhlak mulia, serta menjunjung tinggi persatuan dan kerukunan.",
+  misi: [
+    "Menyelenggarakan kegiatan pengajian dan pembinaan keagamaan.",
+    "Meningkatkan pemahaman dan pengamalan ajaran Islam.",
+    "Mempererat ukhuwah Islamiyah di lingkungan masyarakat.",
+    "Berpartisipasi dalam kegiatan sosial, pendidikan, dan kemasyarakatan."
+  ].join("\n"),
+  tujuan: [
+    "Meningkatkan keimanan dan ketakwaan kepada Allah SWT.",
+    "Membina akhlak mulia masyarakat.",
+    "Menjadi wadah pendidikan Islam non-formal.",
+    "Mendukung terciptanya masyarakat yang rukun, harmonis, dan peduli sesama."
+  ].join("\n"),
+  kegiatan: [
+    "Pengajian rutin mingguan atau bulanan.",
+    "Peringatan Hari Besar Islam.",
+    "Kajian Al-Qur'an dan hadis.",
+    "Santunan sosial.",
+    "Pendidikan dan pembinaan akhlak."
+  ].join("\n"),
+  keanggotaan: "Anggota adalah setiap muslim atau muslimah yang bersedia mengikuti kegiatan Majelis Taklim. Anggota berhak mengikuti kegiatan, memberikan saran, dan memperoleh pembinaan; serta berkewajiban menjaga nama baik Majelis Taklim dan menaati AD/ART.",
+  kepengurusan: ["Pelindung", "Ketua", "Wakil Ketua", "Sekretaris", "Bendahara"].join("\n"),
+  masaBakti: "3 tahun dan dapat dipilih kembali melalui musyawarah.",
+  musyawarah: "Musyawarah merupakan forum tertinggi dalam pengambilan keputusan dan dilaksanakan sekurang-kurangnya satu kali dalam satu tahun atau sewaktu-waktu apabila diperlukan.",
+  keuangan: [
+    "Iuran anggota.",
+    "Infak dan sedekah.",
+    "Donasi yang sah dan tidak mengikat.",
+    "Bantuan pemerintah sesuai ketentuan yang berlaku.",
+    "Sumber lain yang halal dan sah."
+  ].join("\n"),
+  perubahan: "Perubahan AD/ART dilakukan melalui musyawarah pengurus dan disetujui sekurang-kurangnya oleh dua pertiga peserta yang hadir.",
+  rapat: "Rapat pengurus dilaksanakan minimal sekali setiap tiga bulan. Keputusan diambil berdasarkan musyawarah untuk mufakat."
+};
+
+export const GOR_NURANI_BAWAAN = {
+  nama: "GOR Nurani RW 02",
+  jenis: "GOR mini milik RW 02 Perum Pondok Sukatani Permai",
+  tahunPendirian: "2022–2023 (2 tahap)",
+  mulaiOperasional: "Januari 2024",
+  alamat: "Jalan Boulevard, lingkungan RT 01/02 Perum Pondok Sukatani Permai, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, Provinsi Banten",
+  luas: "209 m² (19 m × 11 m)",
+  riwayat: "Dokumen pengelolaan menyebut GOR Nurani didirikan pada 2023, diajukan oleh Anto Carmanto, S.T., M.T. dan Supratono, S.Pd. (Ketua RW 02 periode 2021–2024) melalui Pokir Dewan Kabupaten Tangerang, Bapak Munawir Khoirul Basri, S.E., M.M. periode 2019–2024. Pengelolaan GOR Nurani dimulai pada Januari 2024.",
+  visi: "Mewujudkan kesejahteraan dan kesehatan masyarakat RW 02 Perum Pondok Sukatani Permai dan sekitarnya.",
+  misi: [
+    "Perbaikan administrasi dan pembukuan.",
+    "Mendorong kegiatan olahraga warga.",
+    "Melakukan pendidikan olahraga bulu tangkis bagi anak-anak.",
+    "Memberikan pemasukan rutin untuk kas RT 01/02 dan RW 02 Perum Pondok Sukatani Permai.",
+    "Memberikan bantuan langsung atau tidak langsung kepada warga RW 02.",
+    "Menjadikan GOR sebagai tempat kegiatan sosial warga RW 02 Perum Pondok Sukatani Permai."
+  ].join("\n"),
+  landasan: "Pancasila dan UUD 1945.",
+  sifat: "Profesional dan demokratis.",
+  asas: "Kekeluargaan dan kemandirian.",
+  tujuan: [
+    "Meningkatkan kesejahteraan warga.",
+    "Meningkatkan kesehatan masyarakat.",
+    "Menambah keahlian di bidang olahraga bulu tangkis.",
+    "Menjadikan GOR untuk kegiatan sosial."
+  ].join("\n"),
+  pemanfaatan: "GOR Nurani dapat disewakan kepada pihak lain dengan tarif yang ditetapkan oleh pengelola. Hasil pemanfaatannya dikembalikan sebesar-besarnya untuk kepentingan dan kesejahteraan warga RW 02. Dalam kegiatannya, selain mempertimbangkan usaha atau keuntungan, GOR juga mempertimbangkan kemanfaatan bagi masyarakat.",
+  maknaLogo: "Dokumen AD menjelaskan unsur shuttlecock putih sebagai lambang kebersihan hati, bara api sebagai semangat yang tidak pernah berhenti, serta warna coklat sebagai lambang cinta, keandalan, dan kesejahteraan."
+};
+
 
 /**
  * Tulisan di beranda.
@@ -299,6 +380,8 @@ export const MENU = [
     label: "Warga",
     isi: [
       ["/umkm", "Direktori UMKM", "Usaha warga di kawasan"],
+      ["/majelis-taklim", "Majelis Taklim Al-Ikhlas", "Profil, kegiatan, dan ringkasan AD/ART"],
+      ["/gor-nurani", "GOR Nurani", "Profil, tujuan, dan pemanfaatan GOR RW 02"],
       ["/bansos", "Bantuan Sosial", "Syarat dan jalur pengajuan"],
       ["/tautan", "Tautan Penting", "Desa, kecamatan, Dukcapil"]
     ]
