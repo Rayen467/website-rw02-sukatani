@@ -13,8 +13,8 @@
      bukan langsung di markup, supaya tanda tab dan ganti barisnya jelas
      terbaca dan tidak berubah jadi spasi biasa waktu berkas ini disunting. */
   const CONTOH_KAS = [
-    ["September 2026", "1 Sep", "Iuran warga blok A", "masuk", "2500000"].join("\t"),
-    ["September 2026", "3 Sep", "Beli lampu jalan", "keluar", "480000"].join("\t")
+    ["September 2026", "1 Sep", "Iuran warga blok A", "masuk", "iuran warga", "2500000"].join("\t"),
+    ["September 2026", "3 Sep", "Beli lampu jalan", "keluar", "operasional", "480000"].join("\t")
   ].join("\n");
 
   /* Nilai awal diangkat jadi tetapan karena dipakai di DUA tempat: di sini
