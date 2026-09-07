@@ -19,7 +19,7 @@
 
   function bukaUbah(o) {
     ubahEmail = o.id;
-    u = { nama: o.nama || "", jabatan: o.jabatan || "", peran: o.peran === "master" ? "master" : "petugas" };
+    u = { nama: o.nama || "", jabatan: o.jabatan || "", peran: o.peran === "petugas" ? "petugas" : "master" };
   }
 
   async function simpanUbah(e) {
@@ -30,23 +30,6 @@
       beriTahu("Keterangan " + ubahEmail + " diperbarui.");
       ubahEmail = "";
       muatKoleksi(KOLEKSI.PENGURUS);
-    } catch (err) { beriTahu(pesanRamah(err)); }
-    sibuk = "";
-  }
-
-  /* Warga yang sudah ditolak menumpuk di daftar dan tidak pernah bisa hilang.
-     Menghapus catatannya TIDAK menghapus akunnya -- orangnya masih bisa
-     masuk dan mendaftar ulang kalau memang salah tolak. */
-  async function hapusWarga(o) {
-    const tanya =
-      "Hapus catatan warga " + (o.nama || o.email) + "?\n\n" +
-      "Akunnya tidak ikut terhapus; dia masih bisa mendaftar ulang.";
-    if (!confirm(tanya)) return;
-    sibuk = o.id;
-    try {
-      await hapusDokumen(KOLEKSI.WARGA, o.id);
-      beriTahu("Catatan warga dihapus.");
-      muatKoleksi(KOLEKSI.WARGA);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
@@ -115,7 +98,6 @@
                   {#if o.status !== "ditolak"}
                     <button class="tombol" type="button" onclick={() => setStatusWarga(o.id, "ditolak")} disabled={sibuk === o.id}>Tolak</button>
                   {/if}
-                  <button class="tombol" type="button" onclick={() => hapusWarga(o)} disabled={sibuk === o.id}>Hapus</button>
                 </div>
               </td>
             </tr>
@@ -123,7 +105,7 @@
         </tbody>
       </table>
     </div>
-    <p class="verifikasi">Menyahkan warga tidak memberi hak pengurus. Warga tetap hanya bisa melihat kirimannya sendiri.</p>
+    <p class="verifikasi">Mengesahkan warga tidak memberi hak pengurus. Warga tetap hanya bisa melihat kirimannya sendiri. Gunakan Tolak untuk menolak pendaftaran; catatan warga tidak dihapus.</p>
   {:else}
     <p class="kosong">Belum ada warga yang mendaftar akun.</p>
   {/if}
@@ -198,7 +180,7 @@
   <div class="kepala-bagian" style="margin-top:26px"><h2>Tambah pengurus</h2></div>
   <form class="isian-borang" onsubmit={tambahPengurus}>
     <div class="isian">
-      <label for="p-email">Alamat Gmail</label>
+      <label for="p-email">Alamat email</label>
       <input id="p-email" type="email" bind:value={p.email} required placeholder="nama@gmail.com" />
       <span class="petunjuk">Harus alamat yang dipakai orangnya untuk masuk. Huruf besar otomatis dikecilkan.</span>
     </div>
@@ -210,6 +192,7 @@
     </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "tambah"}>{sibuk === "tambah" ? "Menyimpan..." : "Tambah"}</button></div>
     <p class="catatan-borang">
+      Menambah pengurus di sini memberi peran, belum membuat akun masuk. Orang tersebut perlu mendaftar dengan email yang sama dan memastikannya, atau masuk dengan Google.
       Kedua peran berkewenangan <b>sama persis</b>. Pilihan ini hanya menentukan sebutan yang tampil di layar
       &mdash; dipakai membedakan Ketua RW dan Sekretaris dari Ketua RT dan kader.
       Karena kewenangannya sama, pertimbangkan baik-baik sebelum menambah orang.

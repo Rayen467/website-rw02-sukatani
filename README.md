@@ -129,3 +129,48 @@ pengurus. Nama dan nomor pelapor pengaduan disimpan di koleksi terpisah
 **Aturan Firestore.** Berkas `firestore.rules` di folder ini yang berlaku.
 Kalau diubah, tempel isinya ke konsol Firebase — mengubah berkasnya saja
 tidak berpengaruh apa-apa.
+
+## Authentication dan pemetaan aktor
+
+Firebase Authentication menyimpan identitas akun (UID, email, penyedia masuk,
+dan status verifikasi email). Peran aplikasi tersimpan terpisah pada koleksi
+Firestore `pengurus`, dengan ID dokumen berupa alamat email akun dalam huruf
+kecil. Menambah dokumen pengurus tidak membuat pengguna Authentication.
+
+- Warga: akun Authentication dengan email terverifikasi, tanpa dokumen pengurus.
+  Profil pada `warga/{uid}` dibuat melalui Akun Saya; status awalnya `baru`.
+- Petugas: akun dengan email terverifikasi dan dokumen `pengurus/{email}` berisi
+  `nama`, `jabatan`, dan `peran: "petugas"`.
+- Master Admin: seperti Petugas, dengan `peran: "master"`. Dokumen bootstrap
+  lama tanpa kolom peran tetap dianggap Master Admin.
+
+Petugas dan Master Admin tetap mempunyai kewenangan sama sesuai aturan proyek.
+Jangan membuat atau memberikan akun berhak istimewa hanya berdasarkan nama
+akun atau jumlah pengguna pada tangkapan layar; cocokkan email yang sebenarnya.
+Akun dengan tanda `+` pada alamat email harus memakai alamat lengkap yang sama
+pada Authentication dan ID dokumen pengurus.
+
+Sesudah menekan tautan pemastian email, buka Akun Saya dan pilih **Saya sudah
+verifikasi**. Aplikasi memuat ulang data pengguna dan token untuk aturan server.
+Jika akun berhasil dibuat tetapi email gagal terkirim, gunakan **Kirim ulang
+tautan**; tidak perlu mendaftar ulang.
+
+Pengaturan konsol yang perlu dicocokkan dengan proyek yang benar:
+
+1. Authentication → Sign-in method: Email/Password dan Google untuk dua cara
+   masuk yang ditawarkan situs. Email link tidak digunakan oleh aplikasi ini.
+2. Authentication → Settings → Authorized domains: domain situs produksi
+   `rayen467.github.io`; domain pengembangan ditambahkan hanya bila diperlukan.
+3. Authentication → Users: cocokkan email lengkap dan penyedia masuk. Akun yang
+   hanya memakai Google masuk dengan tombol Google; jangan menganggap kata
+   sandi Google sebagai kata sandi situs.
+4. Firestore → Data → pengurus: cocokkan email, nama, jabatan, dan peran dengan
+   pengurus yang memang ditunjuk. Daftar Authentication tidak menampilkan peran.
+5. Firestore → Rules: pastikan aturan aktif sesuai `firestore.rules`.
+
+Perubahan kode tidak mengubah pengguna, metode masuk, domain, atau aturan aktif
+pada Firebase Console secara otomatis.
+
+Uji regresi autentikasi: `npm test`. Pengujian memakai Firebase tiruan untuk
+memastikan data/peran sesi lama tidak masuk ke sesi berikutnya. Pengujian ini
+bukan pengganti pengujian login dan aturan Firebase produksi.

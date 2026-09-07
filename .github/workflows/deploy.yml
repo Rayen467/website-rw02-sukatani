@@ -45,6 +45,9 @@ jobs:
       - name: Bangun situs
         run: npm run build
 
+      - name: Uji isolasi sesi dan autentikasi
+        run: npm test
+
       - name: Siapkan berkas untuk Pages
         uses: actions/upload-pages-artifact@v3
         with:

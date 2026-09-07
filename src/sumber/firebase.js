@@ -39,6 +39,7 @@ export const konfigurasi = {
 const app = initializeApp(konfigurasi);
 
 export const auth = getAuth(app);
+auth.languageCode = "id";
 export const db = getFirestore(app);
 
 /* -------------------------------------------------------------------------
@@ -50,6 +51,8 @@ export const db = getFirestore(app);
  * ------------------------------------------------------------------------- */
 
 const TERJEMAHAN = [
+  ["verification-send-failed", "Akun sudah dibuat, tetapi tautan pemastian belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan."],
+  ["user-disabled", "Akun ini dinonaktifkan. Hubungi pengurus untuk memeriksa akses Anda."],
   ["popup-closed", "Jendela masuk ditutup sebelum selesai."],
   ["cancelled-popup", "Jendela masuk ditutup sebelum selesai."],
   ["popup-blocked", "Jendela masuk diblokir peramban. Izinkan pop-up untuk situs ini."],

@@ -132,6 +132,7 @@ export const KOLEKSI_UMUM = Object.freeze([
 
 /** Dimuat hanya setelah pengurus masuk. Warga akan ditolak aturan Firestore. */
 export const KOLEKSI_PENGURUS = Object.freeze([
+  KOLEKSI.PENGADUAN_KONTAK,
   KOLEKSI.SURAT,
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU,
@@ -181,6 +182,7 @@ export const JALUR = Object.freeze({
   PROFIL: "/profil",
   PENGURUS: "/pengurus",
   PETA: "/peta",
+  LAYANAN: "/layanan",
   SURAT: "/surat",
   PENGADUAN: "/pengaduan",
   RESERVASI: "/reservasi",

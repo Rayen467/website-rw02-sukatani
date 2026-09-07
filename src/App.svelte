@@ -21,6 +21,7 @@
   import Pengurus from "./halaman/Pengurus.svelte";
   import PetaWilayah from "./halaman/PetaWilayah.svelte";
   import Surat from "./halaman/Surat.svelte";
+  import LayananWarga from "./halaman/LayananWarga.svelte";
   import SuratBorang from "./halaman/SuratBorang.svelte";
   import SuratCetak from "./halaman/SuratCetak.svelte";
   import Pengaduan from "./halaman/Pengaduan.svelte";
@@ -49,7 +50,7 @@
   onMount(() => {
     terapkanGaya(null);
     mulaiRute();
-    mulaiPantauan();
+    return mulaiPantauan();
   });
 
   /** Halaman satu bagian, misalnya /berita. */
@@ -58,6 +59,7 @@
     profil: Profil,
     pengurus: Pengurus,
     peta: PetaWilayah,
+    layanan: LayananWarga,
     surat: Surat,
     pengaduan: Pengaduan,
     reservasi: Reservasi,
@@ -99,7 +101,7 @@
 
 <main id="utama">
   <div class="wadah">
-    {#key rute.jalur}
+    {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
       <pilihan.komponen kunci={pilihan.kunci} />
     {/key}
   </div>

@@ -23,8 +23,10 @@
 import { pantauMasuk, penggunaSekarang } from "../sumber/akun.js";
 import { ambilPeran, ambilProfilWarga } from "../sumber/data.js";
 import { sesi, namaPeran } from "./sesi.svelte.js";
-import { muatSemuaKonten, muatUmum, muatPengurus, muatMilikSaya, muatSuara } from "./isi.svelte.js";
+import { muatSemuaKonten, muatUmum, muatPengurus, muatMilikSaya, muatSuara, kosongkanIsiPribadi } from "./isi.svelte.js";
 import { beriTahu } from "./pesan.svelte.js";
+
+let generasiSesi = 0;
 
 /** Mengosongkan sesi. Dipakai saat keluar dan saat memang belum masuk. */
 function kosongkanSesi() {
@@ -44,7 +46,13 @@ export function mulaiPantauan() {
   muatSemuaKonten();
   muatUmum();
 
-  pantauMasuk(async (u) => {
+  return pantauMasuk(async (u) => {
+    const generasi = ++generasiSesi;
+    const masihSama = () => generasi === generasiSesi && penggunaSekarang() === u;
+    kosongkanIsiPribadi();
+    sesi.peran = null;
+    sesi.profilWarga = null;
+    sesi.siap = false;
     if (!u) {
       kosongkanSesi();
       return;
@@ -67,7 +75,7 @@ export function mulaiPantauan() {
       sesi.profilWarga = null;
       sesi.terverifikasi = false;
       sesi.siap = true;
-      beriTahu("Email belum dipastikan. Buka tautan yang kami kirim ke " + u.email + ".");
+      beriTahu("Email belum dipastikan. Buka Akun Saya untuk mengirim atau memeriksa tautan pemastian.");
       return;
     }
 
@@ -81,6 +89,7 @@ export function mulaiPantauan() {
       /* Gagal memeriksa berarti diperlakukan sebagai warga biasa. Lebih
          aman salah menutup menu daripada salah membukanya. */
     }
+    if (!masihSama()) return;
     sesi.peran = peran;
 
     if (peran) {
@@ -92,11 +101,10 @@ export function mulaiPantauan() {
       return;
     }
 
-    try {
-      sesi.profilWarga = await ambilProfilWarga(u.uid);
-    } catch (err) {
-      sesi.profilWarga = null;
-    }
+    let profil = null;
+    try { profil = await ambilProfilWarga(u.uid); } catch (err) {}
+    if (!masihSama()) return;
+    sesi.profilWarga = profil;
     sesi.siap = true;
     muatMilikSaya(u.uid);
     muatSuara();
@@ -116,8 +124,12 @@ export function mulaiPantauan() {
 export async function segarkanProfilWarga() {
   const u = penggunaSekarang();
   if (!u) return;
+  const generasi = generasiSesi;
   try {
-    sesi.profilWarga = await ambilProfilWarga(u.uid);
+    const profil = await ambilProfilWarga(u.uid);
+    if (generasi !== generasiSesi || penggunaSekarang() !== u) return;
+    sesi.profilWarga = profil;
   } catch (err) {}
+  if (generasi !== generasiSesi || penggunaSekarang() !== u) return;
   muatMilikSaya(u.uid);
 }
