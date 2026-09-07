@@ -69,7 +69,7 @@
     {#each fasilitas as f}
       <div class="kartu">
         <h3>{f.nama}</h3>
-        <p class="keterangan">Kapasitas {f.kapasitas || "\u2026\u2026"}</p>
+        {#if f.kapasitas}<p class="keterangan">Kapasitas {f.kapasitas}</p>{/if}
         <p>{f.ket || ""}</p>
       </div>
     {/each}
