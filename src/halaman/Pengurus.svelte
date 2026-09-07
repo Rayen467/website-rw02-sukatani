@@ -47,20 +47,22 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Ketua RT</h2></div>
-  <div class="tabel-bungkus">
-    <table class="data">
-      <thead><tr><th>RT</th><th>Nama Ketua RT</th><th>Kontak</th><th>Cakupan blok</th></tr></thead>
-      <tbody>
-        {#each barisRT as o}
-          <tr>
-            <td><b>{o.rt || "-"}</b></td>
-            <td><Belum nilai={o.ketua} /></td>
-            <td><Belum nilai={o.kontak} /></td>
-            <td><Belum nilai={o.blok} /></td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+  <div class="petak petak-2">
+    {#each barisRT as o}
+      <div class="kartu">
+        <div class="orang">
+          <span class="foto">
+            {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="" decoding="async" />{/if}
+          </span>
+          <div>
+            <span class="jabatan">{o.rt || "-"}</span>
+            <span class="nama"><Belum nilai={o.ketua} /></span>
+            <span class="kontak">Kontak <Belum nilai={o.kontak} /></span>
+            <span class="kontak">Cakupan <Belum nilai={o.blok} /></span>
+          </div>
+        </div>
+      </div>
+    {/each}
   </div>
-  <p class="verifikasi">Diisi pengurus lewat halaman Kelola.</p>
+  <p class="verifikasi">Foto dan kontak hanya ditampilkan setelah diisi pengurus dan mendapat izin yang bersangkutan.</p>
 </section>
