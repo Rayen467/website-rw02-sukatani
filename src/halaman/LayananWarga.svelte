@@ -17,15 +17,15 @@
       aksi: "Ajukan surat"
     },
     {
-      judul: "Pendaftaran UMKM",
-      ringkas: "Daftarkan usaha warga agar dapat ditinjau pengurus dan ditampilkan di direktori UMKM RW.",
-      alur: "Isi data usaha → kirim → petugas meninjau → disetujui dan masuk katalog, atau ditolak untuk diperbaiki.",
-      href: "#/daftar-usaha",
-      aksi: "Daftarkan UMKM"
+      judul: "Data Kependudukan",
+      ringkas: "Rekap jumlah jiwa, KK, usia, pendidikan, pekerjaan, dan agama untuk kebutuhan pengurus.",
+      alur: "Data agregat dikelola pengurus → statistik diperbarui → data perorangan tetap tidak ditampilkan di halaman publik.",
+      href: "#/kependudukan",
+      aksi: "Buka data kependudukan"
     },
     {
       judul: "Reservasi Fasilitas",
-      ringkas: "Ajukan peminjaman balai warga, kursi, tenda, atau fasilitas RW yang tersedia.",
+      ringkas: "Ajukan pemakaian GOR Nurani, balai warga, kursi, tenda, atau fasilitas RW yang tersedia.",
       alur: "Pilih fasilitas & tanggal → kirim → petugas menyetujui/menolak → tanggal yang disetujui otomatis dikunci.",
       href: "#/reservasi",
       aksi: "Ajukan peminjaman"
@@ -47,8 +47,8 @@
 
 <div class="catatan" style="margin-bottom:22px">
   <b>Satu pintu pelayanan.</b>
-  Pengaduan, pengajuan surat, pendaftaran UMKM, dan peminjaman fasilitas
-  diteruskan ke dashboard petugas. Bila petugas membutuhkan keterangan tambahan,
+  Pengaduan, pengajuan surat, data kependudukan untuk pengurus, dan peminjaman fasilitas
+  punya jalur yang jelas di satu pusat layanan. Bila petugas membutuhkan keterangan tambahan,
   warga dapat dihubungi melalui nomor WhatsApp yang dicantumkan.
 </div>
 
@@ -67,6 +67,27 @@
         <span class="tombol utama">{l.aksi}</span>
       </a>
     {/each}
+  </div>
+</section>
+
+<section class="blok">
+  <div class="kepala-bagian"><h2>Layanan pendukung warga</h2></div>
+  <div class="petak petak-3">
+    <a class="kartu tindakan" href="#/daftar-usaha">
+      <p class="alis">Usaha warga</p>
+      <h3>Pendaftaran UMKM</h3>
+      <p>Daftarkan usaha warga untuk ditinjau pengurus dan ditampilkan di direktori UMKM RW.</p>
+    </a>
+    <a class="kartu tindakan" href="#/bansos">
+      <p class="alis">Informasi warga</p>
+      <h3>Bantuan Sosial</h3>
+      <p>Lihat program, syarat pengajuan, jalur pengusulan, dan jumlah penerima per RT tanpa membuka identitas pribadi.</p>
+    </a>
+    <a class="kartu tindakan" href="#/tautan">
+      <p class="alis">Layanan pemerintah</p>
+      <h3>Tautan Penting</h3>
+      <p>Akses situs desa, kecamatan, Disdukcapil, informasi KTP-el, dan layanan pemerintah terkait.</p>
+    </a>
   </div>
 </section>
 
