@@ -44,6 +44,7 @@
   const sematan = $derived(sematanPeta(batasMentah));
   const sematanKeliru = $derived(sematanSalah(batasMentah));
   const fasilitasUmum = $derived(pakai("fasum", FASUM_BAWAAN));
+  const batasRT = $derived(pakai("batas_rt", []));
 
   let wadah = $state(null);
   let gagalMuat = $state(false);
@@ -55,6 +56,13 @@
     const [lintang, bujur] = bagian;
     if (Math.abs(lintang) > 90 || Math.abs(bujur) > 180) return null;
     return [lintang, bujur];
+  }
+
+  function uraiPoligon(teks) {
+    return String(teks || "")
+      .split(/\n|;/)
+      .map((baris) => uraiTitik(baris.trim()))
+      .filter(Boolean);
   }
 
   $effect(() => {
@@ -119,6 +127,21 @@
           })
             .addTo(peta)
             .bindTooltip(namaTitik || "Titik utama RW 02", { permanent: false });
+        }
+
+        /* Batas RT hanya digambar bila pengurus memasukkan minimal tiga
+           titik koordinat nyata. Data kosong tidak ditebak dari blok/alamat. */
+        for (const r of batasRT) {
+          const poligon = uraiPoligon(r.poligon);
+          if (poligon.length < 3) continue;
+          L.polygon(poligon, {
+            color: "#ffd43b",
+            weight: 3,
+            opacity: 0.95,
+            fillOpacity: 0.04
+          })
+            .addTo(peta)
+            .bindTooltip(r.rt || "Batas RT", { permanent: false });
         }
 
         /* Fasilitas umum bisa diberi koordinat dari Kelola. Hanya item
@@ -187,7 +210,7 @@
 {#if !gagalMuat}
   <p class="keterangan-batas">
     <span class="contoh-garis" aria-hidden="true"></span>
-    Garis merah adalah batas wilayah RW 02. Titik kuning menandai fasilitas umum yang koordinatnya sudah diisi pengurus. Rumah di luar garis termasuk RW lain.
+    Garis merah adalah batas wilayah RW 02. Garis kuning menunjukkan batas RT yang koordinatnya sudah diisi pengurus, dan titik kuning menandai fasilitas umum. Rumah di luar garis termasuk RW lain.
     {#if !sematan && !gambarPeta}
       Ketuk <b>Peta jalan</b> di pojok kanan atas bila ingin melihat nama jalan.
     {/if}
