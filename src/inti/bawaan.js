@@ -127,8 +127,8 @@ export const TAUTAN_BAWAAN = [
   { id: "dukcapil-kab", nama: "Disdukcapil Kabupaten Tangerang", ket: "Jenis layanan, persyaratan, dan informasi administrasi kependudukan Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/" },
   { id: "ktpel-kab", nama: "Informasi KTP-el Kabupaten Tangerang", ket: "Persyaratan dan informasi pencetakan KTP elektronik dari Disdukcapil Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/detail-menu-konten/632" },
   { id: "kabtangerang", nama: "Pemerintah Kabupaten Tangerang", ket: "Laman resmi pemerintah kabupaten", url: "https://www.tangerangkab.go.id" },
-  { id: "desa", nama: "Kantor Desa Sukatani", ket: "Layanan administrasi tingkat desa", url: "" },
-  { id: "kecamatan", nama: "Kecamatan Rajeg", ket: "Layanan administrasi tingkat kecamatan", url: "" },
+  { id: "desa", nama: "Kelurahan Sukatani", ket: "Layanan administrasi dan informasi resmi Kelurahan Sukatani", url: "https://sukatani.tangerangkab.go.id/" },
+  { id: "kecamatan", nama: "Kecamatan Rajeg", ket: "Layanan administrasi dan informasi resmi Kecamatan Rajeg", url: "https://rajeg.tangerangkab.go.id/" },
   { id: "darurat", nama: "Panggilan darurat 112", ket: "Layanan darurat terpadu", url: "" }
 ];
 
@@ -153,8 +153,8 @@ export const IDENTITAS_BAWAAN = {
   lambang: "RW",
   namaSitus: "Warga Permai Sukatani",
   namaRW: "RW 02",
-  wilayah: "Desa Sukatani, Kec. Rajeg",
-  alamatKaki: "Perum Permai Sukatani · Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
+  wilayah: "Kelurahan Sukatani, Kec. Rajeg",
+  alamatKaki: "Perum Permai Sukatani · Kelurahan Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
   alamatSitus: ""
 };
 
@@ -254,7 +254,7 @@ export const BERANDA_BAWAAN = {
   judul: "Selamat datang di situs warga Permai Sukatani",
   ringkas:
     "Tempat mencari cara mengurus surat, nomor pengurus, jadwal kegiatan, laporan kas, dan usaha tetangga sendiri. Ditulis sekali, bisa dibuka kapan saja.",
-  alamat: "Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
+  alamat: "Kelurahan Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
 
   judulLayanan: "Layanan yang sering dipakai",
   layanan1Judul: "Pengajuan Surat",
