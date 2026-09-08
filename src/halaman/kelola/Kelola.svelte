@@ -1,6 +1,7 @@
 <script>
   import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
   import { rute } from "../../keadaan/rute.svelte.js";
+  import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
   import TabBeranda from "./TabBeranda.svelte";
   import TabLaporan from "./TabLaporan.svelte";
@@ -14,6 +15,7 @@
   import TabOrang from "./TabOrang.svelte";
 
   const TAB = [
+    ["dashboard", "Dashboard Petugas", TabDashboard],
     ["kiriman", "Kiriman warga", TabKiriman],
     ["beranda", "Beranda", TabBeranda],
     ["terbit", "Berita & galeri", TabTerbit],
@@ -34,18 +36,17 @@
 
      Alamat yang tidak dikenali jatuh ke tab pertama, bukan layar kosong. */
   const dariAlamat = $derived(
-    TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "kiriman"
+    TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "dashboard"
   );
-  let dipilih = $state("");
-  const aktif = $derived(dipilih || dariAlamat);
+  const aktif = $derived(dariAlamat);
   const Terpilih = $derived((TAB.find((t) => t[0] === aktif) || TAB[0])[2]);
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Kelola</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Pengurus</p>
-  <h1>Kelola situs warga</h1>
-  <p>Semua yang tampil di situs diisi dari sini. Perubahan langsung terlihat warga.</p>
+  <h1>{sesi.peran === "petugas" ? "Dashboard Petugas" : "Dashboard Pengelola"}</h1>
+  <p>Tangani layanan warga dari satu tempat, lalu buka pengaturan situs hanya saat diperlukan.</p>
 </div>
 
   <div class="catatan" style="margin-bottom:22px">
@@ -55,7 +56,7 @@
 
   <div class="pilihan-baris">
     {#each TAB as t}
-      <button class="pilihan" type="button" aria-pressed={aktif === t[0]} onclick={() => (dipilih = t[0])}>{t[1]}</button>
+      <a class="pilihan" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href="#/kelola/{t[0]}">{t[1]}</a>
     {/each}
   </div>
 
