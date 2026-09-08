@@ -105,7 +105,7 @@
         <input
           type="search"
           bind:value={kataCari}
-          placeholder="Cari surat, jadwal, atau usaha warga"
+          placeholder="Cari informasi..."
           aria-label="Cari di situs ini"
         />
         <button type="submit">Cari</button>
