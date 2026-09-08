@@ -3,15 +3,18 @@
   import { kontenNilai } from "../keadaan/isi.svelte.js";
   import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import Belum from "./Belum.svelte";
+  import { waktu } from "../keadaan/waktu.svelte.js";
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
+  const gambarKaki = $derived("./visual/waktu/footer-" + waktu.fase + ".webp");
 </script>
 
-<footer class="tanpa-cetak">
+<footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
   <div class="wadah">
     <div class="kaki-petak">
-      <div>
+      <div class="kaki-brand">
+        <img class="kaki-logo" src="./visual/brand/logo-full.webp" alt="RW 02 Sukatani — Guyub, Maju, Sejahtera" />
         <h4>Tentang situs ini</h4>
         <p>
           Situs informasi warga {namaRW}, Perum Permai Sukatani. Dikelola pengurus RW bersama kader warga.
