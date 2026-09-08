@@ -27,3 +27,25 @@ for (const [kunci, bagian] of kelompok) {
   await writeFile(path.join(tujuan, `${kunci}.webp`), data);
   console.log(`aset waktu: ${kunci}.webp (${data.length} byte)`);
 }
+
+
+/* fallback build-safe: jangan biarkan mode waktu menampilkan background kosong
+   bila satu aset belum tersedia di repo. Akan otomatis tertimpa saat aset asli
+   dengan nama yang sama sudah ditambahkan. */
+const fallback = {
+  "hero-siang.webp": "hero-pagi.webp",
+  "hero-sore.webp": "hero-pagi.webp",
+  "footer-sore.webp": "footer-siang.webp"
+};
+
+for (const [tujuanNama, sumberNama] of Object.entries(fallback)) {
+  const tujuanPath = path.join(tujuan, tujuanNama);
+  try {
+    await readFile(tujuanPath);
+  } catch {
+    const sumberPath = path.join(tujuan, sumberNama);
+    const data = await readFile(sumberPath);
+    await writeFile(tujuanPath, data);
+    console.log(`fallback aset waktu: ${tujuanNama} <- ${sumberNama}`);
+  }
+}
