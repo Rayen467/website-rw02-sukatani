@@ -1628,3 +1628,108 @@ body:has(.beranda-hero) .kaki-logo {
     right: -11px;
   }
 }
+
+
+/* === FIX FOOTER PANORAMA PENUH: JANGAN JADI HAIRLINE === */
+
+/*
+ * Background footer dipisah dari kotak footer utama. Dengan begitu aturan
+ * global footer { background: var(--permukaan) } tidak bisa menutup foto dan
+ * membuat panorama cuma terlihat sebagai garis tipis di batas atas.
+ */
+body:has(.beranda-hero) footer.kaki-waktu {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 410px;
+  padding-top: 72px;
+  padding-bottom: 32px;
+  border-top: 0;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Foto panorama memenuhi SELURUH tinggi dan lebar footer. */
+body:has(.beranda-hero) footer.kaki-waktu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--gambar-kaki) !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 58%;
+  opacity: 1;
+  transform: none;
+}
+
+/* Overlay untuk keterbacaan, tetap transparan supaya panorama jelas. */
+body:has(.beranda-hero) footer.kaki-waktu::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 26, 23, .20) 0%,
+      rgba(3, 25, 22, .48) 42%,
+      rgba(2, 18, 18, .84) 100%
+    );
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) footer.kaki-waktu::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 14, 28, .18) 0%,
+      rgba(2, 16, 28, .50) 44%,
+      rgba(1, 10, 19, .88) 100%
+    );
+}
+
+/* Seluruh isi footer berada di atas foto + overlay, tanpa panel solid penutup. */
+body:has(.beranda-hero) footer.kaki-waktu > .wadah {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+}
+
+body:has(.beranda-hero) footer.kaki-waktu .kaki-petak,
+body:has(.beranda-hero) footer.kaki-waktu .kaki-brand,
+body:has(.beranda-hero) footer.kaki-waktu .kaki-petak > div,
+body:has(.beranda-hero) footer.kaki-waktu .kaki-bawah {
+  background: transparent !important;
+}
+
+/* Hairline yang tersisa hanya separator tipis untuk metadata footer. */
+body:has(.beranda-hero) footer.kaki-waktu .kaki-bawah {
+  border-top: 1px solid rgba(255,255,255,.20);
+}
+
+/* Fokus gambar disesuaikan agar horizon/pemandangan tidak terpotong. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) footer.kaki-waktu::before {
+  background-position: center 52%;
+}
+:root[data-waktu="siang"] body:has(.beranda-hero) footer.kaki-waktu::before {
+  background-position: center 54%;
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) footer.kaki-waktu::before {
+  background-position: center 58%;
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) footer.kaki-waktu::before {
+  background-position: center 58%;
+}
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) footer.kaki-waktu {
+    min-height: 470px;
+    padding-top: 54px;
+  }
+
+  body:has(.beranda-hero) footer.kaki-waktu::before {
+    background-position: center center;
+  }
+}
