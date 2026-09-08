@@ -1,5 +1,6 @@
 <script>
   import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
+  import { galatMuatPengurus, muatPengurus } from "../../keadaan/isi.svelte.js";
   import { rute, pergi } from "../../keadaan/rute.svelte.js";
   import { keluar } from "../../sumber/akun.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
@@ -42,6 +43,7 @@
   );
   const aktif = $derived(dariAlamat);
   const Terpilih = $derived((TAB.find((t) => t[0] === aktif) || TAB[0])[2]);
+  const galatData = $derived(Object.entries(galatMuatPengurus));
 
   async function keluarPengurus() {
     await keluar();
@@ -64,6 +66,19 @@
     </div>
     <button class="tombol" type="button" onclick={keluarPengurus}>Keluar</button>
   </div>
+
+  {#if galatData.length}
+    <div class="catatan awas" style="margin-bottom:22px">
+      <b>Data Petugas belum termuat lengkap.</b>
+      Server menolak atau gagal membaca {galatData.map(([nama]) => nama).join(", ")}.
+      Jangan anggap angka 0 di dashboard berarti tidak ada kiriman.
+      Pastikan email akun sudah terverifikasi, dokumen role pengurus sesuai email login,
+      dan Firestore Rules terbaru sudah dipublish.
+      <div class="baris-tombol" style="margin-top:12px">
+        <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button>
+      </div>
+    </div>
+  {/if}
 
   <div class="pilihan-baris">
     {#each TAB as t}
