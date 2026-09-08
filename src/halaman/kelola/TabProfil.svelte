@@ -49,6 +49,13 @@
     catch (err) { beriTahu("Foto tidak dipakai: " + err.message); return ""; }
   }
 
+  /* Dipakai editor data yang SUDAH ADA. Berbeda dengan bacaFoto(), galat
+     sengaja dilempar supaya foto lama tidak pernah berubah menjadi kosong
+     hanya karena file baru gagal diproses. */
+  function olahFotoPotret(berkas) {
+    return kecilkanFoto(berkas, SISI_POTRET);
+  }
+
   async function jalan(tanda, aksi) {
     sibuk = tanda;
     try { await aksi(); beriTahu("Tersimpan."); }
@@ -104,7 +111,9 @@
       id={o.id}
       judul={o.jabatan || "-"} baris={[(o.nama || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]}
       nilai={o}
+      olahFoto={olahFotoPotret}
       kolom={[
+        { nama: "foto", label: "Foto pengurus", jenis: "foto", petunjuk: "Pilih foto baru untuk mengganti. Kalau tidak disentuh, foto lama tetap dipakai." },
         { nama: "jabatan", label: "Jabatan" },
         { nama: "nama", label: "Nama" },
         { nama: "kontak", label: "Nomor kontak" }
@@ -146,11 +155,13 @@
       id={o.id}
       judul={o.rt || "-"} baris={[(o.blok || "-") + " \u00B7 " + (o.batas || "-"), (o.ketua || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]}
       nilai={o}
+      olahFoto={olahFotoPotret}
       kolom={[
+        { nama: "foto", label: "Foto Ketua RT", jenis: "foto", petunjuk: "Pilih foto baru untuk mengganti. Foto juga bisa dihapus tanpa menghapus data RT." },
         { nama: "rt", label: "RT" },
-        { nama: "blok", label: "Blok" },
+        { nama: "blok", label: "Cakupan blok" },
         { nama: "batas", label: "Batas wilayah", jenis: "panjang" },
-        { nama: "ketua", label: "Ketua RT" },
+        { nama: "ketua", label: "Nama Ketua RT" },
         { nama: "kontak", label: "Nomor kontak" },
         { nama: "poligon", label: "Koordinat batas RT", jenis: "panjang" }
       ]}
