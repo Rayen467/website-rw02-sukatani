@@ -252,6 +252,9 @@ export const GOR_NURANI_BAWAAN = {
   ].join("\n"),
   pemanfaatan: "GOR Nurani dapat disewakan kepada pihak lain dengan tarif yang ditetapkan oleh pengelola dan hasil pemanfaatannya dikembalikan sebesar-besarnya untuk kepentingan serta kesejahteraan warga RW 02. Dalam kegiatannya, selain mempertimbangkan usaha atau keuntungan, GOR juga mempertimbangkan kemanfaatan bagi masyarakat.",
   maknaLogo: "Dokumen AD menjelaskan unsur shuttlecock putih sebagai lambang kebersihan hati, bara api sebagai semangat yang tidak pernah berhenti, serta warna coklat sebagai lambang cinta, keandalan, dan kesejahteraan.",
+  ketuaNama: "",
+  pelaksanaNama: "",
+  bendaharaNama: "",
   strukturPengurus: [
     "Ketua GOR.",
     "Pelaksana Harian.",
