@@ -1,6 +1,8 @@
 <script>
   import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
-  import { rute } from "../../keadaan/rute.svelte.js";
+  import { rute, pergi } from "../../keadaan/rute.svelte.js";
+  import { keluar } from "../../sumber/akun.js";
+  import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
   import TabBeranda from "./TabBeranda.svelte";
@@ -40,6 +42,12 @@
   );
   const aktif = $derived(dariAlamat);
   const Terpilih = $derived((TAB.find((t) => t[0] === aktif) || TAB[0])[2]);
+
+  async function keluarPengurus() {
+    await keluar();
+    beriTahu("Anda sudah keluar dari akun pengurus.");
+    pergi("/");
+  }
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Kelola</span></nav>
@@ -49,9 +57,12 @@
   <p>Tangani layanan warga dari satu tempat, lalu buka pengaturan situs hanya saat diperlukan.</p>
 </div>
 
-  <div class="catatan" style="margin-bottom:22px">
-    <b>Masuk sebagai {namaPeran()}.</b> {sesi.pengguna.email}.
-    Anda punya akses penuh atas seluruh data, isi situs, dan daftar pengurus.
+  <div class="catatan petugas-sesi" style="margin-bottom:22px">
+    <div>
+      <b>Masuk sebagai {namaPeran()}.</b> {sesi.pengguna.email}.
+      Anda punya akses penuh atas seluruh data, isi situs, dan daftar pengurus.
+    </div>
+    <button class="tombol" type="button" onclick={keluarPengurus}>Keluar</button>
   </div>
 
   <div class="pilihan-baris">
