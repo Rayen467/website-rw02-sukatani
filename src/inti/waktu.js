@@ -68,3 +68,18 @@ export const GAMBAR_WAKTU = Object.freeze({
 export function gambarWaktu(fase) {
   return GAMBAR_WAKTU[fase] || GAMBAR_WAKTU.malam;
 }
+
+
+/**
+ * URL absolut untuk gambar fase waktu.
+ *
+ * Penting untuk GitHub Pages: nilai url() yang diteruskan lewat CSS custom
+ * property bisa ikut ter-resolve relatif terhadap berkas CSS hasil bundling
+ * (mis. /assets/...). Dengan mengubahnya menjadi URL absolut dari document.baseURI,
+ * hero dan panorama tetap menunjuk ke /website-rw02-sukatani/visual/... .
+ */
+export function gambarWaktuAbsolut(fase) {
+  const sumber = gambarWaktu(fase);
+  if (typeof document === "undefined") return sumber;
+  return new URL(sumber, document.baseURI).href;
+}
