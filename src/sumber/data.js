@@ -38,7 +38,8 @@ import {
   where,
   orderBy,
   limit,
-  serverTimestamp
+  serverTimestamp,
+  writeBatch
 } from "firebase/firestore/lite";
 import { db } from "./firebase.js";
 import { penggunaSekarang } from "./akun.js";
@@ -222,6 +223,24 @@ export function ubahDokumen(koleksi, id, isi) {
 
 export function hapusDokumen(koleksi, id) {
   return deleteDoc(doc(db, koleksi, id));
+}
+
+/**
+ * Mengganti ID dokumen secara atomik.
+ *
+ * Firestore tidak punya operasi rename. Untuk data seperti RT, ID mengikuti
+ * nama RT (rt-01, rt-02). Kalau nama RT diubah, dokumen baru dan penghapusan
+ * dokumen lama harus terjadi dalam satu batch supaya tidak ada duplikat atau
+ * kehilangan data di tengah jaringan putus.
+ */
+export async function pindahDokumen(koleksi, idLama, idBaru, isi) {
+  if (!idBaru || idBaru === idLama) {
+    return setDoc(doc(db, koleksi, idLama), bersihkan(isi));
+  }
+  const batch = writeBatch(db);
+  batch.set(doc(db, koleksi, idBaru), bersihkan(isi));
+  batch.delete(doc(db, koleksi, idLama));
+  await batch.commit();
 }
 
 /**
