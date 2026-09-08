@@ -118,6 +118,25 @@
     <p>Masuk untuk melacak pengajuan surat, laporan, dan permohonan pinjam yang Anda kirim.</p>
   </div>
 
+  <section class="akses-aktor" aria-label="Jenis akses situs">
+    <div class="kartu">
+      <span class="label-kecil">Pengunjung</span>
+      <h3>Tanpa login</h3>
+      <p>Bisa membaca profil RW, berita, jadwal, kas publik, UMKM, peta, dan informasi umum.</p>
+      <a class="tombol" href="#/">Lanjut sebagai pengunjung</a>
+    </div>
+    <div class="kartu">
+      <span class="label-kecil">Warga</span>
+      <h3>Dashboard Warga</h3>
+      <p>Masuk untuk mengajukan layanan dan melihat status surat, reservasi, serta pendaftaran usaha milik sendiri.</p>
+    </div>
+    <div class="kartu">
+      <span class="label-kecil">Petugas</span>
+      <h3>Dashboard Petugas</h3>
+      <p>Akun pengurus yang sudah diberi role otomatis mendapat dashboard operasional untuk menangani layanan warga.</p>
+    </div>
+  </section>
+
   <div class="kartu masuk-utama">
     <button class="tombol-google" type="button" onclick={google} disabled={terkunci}>
       <svg viewBox="0 0 48 48" aria-hidden="true" width="20" height="20">
