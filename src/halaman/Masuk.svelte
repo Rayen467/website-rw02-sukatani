@@ -27,7 +27,8 @@
    * tanyakan dulu kepadanya.
    */
   import { beriTahu } from "../keadaan/pesan.svelte.js";
-  import { sesi } from "../keadaan/sesi.svelte.js";
+  import { pergi } from "../keadaan/rute.svelte.js";
+  import { sesi, pengurus } from "../keadaan/sesi.svelte.js";
   import { masukEmail, masukGoogle, daftarAkun, lupaSandi, keluar, siapkanAkun } from "../sumber/akun.js";
   import { pesanRamah } from "../sumber/firebase.js";
 
@@ -105,7 +106,9 @@
     <p>Masuk sebagai {sesi.pengguna.email}.</p>
   </div>
   <div class="baris-tombol">
-    <a class="tombol utama" href="#/akun">Buka Akun Saya</a>
+    <button class="tombol utama" type="button" onclick={() => pergi(pengurus() ? "/kelola" : "/akun")}>
+      {pengurus() ? "Buka Dashboard Petugas" : "Buka Dashboard Warga"}
+    </button>
     <button class="tombol" type="button" onclick={() => keluar()}>Keluar</button>
   </div>
 {:else}
