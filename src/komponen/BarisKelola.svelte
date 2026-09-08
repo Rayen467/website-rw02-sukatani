@@ -42,20 +42,27 @@
     kolom = [],
     nilai = {},
     saatUbah = null,
-    saatHapus = null
+    saatHapus = null,
+    olahFoto = null
   } = $props();
 
   let membuka = $state(false);
   let sibuk = $state("");
   let bentuk = $state({});
+  let berkasFoto = $state({});
+  let hapusFoto = $state({});
 
   function buka() {
     /* Nilai lama disalin ke kotak isian. Inilah bedanya dengan cara lama:
        pengurus melihat isi yang sekarang, bukan borang kosong yang harus
        ditebak ulang. */
     const b = {};
-    for (const k of kolom) b[k.nama] = nilai[k.nama] == null ? "" : String(nilai[k.nama]);
+    for (const k of kolom) {
+      if (k.jenis !== "foto") b[k.nama] = nilai[k.nama] == null ? "" : String(nilai[k.nama]);
+    }
     bentuk = b;
+    berkasFoto = {};
+    hapusFoto = {};
     membuka = true;
   }
 
@@ -63,8 +70,23 @@
     e.preventDefault();
     sibuk = "simpan";
     try {
-      if (saatUbah) await saatUbah(id, { ...bentuk });
-      else await ubahDokumen(koleksi, id, { ...bentuk });
+      const kirim = { ...bentuk };
+
+      /* Kolom foto berbeda dengan teks: kalau tidak disentuh, nilainya jangan
+         ikut dikirim supaya foto lama tetap ada. Kalau Petugas memilih file
+         baru, file diproses lewat olahFoto() sebelum masuk ke Firestore.
+         Tombol Hapus foto mengirim string kosong secara eksplisit. */
+      for (const k of kolom.filter((x) => x.jenis === "foto")) {
+        if (hapusFoto[k.nama]) {
+          kirim[k.nama] = "";
+        } else if (berkasFoto[k.nama]) {
+          if (!olahFoto) throw new Error("pengolah foto belum dipasang");
+          kirim[k.nama] = await olahFoto(berkasFoto[k.nama], k);
+        }
+      }
+
+      if (saatUbah) await saatUbah(id, kirim);
+      else await ubahDokumen(koleksi, id, kirim);
       beriTahu("Perubahan tersimpan.");
       membuka = false;
       muatKoleksi(koleksi);
@@ -112,7 +134,45 @@
     {#each kolom as k}
       <div class="isian">
         <label for="ubah-{id}-{k.nama}">{k.label}</label>
-        {#if k.jenis === "panjang"}
+        {#if k.jenis === "foto"}
+          {#if nilai[k.nama] && !hapusFoto[k.nama]}
+            <div style="margin-bottom:10px">
+              <img
+                src={nilai[k.nama]}
+                alt=""
+                style="width:84px;height:84px;object-fit:cover;border-radius:8px;display:block"
+              />
+            </div>
+          {/if}
+          <input
+            id="ubah-{id}-{k.nama}"
+            type="file"
+            accept="image/*"
+            onchange={(e) => {
+              berkasFoto[k.nama] = e.currentTarget.files[0] || null;
+              if (berkasFoto[k.nama]) hapusFoto[k.nama] = false;
+            }}
+          />
+          {#if nilai[k.nama]}
+            <div class="baris-tombol" style="margin-top:8px">
+              <button
+                class="tombol"
+                type="button"
+                onclick={() => {
+                  hapusFoto[k.nama] = !hapusFoto[k.nama];
+                  if (hapusFoto[k.nama]) berkasFoto[k.nama] = null;
+                }}
+              >
+                {hapusFoto[k.nama] ? "Batal hapus foto" : "Hapus foto"}
+              </button>
+            </div>
+          {/if}
+          {#if berkasFoto[k.nama]}
+            <span class="petunjuk">Foto baru: {berkasFoto[k.nama].name}</span>
+          {:else if hapusFoto[k.nama]}
+            <span class="petunjuk">Foto akan dihapus saat perubahan disimpan.</span>
+          {/if}
+        {:else if k.jenis === "panjang"}
           <textarea id="ubah-{id}-{k.nama}" bind:value={bentuk[k.nama]}></textarea>
         {:else if k.jenis === "tanggal"}
           <input id="ubah-{id}-{k.nama}" type="date" bind:value={bentuk[k.nama]} />
