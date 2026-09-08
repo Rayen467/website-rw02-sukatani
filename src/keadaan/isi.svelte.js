@@ -37,6 +37,8 @@ import {
 import { POLLING_BAWAAN } from "../inti/bawaan.js";
 import { terapkanGaya } from "./tampilan.js";
 
+export const galatMuatPengurus = $state({});
+
 export const isi = $state({
   /* --- Dibaca siapa pun, termasuk yang belum masuk --------------------- */
   pengumuman: null,
@@ -77,7 +79,10 @@ let generasiSesi = 0;
 /** Buang data pribadi dan batalkan hasil permintaan dari sesi sebelumnya. */
 export function kosongkanIsiPribadi() {
   generasiSesi += 1;
-  for (const nama of KOLEKSI_PENGURUS) isi[nama] = null;
+  for (const nama of KOLEKSI_PENGURUS) {
+    isi[nama] = null;
+    delete galatMuatPengurus[nama];
+  }
   isi.suara = null;
 }
 
@@ -121,8 +126,14 @@ export async function muatKoleksi(nama) {
     const hasil = await ambilKoleksi(nama);
     if (KOLEKSI_PENGURUS.includes(nama) && generasi !== generasiSesi) return;
     isi[nama] = hasil;
+    if (KOLEKSI_PENGURUS.includes(nama)) delete galatMuatPengurus[nama];
   } catch (err) {
-    /* Ditolak karena memang bukan haknya. Lihat catatan di kepala berkas. */
+    /* Koleksi privat hanya dimuat setelah peran pengurus berhasil dibaca.
+       Jadi kalau yang gagal adalah koleksi pengurus, itu BUKAN penolakan
+       normal warga dan perlu terlihat di Dashboard Petugas. */
+    if (KOLEKSI_PENGURUS.includes(nama) && generasi === generasiSesi) {
+      galatMuatPengurus[nama] = String((err && (err.code || err.message)) || "gagal memuat");
+    }
   }
 }
 
