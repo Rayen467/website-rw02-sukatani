@@ -16,6 +16,8 @@
 
 @media (max-width: 960px) {
   .deret-angka { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .petugas-hero { grid-template-columns: minmax(0, 1fr); }
+  .petugas-ringkasan { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .gor-hero { grid-template-columns: minmax(0, 1fr); }
   .gor-ringkas { max-width: 620px; }
   .gor-layanan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -37,6 +39,29 @@
 
 @media (max-width: 680px) {
   .situs-atas { flex-wrap: wrap; }
+
+  .petugas-hero {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+  .petugas-ringkasan {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .petugas-tugas {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .pilihan-baris {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .pilihan-baris::-webkit-scrollbar { display: none; }
+  .pilihan-baris .pilihan {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 
   .gor-hero {
     padding: 24px 18px;
