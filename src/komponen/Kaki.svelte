@@ -45,14 +45,13 @@
         </ul>
       </div>
     </div>
-    <div class="kaki-bawah">
-      <span class="mono">{alamatKaki}</span>
-      <span>Dikelola pengurus {namaRW}.</span>
-    </div>
-    <div class="kaki-pembuat">
-      <span>Pengembangan situs</span>
-      <span aria-hidden="true">·</span>
-      <a href="mailto:rayenxtenri@gmail.com">rayenxtenri@gmail.com</a>
+    <div class="kaki-bawah kaki-bawah-identitas">
+      <span class="mono kaki-alamat">{alamatKaki}</span>
+      <div class="kaki-pengelola">
+        <span>Dikelola pengurus {namaRW}.</span>
+        <span class="kaki-kkn">KKN 20</span>
+        <a href="mailto:rayenxtenri@gmail.com">rayenxtenri@gmail.com</a>
+      </div>
     </div>
   </div>
 </footer>
