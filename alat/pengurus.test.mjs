@@ -70,7 +70,7 @@ test("upload foto yang gagal menghentikan simpan, bukan diam-diam menghapus foto
 
 test("hapus satu Pengurus RW atau RT tetap tersedia lewat BarisKelola", () => {
   assert.match(baris, /hapusDokumen/);
-  assert.match(baris, />Hapus</);
+  assert.match(baris, /"Hapus"/);
   assert.match(baris, /Tindakan ini tidak bisa dibatalkan/);
 });
 
