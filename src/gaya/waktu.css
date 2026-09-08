@@ -1176,13 +1176,11 @@ body:has(.beranda-hero) .umkm-home-foto {
 :root[data-waktu="sore"] body:has(.beranda-hero) main {
   background:
     linear-gradient(180deg, rgba(72,42,24,.08), rgba(57,39,29,.48) 62%, rgba(36,29,24,.72)),
-    url("../../public/visual/waktu/footer-sore.webp") center bottom / 100% auto no-repeat,
     #6f5a4a;
 }
 :root[data-waktu="malam"] body:has(.beranda-hero) main {
   background:
     linear-gradient(180deg, rgba(3,20,34,.18), rgba(3,21,35,.72) 58%, rgba(2,17,29,.94)),
-    url("../../public/visual/waktu/footer-malam.webp") center bottom / 100% auto no-repeat,
     #061a2a;
 }
 
