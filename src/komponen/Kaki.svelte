@@ -7,7 +7,15 @@
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
-  const gambarKaki = $derived("./visual/waktu/footer-" + waktu.fase + ".webp");
+
+  // Pagi, siang, dan malam memakai panorama footer khusus. Untuk sore,
+  // gunakan panorama sore asli yang sama dengan hero — bukan menggandakan
+  // aset siang — sampai panorama footer sore tersimpan sebagai aset khusus.
+  const gambarKaki = $derived(
+    waktu.fase === "sore"
+      ? "./visual/waktu/hero-sore.webp"
+      : "./visual/waktu/footer-" + waktu.fase + ".webp"
+  );
 </script>
 
 <footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
