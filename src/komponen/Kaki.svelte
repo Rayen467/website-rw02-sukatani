@@ -3,12 +3,11 @@
   import { kontenNilai } from "../keadaan/isi.svelte.js";
   import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import Belum from "./Belum.svelte";
-  import { gambarWaktu } from "../inti/waktu.js";
   import { waktu } from "../keadaan/waktu.svelte.js";
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
-  const gambarKaki = $derived(gambarWaktu(waktu.fase));
+  const gambarKaki = $derived("./visual/waktu/footer-" + waktu.fase + ".webp");
 </script>
 
 <footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
