@@ -83,7 +83,12 @@
   <div class="wadah">
     <div class="situs-atas">
       <a class="merek merek-visual" href="#/" aria-label={ident.namaSitus}>
-        <img class="merek-logo-penuh" src="./visual/brand/logo-full.webp" alt="RW 02 Sukatani" />
+        <img class="merek-logo-ikon" src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
+        <span class="merek-teks">
+          <strong>RW 02</strong>
+          <b>SUKATANI</b>
+          <small>GUYUB · MAJU · SEJAHTERA</small>
+        </span>
       </a>
 
       <nav class="menu-utama menu-ringkas" aria-label="Menu utama">

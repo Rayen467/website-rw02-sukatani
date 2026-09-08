@@ -1330,3 +1330,301 @@ body:has(.beranda-hero) .kaki-logo {
       var(--gambar-hero);
   }
 }
+
+
+/* === KOREKSI VISUAL FINAL BERDASARKAN MOCKUP 4 WAKTU === */
+
+/* Header: floating glass tipis, lockup horizontal jelas, bukan logo mini gelap. */
+body:has(.beranda-hero) .situs {
+  top: 14px;
+  width: min(1180px, calc(100% - 48px));
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--waktu-cahaya) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--waktu-panel-garis) 72%, transparent);
+  box-shadow: 0 14px 40px -28px rgba(0,0,0,.42);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .situs {
+  background: rgba(10, 35, 55, .82);
+  border-color: rgba(180, 222, 228, .16);
+}
+body:has(.beranda-hero) .situs > .wadah {
+  padding: 0 16px;
+}
+body:has(.beranda-hero) .situs-atas {
+  min-height: 64px;
+}
+body:has(.beranda-hero) .merek-visual {
+  width: 190px;
+  min-width: 190px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  overflow: visible;
+}
+body:has(.beranda-hero) .merek-logo-ikon {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex: 0 0 52px;
+}
+body:has(.beranda-hero) .merek-teks {
+  min-width: 0;
+  display: grid;
+  line-height: 1;
+  color: #123e34;
+}
+body:has(.beranda-hero) .merek-teks strong {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+body:has(.beranda-hero) .merek-teks b {
+  margin-top: 2px;
+  font-size: 16px;
+  letter-spacing: .16em;
+}
+body:has(.beranda-hero) .merek-teks small {
+  margin-top: 4px;
+  font-size: 5.8px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  white-space: nowrap;
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .merek-teks {
+  color: #f0faf7;
+}
+
+/* Hero: gambar harus dominan seperti mockup; judul tidak boleh menelan layar. */
+body:has(.beranda-hero) .beranda-hero {
+  min-height: clamp(500px, 64vh, 650px);
+  margin-top: -26px;
+  background-position: center 52%;
+}
+body:has(.beranda-hero) .beranda-hero::after {
+  height: 118px;
+}
+body:has(.beranda-hero) .beranda-hero-dalam {
+  padding-top: 92px;
+  padding-bottom: 78px;
+}
+body:has(.beranda-hero) .beranda-copy {
+  width: min(560px, 58%);
+}
+body:has(.beranda-hero) .beranda-eyebrow {
+  margin-bottom: 11px;
+  font-size: 9.5px;
+  letter-spacing: .26em;
+}
+body:has(.beranda-hero) .beranda-copy h1 {
+  max-width: 12.5ch;
+  font-size: clamp(44px, 4.55vw, 62px);
+  line-height: .98;
+  letter-spacing: -.038em;
+}
+body:has(.beranda-hero) .beranda-ringkas {
+  max-width: 44ch;
+  margin-top: 15px;
+  font-size: clamp(13px, 1.18vw, 16px);
+  line-height: 1.5;
+}
+body:has(.beranda-hero) .beranda-cta {
+  margin-top: 20px;
+}
+body:has(.beranda-hero) .beranda-cta a {
+  min-height: 42px;
+  padding: 9px 18px;
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .beranda-meta {
+  margin-top: 44px;
+  gap: 28px;
+}
+body:has(.beranda-hero) .beranda-meta-item {
+  min-width: 170px;
+}
+body:has(.beranda-hero) .beranda-meta-item b {
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .beranda-meta-item small {
+  font-size: 9.2px;
+}
+body:has(.beranda-hero) .meta-ikon {
+  font-size: 24px;
+}
+
+/* Pemilih waktu mengikuti posisi kanan mockup. */
+body:has(.beranda-hero) .pemilih-waktu {
+  top: 110px;
+  right: 12px;
+}
+body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+  min-width: 82px;
+  min-height: 35px;
+  padding-left: 28px;
+  font-size: 10.5px;
+}
+body:has(.beranda-hero) .pemilih-waktu .titik {
+  width: 12px;
+  height: 12px;
+  top: 10px;
+}
+
+/* Shortcut tepat menimpa batas hero seperti referensi, lebih pendek dari versi gagal. */
+body:has(.beranda-hero) .layanan-cepat {
+  margin-top: -48px;
+  padding: 8px;
+  border-radius: 15px;
+}
+body:has(.beranda-hero) .layanan-cepat-item {
+  min-height: 112px;
+  padding: 12px 14px 10px;
+}
+body:has(.beranda-hero) .layanan-ikon {
+  width: 36px;
+  height: 36px;
+}
+body:has(.beranda-hero) .layanan-cepat-item strong {
+  font-size: 11px;
+}
+body:has(.beranda-hero) .layanan-cepat-item small {
+  font-size: 9px;
+}
+
+/* Konten lebih rapat dan proporsional; tidak ada kotak kosong jumbo. */
+body:has(.beranda-hero) .blok {
+  margin-bottom: 20px;
+}
+body:has(.beranda-hero) .panel-rumah {
+  min-height: 0;
+  padding: 16px;
+}
+body:has(.beranda-hero) .panel-kepala h2 {
+  font-size: clamp(19px, 1.8vw, 23px);
+}
+body:has(.beranda-hero) .kosong {
+  min-height: 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+body:has(.beranda-hero) .kosong-judul {
+  font-size: 13px;
+}
+body:has(.beranda-hero) .kosong-ket,
+body:has(.beranda-hero) .kosong-siapa {
+  font-size: 10px;
+  line-height: 1.45;
+}
+body:has(.beranda-hero) .kegiatan-card img {
+  height: 118px;
+}
+body:has(.beranda-hero) .galeri-home a {
+  height: 104px;
+}
+
+/* Footer harus kembali jadi panorama, bukan blok hijau/hitam datar. */
+body:has(.beranda-hero) footer.kaki-waktu {
+  min-height: 390px;
+  padding-top: 70px;
+  padding-bottom: 30px;
+  background:
+    linear-gradient(180deg, rgba(3, 28, 24, .18), rgba(3, 25, 23, .78) 62%, rgba(2, 18, 18, .94)),
+    var(--gambar-kaki);
+  background-size: cover;
+  background-position: center 62%;
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) footer.kaki-waktu {
+  background:
+    linear-gradient(180deg, rgba(2, 15, 28, .18), rgba(2, 16, 27, .76) 58%, rgba(1, 11, 20, .94)),
+    var(--gambar-kaki);
+}
+body:has(.beranda-hero) .kaki-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+body:has(.beranda-hero) .kaki-logo-ikon {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+body:has(.beranda-hero) .kaki-logo-teks {
+  display: grid;
+  line-height: 1;
+}
+body:has(.beranda-hero) .kaki-logo-teks strong {
+  font-size: 14px;
+  letter-spacing: .04em;
+}
+body:has(.beranda-hero) .kaki-logo-teks b {
+  margin-top: 2px;
+  font-size: 18px;
+  letter-spacing: .14em;
+}
+body:has(.beranda-hero) .kaki-logo-teks small {
+  margin-top: 5px;
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+/* Hilangkan logo lama bila aturan CSS lama masih menargetkannya. */
+body:has(.beranda-hero) .kaki-logo {
+  display: none !important;
+}
+
+@media (max-width: 1020px) {
+  body:has(.beranda-hero) .merek-visual {
+    width: 168px;
+    min-width: 168px;
+  }
+  body:has(.beranda-hero) .beranda-copy {
+    width: min(520px, 66%);
+  }
+}
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) .situs {
+    width: calc(100% - 18px);
+    top: 9px;
+  }
+  body:has(.beranda-hero) .merek-visual {
+    width: 132px;
+    min-width: 132px;
+    gap: 6px;
+  }
+  body:has(.beranda-hero) .merek-logo-ikon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+  body:has(.beranda-hero) .merek-teks strong { font-size: 10px; }
+  body:has(.beranda-hero) .merek-teks b { font-size: 12px; }
+  body:has(.beranda-hero) .merek-teks small { font-size: 4.7px; }
+  body:has(.beranda-hero) .beranda-hero {
+    min-height: 560px;
+    background-position: 58% center;
+  }
+  body:has(.beranda-hero) .beranda-hero-dalam {
+    padding-top: 104px;
+  }
+  body:has(.beranda-hero) .beranda-copy {
+    width: calc(100% - 40px);
+  }
+  body:has(.beranda-hero) .beranda-copy h1 {
+    max-width: 10.5ch;
+    font-size: clamp(35px, 10vw, 42px);
+  }
+  body:has(.beranda-hero) .beranda-ringkas {
+    max-width: 32ch;
+    font-size: 12px;
+  }
+  body:has(.beranda-hero) .beranda-meta {
+    margin-top: 38px;
+  }
+  body:has(.beranda-hero) .pemilih-waktu {
+    top: 106px;
+    right: -11px;
+  }
+}

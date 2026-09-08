@@ -3,26 +3,29 @@
   import { kontenNilai } from "../keadaan/isi.svelte.js";
   import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import Belum from "./Belum.svelte";
+  import { gambarWaktuAbsolut } from "../inti/waktu.js";
   import { waktu } from "../keadaan/waktu.svelte.js";
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
 
-  // Pagi, siang, dan malam memakai panorama footer khusus. Untuk sore,
-  // gunakan panorama sore asli yang sama dengan hero — bukan menggandakan
-  // aset siang — sampai panorama footer sore tersimpan sebagai aset khusus.
-  const gambarKaki = $derived(
-    waktu.fase === "sore"
-      ? "./visual/waktu/hero-sore.webp"
-      : "./visual/waktu/footer-" + waktu.fase + ".webp"
-  );
+  // Pakai panorama fase yang sama dengan hero. Empat file ini ada di repo
+  // dan URL-nya dibuat absolut agar GitHub Pages tidak salah resolve.
+  const gambarKaki = $derived(gambarWaktuAbsolut(waktu.fase));
 </script>
 
 <footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
   <div class="wadah">
     <div class="kaki-petak">
       <div class="kaki-brand">
-        <img class="kaki-logo" src="./visual/brand/logo-full.webp" alt="RW 02 Sukatani — Guyub, Maju, Sejahtera" />
+        <div class="kaki-lockup" aria-label="RW 02 Sukatani — Guyub, Maju, Sejahtera">
+          <img class="kaki-logo-ikon" src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
+          <span class="kaki-logo-teks">
+            <strong>RW 02</strong>
+            <b>SUKATANI</b>
+            <small>GUYUB · MAJU · SEJAHTERA</small>
+          </span>
+        </div>
         <h4>Tentang situs ini</h4>
         <p>
           Situs informasi warga {namaRW}, Perum Permai Sukatani. Dikelola pengurus RW bersama kader warga.

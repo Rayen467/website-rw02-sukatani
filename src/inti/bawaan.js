@@ -346,9 +346,9 @@ export const GOR_NURANI_BAWAAN = {
  * tahu keadaan RW mana pun.
  */
 export const BERANDA_BAWAAN = {
-  judul: "Selamat datang di situs warga Permai Sukatani",
+  judul: "Rumah yang Menghubungkan Kita",
   ringkas:
-    "Tempat mencari cara mengurus surat, nomor pengurus, jadwal kegiatan, laporan kas, dan usaha tetangga sendiri. Ditulis sekali, bisa dibuka kapan saja.",
+    "Lingkungan yang nyaman, informasi dan layanan lebih mudah dalam satu tempat. Bersama membangun Permai Sukatani yang lebih baik.",
   alamat: "Kelurahan Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
 
   judulLayanan: "Layanan yang sering dipakai",
