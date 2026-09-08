@@ -16,6 +16,11 @@
 
 @media (max-width: 960px) {
   .deret-angka { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gor-hero { grid-template-columns: minmax(0, 1fr); }
+  .gor-ringkas { max-width: 620px; }
+  .gor-layanan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gor-booking-layout { grid-template-columns: minmax(0, 1fr); }
+  .gor-ringkasan-pinjam { position: static; }
   .usaha-rinci { grid-template-columns: 1fr; gap: 22px; }
   .sisi { position: static; }
   .kaki-petak { grid-template-columns: 1fr 1fr; }
@@ -32,6 +37,64 @@
 
 @media (max-width: 680px) {
   .situs-atas { flex-wrap: wrap; }
+
+  .gor-hero {
+    padding: 24px 18px;
+    gap: 24px;
+  }
+  .gor-hero h1 { font-size: clamp(34px, 12vw, 48px); }
+  .gor-ringkas { grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .gor-fakta { min-height: 82px; padding: 13px; }
+
+  .gor-nav {
+    top: 68px;
+    display: flex;
+    overflow-x: auto;
+    padding: 5px;
+    scrollbar-width: none;
+  }
+  .gor-nav::-webkit-scrollbar { display: none; }
+  .gor-nav button {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+
+  .gor-section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .gor-section-head > p { max-width: none; }
+
+  .gor-profil-grid,
+  .gor-tarif-grid,
+  .gor-steps,
+  .gor-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .gor-data-kunci > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .gor-layanan-grid { grid-template-columns: minmax(0, 1fr); }
+  .gor-layanan { min-height: auto; }
+  .gor-steps > div {
+    border-left: 0;
+    border-top: 1px solid var(--garis);
+    min-height: 88px;
+  }
+  .gor-steps > div:first-child { border-top: 0; }
+  .gor-tarif { min-height: 150px; }
+  .gor-form { padding: 17px 15px; }
+  .gor-span-2 { grid-column: auto; }
+  .gor-summary-row { grid-template-columns: 88px minmax(0, 1fr); }
+  .gor-kalender .kalender-kepala {
+    align-items: flex-start;
+    gap: 10px;
+    flex-direction: column;
+  }
   .cari-kotak { order: 3; width: 100%; margin-left: 0; }
   .burger { margin-left: auto; }
   .petak-2, .petak-3 { grid-template-columns: 1fr; }
