@@ -63,7 +63,7 @@
       beriTahu(
         fotoBesar.length
           ? hasil.gagal
-            ? "Album tersimpan. " + hasil.masuk + " foto berhasil, " + hasil.gagal + " foto gagal dikirim. Anda bisa menambahkan ulang foto yang gagal."
+            ? "Album tersimpan. " + hasil.masuk + " foto berhasil, " + hasil.gagal + " foto gagal dikirim dan tidak dihitung. Periksa album setelah jaringan stabil."
             : "Tersimpan dengan " + hasil.masuk + " foto."
           : "Kegiatan tercatat, belum ada fotonya."
       );
