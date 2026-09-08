@@ -24,7 +24,7 @@
     ...(pengurus()
       ? [{ label: sesi.peran === "petugas" ? "Dashboard Petugas" : "Dashboard Admin", alamat: "/kelola" }]
       : sesi.pengguna
-        ? [{ label: "Akun Saya", alamat: "/akun" }]
+        ? [{ label: "Dashboard Warga", alamat: "/akun" }]
         : [])
   ]);
 
