@@ -3,15 +3,27 @@
   import { kontenNilai } from "../keadaan/isi.svelte.js";
   import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import Belum from "./Belum.svelte";
-  import { gambarWaktuAbsolut } from "../inti/waktu.js";
   import { waktu } from "../keadaan/waktu.svelte.js";
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
 
-  // Pakai panorama fase yang sama dengan hero. Empat file ini ada di repo
-  // dan URL-nya dibuat absolut agar GitHub Pages tidak salah resolve.
-  const gambarKaki = $derived(gambarWaktuAbsolut(waktu.fase));
+  // Footer punya panorama khusus untuk pagi, siang, dan malam.
+  // Sore memakai panorama sore yang tersedia sampai aset footer-sore khusus ada.
+  // document.baseURI menjaga URL tetap benar saat situs berada di sub-path GitHub Pages.
+  const gambarKaki = $derived.by(() => {
+    const nama =
+      waktu.fase === "pagi"
+        ? "footer-pagi.webp"
+        : waktu.fase === "siang"
+          ? "footer-siang.webp"
+          : waktu.fase === "malam"
+            ? "footer-malam.webp"
+            : "hero-sore.webp";
+
+    if (typeof document === "undefined") return "./visual/waktu/" + nama;
+    return new URL("./visual/waktu/" + nama, document.baseURI).href;
+  });
 </script>
 
 <footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
