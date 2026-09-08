@@ -28,7 +28,11 @@
     for (let i = 0; i < mulai; i++) hasil.push(null);
     for (let d = 1; d <= jumlahHari; d++) {
       const iso = tahun + "-" + String(bulan + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
-      hasil.push({ hari: d, iso, dipakai: jadwal.filter((j) => j.id === iso) });
+      hasil.push({
+        hari: d,
+        iso,
+        dipakai: jadwal.filter((j) => (j.tanggal || String(j.id || "").split("--")[0]) === iso)
+      });
     }
     while (hasil.length % 7 !== 0) hasil.push(null);
     return hasil;
