@@ -107,6 +107,61 @@ export const BATAS_BERKAS_KB = Math.round((BATAS_BERKAS * 3) / 4 / 1024);
 /** Batas ukuran foto setelah dikecilkan, dihitung dari panjang teksnya. */
 const BATAS_FOTO = 700000;
 
+/* ---------------------------------------------------------------------------
+ *  UKURAN SIMPAN TIAP JENIS FOTO
+ *
+ *  Setiap angka di bawah TERIKAT pada satu kotak di CSS. Foto yang disimpan
+ *  jauh lebih besar daripada kotaknya tidak terlihat lebih tajam sedikit
+ *  pun -- peramban mengecilkannya lagi waktu menggambar -- tapi tetap
+ *  diunduh utuh oleh setiap warga.
+ *
+ *  Angka ini diukur, bukan ditebak. Satu foto asli 215 KB dijalankan lewat
+ *  kecilkanFoto() di bawah, lalu panjang teks base64-nya dihitung:
+ *
+ *      sisi   hasil tersimpan
+ *      128    6 KB
+ *      192    12 KB
+ *      256    19 KB
+ *      320    27 KB
+ *      400    47 KB
+ *      600    89 KB
+ *      1000   231 KB
+ *
+ *  Perhatikan lonjakannya: setiap kali sisinya dilipatduakan, ukurannya
+ *  naik sekitar empat kali. Karena itu selisih 256 dan 600 bukan "sedikit
+ *  lebih besar", tapi hampir lima kali lipat.
+ *
+ *  KALAU KOTAKNYA DI CSS DIUBAH, ANGKA DI SINI HARUS IKUT DIUBAH. Kalau
+ *  tidak, fotonya jadi buram, dan pengurus RW harus mengunggah ulang
+ *  semuanya satu per satu -- pekerjaan yang tidak bisa dibatalkan dari
+ *  sini. Nama kotaknya disebut di tiap baris supaya gampang dicari.
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Potret orang: sambutan Ketua RW dan struktur pengurus.
+ * Kotaknya `.orang .foto` di gaya/bagian.css, 64x64 piksel, tetap.
+ * 256 memberi ruang sampai layar 4x rapat, atau kalau kotaknya nanti
+ * diperbesar jadi 96px. Sebelumnya 600, yang berarti sembilan kali lebih
+ * besar daripada kotaknya dan 89 KB per orang -- terunduh setiap kunjungan
+ * karena struktur pengurus ikut dimuat di awal.
+ */
+export const SISI_POTRET = 256;
+
+/**
+ * Sampul di kartu katalog usaha dan album galeri.
+ * Kotaknya `.usaha-kartu .muka` dan `.galitem .muka`, selebar satu kolom
+ * dari tiga: (1120 - 40 tepi - 28 sela) / 3 = 351 piksel.
+ * Sampul ikut terunduh setiap kunjungan, jadi angkanya ditahan di 400.
+ */
+export const SISI_SAMPUL = 400;
+
+/**
+ * Foto ukuran penuh di halaman rincian, yang diambil hanya kalau
+ * halamannya dibuka. Kotaknya `.foto-deret div:first-child`, sekitar
+ * 600 piksel di layar lebar. 1000 memberi ruang untuk layar 2x rapat.
+ */
+export const SISI_FOTO_PENUH = 1000;
+
 /**
  * Mengecilkan foto di perangkat sebelum dikirim.
  *

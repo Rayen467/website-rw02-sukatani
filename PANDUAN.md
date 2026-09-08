@@ -120,16 +120,33 @@ Polanya: pisah keterangan dari isinya, dua koleksi, id yang sama.
 |---|---|
 | `berkas` — judul, ukuran, jenis | `berkas_isi` — berkas base64 |
 | `galeri` — judul album, sampul kecil | `galeri_foto` — foto ukuran penuh |
+| `usaha` — keterangan, sampul kecil | `usaha_foto` — foto ukuran penuh |
 
 Yang berat diambil lewat `ambilDokumen()` atau `ambilCocok()` waktu tombol
 ditekan, bukan lewat `muatKoleksi()`.
 
-> **Menghapus harus mengurus keduanya.** Lihat `hapusBerkas()` dan
-> `hapusAlbum()` di `src/sumber/data.js` — isinya dihapus DULUAN. Kalau
+> **Menghapus harus mengurus keduanya.** Lihat `hapusBerkas()`,
+> `hapusAlbum()`, dan `hapusUsaha()` di `src/sumber/data.js` — isinya dihapus DULUAN. Kalau
 > urutannya dibalik dan langkah kedua gagal, isi yang tertinggal tidak
 > muncul di layar mana pun tapi tetap memakan kuota, dan cuma bisa dibuang
 > lewat konsol Firebase. Karena itu baris berkas dan album memakai
 > `saatHapus` sendiri, bukan penghapus bawaan `BarisKelola`.
+
+### Mengubah ukuran kotak foto di CSS
+
+Ukuran foto yang **disimpan** ditulis di `src/inti/peramban.js` sebagai
+`SISI_POTRET`, `SISI_SAMPUL`, dan `SISI_FOTO_PENUH`. Tiap angka terikat pada
+satu kotak di CSS, dan namanya disebut di komentarnya.
+
+Kalau kotaknya diperbesar, angkanya harus ikut diperbesar — kalau tidak,
+fotonya jadi buram. Dan itu tidak bisa dibetulkan dari kode: foto yang
+terlanjur tersimpan kecil harus diunggah ulang satu per satu oleh pengurus
+RW.
+
+Kalau kotaknya diperkecil, angkanya sebaiknya ikut diperkecil. Foto yang
+jauh lebih besar daripada kotaknya tidak terlihat lebih tajam sedikit pun,
+tapi tetap diunduh utuh oleh setiap warga. Ukurannya naik sekitar empat
+kali lipat setiap sisinya dilipatduakan, jadi selisihnya cepat besar.
 
 ### Menambah kolom di halaman Kelola
 

@@ -382,3 +382,41 @@ export async function hapusAlbum(albumId) {
 export function hapusFotoAlbum(fotoId) {
   return deleteDoc(doc(db, KOLEKSI.GALERI_FOTO, fotoId));
 }
+
+/**
+ * Menyimpan satu usaha: keterangan dan sampul kecilnya di koleksi usaha,
+ * foto ukuran penuhnya di usaha_foto dengan id yang sama.
+ *
+ * Urutannya sama seperti simpanBerkas(): keterangan duluan, isi menyusul.
+ * Kalau langkah kedua gagal, yang tertinggal adalah usaha yang muncul di
+ * katalog dengan sampulnya, cuma tanpa foto besar di halaman rincian --
+ * masih berguna, dan pengurus bisa mengunggah ulang. Kebalikannya jauh
+ * lebih buruk: foto tanpa keterangan tidak muncul di layar mana pun tapi
+ * tetap memakan kuota, dan cuma bisa dibuang lewat konsol Firebase.
+ *
+ * fotoPenuh boleh kosong, dan artinya BUKAN "hapus fotonya" melainkan
+ * "tidak ada foto baru dipilih". Pengurus yang cuma membetulkan jam buka
+ * tidak perlu mengunggah ulang fotonya.
+ */
+export async function simpanUsaha(id, keterangan, fotoPenuh) {
+  await setDoc(doc(db, KOLEKSI.USAHA, id), bersihkan(keterangan));
+  if (fotoPenuh) {
+    await setDoc(doc(db, KOLEKSI.USAHA_FOTO, id), { foto: String(fotoPenuh) });
+  }
+}
+
+/**
+ * Menghapus usaha beserta foto ukuran penuhnya.
+ *
+ * Fotonya dihapus lebih dulu, dengan alasan yang sama seperti hapusBerkas().
+ * Usaha lama yang fotonya masih menempel di dokumennya sendiri tidak punya
+ * dokumen di usaha_foto; itu bukan kesalahan, jadi ditelan diam-diam.
+ */
+export async function hapusUsaha(id) {
+  try {
+    await deleteDoc(doc(db, KOLEKSI.USAHA_FOTO, id));
+  } catch (err) {
+    /* Usaha yang belum pernah punya foto besar memang tidak punya dokumennya. */
+  }
+  await deleteDoc(doc(db, KOLEKSI.USAHA, id));
+}

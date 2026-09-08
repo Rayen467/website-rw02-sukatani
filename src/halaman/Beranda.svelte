@@ -141,7 +141,7 @@
       {#each usaha as u}
         <a class="kartu usaha-kartu" href="#/umkm/{u.id}">
           <span class="muka">
-            {#if u.foto}<img class="gambar-penuh" src={u.foto} alt="" decoding="async" />{/if}
+            {#if u.sampul || u.foto}<img class="gambar-penuh" src={u.sampul || u.foto} alt="" decoding="async" />{/if}
           </span>
           <span class="badan">
             <span class="jenis">{u.katLabel || ""}</span>

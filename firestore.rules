@@ -353,7 +353,20 @@ service cloud.firestore {
     }
 
     // Katalog usaha yang sudah ditinjau dan ditampilkan.
+    // Isinya keterangan dan sampul kecil saja; foto ukuran penuhnya ada di
+    // usaha_foto di bawah.
     match /usaha/{slug} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // Foto usaha ukuran penuh, id-nya sama dengan dokumen di koleksi usaha.
+    // Dipisah bukan demi kerahasiaan -- fotonya memang diterbitkan untuk
+    // warga -- tapi supaya tidak ikut terunduh setiap situs dibuka. Koleksi
+    // usaha ikut dimuat di awal karena beranda memajang tiga usaha teratas
+    // dan halaman Cari mencari di dalamnya. Penjelasannya di catatan
+    // USAHA_FOTO, src/inti/nama.js.
+    match /usaha_foto/{slug} {
       allow read: if true;
       allow write: if petugas();
     }

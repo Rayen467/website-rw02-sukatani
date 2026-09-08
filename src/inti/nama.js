@@ -67,6 +67,18 @@ export const KOLEKSI = Object.freeze({
      semuanya ikut dimuat di awal itu 14 MB per pengunjung. */
   GALERI_FOTO: "galeri_foto",
 
+  /* Foto usaha ukuran penuh, id-nya sama dengan dokumen di koleksi "usaha".
+     Alasannya sama seperti dua di atas, tapi di sini paling terasa.
+     Koleksi "usaha" ikut diambil setiap situs dibuka -- beranda memang
+     memajang tiga usaha teratas, dan halaman Cari mencari di dalamnya --
+     jadi foto yang menempel di dokumennya ikut terbawa juga. Foto ukuran
+     penuh besarnya 231 KB. Dua puluh usaha berarti 4,6 MB ditarik setiap
+     orang membuka beranda, padahal foto sebesar itu cuma dipakai di satu
+     halaman rincian yang dibuka satu per satu. Yang tinggal di "usaha"
+     sekarang cuma sampul kecilnya; yang ini diambil saat rinciannya
+     dibuka. */
+  USAHA_FOTO: "usaha_foto",
+
   /* Pengaduan -- isi laporan terbuka, identitas pelapor terpisah */
   PENGADUAN: "pengaduan",
   PENGADUAN_KONTAK: "pengaduan_kontak",

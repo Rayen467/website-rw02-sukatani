@@ -2,10 +2,10 @@
   import { KOLEKSI, KONTEN } from "../../inti/nama.js";
   import { isi, konten, muatKoleksi, muatKonten } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { tambahIsi, simpanKonten, simpanDokumen } from "../../sumber/data.js";
+  import { tambahIsi, simpanKonten, simpanDokumen, simpanUsaha, hapusUsaha } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { keSlug } from "../../inti/format.js";
-  import { kecilkanFoto } from "../../inti/peramban.js";
+  import { kecilkanFoto, SISI_POTRET, SISI_SAMPUL, SISI_FOTO_PENUH } from "../../inti/peramban.js";
   import { JENIS_USAHA } from "../../inti/bawaan.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
@@ -53,7 +53,7 @@
 <section class="blok">
   <div class="kepala-bagian"><h2>Sambutan Ketua RW</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("sambutan", async () => {
-    const foto = (await bacaFoto(fotoSambutan, 600)) || sb.foto || "";
+    const foto = (await bacaFoto(fotoSambutan, SISI_POTRET)) || sb.foto || "";
     await simpanKonten(KONTEN.SAMBUTAN, { nama: sb.nama, teks: sb.teks, foto });
     muatKonten(KONTEN.SAMBUTAN);
   }); }}>
@@ -75,7 +75,7 @@
     Warga &amp; pengurus &mdash; menambah nama di sini tidak memberi hak apa pun, jadi aman untuk pengurus yang tidak punya akun.
   </div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("struktur", async () => {
-    const foto = await bacaFoto(fotoStruktur, 600);
+    const foto = await bacaFoto(fotoStruktur, SISI_POTRET);
     await tambahIsi(KOLEKSI.PENGURUS_TAMPIL, { ...st, foto });
     st = { jabatan: "", nama: "", kontak: "" };
     fotoStruktur = null;
@@ -215,11 +215,22 @@
   <div class="kepala-bagian"><h2>Katalog usaha warga</h2></div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("usaha", async () => {
     const label = (JENIS_USAHA.find((j) => j.nilai === uk.kat) || {}).label || "Lainnya";
-    /* Foto lama dipertahankan kalau tidak ada berkas baru dipilih, supaya
-       membetulkan jam buka saja tidak ikut menghapus fotonya. */
-    const lamaFoto = (isi.usaha || []).find((x) => x.id === (keSlug(uk.nama) || "usaha"));
-    const foto = (await bacaFoto(fotoUsaha, 1000)) || (lamaFoto && lamaFoto.foto) || "";
-    await simpanDokumen(KOLEKSI.USAHA, keSlug(uk.nama) || "usaha", { ...uk, katLabel: label, foto });
+    const idUsaha = keSlug(uk.nama) || "usaha";
+    /* Satu berkas yang dipilih pengurus disimpan dalam DUA ukuran, dan
+       keduanya berakhir di tempat yang berbeda. Sampul kecil menempel di
+       dokumen usaha, yang ikut terunduh setiap orang membuka situs. Yang
+       ukuran penuh disimpan sendiri di usaha_foto, dan cuma diambil kalau
+       halaman rinciannya dibuka. Alasannya di catatan USAHA_FOTO,
+       src/inti/nama.js.
+
+       Foto lama dipertahankan kalau tidak ada berkas baru dipilih, supaya
+       membetulkan jam buka saja tidak ikut menghapus fotonya. Kolom "foto"
+       ikut dibaca untuk usaha lama, yang sampulnya masih tersimpan di sana
+       sebelum pemisahan ini. */
+    const lama = (isi.usaha || []).find((x) => x.id === idUsaha);
+    const sampul = (await bacaFoto(fotoUsaha, SISI_SAMPUL)) || (lama && (lama.sampul || lama.foto)) || "";
+    const penuh = await bacaFoto(fotoUsaha, SISI_FOTO_PENUH);
+    await simpanUsaha(idUsaha, { ...uk, katLabel: label, sampul }, penuh);
     uk = { nama: "", kat: "siapsaji", ringkas: "", panjang: "", jam: "", wa: "" };
     fotoUsaha = null;
     muatKoleksi(KOLEKSI.USAHA);
@@ -233,7 +244,7 @@
     <div class="isian">
       <label for="uk-foto">Foto produk</label>
       <input id="uk-foto" type="file" accept="image/*" onchange={(e) => (fotoUsaha = e.target.files[0] || null)} />
-      <span class="petunjuk">Tampil di beranda dan halaman katalog. Kalau dikosongkan, foto yang lama tetap dipakai.</span>
+      <span class="petunjuk">Satu foto saja. Yang kecil tampil di beranda dan katalog, yang ukuran penuh di halaman usaha ini. Kalau dikosongkan, foto yang lama tetap dipakai.</span>
     </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "usaha"}>Tampilkan di katalog</button></div>
   </form>
@@ -243,6 +254,7 @@
       id={o.id}
       judul={o.nama} baris={[(o.katLabel || "") + " \u00B7 " + (o.jam || ""), o.ringkas || ""]}
       nilai={o}
+      saatHapus={hapusUsaha}
       kolom={[
         { nama: "nama", label: "Nama usaha" },
         { nama: "ringkas", label: "Keterangan singkat" },
