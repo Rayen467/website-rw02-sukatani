@@ -1,7 +1,5 @@
 <script>
-  import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { sesi, pengurus, namaPeran, wargaAktif } from "../keadaan/sesi.svelte.js";
-  import { keluar } from "../sumber/akun.js";
   import { pergi } from "../keadaan/rute.svelte.js";
 
   const label = $derived.by(() => {
@@ -12,13 +10,12 @@
     return nama + " · " + (wargaAktif() ? "Warga" : "Menunggu verifikasi");
   });
 
-  async function tekan() {
-    if (sesi.pengguna) {
-      await keluar();
-      beriTahu("Anda sudah keluar.");
-    } else {
+  function tekan() {
+    if (!sesi.pengguna) {
       pergi("/masuk");
+      return;
     }
+    pergi(pengurus() ? "/kelola" : "/akun");
   }
 </script>
 
@@ -27,7 +24,7 @@
   class:aktif={!!sesi.pengguna}
   type="button"
   onclick={tekan}
-  title={sesi.pengguna ? sesi.pengguna.email + ". Tekan untuk keluar." : "Masuk atau daftar akun warga"}
+  title={sesi.pengguna ? (pengurus() ? "Buka Dashboard Petugas/Pengelola" : "Buka Dashboard Warga") : "Masuk atau daftar akun warga"}
 >
   {#if sesi.pengguna}
     <svg viewBox="0 0 24 24" aria-hidden="true">
