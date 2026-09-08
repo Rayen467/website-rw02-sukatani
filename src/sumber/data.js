@@ -277,6 +277,14 @@ export async function setujuiReservasi(id, tanggal, fasilitas) {
   }
 }
 
+/** Menutup reservasi yang sudah selesai dipakai. Kunci kalender sengaja
+ * tetap dipertahankan sebagai catatan bahwa fasilitas memang terpakai pada
+ * tanggal tersebut; kalender bulan lampau tidak perlu dibuka kembali. */
+export function selesaikanReservasi(id) {
+  return updateDoc(doc(db, KOLEKSI.RESERVASI, id), { status: STATUS.SELESAI });
+}
+
+
 /**
  * Menyimpan satu berkas: keterangannya di koleksi berkas, isinya di
  * koleksi berkas_isi dengan id yang sama.
@@ -308,11 +316,11 @@ export async function simpanBerkas(keterangan, isiBerkas) {
  * tanpa membuka konsol Firebase.
  */
 export async function hapusBerkas(id) {
-  try {
-    await deleteDoc(doc(db, KOLEKSI.BERKAS_ISI, id));
-  } catch (err) {
-    /* Berkas yang cara masuknya tautan memang tidak punya dokumen isi. */
-  }
+  /* deleteDoc pada dokumen yang tidak ada tetap berhasil. Karena itu galat
+     di sini berarti galat sungguhan (izin/jaringan) dan TIDAK boleh ditelan:
+     kalau metadata dihapus sesudah isi gagal dihapus, isi base64 menjadi
+     sampah tersembunyi yang tak bisa dibersihkan dari layar Kelola. */
+  await deleteDoc(doc(db, KOLEKSI.BERKAS_ISI, id));
   await deleteDoc(doc(db, KOLEKSI.BERKAS, id));
 }
 
@@ -344,19 +352,34 @@ export async function ambilCocok(koleksi, kolom, nilai) {
 export async function simpanAlbum(keterangan, fotoList) {
   const acuan = await addDoc(collection(db, KOLEKSI.GALERI), {
     ...bersihkan(keterangan),
+    jumlahFoto: "0",
     dibuat: serverTimestamp()
   });
+
   let masuk = 0;
+  let gagal = 0;
+
+  /* Satu foto yang gagal tidak boleh membatalkan seluruh album. Di jaringan
+     HP yang tidak stabil, foto ke-8 bisa gagal setelah tujuh foto sebelumnya
+     sudah tersimpan. Dulu keadaan itu meninggalkan album setengah jadi dengan
+     jumlahFoto yang tetap mengaku delapan. Sekarang setiap foto dicoba sendiri
+     dan jumlah album selalu disamakan dengan yang benar-benar masuk. */
   for (let i = 0; i < fotoList.length; i++) {
-    await addDoc(collection(db, KOLEKSI.GALERI_FOTO), {
-      album: acuan.id,
-      foto: String(fotoList[i]),
-      urut: String(i),
-      dibuat: serverTimestamp()
-    });
-    masuk += 1;
+    try {
+      await addDoc(collection(db, KOLEKSI.GALERI_FOTO), {
+        album: acuan.id,
+        foto: String(fotoList[i]),
+        urut: String(i),
+        dibuat: serverTimestamp()
+      });
+      masuk += 1;
+    } catch (err) {
+      gagal += 1;
+    }
   }
-  return { id: acuan.id, masuk };
+
+  await updateDoc(acuan, { jumlahFoto: String(masuk) });
+  return { id: acuan.id, masuk, gagal };
 }
 
 /**
@@ -424,10 +447,9 @@ export async function simpanUsaha(id, keterangan, fotoPenuh) {
  * dokumen di usaha_foto; itu bukan kesalahan, jadi ditelan diam-diam.
  */
 export async function hapusUsaha(id) {
-  try {
-    await deleteDoc(doc(db, KOLEKSI.USAHA_FOTO, id));
-  } catch (err) {
-    /* Usaha yang belum pernah punya foto besar memang tidak punya dokumennya. */
-  }
+  /* Sama seperti berkas: tidak adanya dokumen foto bukan galat. Galat yang
+     benar-benar terjadi harus menghentikan proses supaya foto besar tidak
+     tertinggal tanpa katalog yang menunjuk kepadanya. */
+  await deleteDoc(doc(db, KOLEKSI.USAHA_FOTO, id));
   await deleteDoc(doc(db, KOLEKSI.USAHA, id));
 }
