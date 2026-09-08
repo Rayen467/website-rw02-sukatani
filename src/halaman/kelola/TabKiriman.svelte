@@ -26,7 +26,7 @@
   import { unduhTeks } from "../../inti/peramban.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { ubahStatus, ubahDokumen, setujuiReservasi, simpanDokumen } from "../../sumber/data.js";
+  import { ubahStatus, ubahDokumen, setujuiReservasi, selesaikanReservasi, simpanDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
@@ -143,6 +143,12 @@
       muatKoleksi(KOLEKSI.JADWAL);
     }, "Disetujui. Tanggal " + r.tanggal + " terkunci di kalender warga.");
 
+  const selesaiPinjam = (r) =>
+    jalan(r.id, async () => {
+      await selesaikanReservasi(r.id);
+      muatKoleksi(KOLEKSI.RESERVASI);
+    }, "Reservasi ditandai selesai. Riwayat warga ikut diperbarui.");
+
   const tolakPinjam = (r) =>
     jalan(r.id, async () => {
       /* Tanggalnya sengaja TIDAK dikunci di kalender. Menolak berarti
@@ -251,7 +257,7 @@
               id="pg-ct-{p.id}"
               value={isian(p, "catatan")}
               oninput={(e) => setIsian(p, "catatan", e.currentTarget.value)}
-              placeholder="Sudah diteruskan ke kantor desa, menunggu jadwal perbaikan"
+              placeholder="Sudah diteruskan ke kantor kelurahan, menunggu jadwal perbaikan"
             ></textarea>
             <span class="petunjuk">Terbaca warga di halaman Pengaduan. Tulis apa yang sudah dikerjakan, bukan janji.</span>
           </div>
@@ -327,6 +333,10 @@
           {#if (r.status || STATUS.BARU) === STATUS.BARU}
             <button class="tombol utama" type="button" onclick={() => setujuiPinjam(r)} disabled={sibuk === r.id}>Setujui &amp; kunci tanggal</button>
             <button class="tombol" type="button" onclick={() => tolakPinjam(r)} disabled={sibuk === r.id}>Tolak</button>
+          {:else if r.status === STATUS.PROSES}
+            <button class="tombol utama" type="button" onclick={() => selesaiPinjam(r)} disabled={sibuk === r.id}>
+              {sibuk === r.id ? "Menyimpan..." : "Tandai selesai"}
+            </button>
           {:else}
             <span class="keterangan">sudah diputuskan</span>
           {/if}
