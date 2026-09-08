@@ -1,25 +1,14 @@
 <script>
   import { KONTEN } from "../inti/nama.js";
-  import { keDaftar } from "../inti/format.js";
-  import { SAMBUTAN_BAWAAN, BERANDA_BAWAAN } from "../inti/bawaan.js";
+  import { BERANDA_BAWAAN } from "../inti/bawaan.js";
   import { isi, konten, kontenNilai } from "../keadaan/isi.svelte.js";
   import { waktu, FASE_WAKTU, pilihWaktu, kembaliOtomatis } from "../keadaan/waktu.svelte.js";
-  import Belum from "../komponen/Belum.svelte";
-  import TombolSalin from "../komponen/TombolSalin.svelte";
   import Kosong from "../komponen/Kosong.svelte";
 
-  const sambutan = $derived({
-    teks: kontenNilai(KONTEN.SAMBUTAN, "teks", SAMBUTAN_BAWAAN.teks),
-    nama: kontenNilai(KONTEN.SAMBUTAN, "nama", SAMBUTAN_BAWAAN.nama),
-    foto: kontenNilai(KONTEN.SAMBUTAN, "foto", "")
-  });
-
   const kabar = $derived((isi.pengumuman || []).slice(0, 3));
-  const penting = $derived((isi.pengumuman || []).find((x) => x.penting === "true") || null);
   const usaha = $derived((isi.usaha || []).slice(0, 4));
   const album = $derived((isi.galeri || []).slice(0, 4));
   const profil = $derived(konten(KONTEN.PROFIL) || {});
-  const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", "RW 02"));
 
   const t = $derived(
     Object.fromEntries(
@@ -27,11 +16,7 @@
     )
   );
 
-  const gambarHero = $derived(
-    waktu.fase === "malam"
-      ? "./visual/waktu/hero-malam.webp"
-      : "./visual/waktu/hero-pagi.webp"
-  );
+  const gambarHero = $derived("./visual/waktu/hero-" + waktu.fase + ".webp");
 
   const layanan = [
     {
@@ -297,52 +282,3 @@
     {/if}
   </section>
 </div>
-
-{#if penting}
-  <section class="blok">
-    <div class="catatan awas">
-      <p class="alis">Pengumuman penting</p>
-      <h3 style="margin:4px 0 8px"><a href="#/berita/{penting.id}">{penting.judul}</a></h3>
-      <p>{penting.ringkas || penting.isi || ""}</p>
-      <div class="baris-tombol" style="margin-top:10px">
-        <a class="tombol utama" href="#/berita/{penting.id}">Baca pengumuman</a>
-        <TombolSalin judul={penting.judul} jalur="/berita/{penting.id}" />
-      </div>
-    </div>
-  </section>
-{/if}
-
-<section class="blok zona">
-  <div class="darurat">
-    <span class="judul">Nomor penting</span>
-    <span class="butir"><span class="nama">Pos keamanan</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "posKeamanan")} /></span></span>
-    <span class="butir"><span class="nama">Ketua RW</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "ketuaRW")} /></span></span>
-    <span class="butir"><span class="nama">Transportasi warga</span><span class="nomor"><Belum nilai={kontenNilai(KONTEN.KONTAK, "ambulans")} /></span></span>
-  </div>
-</section>
-
-{#if sambutan.teks}
-  <section class="blok">
-    <div class="sambutan">
-      <p class="alis">Sambutan Ketua RW</p>
-      <div class="orang" class:tanpa-foto={!sambutan.foto}>
-        {#if sambutan.foto}
-          <span class="foto"><img class="gambar-penuh" src={sambutan.foto} alt="" decoding="async" /></span>
-        {/if}
-        <div>
-          {#each keDaftar(sambutan.teks) as alinea}
-            <p class="alinea">{alinea}</p>
-          {/each}
-          <p class="tanda-tangan"><b class="mono">Ketua {namaRW}{sambutan.nama ? " — " + sambutan.nama : ""}</b></p>
-        </div>
-      </div>
-    </div>
-  </section>
-{/if}
-
-<section class="blok">
-  <div class="petak petak-2">
-    <a class="kartu sunyi" href="#/kas"><p class="alis">Transparansi</p><h3>{t.judulKas}</h3><p>{t.teksKas}</p></a>
-    <a class="kartu sunyi" href="#/program"><p class="alis">Transparansi</p><h3>{t.judulProgram}</h3><p>{t.teksProgram}</p></a>
-  </div>
-</section>
