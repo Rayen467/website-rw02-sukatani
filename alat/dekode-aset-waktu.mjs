@@ -1,4 +1,4 @@
-import { readFile, readdir, mkdir, writeFile } from "node:fs/promises";
+import { access, readFile, readdir, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const akar = process.cwd();
@@ -28,24 +28,22 @@ for (const [kunci, bagian] of kelompok) {
   console.log(`aset waktu: ${kunci}.webp (${data.length} byte)`);
 }
 
+// Jangan diam-diam mengganti satu fase dengan fase lain. Kalau aset inti
+// hilang, build harus gagal sehingga masalah terlihat sebelum situs tayang.
+const wajib = [
+  "hero-pagi.webp",
+  "hero-siang.webp",
+  "hero-sore.webp",
+  "hero-malam.webp",
+  "footer-pagi.webp",
+  "footer-siang.webp",
+  "footer-malam.webp"
+];
 
-/* fallback build-safe: jangan biarkan mode waktu menampilkan background kosong
-   bila satu aset belum tersedia di repo. Akan otomatis tertimpa saat aset asli
-   dengan nama yang sama sudah ditambahkan. */
-const fallback = {
-  "hero-siang.webp": "hero-pagi.webp",
-  "hero-sore.webp": "hero-pagi.webp",
-  "footer-sore.webp": "footer-siang.webp"
-};
-
-for (const [tujuanNama, sumberNama] of Object.entries(fallback)) {
-  const tujuanPath = path.join(tujuan, tujuanNama);
+for (const nama of wajib) {
   try {
-    await readFile(tujuanPath);
+    await access(path.join(tujuan, nama));
   } catch {
-    const sumberPath = path.join(tujuan, sumberNama);
-    const data = await readFile(sumberPath);
-    await writeFile(tujuanPath, data);
-    console.log(`fallback aset waktu: ${tujuanNama} <- ${sumberNama}`);
+    throw new Error(`Aset waktu wajib hilang: public/visual/waktu/${nama}`);
   }
 }
