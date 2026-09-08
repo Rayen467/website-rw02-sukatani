@@ -39,6 +39,6 @@ export function bagianWaktu(tanggal = new Date()) {
     fase,
     label: labelFase(fase),
     jam: ambil("hour") + ":" + ambil("minute"),
-    tanggal: [ambil("weekday"), ambil("day"), ambil("month"), ambil("year")].filter(Boolean).join(", ").replace(", ,", ",")
+    tanggal: ambil("weekday") + ", " + ambil("day") + " " + ambil("month") + " " + ambil("year")
   };
 }
