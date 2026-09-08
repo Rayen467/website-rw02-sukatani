@@ -21,6 +21,20 @@
 
   $effect(() => { if (!form.fasilitas && fasilitas.length) form.fasilitas = fasilitas[0].nama; });
 
+  function tanggalJadwal(j) {
+    return j.tanggal || String(j.id || "").split("--")[0];
+  }
+
+  function fasilitasTerpakai(tanggal, nama) {
+    const target = String(nama || "").trim().toLowerCase();
+    return jadwal.some((j) =>
+      tanggalJadwal(j) === tanggal &&
+      String(j.fasilitas || "").trim().toLowerCase() === target
+    );
+  }
+
+  const bentrok = $derived(fasilitasTerpakai(form.tanggal, form.fasilitas));
+
   const sel = $derived.by(() => {
     const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
     const mulai = (new Date(tahun, bulan, 1).getDay() + 6) % 7;
@@ -49,6 +63,10 @@
     e.preventDefault();
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya permohonan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
     if (!sesi.terverifikasi) { beriTahu("Verifikasi email dulu sebelum mengajukan reservasi."); pergi("/akun"); return; }
+    if (fasilitasTerpakai(form.tanggal, form.fasilitas)) {
+      beriTahu(form.fasilitas + " sudah terpakai pada tanggal tersebut. Pilih tanggal atau fasilitas lain.");
+      return;
+    }
     mengirim = true;
     try {
       await kirimWarga(KOLEKSI.RESERVASI, form);
@@ -117,11 +135,15 @@
   <div class="kepala-bagian"><h2>Ajukan peminjaman</h2></div>
   <form class="isian-borang" onsubmit={kirim}>
     <div class="isian"><label for="r-fas">Fasilitas</label><select id="r-fas" bind:value={form.fasilitas}>{#each fasilitas as f}<option>{f.nama}</option>{/each}</select></div>
-    <div class="isian"><label for="r-tgl">Tanggal pemakaian</label><input id="r-tgl" type="date" bind:value={form.tanggal} required /></div>
+    <div class="isian">
+      <label for="r-tgl">Tanggal pemakaian</label>
+      <input id="r-tgl" type="date" min={tanggalHariIni()} bind:value={form.tanggal} required />
+      {#if bentrok}<span class="petunjuk"><b>{form.fasilitas} sudah terpakai pada tanggal ini.</b></span>{/if}
+    </div>
     <div class="isian"><label for="r-jam">Perkiraan waktu</label><input id="r-jam" bind:value={form.jam} placeholder="08.00 sampai 14.00" /></div>
     <div class="isian"><label for="r-acara">Keperluan</label><input id="r-acara" bind:value={form.acara} placeholder="Pengajian, rapat blok, acara keluarga" /></div>
     <div class="isian"><label for="r-nama">Nama peminjam</label><input id="r-nama" bind:value={form.nama} required /></div>
     <div class="isian"><label for="r-wa">Nomor WhatsApp</label><input id="r-wa" bind:value={form.wa} inputmode="tel" required /></div>
-    <div><button class="tombol utama" type="submit" disabled={mengirim}>{mengirim ? "Mengirim..." : "Kirim permohonan"}</button></div>
+    <div><button class="tombol utama" type="submit" disabled={mengirim || bentrok}>{mengirim ? "Mengirim..." : "Kirim permohonan"}</button></div>
   </form>
 </section>
