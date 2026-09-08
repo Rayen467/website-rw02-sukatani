@@ -28,8 +28,14 @@
    */
   import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { sesi } from "../keadaan/sesi.svelte.js";
-  import { masukEmail, masukGoogle, daftarAkun, lupaSandi, keluar } from "../sumber/akun.js";
+  import { masukEmail, masukGoogle, daftarAkun, lupaSandi, keluar, siapkanAkun } from "../sumber/akun.js";
   import { pesanRamah } from "../sumber/firebase.js";
+
+  /* Halaman ini pasti berurusan dengan akun, jadi pustaka masuk diminta
+     sekarang tanpa ditunggu. Kalau penanda "pernah masuk" hilang -- data
+     peramban dibersihkan, misalnya -- inilah yang memulihkan sesi lama.
+     Lihat catatan di kepala src/sumber/akun.js. */
+  siapkanAkun();
 
   let mode = $state("masuk");
   let sibuk = $state(false);

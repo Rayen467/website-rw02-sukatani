@@ -172,6 +172,28 @@ Jangan memanggil Firestore langsung dari halaman — pemeriksa akan menolak.
 
 ---
 
+### Menyentuh apa pun yang berhubungan dengan masuk
+
+Semua yang berasal dari `firebase/auth` ditulis di **satu** berkas:
+`src/sumber/pintu.js`. Jangan mengimpor `firebase/auth` dari berkas lain.
+
+Alasannya ukuran. Pustaka masuk besarnya sekitar 120 KB, seperempat dari
+seluruh kode situs, dan hampir semua yang dibuka warga tidak
+memerlukannya. Berkas itu diambil lewat `import()` dari
+`src/sumber/akun.js`, jadi ia tidak ikut berkas utama — tapi kalau ada
+berkas lain yang mengimpor `firebase/auth` dengan cara biasa, seluruh
+pustakanya kembali masuk ke berkas utama dan semua orang mengunduhnya
+lagi.
+
+Yang menentukan perlu-tidaknya diunduh adalah satu penanda di penyimpanan
+peramban, `pernah-masuk`, yang ditulis situs ini sendiri. Penjelasan
+lengkapnya, termasuk apa yang terjadi kalau penandanya hilang, ada di
+kepala `src/sumber/akun.js`.
+
+Halaman yang pasti berurusan dengan akun memanggil `siapkanAkun()`:
+Masuk, Akun Saya, dan Kelola. Kalau nanti ada halaman baru seperti itu,
+tambahkan panggilannya juga.
+
 ## 4. Cara menamai
 
 Semua nama dalam bahasa Indonesia, termasuk nama kelas CSS. Ini disengaja:
@@ -267,5 +289,6 @@ komputer sendiri, dijamin lolos juga di GitHub.
 | "Ditolak aturan keamanan" | `firestore.rules` sudah dipasang di konsol? |
 | Login ditolak terus | alamat situs sudah didaftarkan di Authorized domains? |
 | Menu Kelola tidak muncul | email sudah dipastikan lewat tautan? |
+| Terlihat keluar padahal tadi masuk | buka Masuk atau Akun Saya sekali; penanda `pernah-masuk` hilang |
 | Warna aneh di tampilan gelap | ada token yang cuma diisi di satu blok `token.css` |
 | Tampilan HP rusak | `layar-kecil.css` harus tetap paling bawah di `global.css` |

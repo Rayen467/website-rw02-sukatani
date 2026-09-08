@@ -4,9 +4,15 @@
   import { beriTahu } from "../keadaan/pesan.svelte.js";
   import { sesi, pengurus, namaPeran } from "../keadaan/sesi.svelte.js";
   import { RT_BAWAAN } from "../inti/bawaan.js";
-  import { kirimUlangVerifikasi, periksaVerifikasi } from "../sumber/akun.js";
+  import { kirimUlangVerifikasi, periksaVerifikasi, siapkanAkun } from "../sumber/akun.js";
   import { daftarWarga } from "../sumber/data.js";
   import { pesanRamah } from "../sumber/firebase.js";
+
+  /* Halaman ini pasti berurusan dengan akun, jadi pustaka masuk diminta
+     sekarang tanpa ditunggu. Kalau penanda "pernah masuk" hilang -- data
+     peramban dibersihkan, misalnya -- inilah yang memulihkan sesi lama.
+     Lihat catatan di kepala src/sumber/akun.js. */
+  siapkanAkun();
   import { pergi } from "../keadaan/rute.svelte.js";
   import Lencana from "../komponen/Lencana.svelte";
   import Kosong from "../komponen/Kosong.svelte";

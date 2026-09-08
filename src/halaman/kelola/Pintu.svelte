@@ -23,6 +23,13 @@
    * pemisahan di sini soal kuota warga, bukan soal keamanan.
    */
   import { sesi, pengurus } from "../../keadaan/sesi.svelte.js";
+  import { siapkanAkun } from "../../sumber/akun.js";
+
+  /* Halaman ini pasti berurusan dengan akun, jadi pustaka masuk diminta
+     sekarang tanpa ditunggu. Kalau penanda "pernah masuk" hilang -- data
+     peramban dibersihkan, misalnya -- inilah yang memulihkan sesi lama.
+     Lihat catatan di kepala src/sumber/akun.js. */
+  siapkanAkun();
 
   let Kelola = $state(null);
   let gagal = $state(false);

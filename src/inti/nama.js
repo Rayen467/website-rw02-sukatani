@@ -257,5 +257,13 @@ export const PERAN = Object.freeze({
 /** Kunci penyimpanan di peramban pengunjung. */
 export const KUNCI_SIMPAN = Object.freeze({
   TEMA: "tema",
-  ANTREAN: "antrean-"
+  ANTREAN: "antrean-",
+
+  /* Penanda bahwa peramban ini PERNAH dipakai masuk. Bukan bukti, dan
+     bukan pengaman: yang menentukan siapa yang masuk tetap Firebase, dan
+     yang menjaga data tetap aturan Firestore di server. Penanda ini cuma
+     dipakai untuk menjawab satu pertanyaan sebelum apa pun diunduh --
+     "perlukah pustaka masuk diambil sekarang?" Alasannya di catatan di
+     kepala src/sumber/akun.js. */
+  PERNAH_MASUK: "pernah-masuk"
 });

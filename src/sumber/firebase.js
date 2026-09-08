@@ -24,7 +24,6 @@
  */
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite";
 
 export const konfigurasi = {
@@ -36,10 +35,18 @@ export const konfigurasi = {
   appId: "1:320438118706:web:cadfa61b7afe4bf3afcf2b"
 };
 
-const app = initializeApp(konfigurasi);
+/**
+ * Sambungan dasar. Dipakai firestore di bawah, dan dipakai sumber/akun.js
+ * waktu ia memuat pustaka masuk -- yang sengaja TIDAK diimpor di sini.
+ *
+ * Pustaka masuk besarnya 123 KB, seperempat dari seluruh kode situs, dan
+ * sebagian besar warga tidak pernah memakainya: membaca pengumuman, kas,
+ * galeri, dan direktori usaha semuanya terbuka tanpa masuk. Kalau berkas
+ * ini mengimpornya, ia ikut ke berkas utama dan diunduh semua orang.
+ * Karena itu pemuatannya diserahkan ke akun.js, yang punya syaratnya.
+ */
+export const app = initializeApp(konfigurasi);
 
-export const auth = getAuth(app);
-auth.languageCode = "id";
 export const db = getFirestore(app);
 
 /* -------------------------------------------------------------------------

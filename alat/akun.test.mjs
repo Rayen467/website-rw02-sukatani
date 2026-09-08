@@ -17,20 +17,34 @@ const jeda = () => {
 async function muat(jalur, tiruan = {}) {
   const konteks = createContext({ console, $state: (nilai) => nilai });
   const modul = new Map();
+  const alamat = (spesifier, induk) => spesifier.startsWith('.')
+    ? resolve(dirname(induk.identifier), spesifier) : spesifier;
+  const penghubung = (spesifier, induk) => buat(alamat(spesifier, induk));
+
+  // sumber/akun.js memuat pustaka masuk lewat import() supaya tidak ikut
+  // berkas utama. Tanpa kait ini, modul tiruannya tidak pernah sampai ke
+  // sana dan seluruh berkas gagal dijalankan.
+  async function dinamis(spesifier, induk) {
+    const anak = await buat(alamat(spesifier, induk));
+    if (anak.status === 'unlinked') await anak.link(penghubung);
+    if (anak.status === 'linked') await anak.evaluate();
+    return anak;
+  }
+
   async function buat(id) {
     if (modul.has(id)) return modul.get(id);
     const nilai = tiruan[id];
+    const pilihan = { context: konteks, identifier: id, importModuleDynamically: dinamis };
     const m = nilai
       ? new SyntheticModule(Object.keys(nilai), function () {
           for (const [k, v] of Object.entries(nilai)) this.setExport(k, v);
-        }, { context: konteks, identifier: id })
-      : new SourceTextModule(await readFile(id, 'utf8'), { context: konteks, identifier: id });
+        }, pilihan)
+      : new SourceTextModule(await readFile(id, 'utf8'), pilihan);
     modul.set(id, m);
     return m;
   }
   const m = await buat(resolve(akar, jalur));
-  await m.link((specifier, induk) => buat(specifier.startsWith('.')
-    ? resolve(dirname(induk.identifier), specifier) : specifier));
+  await m.link(penghubung);
   await m.evaluate();
   return { ekspor: m.namespace, modul };
 }
@@ -153,20 +167,49 @@ test('peran asing dan akun belum terverifikasi tidak membuka menu Kelola', async
   assert.equal(l.pengurus(), false);
 });
 
-async function sumberAkun(ganti = {}) {
-  const auth = { currentUser: akun('uji', false) };
+/**
+ * Menjalankan sumber/akun.js dengan pustaka masuk tiruan.
+ *
+ * `pernahMasuk` menirukan penanda di penyimpanan peramban: itu yang
+ * menentukan apakah pustaka masuk diunduh waktu situs menyala. `unduhan`
+ * menghitung berapa kali pustakanya benar-benar diambil, supaya bisa
+ * dipastikan warga yang belum pernah masuk tidak mengunduhnya sama sekali.
+ */
+async function sumberAkun(ganti = {}, pernahMasuk = true) {
+  const auth = { currentUser: akun('uji', false), languageCode: null };
+  const unduhan = { jumlah: 0 };
   const firebase = Object.fromEntries([
     'GoogleAuthProvider', 'signInWithPopup', 'signInWithEmailAndPassword',
     'createUserWithEmailAndPassword', 'sendEmailVerification', 'sendPasswordResetEmail',
     'updateProfile', 'signOut', 'onIdTokenChanged', 'reload', 'getIdToken'
   ].map((n) => [n, async () => {}]));
+  firebase.getAuth = () => { unduhan.jumlah += 1; return auth; };
   Object.assign(firebase, ganti);
+
+  const kotak = new Map();
+  if (pernahMasuk) kotak.set('pernah-masuk', '1');
+  const simpanan = {
+    baca: (k) => (kotak.has(k) ? kotak.get(k) : null),
+    tulis: (k, v) => kotak.set(k, v),
+    hapus: (k) => kotak.delete(k)
+  };
+
+  /* Yang ditiru cuma pustaka Firebase-nya. sumber/pintu.js sengaja
+     dijalankan apa adanya, karena di sanalah aturan main akun berada --
+     urutan reload lalu token, pembedaan galat pendaftaran, dan pemasangan
+     pemantauan. */
   const hasil = await muat('src/sumber/akun.js', {
     'firebase/auth': firebase,
-    [path('src/sumber/firebase.js')]: { auth }
+    [path('src/sumber/firebase.js')]: { app: {} },
+    [path('src/inti/peramban.js')]: { simpanan }
   });
-  return { ...hasil.ekspor, auth };
+  return { ...hasil.ekspor, auth, kotak, unduhan };
 }
+
+/* Pustaka masuk diambil lewat import(), jadi pemantauannya baru terpasang
+   beberapa putaran kemudian. Yang menunggu tanpa pegangan memakai ini;
+   yang bisa memegang janjinya lebih baik menunggu siapkanAkun(). */
+const tungguPintu = () => new Promise((r) => setTimeout(r, 30));
 
 test('cek verifikasi memuat ulang akun sebelum memperbarui token server', async () => {
   const urutan = [];
@@ -179,13 +222,19 @@ test('cek verifikasi memuat ulang akun sebelum memperbarui token server', async 
 });
 
 test('cek verifikasi tidak melanjutkan token akun yang sudah diganti', async () => {
-  const tunggu = jeda();
   let token = false;
-  const l = await sumberAkun({ reload: () => tunggu.janji, getIdToken: async () => { token = true; } });
-  const proses = l.periksaVerifikasi();
-  l.auth.currentUser = akun('baru');
-  tunggu.selesai();
-  assert.equal(await proses, false);
+  let bertukar = () => {};
+  /* Akunnya berganti TEPAT saat reload() sedang berjalan. Itu keadaan yang
+     dijaga: token yang telanjur diminta tidak boleh dipasang ke akun lain.
+     Pergantiannya ditaruh di dalam reload(), bukan di antara dua baris di
+     sini, supaya yang diuji tetap hal itu dan bukan lomba dengan
+     pengunduhan pustaka masuk. */
+  const l = await sumberAkun({
+    reload: async () => { bertukar(); },
+    getIdToken: async () => { token = true; }
+  });
+  bertukar = () => { l.auth.currentUser = akun('baru'); };
+  assert.equal(await l.periksaVerifikasi(), false);
   assert.equal(token, false);
 });
 
@@ -213,6 +262,7 @@ test('penyegaran token rutin tidak mengulang sesi, perubahan verifikasi tetap di
   const l = await sumberAkun({ onIdTokenChanged: (auth, fn) => { pantau = fn; return () => {}; } });
   let jumlah = 0;
   l.pantauMasuk(() => { jumlah += 1; });
+  await tungguPintu();
   await pantau(l.auth.currentUser);
   await pantau(l.auth.currentUser);
   assert.equal(jumlah, 1);
@@ -221,4 +271,83 @@ test('penyegaran token rutin tidak mengulang sesi, perubahan verifikasi tetap di
   assert.equal(jumlah, 2);
   await pantau(null);
   assert.equal(jumlah, 3);
+});
+
+/* ---------------------------------------------------------------------------
+ *  Pustaka masuk sebagai unduhan bersyarat
+ *
+ *  Bagian ini menjaga satu janji: warga yang belum pernah masuk tidak
+ *  mengunduh 123 KB pustaka masuk, DAN pengurus yang sudah masuk tidak
+ *  pernah terlihat keluar gara-gara itu. Keduanya tidak kelihatan di layar,
+ *  jadi tidak akan ketahuan dengan mencoba sendiri.
+ * ------------------------------------------------------------------------- */
+
+test('peramban yang belum pernah dipakai masuk tidak mengunduh pustaka masuk', async () => {
+  const l = await sumberAkun({}, false);
+  const dilihat = [];
+  l.pantauMasuk((u) => dilihat.push(u));
+
+  // Jawabannya diberikan seketika, tanpa menunggu jaringan sama sekali.
+  assert.deepEqual(dilihat, [null]);
+  assert.equal(l.unduhan.jumlah, 0);
+  assert.equal(l.penggunaSekarang(), null);
+
+  await tungguPintu();
+  assert.equal(l.unduhan.jumlah, 0, 'pustaka masuk tetap tidak boleh diambil');
+});
+
+test('peramban yang pernah dipakai masuk mengunduh pustakanya dan memasang pemantauan', async () => {
+  let pantau;
+  const l = await sumberAkun({ onIdTokenChanged: (auth, fn) => { pantau = fn; return () => {}; } }, true);
+  l.pantauMasuk(() => {});
+  await tungguPintu();
+  assert.equal(l.unduhan.jumlah, 1);
+  assert.equal(typeof pantau, 'function');
+});
+
+test('penanda dipasang saat masuk dan dicabut saat keluar', async () => {
+  let pantau;
+  const l = await sumberAkun({ onIdTokenChanged: (auth, fn) => { pantau = fn; return () => {}; } }, false);
+  l.pantauMasuk(() => {});
+  assert.equal(l.kotak.has('pernah-masuk'), false);
+
+  // Warga menekan tombol masuk: pustakanya diambil sekarang juga.
+  await l.siapkanAkun();
+  assert.equal(l.unduhan.jumlah, 1);
+
+  await pantau(akun('warga'));
+  assert.equal(l.kotak.get('pernah-masuk'), '1', 'kunjungan berikutnya harus memulihkan sesinya');
+
+  await pantau(null);
+  assert.equal(l.kotak.has('pernah-masuk'), false, 'setelah keluar tidak perlu diunduh lagi');
+});
+
+test('halaman berakun memulihkan sesi walau penandanya hilang', async () => {
+  // Data peramban dibersihkan sebagian: sesi Firebase masih ada, penanda
+  // kita hilang. Membuka Masuk, Akun Saya, atau Kelola harus tetap
+  // mengembalikan orangnya tanpa mengetik apa pun.
+  let pantau;
+  const l = await sumberAkun({ onIdTokenChanged: (auth, fn) => { pantau = fn; return () => {}; } }, false);
+  const dilihat = [];
+  l.pantauMasuk((u) => dilihat.push(u && u.uid));
+  assert.deepEqual(dilihat, [null]);
+
+  await l.siapkanAkun();
+  await pantau(akun('pengurus'));
+
+  assert.deepEqual(dilihat, [null, 'pengurus']);
+  assert.equal(l.kotak.get('pernah-masuk'), '1');
+});
+
+test('berhenti memantau sebelum pustakanya selesai diunduh tidak memasang apa pun', async () => {
+  let terpasang = 0;
+  let dilepas = 0;
+  const l = await sumberAkun({
+    onIdTokenChanged: () => { terpasang += 1; return () => { dilepas += 1; }; }
+  }, true);
+  const berhenti = l.pantauMasuk(() => {});
+  berhenti();
+  await tungguPintu();
+  assert.equal(terpasang, 0, 'pemantauan tidak boleh terpasang setelah dilepas');
+  assert.equal(dilepas, 0);
 });
