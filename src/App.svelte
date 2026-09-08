@@ -11,6 +11,7 @@
   import { mulaiPantauan } from "./keadaan/mulai.js";
   import { pengurus, sesi } from "./keadaan/sesi.svelte.js";
   import { terapkanGaya } from "./keadaan/tampilan.js";
+  import { mulaiWaktu } from "./keadaan/waktu.svelte.js";
 
   import Kepala from "./komponen/Kepala.svelte";
   import Kaki from "./komponen/Kaki.svelte";
@@ -52,7 +53,14 @@
   onMount(() => {
     terapkanGaya(null);
     mulaiRute();
-    return mulaiPantauan();
+
+    const berhentiWaktu = mulaiWaktu();
+    const berhentiPantauan = mulaiPantauan();
+
+    return () => {
+      berhentiWaktu?.();
+      berhentiPantauan?.();
+    };
   });
 
   /** Halaman satu bagian, misalnya /berita. */
