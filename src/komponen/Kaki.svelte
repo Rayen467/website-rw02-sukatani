@@ -7,11 +7,7 @@
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
-  const gambarKaki = $derived(
-    waktu.fase === "malam"
-      ? "./visual/waktu/hero-malam.webp"
-      : "./visual/waktu/hero-pagi.webp"
-  );
+  const gambarKaki = $derived("./visual/waktu/footer-" + waktu.fase + ".webp");
 </script>
 
 <footer class="tanpa-cetak kaki-waktu" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
