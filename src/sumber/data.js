@@ -43,6 +43,7 @@ import {
 import { db } from "./firebase.js";
 import { penggunaSekarang } from "./akun.js";
 import { KOLEKSI, TANPA_URUTAN, STATUS, PERAN } from "../inti/nama.js";
+import { keSlug } from "../inti/format.js";
 
 /* =========================================================================
  *  MEMBACA
@@ -259,8 +260,18 @@ export function pilihPolling(pollId, nomor) {
 export async function setujuiReservasi(id, tanggal, fasilitas) {
   await updateDoc(doc(db, KOLEKSI.RESERVASI, id), { status: STATUS.PROSES });
   if (tanggal) {
-    await setDoc(doc(db, KOLEKSI.JADWAL, tanggal), {
-      fasilitas: String(fasilitas || ""),
+    /*
+     * Kunci kalender dibuat per TANGGAL + FASILITAS, bukan tanggal saja.
+     * Dengan begitu GOR Nurani dipakai pada hari tertentu tidak ikut
+     * mengunci tenda, kursi, atau fasilitas RW lain pada tanggal yang sama.
+     * Dokumen jadwal lama yang id-nya hanya tanggal tetap kompatibel karena
+     * halaman kalender membaca kolom tanggal bila ada dan jatuh ke id lama.
+     */
+    const nama = String(fasilitas || "");
+    const kunci = tanggal + "--" + (keSlug(nama) || "fasilitas");
+    await setDoc(doc(db, KOLEKSI.JADWAL, kunci), {
+      tanggal: String(tanggal),
+      fasilitas: nama,
       dibuat: serverTimestamp()
     });
   }
