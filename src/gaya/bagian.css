@@ -946,3 +946,113 @@
   line-height: 1.55;
 }
 .gor-ringkasan-pinjam .catatan { margin-top: 14px; font-size: 12px; }
+
+
+/* =======================================================================
+ * DASHBOARD PETUGAS
+ * ======================================================================= */
+.petugas-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 24px;
+  padding: clamp(24px, 4vw, 38px);
+  border: 1px solid var(--garis);
+  border-radius: 7px;
+  background: linear-gradient(145deg, var(--permukaan), var(--permukaan-2));
+}
+.petugas-hero h1 {
+  margin: 5px 0 10px;
+  font-size: clamp(32px, 4.5vw, 48px);
+  line-height: 1;
+}
+.petugas-hero > div:first-child > p:last-child {
+  max-width: 680px;
+  color: var(--tinta-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.petugas-identitas {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px;
+  border: 1px solid var(--garis);
+  border-radius: 6px;
+  background: var(--permukaan);
+}
+.petugas-identitas strong {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.petugas-identitas > span:last-child {
+  color: var(--tinta-3);
+  font-size: 12px;
+}
+
+.petugas-ringkasan {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.petugas-ringkasan .angka {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .14s, transform .14s;
+}
+.petugas-ringkasan .angka:hover {
+  border-color: var(--brand);
+  transform: translateY(-1px);
+}
+.petugas-ringkasan .angka .besar {
+  color: var(--tinta);
+}
+
+.petugas-antrean {
+  border-top: 1px solid var(--garis);
+}
+.petugas-tugas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--garis);
+  color: inherit;
+  text-decoration: none;
+}
+.petugas-tugas:hover h3 { color: var(--brand); }
+.petugas-tugas h3 {
+  margin: 5px 0 3px;
+  font-size: 15px;
+}
+.petugas-tugas p {
+  color: var(--tinta-3);
+  font-size: 12.5px;
+}
+.petugas-menu .kartu {
+  min-height: 205px;
+}
+.petugas-menu .kartu h3 {
+  margin: 7px 0 8px;
+  font-size: 18px;
+}
+.petugas-menu .kartu p:not(.alis) {
+  color: var(--tinta-2);
+  font-size: 13.5px;
+}
+.petugas-menu .kartu .tombol {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Tab Kelola sekarang berupa tautan agar alamat #/kelola/... selalu
+   mencerminkan posisi petugas dan bisa ditautkan dari dashboard. */
+.pilihan-baris .pilihan {
+  text-decoration: none;
+}
+.pilihan-baris .pilihan.aktif,
+.pilihan-baris .pilihan[aria-current="page"] {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+}
