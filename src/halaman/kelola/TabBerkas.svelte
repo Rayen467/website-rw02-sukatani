@@ -73,9 +73,17 @@
       beriTahu("Tersimpan.");
       muatKoleksi(KOLEKSI.BERKAS);
     } catch (err) {
-      /* Galat dari bacaBerkas sudah berbentuk kalimat siap baca, jadi
-         pesanRamah() hanya dipakai untuk galat yang datang dari Firebase. */
-      beriTahu(err.code ? pesanRamah(err) : err.message);
+      /* Metadata dibuat lebih dulu daripada isi berkas. Kalau jaringan putus
+         di langkah kedua, judulnya mungkin sudah tersimpan. Segarkan daftar
+         supaya Petugas bisa melihat keadaan sebenarnya dan menghapus/retry,
+         bukan mengira tidak ada apa-apa yang masuk. */
+      muatKoleksi(KOLEKSI.BERKAS);
+      const dasar = err.code ? pesanRamah(err) : err.message;
+      beriTahu(
+        b.cara === "unggah"
+          ? dasar + " Daftar dokumen disegarkan; bila judul muncul tanpa berkas, hapus lalu unggah ulang."
+          : dasar
+      );
     }
     sibuk = false;
   }
