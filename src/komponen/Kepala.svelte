@@ -71,7 +71,9 @@
   <div class="wadah">
     <div class="situs-atas">
       <a class="merek" href="#/">
-        <span class="lambang" aria-hidden="true">{ident.lambang}</span>
+        <span class="lambang lambang-logo">
+          <img src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
+        </span>
         <span>
           <span class="nama">{ident.namaSitus}</span>
           <span class="sub">{ident.namaRW} · {ident.wilayah}</span>
