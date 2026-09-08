@@ -76,7 +76,7 @@ export const JENIS_SURAT_BAWAAN = [
 ];
 
 export const FASILITAS_BAWAAN = [
-  { id: "gor-nurani", nama: "GOR Nurani", kapasitas: "", ket: "GOR mini RW 02 untuk kegiatan olahraga dan sosial. Pemakaian menunggu persetujuan pengelola; tarif bila ada ditetapkan pengelola." },
+  { id: "gor-nurani", nama: "GOR Nurani", kapasitas: "", ket: "GOR mini RW 02 untuk olahraga, kegiatan sosial, dan hajatan. Jadwal tetap warga dan tarif hajatan mengikuti AD/ART pengelolaan GOR." },
   { id: "balai", nama: "Balai Warga", kapasitas: "80 orang", ket: "Termasuk kursi dan listrik. Kebersihan dikembalikan seperti semula." },
   { id: "tenda", nama: "Tenda dan Terpal", kapasitas: "2 unit", ket: "Pemasangan dibantu petugas, dijadwalkan sehari sebelumnya." },
   { id: "kursi", nama: "Kursi Plastik", kapasitas: "120 buah", ket: "Diambil dan dikembalikan sendiri oleh peminjam." },
@@ -168,10 +168,26 @@ export const MAJELIS_TAKLIM_BAWAAN = {
   tanggalSkt: "5 Agustus 2026",
   masaBerlaku: "5 tahun sejak tanggal diterbitkan",
   ketua: "Eti Suhaeti",
+  sekretaris: "Sri Maryanti",
   tahunBerdiri: "2026",
   tanggalBerdiri: "18 Juli 2026",
   periode: "2026–2029",
   alamat: "Jl. Boulevard RW 02, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, Banten",
+  nomorPermohonan: "01/MT-AI/VII/2026",
+  tanggalPermohonan: "20 Juli 2026",
+  jumlahAnggota: "250 orang",
+  tujuanPendaftaran: "Permohonan pendaftaran Majelis Taklim Al-Ikhlas RW 02 PSP kepada Kantor Urusan Agama Kecamatan Rajeg agar terdaftar dan memperoleh Surat Keterangan Terdaftar sesuai ketentuan yang berlaku.",
+  lampiranPendaftaran: [
+    "SK Susunan Pengurus Majelis Taklim dari Ketua RW 02 Sukatani.",
+    "Fotokopi KTP pengurus.",
+    "AD/ART Majelis Taklim Al-Ikhlas.",
+    "Foto lokasi Majelis Taklim Al-Ikhlas RW 02.",
+    "Daftar hadir pengajian dan pengukuhan pengurus Majelis Taklim Al-Ikhlas RW 02."
+  ].join("\n"),
+  dokumenRwNomor: "04/SK/RW02/VII/2026",
+  dokumenRwJudul: "Pengangkatan Pengurus Majelis Taklim Ibu-Ibu RW 02 Perum Pondok Sukatani Permai Masa Bakti 2024–2027",
+  dokumenRwDasar: "Dokumen menyebut hasil Musyawarah Warga dan Jamaah Majelis Taklim Ibu-Ibu RW 02 pada 13 Juni 2026.",
+  dokumenRwCatatan: "SK RW tersebut membahas pengurus PAW Majelis Taklim Ibu-Ibu RW 02 dengan judul dan periode berbeda dari SKT/AD/ART Al-Ikhlas. Karena itu, dokumen ini disimpan sebagai arsip pendukung dan tidak dipakai untuk mengganti periode Al-Ikhlas 2026–2029.",
   landasan: "Islam berdasarkan Al-Qur'an dan As-Sunnah serta berpedoman pada peraturan perundang-undangan yang berlaku di Negara Kesatuan Republik Indonesia.",
   visi: "Terwujudnya masyarakat yang beriman, bertakwa, berilmu, berakhlak mulia, serta menjunjung tinggi persatuan dan kerukunan.",
   misi: [
@@ -234,9 +250,85 @@ export const GOR_NURANI_BAWAAN = {
     "Menambah keahlian di bidang olahraga bulu tangkis.",
     "Menjadikan GOR untuk kegiatan sosial."
   ].join("\n"),
-  pemanfaatan: "GOR Nurani dapat disewakan kepada pihak lain dengan tarif yang ditetapkan oleh pengelola. Hasil pemanfaatannya dikembalikan sebesar-besarnya untuk kepentingan dan kesejahteraan warga RW 02. Dalam kegiatannya, selain mempertimbangkan usaha atau keuntungan, GOR juga mempertimbangkan kemanfaatan bagi masyarakat.",
-  maknaLogo: "Dokumen AD menjelaskan unsur shuttlecock putih sebagai lambang kebersihan hati, bara api sebagai semangat yang tidak pernah berhenti, serta warna coklat sebagai lambang cinta, keandalan, dan kesejahteraan."
+  pemanfaatan: "GOR Nurani dapat disewakan kepada pihak lain dengan tarif yang ditetapkan oleh pengelola dan hasil pemanfaatannya dikembalikan sebesar-besarnya untuk kepentingan serta kesejahteraan warga RW 02. Dalam kegiatannya, selain mempertimbangkan usaha atau keuntungan, GOR juga mempertimbangkan kemanfaatan bagi masyarakat.",
+  maknaLogo: "Dokumen AD menjelaskan unsur shuttlecock putih sebagai lambang kebersihan hati, bara api sebagai semangat yang tidak pernah berhenti, serta warna coklat sebagai lambang cinta, keandalan, dan kesejahteraan.",
+  strukturPengurus: [
+    "Ketua GOR.",
+    "Pelaksana Harian.",
+    "Bendahara."
+  ].join("\n"),
+  ketentuanPengurus: "Ketua, Bendahara, dan Pelaksana Harian dipilih dari warga RW 02 melalui rapat pengurus RT dan/atau pengurus RW 02. Jabatan tersebut bukan dijabat Ketua RW 02. Pengurus diprioritaskan dari warga RT 01/02 dan masa kepengurusannya mengikuti periode kepengurusan RW.",
+  tugasKetua: [
+    "Mengatur dan mengontrol seluruh kegiatan GOR.",
+    "Membuat rencana dan kebijakan pengelolaan GOR.",
+    "Bertanggung jawab atas seluruh kegiatan GOR.",
+    "Kebijakan strategis, terutama yang berkaitan dengan keuangan, ditandatangani pengurus GOR dan disetujui Ketua RW 02.",
+    "Menjaga suasana kondusif di internal maupun eksternal RW 02.",
+    "Membuat laporan pertanggungjawaban pada akhir masa kepengurusan."
+  ].join("\n"),
+  tugasPelaksana: [
+    "Bertanggung jawab atas kebersihan GOR.",
+    "Mendata penyewa GOR, baik anggota maupun bukan anggota.",
+    "Menjaga dan merawat fasilitas GOR.",
+    "Membuat laporan kegiatan harian GOR.",
+    "Membayar listrik dan PAM."
+  ].join("\n"),
+  tugasBendahara: [
+    "Menyimpan keuangan GOR dengan baik.",
+    "Membuat laporan keuangan setiap bulan.",
+    "Mengeluarkan dana kegiatan berdasarkan instruksi Ketua GOR dan persetujuan Ketua RW 02.",
+    "Menyediakan dana taktis yang sewaktu-waktu dapat digunakan untuk kegiatan organisasi."
+  ].join("\n"),
+  alokasiProfit: [
+    "Pelaksana Harian: 20% dari keuntungan bersih GOR setelah pembayaran listrik dan PAM.",
+    "Bendahara: honorarium Rp50.000 per bulan sebelum perhitungan keuntungan bersih.",
+    "Kas RW 02: 20% dari keuntungan bersih setelah pembayaran listrik dan PAM.",
+    "Kas RT 01/02: 45% dari keuntungan bersih setelah pembayaran listrik dan PAM.",
+    "Biaya perawatan GOR: 15% dari keuntungan bersih setelah pembayaran listrik dan PAM."
+  ].join("\n"),
+  batasDistribusiProfit: "Alokasi sebagaimana ketentuan pembagian profit diberikan paling lambat setiap tanggal 10.",
+  jadwalTetap: [
+    "Sabtu 08.00–12.00: senam ibu-ibu RW 02.",
+    "Sabtu 12.00–14.00: penggunaan untuk warga RT 01/02.",
+    "Sabtu 16.00–18.00: diklat/latihan anak-anak RW 02.",
+    "Kamis 19.00–23.00: kegiatan bulu tangkis bapak-bapak/ibu-ibu warga RW 02 PSP."
+  ].join("\n"),
+  aturanBadminton: [
+    "Peserta baru mendaftarkan diri kepada pengurus harian GOR.",
+    "Pengurus mendata pengguna dan membedakan anggota serta bukan anggota.",
+    "Lapangan disiapkan oleh pengurus harian paling lambat 30 menit sebelum jadwal."
+  ].join("\n"),
+  aturanHajatan: [
+    "Penyewa untuk hajatan wajib mendaftarkan diri minimal 1 bulan sebelum acara.",
+    "Hajatan hari Sabtu menggunakan waktu persiapan Kamis, Jumat, dan Sabtu; pada Sabtu pukul 14.00 kondisi GOR harus sudah bersih kembali.",
+    "Hajatan hari Minggu menggunakan waktu persiapan Jumat, Sabtu, dan Minggu sampai pukul 14.00.",
+    "Hajatan di luar hari tersebut dibahas langsung dengan pengurus dan bersifat situasional.",
+    "Acara khusus dimusyawarahkan dengan pengurus GOR."
+  ].join("\n"),
+  tarifRt0102: "Rp1.000.000",
+  komposisiRt0102: "Rp500.000 biaya kebersihan; Rp300.000 kas RT 01/02; Rp200.000 kas RW 02.",
+  tarifRw02Lain: "Rp1.500.000",
+  komposisiRw02Lain: "Rp500.000 biaya kebersihan; Rp500.000 kas RT 01/02; Rp500.000 kas RW 02.",
+  tarifLuarRw02: "Rp2.500.000",
+  komposisiLuarRw02: "Rp500.000 biaya kebersihan; Rp1.000.000 kas RT 01/02; Rp1.000.000 kas RW 02.",
+  tarifCatatan: "Tarif GOR dapat dinaikkan sewaktu-waktu berdasarkan rapat pengurus GOR dan pengurus RW 02 Perum Pondok Sukatani Permai.",
+  perlengkapan: [
+    "Identitas GOR.",
+    "Net bulu tangkis.",
+    "Jam dinding.",
+    "Papan pengumuman.",
+    "Sapu.",
+    "Lap pel.",
+    "Tong sampah.",
+    "Asbak rokok."
+  ].join("\n"),
+  rapat: "Rapat disiapkan dengan menentukan tujuan, agenda, peserta, materi, tempat, dan waktu. Pelaksanaan meliputi pembukaan, penyampaian informasi, diskusi/pembahasan, pengambilan keputusan, penutupan, lalu pencatatan serta tindak lanjut hasil rapat.",
+  keputusan: "Pengambilan keputusan dapat melalui musyawarah untuk mufakat, voting, aklamasi, dan analisis. Keputusan harus dapat dipertanggungjawabkan kepada warga RW 02, dibuat tertulis, ditandatangani seluruh pengurus GOR, dan disetujui Ketua RW 02.",
+  renovasi: "Pembangunan atau renovasi GOR dilakukan sesuai program kerja pengurus RW 02 dan ditandatangani seluruh pengurus GOR. Program kerja disampaikan pada awal kepengurusan dan anggaran pembangunan dibuat terlebih dahulu sebelum pembentukan panitia kecil pembangunan.",
+  perubahanAdart: "AD/ART dapat dievaluasi setiap 3 tahun atau diubah sewaktu-waktu melalui rapat Pengurus GOR, Pengurus RT, dan Pengurus RW 02. Apabila belum diubah, ketentuan lama tetap berlaku.",
+  sumberDokumen: "Anggaran Dasar dan Anggaran Rumah Tangga Pengelolaan GOR Nurani RW 02 Sukatani serta lampiran foto GOR dari arsip RW 02."
 };
+
 
 
 /**
