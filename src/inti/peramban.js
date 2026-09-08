@@ -138,7 +138,7 @@ const BATAS_FOTO = 700000;
  * ------------------------------------------------------------------------- */
 
 /**
- * Potret orang: sambutan Ketua RW dan struktur pengurus.
+ * Potret orang: sambutan Ketua RW, struktur pengurus, dan Ketua RT.
  * Kotaknya `.orang .foto` di gaya/bagian.css, 64x64 piksel, tetap.
  * 256 memberi ruang sampai layar 4x rapat, atau kalau kotaknya nanti
  * diperbesar jadi 96px. Sebelumnya 600, yang berarti sembilan kali lebih
@@ -161,6 +161,21 @@ export const SISI_SAMPUL = 400;
  * 600 piksel di layar lebar. 1000 memberi ruang untuk layar 2x rapat.
  */
 export const SISI_FOTO_PENUH = 1000;
+
+/**
+ * Foto galeri yang dibuka di tirai layar penuh. Kotaknya seluruh layar,
+ * jadi ini satu-satunya ukuran yang memang perlu besar. Diambil hanya
+ * kalau albumnya dibuka; yang ikut dimuat di awal cuma sampulnya.
+ */
+export const SISI_FOTO_LAYAR = 1200;
+
+/**
+ * Gambar peta yang ditempel pengurus kalau sematan Google Maps tidak
+ * dipakai. Kotaknya `.petabox` di gaya/bagian.css, selebar isi halaman
+ * (paling lebar 1080 piksel) dan setinggi 420. Cuma ada satu di seluruh
+ * situs, jadi ukurannya tidak berlipat seperti foto usaha.
+ */
+export const SISI_GAMBAR_PETA = 1400;
 
 /**
  * Mengecilkan foto di perangkat sebelum dikirim.

@@ -44,6 +44,7 @@
   async function kirim(e) {
     e.preventDefault();
     if (!sesi.pengguna) { beriTahu("Masuk dulu supaya permohonan bisa Anda lacak sendiri."); pergi("/masuk"); return; }
+    if (!sesi.terverifikasi) { beriTahu("Verifikasi email dulu sebelum mengajukan reservasi."); pergi("/akun"); return; }
     mengirim = true;
     try {
       await kirimWarga(KOLEKSI.RESERVASI, form);
@@ -69,7 +70,7 @@
     {#each fasilitas as f}
       <div class="kartu">
         <h3>{f.nama}</h3>
-        <p class="keterangan">Kapasitas {f.kapasitas || "\u2026\u2026"}</p>
+        {#if f.kapasitas}<p class="keterangan">Kapasitas {f.kapasitas}</p>{/if}
         <p>{f.ket || ""}</p>
       </div>
     {/each}

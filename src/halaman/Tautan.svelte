@@ -30,6 +30,6 @@
 </div>
 
 <p class="verifikasi">
-  Tautan yang belum terisi sengaja dikosongkan. Alamat resmi dipastikan lebih dulu kepada kantor desa
+  Tautan yang belum terisi sengaja dikosongkan. Alamat resmi dipastikan lebih dulu kepada kantor kelurahan
   agar warga tidak diarahkan ke laman yang keliru.
 </p>

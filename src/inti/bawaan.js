@@ -76,6 +76,7 @@ export const JENIS_SURAT_BAWAAN = [
 ];
 
 export const FASILITAS_BAWAAN = [
+  { id: "gor-nurani", nama: "GOR Nurani", kapasitas: "", ket: "GOR mini RW 02 untuk kegiatan olahraga dan sosial. Pemakaian menunggu persetujuan pengelola; tarif bila ada ditetapkan pengelola." },
   { id: "balai", nama: "Balai Warga", kapasitas: "80 orang", ket: "Termasuk kursi dan listrik. Kebersihan dikembalikan seperti semula." },
   { id: "tenda", nama: "Tenda dan Terpal", kapasitas: "2 unit", ket: "Pemasangan dibantu petugas, dijadwalkan sehari sebelumnya." },
   { id: "kursi", nama: "Kursi Plastik", kapasitas: "120 buah", ket: "Diambil dan dikembalikan sendiri oleh peminjam." },
@@ -83,6 +84,7 @@ export const FASILITAS_BAWAAN = [
 ];
 
 export const FASUM_BAWAAN = [
+  { id: "gor-nurani", nama: "GOR Nurani", jenis: "Olahraga dan sosial", rt: "Lingkungan RT 01/02" },
   { id: "balai", nama: "Balai Warga", jenis: "Pertemuan", rt: "RT 02" },
   { id: "pos", nama: "Pos Keamanan Utama", jenis: "Keamanan", rt: "Gerbang" },
   { id: "lapangan", nama: "Lapangan Serbaguna", jenis: "Olahraga", rt: "RT 03" },
@@ -109,22 +111,24 @@ export const BANSOS_BAWAAN = [
   {
     id: "bpnt",
     nama: "Bantuan Pangan Non Tunai",
-    jalur: "Diusulkan Ketua RT, diverifikasi pengurus RW, diteruskan ke kantor desa",
+    jalur: "Diusulkan Ketua RT, diverifikasi pengurus RW, diteruskan ke kantor kelurahan",
     syarat: ["Terdaftar dalam data kesejahteraan sosial", "Kartu Keluarga dan KTP aktif", "Tidak sedang menerima bantuan sejenis"]
   },
   {
     id: "pkh",
     nama: "Program Keluarga Harapan",
-    jalur: "Pendataan melalui pendamping program dan pemerintah desa",
+    jalur: "Pendataan melalui pendamping program dan pemerintah kelurahan",
     syarat: ["Memiliki anggota keluarga sesuai kriteria program", "Kartu Keluarga dan KTP aktif", "Bersedia mengikuti pendampingan"]
   }
 ];
 
 export const TAUTAN_BAWAAN = [
   { id: "dukcapil", nama: "Dukcapil Kementerian Dalam Negeri", ket: "Informasi administrasi kependudukan nasional", url: "https://dukcapil.kemendagri.go.id" },
+  { id: "dukcapil-kab", nama: "Disdukcapil Kabupaten Tangerang", ket: "Jenis layanan, persyaratan, dan informasi administrasi kependudukan Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/" },
+  { id: "ktpel-kab", nama: "Informasi KTP-el Kabupaten Tangerang", ket: "Persyaratan dan informasi pencetakan KTP elektronik dari Disdukcapil Kabupaten Tangerang", url: "https://disdukcapil.tangerangkab.go.id/detail-menu-konten/632" },
   { id: "kabtangerang", nama: "Pemerintah Kabupaten Tangerang", ket: "Laman resmi pemerintah kabupaten", url: "https://www.tangerangkab.go.id" },
-  { id: "desa", nama: "Kantor Desa Sukatani", ket: "Layanan administrasi tingkat desa", url: "" },
-  { id: "kecamatan", nama: "Kecamatan Rajeg", ket: "Layanan administrasi tingkat kecamatan", url: "" },
+  { id: "desa", nama: "Kelurahan Sukatani", ket: "Layanan administrasi dan informasi resmi Kelurahan Sukatani", url: "https://sukatani.tangerangkab.go.id/" },
+  { id: "kecamatan", nama: "Kecamatan Rajeg", ket: "Layanan administrasi dan informasi resmi Kecamatan Rajeg", url: "https://rajeg.tangerangkab.go.id/" },
   { id: "darurat", nama: "Panggilan darurat 112", ket: "Layanan darurat terpadu", url: "" }
 ];
 
@@ -149,12 +153,91 @@ export const IDENTITAS_BAWAAN = {
   lambang: "RW",
   namaSitus: "Warga Permai Sukatani",
   namaRW: "RW 02",
-  wilayah: "Desa Sukatani, Kec. Rajeg",
-  alamatKaki: "Perum Permai Sukatani · Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
+  wilayah: "Kelurahan Sukatani, Kec. Rajeg",
+  alamatKaki: "Perum Permai Sukatani · Kelurahan Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
   alamatSitus: ""
 };
 
 export const KOORDINAT_BAWAAN = "-6.129217,106.497767";
+
+
+export const MAJELIS_TAKLIM_BAWAAN = {
+  nama: "Majelis Taklim Al-Ikhlas RW 02 PSP",
+  noSkt: "MT025033603112026015",
+  dasarSkt: "Peraturan Menteri Agama Republik Indonesia Nomor 29 Tahun 2019 tentang Majelis Taklim",
+  tanggalSkt: "5 Agustus 2026",
+  masaBerlaku: "5 tahun sejak tanggal diterbitkan",
+  ketua: "Eti Suhaeti",
+  tahunBerdiri: "2026",
+  tanggalBerdiri: "18 Juli 2026",
+  periode: "2026–2029",
+  alamat: "Jl. Boulevard RW 02, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, Banten",
+  landasan: "Islam berdasarkan Al-Qur'an dan As-Sunnah serta berpedoman pada peraturan perundang-undangan yang berlaku di Negara Kesatuan Republik Indonesia.",
+  visi: "Terwujudnya masyarakat yang beriman, bertakwa, berilmu, berakhlak mulia, serta menjunjung tinggi persatuan dan kerukunan.",
+  misi: [
+    "Menyelenggarakan kegiatan pengajian dan pembinaan keagamaan.",
+    "Meningkatkan pemahaman dan pengamalan ajaran Islam.",
+    "Mempererat ukhuwah Islamiyah di lingkungan masyarakat.",
+    "Berpartisipasi dalam kegiatan sosial, pendidikan, dan kemasyarakatan."
+  ].join("\n"),
+  tujuan: [
+    "Meningkatkan keimanan dan ketakwaan kepada Allah SWT.",
+    "Membina akhlak mulia masyarakat.",
+    "Menjadi wadah pendidikan Islam non-formal.",
+    "Mendukung terciptanya masyarakat yang rukun, harmonis, dan peduli sesama."
+  ].join("\n"),
+  kegiatan: [
+    "Pengajian rutin mingguan atau bulanan.",
+    "Peringatan Hari Besar Islam.",
+    "Kajian Al-Qur'an dan hadis.",
+    "Santunan sosial.",
+    "Pendidikan dan pembinaan akhlak."
+  ].join("\n"),
+  keanggotaan: "Anggota adalah setiap muslim atau muslimah yang bersedia mengikuti kegiatan Majelis Taklim. Anggota berhak mengikuti kegiatan, memberikan saran, dan memperoleh pembinaan; serta berkewajiban menjaga nama baik Majelis Taklim dan menaati AD/ART.",
+  kepengurusan: ["Pelindung", "Ketua", "Wakil Ketua", "Sekretaris", "Bendahara"].join("\n"),
+  masaBakti: "3 tahun dan dapat dipilih kembali melalui musyawarah.",
+  musyawarah: "Musyawarah merupakan forum tertinggi dalam pengambilan keputusan dan dilaksanakan sekurang-kurangnya satu kali dalam satu tahun atau sewaktu-waktu apabila diperlukan.",
+  keuangan: [
+    "Iuran anggota.",
+    "Infak dan sedekah.",
+    "Donasi yang sah dan tidak mengikat.",
+    "Bantuan pemerintah sesuai ketentuan yang berlaku.",
+    "Sumber lain yang halal dan sah."
+  ].join("\n"),
+  perubahan: "Perubahan AD/ART dilakukan melalui musyawarah pengurus dan disetujui sekurang-kurangnya oleh dua pertiga peserta yang hadir.",
+  rapat: "Rapat pengurus dilaksanakan minimal sekali setiap tiga bulan. Keputusan diambil berdasarkan musyawarah untuk mufakat."
+};
+
+export const GOR_NURANI_BAWAAN = {
+  nama: "GOR Nurani RW 02",
+  jenis: "GOR mini milik RW 02 Perum Pondok Sukatani Permai",
+  tahunPendirian: "2022–2023 (2 tahap)",
+  mulaiOperasional: "Januari 2024",
+  alamat: "Jalan Boulevard, lingkungan RT 01/02 Perum Pondok Sukatani Permai, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, Provinsi Banten",
+  luas: "209 m² (19 m × 11 m)",
+  riwayat: "Dokumen pengelolaan menyebut GOR Nurani didirikan pada 2023, diajukan oleh Anto Carmanto, S.T., M.T. dan Supratono, S.Pd. (Ketua RW 02 periode 2021–2024) melalui Pokir Dewan Kabupaten Tangerang, Bapak Munawir Khoirul Basri, S.E., M.M. periode 2019–2024. Pengelolaan GOR Nurani dimulai pada Januari 2024.",
+  visi: "Mewujudkan kesejahteraan dan kesehatan masyarakat RW 02 Perum Pondok Sukatani Permai dan sekitarnya.",
+  misi: [
+    "Perbaikan administrasi dan pembukuan.",
+    "Mendorong kegiatan olahraga warga.",
+    "Melakukan pendidikan olahraga bulu tangkis bagi anak-anak.",
+    "Memberikan pemasukan rutin untuk kas RT 01/02 dan RW 02 Perum Pondok Sukatani Permai.",
+    "Memberikan bantuan langsung atau tidak langsung kepada warga RW 02.",
+    "Menjadikan GOR sebagai tempat kegiatan sosial warga RW 02 Perum Pondok Sukatani Permai."
+  ].join("\n"),
+  landasan: "Pancasila dan UUD 1945.",
+  sifat: "Profesional dan demokratis.",
+  asas: "Kekeluargaan dan kemandirian.",
+  tujuan: [
+    "Meningkatkan kesejahteraan warga.",
+    "Meningkatkan kesehatan masyarakat.",
+    "Menambah keahlian di bidang olahraga bulu tangkis.",
+    "Menjadikan GOR untuk kegiatan sosial."
+  ].join("\n"),
+  pemanfaatan: "GOR Nurani dapat disewakan kepada pihak lain dengan tarif yang ditetapkan oleh pengelola. Hasil pemanfaatannya dikembalikan sebesar-besarnya untuk kepentingan dan kesejahteraan warga RW 02. Dalam kegiatannya, selain mempertimbangkan usaha atau keuntungan, GOR juga mempertimbangkan kemanfaatan bagi masyarakat.",
+  maknaLogo: "Dokumen AD menjelaskan unsur shuttlecock putih sebagai lambang kebersihan hati, bara api sebagai semangat yang tidak pernah berhenti, serta warna coklat sebagai lambang cinta, keandalan, dan kesejahteraan."
+};
+
 
 /**
  * Tulisan di beranda.
@@ -171,7 +254,7 @@ export const BERANDA_BAWAAN = {
   judul: "Selamat datang di situs warga Permai Sukatani",
   ringkas:
     "Tempat mencari cara mengurus surat, nomor pengurus, jadwal kegiatan, laporan kas, dan usaha tetangga sendiri. Ditulis sekali, bisa dibuka kapan saja.",
-  alamat: "Desa Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
+  alamat: "Kelurahan Sukatani, Kec. Rajeg, Kab. Tangerang, Banten 15540",
 
   judulLayanan: "Layanan yang sering dipakai",
   layanan1Judul: "Pengajuan Surat",
@@ -182,7 +265,7 @@ export const BERANDA_BAWAAN = {
     "Laporkan sampah, lampu mati, saluran tersumbat, atau gangguan keamanan. Status laporan bisa dipantau.",
   layanan3Judul: "Reservasi Fasilitas",
   layanan3Teks:
-    "Pinjam balai warga, tenda, kursi, atau pengeras suara. Jadwal ketersediaan terlihat langsung.",
+    "Pinjam GOR Nurani, balai warga, tenda, kursi, atau fasilitas RW lain. Jadwal ketersediaan terlihat langsung.",
 
   judulKas: "Laporan Kas RW",
   teksKas:
@@ -273,7 +356,7 @@ export const MENU = [
       ["/layanan", "Pusat Layanan Warga", "Semua layanan dan alur pengajuan"],
       ["/surat", "Pengajuan Surat", "Surat pengantar dan keterangan"],
       ["/pengaduan", "Pengaduan dan Aspirasi", "Lapor dan pantau statusnya"],
-      ["/reservasi", "Reservasi Fasilitas", "Balai warga, tenda, kursi"],
+      ["/reservasi", "Reservasi Fasilitas", "GOR Nurani, balai warga, tenda, kursi"],
       ["/daftar-usaha", "Pendaftaran UMKM", "Daftarkan usaha warga"],
       ["/kependudukan", "Data Kependudukan", "Statistik warga"]
     ]
@@ -283,7 +366,7 @@ export const MENU = [
     isi: [
       ["/berita", "Berita dan Pengumuman", "Kabar terbaru dari pengurus"],
       ["/kalender", "Kalender Kegiatan", "Jadwal rutin dan acara"],
-      ["/galeri", "Galeri Foto", "Dokumentasi kegiatan"],
+      ["/galeri", "Galeri Foto & Video", "Dokumentasi kegiatan, pembangunan, dan acara warga"],
       ["/berkas", "Dokumen dan Video", "Notulen, SK, formulir, rekaman"],
       ["/forum", "Forum dan Polling", "Musyawarah dan survei warga"]
     ]
@@ -299,8 +382,10 @@ export const MENU = [
     label: "Warga",
     isi: [
       ["/umkm", "Direktori UMKM", "Usaha warga di kawasan"],
+      ["/majelis-taklim", "Majelis Taklim Al-Ikhlas", "Profil, kegiatan, dan ringkasan AD/ART"],
+      ["/gor-nurani", "GOR Nurani", "Profil, tujuan, dan pemanfaatan GOR RW 02"],
       ["/bansos", "Bantuan Sosial", "Syarat dan jalur pengajuan"],
-      ["/tautan", "Tautan Penting", "Desa, kecamatan, Dukcapil"]
+      ["/tautan", "Tautan Penting", "Desa, kecamatan, Dukcapil, KTP-el"]
     ]
   },
   { label: "Kontak", alamat: "/kontak" }

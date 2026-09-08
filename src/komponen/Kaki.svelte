@@ -24,7 +24,7 @@
           <li><a href="#/surat">Pengajuan Surat</a></li>
           <li><a href="#/pengaduan">Pengaduan dan Aspirasi</a></li>
           <li><a href="#/reservasi">Reservasi Fasilitas</a></li>
-          <li><a href="#/bansos">Bantuan Sosial</a></li>
+          <li><a href="#/kependudukan">Data Kependudukan</a></li>
         </ul>
       </div>
       <div>
@@ -32,8 +32,8 @@
         <ul>
           <li><a href="#/berita">Berita dan Pengumuman</a></li>
           <li><a href="#/kalender">Kalender Kegiatan</a></li>
-          <li><a href="#/galeri">Galeri Foto</a></li>
-          <li><a href="#/kas">Laporan Kas RW</a></li>
+          <li><a href="#/galeri">Galeri Foto &amp; Video</a></li>
+          <li><a href="#/berkas">Dokumen &amp; Video</a></li>
         </ul>
       </div>
       <div>

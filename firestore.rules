@@ -466,6 +466,14 @@ service cloud.firestore {
       allow write: if petugas();
     }
 
+    // ---------- penerima bantuan sosial: PRIVAT ----------
+    // Nama penerima tidak pernah dibuka untuk publik. Hanya pengurus yang
+    // boleh membaca dan mengubah daftar rinci; halaman warga hanya
+    // menampilkan jumlah agregat per RT dari konten/bansos.
+    match /bansos_penerima/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
     // ---------- penutup ----------
 
     match /{document=**} {

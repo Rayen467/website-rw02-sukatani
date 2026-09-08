@@ -39,6 +39,8 @@
   import DaftarUsaha from "./halaman/DaftarUsaha.svelte";
   import Bansos from "./halaman/Bansos.svelte";
   import Tautan from "./halaman/Tautan.svelte";
+  import MajelisTaklim from "./halaman/MajelisTaklim.svelte";
+  import GorNurani from "./halaman/GorNurani.svelte";
   import Berkas from "./halaman/Berkas.svelte";
   import Kontak from "./halaman/Kontak.svelte";
   import Masuk from "./halaman/Masuk.svelte";
@@ -74,6 +76,8 @@
     "daftar-usaha": DaftarUsaha,
     bansos: Bansos,
     tautan: Tautan,
+    "majelis-taklim": MajelisTaklim,
+    "gor-nurani": GorNurani,
     berkas: Berkas,
     kontak: Kontak,
     masuk: Masuk,

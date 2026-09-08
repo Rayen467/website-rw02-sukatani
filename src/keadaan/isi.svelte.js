@@ -63,6 +63,7 @@ export const isi = $state({
   usaha_baru: null,
   warga: null,
   pengurus: null,
+  bansos_penerima: null,
 
   /* --- Dokumen tetap, satu bagian satu kunci -------------------------- */
   konten: {},

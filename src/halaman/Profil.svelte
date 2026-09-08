@@ -66,7 +66,7 @@
     <table class="data"><tbody>
       <tr><th>Luas wilayah</th><td><Belum nilai={p.luas} /></td></tr>
       <tr><th>Jumlah RT</th><td><Belum nilai={p.jumlahRT} /></td></tr>
-      <tr><th>Desa</th><td>Sukatani</td></tr>
+      <tr><th>Kelurahan</th><td>Sukatani</td></tr>
       <tr><th>Kecamatan</th><td>Rajeg</td></tr>
       <tr><th>Kabupaten</th><td>Tangerang, Provinsi Banten</td></tr>
       <tr><th>Kode pos</th><td>15540</td></tr>

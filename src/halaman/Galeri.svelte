@@ -15,6 +15,7 @@
   import Kosong from "../komponen/Kosong.svelte";
 
   const daftar = $derived(isi.galeri || []);
+  const video = $derived((isi.berkas || []).filter((d) => d.kategori === "video"));
 
   let album = $state(null);
   let foto = $state([]);
@@ -55,8 +56,8 @@
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Galeri</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Informasi</p>
-  <h1>Galeri foto kegiatan</h1>
-  <p>Dokumentasi kegiatan, pembangunan, dan acara warga. Ketuk satu kegiatan untuk melihat semua fotonya.</p>
+  <h1>Galeri foto &amp; video</h1>
+  <p>Dokumentasi kegiatan, pembangunan, dan acara warga dalam bentuk album foto maupun video.</p>
 </div>
 
 {#if daftar.length}
@@ -89,6 +90,33 @@
     aksi="Unggah foto kegiatan"
   />
 {/if}
+
+<section class="blok" style="margin-top:30px">
+  <div class="kepala-bagian">
+    <h2>Video kegiatan</h2>
+    <a href="#/berkas">Dokumen &amp; video →</a>
+  </div>
+  {#if video.length}
+    <div class="petak petak-2">
+      {#each video as v}
+        <div class="kartu">
+          <p class="alis">Video{v.tgl ? " · " + v.tgl : ""}</p>
+          <h3>{v.judul}</h3>
+          {#if v.ket}<p>{v.ket}</p>{/if}
+          {#if v.cara === "tautan" && v.tautan}
+            <a class="tombol utama" href={v.tautan} target="_blank" rel="noopener noreferrer">Tonton video ↗</a>
+          {:else}
+            <a class="tombol" href="#/berkas">Buka di Dokumen &amp; Video</a>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  {:else}
+    <div class="catatan">
+      <b>Belum ada video kegiatan.</b> Pengurus dapat menambahkan tautan YouTube atau video lain lewat Kelola → Dokumen &amp; Video dengan kategori Video kegiatan.
+    </div>
+  {/if}
+</section>
 
 <svelte:window
   onkeydown={(e) => {

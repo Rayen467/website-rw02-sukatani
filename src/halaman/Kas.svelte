@@ -36,17 +36,18 @@
     <div class="kepala-bagian"><h2>Rincian transaksi</h2></div>
     <div class="tabel-bungkus">
       <table class="data">
-        <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Nominal</th></tr></thead>
+        <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Jenis</th><th>Nominal</th></tr></thead>
         <tbody>
           {#each kas as t}
             <tr>
               <td>{t.tgl || ""}{t.periode ? " \u00B7 " + t.periode : ""}</td>
               <td>{t.ket}</td>
+              <td>{t.kategori || "Lainnya"}</td>
               <td><Lencana status={t.jenis === "masuk" ? "selesai" : "proses"} /></td>
               <td class="angka-kanan">{rupiah(t.nominal)}</td>
             </tr>
           {/each}
-          <tr class="jumlah"><td colspan="3">Saldo</td><td class="angka-kanan">{rupiah(ringkas.saldo)}</td></tr>
+          <tr class="jumlah"><td colspan="4">Saldo</td><td class="angka-kanan">{rupiah(ringkas.saldo)}</td></tr>
         </tbody>
       </table>
     </div>

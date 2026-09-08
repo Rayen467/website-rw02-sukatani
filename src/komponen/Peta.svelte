@@ -32,8 +32,8 @@
    * mengunduhnya, jadi impornya dinamis.
    */
   import { KONTEN } from "../inti/nama.js";
-  import { kontenNilai } from "../keadaan/isi.svelte.js";
-  import { KOORDINAT_BAWAAN } from "../inti/bawaan.js";
+  import { kontenNilai, pakai } from "../keadaan/isi.svelte.js";
+  import { KOORDINAT_BAWAAN, FASUM_BAWAAN } from "../inti/bawaan.js";
   import { sematanPeta, sematanSalah } from "../inti/peta.js";
   import { BATAS_RW, KOTAK_RW, LUAS_RW_HEKTAR, LEBAR_RW_M, TINGGI_RW_M } from "../inti/batas.js";
 
@@ -43,6 +43,8 @@
   const batasMentah = $derived(kontenNilai(KONTEN.KONTAK, "petaBatas", ""));
   const sematan = $derived(sematanPeta(batasMentah));
   const sematanKeliru = $derived(sematanSalah(batasMentah));
+  const fasilitasUmum = $derived(pakai("fasum", FASUM_BAWAAN));
+  const batasRT = $derived(pakai("batas_rt", []));
 
   let wadah = $state(null);
   let gagalMuat = $state(false);
@@ -54,6 +56,13 @@
     const [lintang, bujur] = bagian;
     if (Math.abs(lintang) > 90 || Math.abs(bujur) > 180) return null;
     return [lintang, bujur];
+  }
+
+  function uraiPoligon(teks) {
+    return String(teks || "")
+      .split(/\n|;/)
+      .map((baris) => uraiTitik(baris.trim()))
+      .filter(Boolean);
   }
 
   $effect(() => {
@@ -120,6 +129,37 @@
             .bindTooltip(namaTitik || "Titik utama RW 02", { permanent: false });
         }
 
+        /* Batas RT hanya digambar bila pengurus memasukkan minimal tiga
+           titik koordinat nyata. Data kosong tidak ditebak dari blok/alamat. */
+        for (const r of batasRT) {
+          const poligon = uraiPoligon(r.poligon);
+          if (poligon.length < 3) continue;
+          L.polygon(poligon, {
+            color: "#ffd43b",
+            weight: 3,
+            opacity: 0.95,
+            fillOpacity: 0.04
+          })
+            .addTo(peta)
+            .bindTooltip(r.rt || "Batas RT", { permanent: false });
+        }
+
+        /* Fasilitas umum bisa diberi koordinat dari Kelola. Hanya item
+           yang punya koordinat sah yang digambar, jadi data lama tetap aman. */
+        for (const f of fasilitasUmum) {
+          const titikFasilitas = uraiTitik(f.koordinat);
+          if (!titikFasilitas) continue;
+          L.circleMarker(titikFasilitas, {
+            radius: 6,
+            color: "#ffffff",
+            weight: 2,
+            fillColor: "#f59f00",
+            fillOpacity: 1
+          })
+            .addTo(peta)
+            .bindTooltip((f.nama || "Fasilitas umum") + (f.rt ? " · " + f.rt : ""), { permanent: false });
+        }
+
         peta.fitBounds(KOTAK_RW, { padding: [18, 18] });
 
         /* Leaflet mengukur wadahnya sekali, saat dipasang. Kalau saat itu
@@ -170,7 +210,7 @@
 {#if !gagalMuat}
   <p class="keterangan-batas">
     <span class="contoh-garis" aria-hidden="true"></span>
-    Garis merah adalah batas wilayah RW 02. Rumah di luar garis termasuk RW lain.
+    Garis merah adalah batas wilayah RW 02. Garis kuning menunjukkan batas RT yang koordinatnya sudah diisi pengurus, dan titik kuning menandai fasilitas umum. Rumah di luar garis termasuk RW lain.
     {#if !sematan && !gambarPeta}
       Ketuk <b>Peta jalan</b> di pojok kanan atas bila ingin melihat nama jalan.
     {/if}

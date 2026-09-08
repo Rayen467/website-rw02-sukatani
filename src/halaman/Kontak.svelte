@@ -9,7 +9,7 @@
     ["Keuangan dan iuran", "Bendahara RW", kontenNilai(KONTEN.KONTAK, "bendahara")],
     ["Keamanan", "Pos keamanan", kontenNilai(KONTEN.KONTAK, "posKeamanan")],
     ["Kebersihan dan sampah", "Seksi kebersihan", kontenNilai(KONTEN.KONTAK, "kebersihan")],
-    ["Keadaan darurat", "Ambulans desa", kontenNilai(KONTEN.KONTAK, "ambulans")]
+    ["Transportasi warga", "Transportasi warga", kontenNilai(KONTEN.KONTAK, "ambulans")]
   ]);
 </script>
 

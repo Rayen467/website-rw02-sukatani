@@ -50,6 +50,7 @@ export const KOLEKSI = Object.freeze({
   FASUM: "fasum",
   RUTIN: "rutin",
   BANSOS: "bansos",
+  BANSOS_PENERIMA: "bansos_penerima",
   BERKAS: "berkas",
 
   /* Isi berkas dipisah dari keterangannya, dan ini BUKAN kerapian belaka.
@@ -115,7 +116,9 @@ export const KONTEN = Object.freeze({
   IDENTITAS: "identitas",
   BERANDA: "beranda",
   POLLING: "polling",
-  TAMPILAN: "tampilan"
+  TAMPILAN: "tampilan",
+  MAJELIS_TAKLIM: "majelis_taklim",
+  GOR_NURANI: "gor_nurani"
 });
 
 /* -------------------------------------------------------------------------
@@ -149,7 +152,8 @@ export const KOLEKSI_PENGURUS = Object.freeze([
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU,
   KOLEKSI.WARGA,
-  KOLEKSI.PENGURUS
+  KOLEKSI.PENGURUS,
+  KOLEKSI.BANSOS_PENERIMA
 ]);
 
 /** Kiriman yang bisa dilacak sendiri oleh warga yang mengirimnya. */
@@ -209,6 +213,8 @@ export const JALUR = Object.freeze({
   DAFTAR_USAHA: "/daftar-usaha",
   BANSOS: "/bansos",
   TAUTAN: "/tautan",
+  MAJELIS_TAKLIM: "/majelis-taklim",
+  GOR_NURANI: "/gor-nurani",
   BERKAS: "/berkas",
   KONTAK: "/kontak",
   MASUK: "/masuk",
