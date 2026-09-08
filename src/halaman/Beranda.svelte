@@ -195,21 +195,26 @@
 
   <section class="panel-rumah panel-tentang">
     <img class="ornamen-daun" src="./visual/brand/ornamen-daun.webp" alt="" aria-hidden="true" />
-    <div class="panel-kepala">
+    <div class="panel-kepala tentang-kepala">
       <h2>Tentang Permai Sukatani</h2>
-      <a href="#/profil" aria-label="Buka profil RW">→</a>
+      <span class="tentang-info" aria-hidden="true">i</span>
     </div>
     <div class="tentang-isi">
-      <img src={gambarHero} alt="" decoding="async" />
-      <div>
+      <div class="tentang-foto">
+        <img src={gambarHero} alt="Suasana Permai Sukatani" decoding="async" />
+      </div>
+      <div class="tentang-copy">
         <p>
           {profil.sejarah ||
-            "Permai Sukatani adalah lingkungan warga yang tumbuh bersama, saling terhubung, peduli, dan membangun lingkungan yang lebih baik."}
+            "Perumahan yang tumbuh bersama, membangun lingkungan yang lebih baik untuk kita semua. RW 02 Sukatani adalah rumah, tempat kita saling terhubung, peduli, dan melangkah maju bersama."}
         </p>
-        <a class="cta-mini" href="#/profil">Lihat Profil →</a>
+        <a class="cta-mini" href="#/profil">Lihat Profil <span>→</span></a>
       </div>
     </div>
-    <blockquote>Lingkungan yang baik berawal dari warga yang peduli.</blockquote>
+    <blockquote>
+      <span class="tentang-quote-mark" aria-hidden="true">“</span>
+      <span>Lingkungan yang baik berawal dari warga yang peduli.</span>
+    </blockquote>
   </section>
 </div>
 
