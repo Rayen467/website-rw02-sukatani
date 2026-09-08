@@ -878,6 +878,399 @@ footer.kaki-waktu {
   }
 }
 
+
+/* ==========================================================================
+ * PRESISI BERANDA — mengikuti empat referensi visual Pagi/Siang/Sore/Malam.
+ * Typography sengaja ditahan supaya halaman lega dan tidak sesak.
+ * ========================================================================== */
+body:has(.beranda-hero) main {
+  padding-top: 0;
+  overflow: clip;
+}
+body:has(.beranda-hero) main > .wadah {
+  max-width: 1200px;
+}
+
+/* Floating navbar satu baris. */
+body:has(.beranda-hero) .situs {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: min(1160px, calc(100% - 40px));
+  transform: translateX(-50%);
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.34);
+  border-radius: 17px;
+  background-image: none;
+  background-color: rgba(248,252,250,.72);
+  box-shadow: 0 18px 48px -34px rgba(5,35,29,.48);
+  backdrop-filter: blur(18px) saturate(1.16);
+  -webkit-backdrop-filter: blur(18px) saturate(1.16);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .situs {
+  color: #fffaf3;
+  border-color: rgba(255,245,228,.24);
+  background-color: rgba(76,62,54,.34);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .situs {
+  color: #f5fbfa;
+  border-color: rgba(177,218,221,.16);
+  background-color: rgba(5,27,43,.68);
+}
+body:has(.beranda-hero) .situs > .wadah {
+  max-width: none;
+  padding: 0 16px;
+}
+body:has(.beranda-hero) .situs-atas {
+  min-height: 66px;
+  padding: 7px 0;
+  gap: 9px;
+}
+body:has(.beranda-hero) .merek-visual {
+  width: 154px;
+  min-width: 154px;
+  height: 52px;
+  gap: 0;
+}
+body:has(.beranda-hero) .merek-logo-penuh {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+body:has(.beranda-hero) nav.menu-ringkas {
+  margin-left: auto;
+  display: flex;
+  gap: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+body:has(.beranda-hero) .menu-ringkas .menu-butir > a {
+  padding: 9px 8px 10px;
+  border-radius: 0;
+  border-bottom-width: 2px;
+  font-size: 12px;
+  font-weight: 650;
+  color: color-mix(in srgb, var(--waktu-hero-teks) 82%, transparent);
+}
+body:has(.beranda-hero) .menu-ringkas .menu-butir.terpilih > a {
+  color: #0b684f;
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .menu-ringkas .menu-butir > a,
+:root[data-waktu="malam"] body:has(.beranda-hero) .menu-ringkas .menu-butir > a {
+  color: rgba(255,255,255,.88);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .menu-ringkas .menu-butir.terpilih > a {
+  color: #fff4dc;
+  border-bottom-color: #ffd596;
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .menu-ringkas .menu-butir.terpilih > a {
+  color: #83e3bd;
+  border-bottom-color: #4ed2a1;
+}
+body:has(.beranda-hero) .cari-kotak {
+  margin-left: 7px;
+  max-width: 172px;
+  flex: 0 1 172px;
+  padding: 7px 10px;
+  background: rgba(255,255,255,.84);
+  border-color: rgba(16,61,49,.12);
+}
+body:has(.beranda-hero) .cari-kotak input {
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .cari-kotak button {
+  display: none;
+}
+body:has(.beranda-hero) .situs-atas > .tombol-kecil {
+  min-height: 38px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .situs-atas > .tombol-kecil[title^="Tampilan:"] {
+  display: none;
+}
+
+/* Hero: proporsi mengikuti screenshot, bukan headline raksasa. */
+body:has(.beranda-hero) .beranda-hero {
+  min-height: clamp(590px, 72vh, 720px);
+  margin-top: -32px;
+  background-position: center center;
+}
+body:has(.beranda-hero) .beranda-hero-dalam {
+  padding-top: 112px;
+  padding-bottom: 104px;
+  align-items: center;
+}
+body:has(.beranda-hero) .beranda-copy {
+  width: min(570px, 61%);
+}
+body:has(.beranda-hero) .beranda-eyebrow {
+  margin-bottom: 13px;
+  font-size: 10.5px;
+  letter-spacing: .27em;
+}
+body:has(.beranda-hero) .beranda-copy h1 {
+  max-width: 13.5ch;
+  font-size: clamp(48px, 4.7vw, 60px);
+  line-height: .98;
+  letter-spacing: -.038em;
+}
+body:has(.beranda-hero) .beranda-ringkas {
+  max-width: 45ch;
+  margin-top: 17px;
+  font-size: clamp(13.5px, 1.2vw, 15.5px);
+  line-height: 1.55;
+}
+body:has(.beranda-hero) .beranda-cta {
+  margin-top: 21px;
+}
+body:has(.beranda-hero) .beranda-cta a {
+  min-height: 42px;
+  padding: 9px 19px;
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .beranda-meta {
+  gap: 28px;
+  margin-top: 62px;
+}
+body:has(.beranda-hero) .beranda-meta-item {
+  min-width: 165px;
+  gap: 10px;
+}
+body:has(.beranda-hero) .beranda-meta-item b {
+  font-size: 12px;
+}
+body:has(.beranda-hero) .beranda-meta-item small {
+  font-size: 9.5px;
+}
+body:has(.beranda-hero) .meta-ikon {
+  font-size: 24px;
+}
+body:has(.beranda-hero) .pemilih-waktu {
+  top: 106px;
+  right: 17px;
+}
+body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+  min-width: 78px;
+  min-height: 37px;
+  padding-left: 30px;
+  font-size: 11px;
+}
+body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu)::after {
+  left: 9px;
+  top: 24px;
+  height: 26px;
+}
+body:has(.beranda-hero) .pemilih-waktu .titik {
+  left: 3px;
+  top: 10px;
+  width: 13px;
+  height: 13px;
+}
+
+/* Layanan overlap lebih ramping dan lega. */
+body:has(.beranda-hero) .layanan-cepat {
+  margin-top: -58px;
+  padding: 9px;
+  border-radius: 16px;
+}
+body:has(.beranda-hero) .layanan-cepat-item {
+  min-height: 128px;
+  padding: 13px 15px 12px;
+}
+body:has(.beranda-hero) .layanan-ikon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 5px;
+  border-radius: 9px;
+}
+body:has(.beranda-hero) .layanan-ikon svg {
+  width: 22px;
+  height: 22px;
+}
+body:has(.beranda-hero) .layanan-cepat-item strong {
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .layanan-cepat-item small {
+  max-width: 18ch;
+  font-size: 9.5px;
+  line-height: 1.42;
+}
+
+/* Isi utama dibuat kompak seperti screenshot namun tidak padat. */
+body:has(.beranda-hero) .blok {
+  margin-bottom: 24px;
+}
+body:has(.beranda-hero) .beranda-grid-utama {
+  gap: 16px;
+}
+body:has(.beranda-hero) .panel-rumah {
+  padding: 17px;
+  border-radius: 14px;
+}
+body:has(.beranda-hero) .panel-kepala {
+  margin-bottom: 10px;
+}
+body:has(.beranda-hero) .panel-kepala h2 {
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.1;
+}
+body:has(.beranda-hero) .panel-kepala a {
+  font-size: 9.5px;
+}
+body:has(.beranda-hero) .pengumuman-ringkas article {
+  min-height: 67px;
+  grid-template-columns: 40px 66px minmax(0,1fr) auto;
+  gap: 10px;
+  padding: 8px 0;
+}
+body:has(.beranda-hero) .pengumuman-ikon {
+  width: 37px;
+  height: 37px;
+  font-size: 17px;
+}
+body:has(.beranda-hero) .pengumuman-ringkas h3 {
+  font-size: 11.5px;
+}
+body:has(.beranda-hero) .pengumuman-ringkas p,
+body:has(.beranda-hero) .pengumuman-ringkas time {
+  font-size: 9px;
+}
+body:has(.beranda-hero) .tentang-isi > img {
+  height: 119px;
+}
+body:has(.beranda-hero) .tentang-isi p {
+  font-size: 9.8px;
+}
+body:has(.beranda-hero) .panel-tentang blockquote {
+  margin-top: 13px;
+  padding-top: 11px;
+  font-size: 13px;
+}
+body:has(.beranda-hero) .kegiatan-grid {
+  gap: 10px;
+}
+body:has(.beranda-hero) .kegiatan-card img {
+  height: 112px;
+}
+body:has(.beranda-hero) .kegiatan-card strong {
+  font-size: 10.5px;
+}
+body:has(.beranda-hero) .kegiatan-card small {
+  font-size: 8.7px;
+}
+body:has(.beranda-hero) .beranda-grid-bawah {
+  gap: 20px;
+}
+body:has(.beranda-hero) .galeri-home a {
+  height: 101px;
+}
+body:has(.beranda-hero) .umkm-home-foto {
+  height: 78px;
+}
+
+/* Sore dan malam membawa atmosfer sampai area konten seperti referensi. */
+:root[data-waktu="sore"] body:has(.beranda-hero) main {
+  background:
+    linear-gradient(180deg, rgba(72,42,24,.08), rgba(57,39,29,.48) 62%, rgba(36,29,24,.72)),
+    #6f5a4a;
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) main {
+  background:
+    linear-gradient(180deg, rgba(3,20,34,.18), rgba(3,21,35,.72) 58%, rgba(2,17,29,.94)),
+    #061a2a;
+}
+
+/* Panorama footer tidak dibuat terlalu tinggi agar halaman tetap ringan. */
+body:has(.beranda-hero) footer.kaki-waktu {
+  min-height: 350px;
+  padding-top: 58px;
+  padding-bottom: 30px;
+  background-position: center center;
+}
+body:has(.beranda-hero) .kaki-logo {
+  width: 158px;
+  height: 70px;
+}
+
+/* Tablet: navbar tetap satu baris selama masih muat, lalu pakai burger. */
+@media (max-width: 1020px) {
+  body:has(.beranda-hero) .menu-ringkas { display: none !important; }
+  body:has(.beranda-hero) .burger { display: inline-flex; }
+  body:has(.beranda-hero) .cari-kotak { margin-left: auto; }
+  body:has(.beranda-hero) .beranda-copy { width: min(560px, 70%); }
+}
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) .situs {
+    top: 10px;
+    width: calc(100% - 20px);
+    border-radius: 14px;
+  }
+  body:has(.beranda-hero) .situs > .wadah { padding: 0 10px; }
+  body:has(.beranda-hero) .situs-atas { min-height: 58px; }
+  body:has(.beranda-hero) .merek-visual {
+    width: 116px;
+    min-width: 116px;
+    height: 44px;
+  }
+  body:has(.beranda-hero) .cari-kotak { display: none; }
+  body:has(.beranda-hero) .situs-atas > .tombol-kecil {
+    padding: 7px 9px;
+    font-size: 10px;
+    max-width: 125px;
+  }
+  body:has(.beranda-hero) .beranda-hero {
+    min-height: 590px;
+    background-position: 61% center;
+  }
+  body:has(.beranda-hero) .beranda-hero-dalam {
+    padding-top: 105px;
+    padding-bottom: 80px;
+    align-items: flex-start;
+  }
+  body:has(.beranda-hero) .beranda-copy {
+    width: calc(100% - 46px);
+    padding-right: 0;
+  }
+  body:has(.beranda-hero) .beranda-copy h1 {
+    max-width: 11ch;
+    font-size: clamp(36px, 10.5vw, 43px);
+    line-height: 1;
+  }
+  body:has(.beranda-hero) .beranda-ringkas {
+    max-width: 33ch;
+    font-size: 12.5px;
+  }
+  body:has(.beranda-hero) .beranda-meta {
+    margin-top: 42px;
+    gap: 12px;
+  }
+  body:has(.beranda-hero) .beranda-meta-item {
+    min-width: 0;
+  }
+  body:has(.beranda-hero) .pemilih-waktu {
+    top: 105px;
+    right: -7px;
+    transform: scale(.87);
+    transform-origin: top right;
+  }
+  body:has(.beranda-hero) .layanan-cepat {
+    margin-top: -42px;
+  }
+  body:has(.beranda-hero) .layanan-cepat-item {
+    min-height: 112px;
+    padding: 11px;
+  }
+  body:has(.beranda-hero) .panel-kepala h2 {
+    font-size: 20px;
+  }
+}
+
+
 /* ===========================================================================
  *  LAPIS KETERBACAAN DI SOROTAN SIANG HARI
  *

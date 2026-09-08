@@ -11,7 +11,7 @@
     "test": "node --experimental-vm-modules --test alat/akun.test.mjs alat/petugas.test.mjs alat/pengurus.test.mjs alat/waktu.test.mjs",
     "dev": "vite",
     "periksa": "node alat/periksa-arsitektur.mjs",
-    "build": "npm run periksa && vite build",
+    "build": "npm run periksa && node alat/dekode-aset-waktu.mjs && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
