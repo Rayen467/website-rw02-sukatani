@@ -1196,3 +1196,27 @@
 .akses-aktor .tombol {
   margin-top: auto;
 }
+
+
+/* Kredit pembuat sengaja dibuat sangat tenang agar tidak bersaing dengan
+   identitas RW dan informasi utama footer. */
+.kaki-pembuat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0 2px;
+  color: var(--tinta-3);
+  font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.015em;
+  opacity: .58;
+}
+.kaki-pembuat a {
+  color: inherit;
+  text-decoration: none;
+}
+.kaki-pembuat a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
