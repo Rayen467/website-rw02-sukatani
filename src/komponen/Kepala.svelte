@@ -28,7 +28,19 @@
         : [])
   ]);
 
-  /* Menandai menu induk dari halaman yang sedang dibuka. */
+  /* Menu desktop dibuat ringkas seperti referensi visual. Semua menu lengkap
+     tetap tersedia di laci HP dan halaman terkait tetap dapat diakses. */
+  const menuRingkas = [
+    { label: "Beranda", alamat: "/" },
+    { label: "Profil", alamat: "/profil" },
+    { label: "Layanan", alamat: "/layanan" },
+    { label: "Berita", alamat: "/berita" },
+    { label: "Galeri", alamat: "/galeri" },
+    { label: "UMKM", alamat: "/umkm" },
+    { label: "Kontak", alamat: "/kontak" }
+  ];
+
+    /* Menandai menu induk dari halaman yang sedang dibuka. */
   const induk = $derived.by(() => {
     const jalur = "/" + (rute.bagian[0] || "");
     for (const g of daftarMenu) {
@@ -70,15 +82,20 @@
 <header class="situs tanpa-cetak">
   <div class="wadah">
     <div class="situs-atas">
-      <a class="merek" href="#/">
-        <span class="lambang lambang-logo">
-          <img src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
-        </span>
-        <span>
-          <span class="nama">{ident.namaSitus}</span>
-          <span class="sub">{ident.namaRW} · {ident.wilayah}</span>
-        </span>
+      <a class="merek merek-visual" href="#/" aria-label={ident.namaSitus}>
+        <img class="merek-logo-penuh" src="./visual/brand/logo-full.webp" alt="RW 02 Sukatani" />
       </a>
+
+      <nav class="menu-utama menu-ringkas" aria-label="Menu utama">
+        {#each menuRingkas as g}
+          <div
+            class="menu-butir"
+            class:terpilih={rute.jalur === g.alamat || (g.alamat !== "/" && rute.jalur.startsWith(g.alamat))}
+          >
+            <a href="#{g.alamat}">{g.label}</a>
+          </div>
+        {/each}
+      </nav>
 
       <form class="cari-kotak" role="search" onsubmit={cari}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -111,31 +128,6 @@
       </button>
     </div>
 
-    <nav class="menu-utama" aria-label="Menu utama">
-      {#each daftarMenu as g}
-        <div class="menu-butir" class:terpilih={induk === g.label}>
-          {#if g.alamat}
-            <a href="#{g.alamat}">{g.label}</a>
-          {:else}
-            <button
-              type="button"
-              aria-expanded={menuTerbuka === g.label}
-              onclick={(e) => {
-                e.stopPropagation();
-                bukaMenu(g.label);
-              }}>{g.label}</button
-            >
-            {#if menuTerbuka === g.label}
-              <div class="turunan">
-                {#each g.isi as it}
-                  <a href="#{it[0]}">{it[1]}<span>{it[2]}</span></a>
-                {/each}
-              </div>
-            {/if}
-          {/if}
-        </div>
-      {/each}
-    </nav>
 
     {#if laciTerbuka}
       <div class="laci">
