@@ -156,6 +156,16 @@
   .kabar { grid-template-columns: 1fr; gap: 5px; }
   .kabar .tanggal { padding-top: 0; }
   .kaki-petak { grid-template-columns: 1fr; }
+  .kaki-bawah-identitas {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .kaki-alamat { max-width: none; }
+  .kaki-pengelola {
+    margin-left: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
   .foto-deret { grid-template-columns: repeat(2, 1fr); }
   .foto-deret div:first-child { grid-column: span 2; }
   .batang { grid-template-columns: 104px minmax(0, 1fr) 44px; font-size: 12.5px; }
