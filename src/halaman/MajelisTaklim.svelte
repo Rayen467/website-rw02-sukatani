@@ -10,6 +10,7 @@
   const kegiatan = $derived(keDaftar(nilai("kegiatan")));
   const kepengurusan = $derived(keDaftar(nilai("kepengurusan")));
   const keuangan = $derived(keDaftar(nilai("keuangan")));
+  const lampiran = $derived(keDaftar(nilai("lampiranPendaftaran")));
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>›</span><span>Majelis Taklim Al-Ikhlas</span></nav>
@@ -17,7 +18,10 @@
 <div class="kepala-halaman">
   <p class="alis">Kelembagaan warga</p>
   <h1>{nilai("nama")}</h1>
-  <p>Profil dan ringkasan ketentuan organisasi berdasarkan Surat Keterangan Terdaftar serta AD/ART Majelis Taklim Al-Ikhlas RW 02.</p>
+  <p>
+    Profil dan ringkasan ketentuan organisasi berdasarkan Surat Keterangan Terdaftar,
+    AD/ART, serta dokumen permohonan pendaftaran Majelis Taklim Al-Ikhlas RW 02.
+  </p>
 </div>
 
 <section class="blok">
@@ -32,6 +36,7 @@
           <tr><th>Tanggal diterbitkan</th><td>{nilai("tanggalSkt")}</td></tr>
           <tr><th>Masa berlaku</th><td>{nilai("masaBerlaku")}</td></tr>
           <tr><th>Ketua</th><td>{nilai("ketua")}</td></tr>
+          <tr><th>Sekretaris</th><td>{nilai("sekretaris")}</td></tr>
           <tr><th>Tahun berdiri</th><td>{nilai("tahunBerdiri")}</td></tr>
         </tbody></table>
       </div>
@@ -43,11 +48,43 @@
         <table class="data"><tbody>
           <tr><th>Didirikan</th><td>{nilai("tanggalBerdiri")}</td></tr>
           <tr><th>Periode</th><td>{nilai("periode")}</td></tr>
+          <tr><th>Jumlah anggota</th><td>{nilai("jumlahAnggota")}</td></tr>
           <tr><th>Alamat</th><td>{nilai("alamat")}</td></tr>
           <tr><th>Masa bakti pengurus</th><td>{nilai("masaBakti")}</td></tr>
         </tbody></table>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="blok">
+  <div class="kepala-bagian"><h2>Dokumen pendaftaran ke KUA Rajeg</h2></div>
+  <div class="petak petak-2">
+    <div class="kartu">
+      <div class="tabel-bungkus" style="border:0;background:none">
+        <table class="data"><tbody>
+          <tr><th>Nomor surat</th><td>{nilai("nomorPermohonan")}</td></tr>
+          <tr><th>Tanggal</th><td>{nilai("tanggalPermohonan")}</td></tr>
+          <tr><th>Tujuan</th><td>Kantor Urusan Agama Kecamatan Rajeg</td></tr>
+          <tr><th>Jumlah anggota</th><td>{nilai("jumlahAnggota")}</td></tr>
+        </tbody></table>
+      </div>
+      <p>{nilai("tujuanPendaftaran")}</p>
+    </div>
+    <div class="kartu">
+      <h3>Lampiran permohonan</h3>
+      <ol class="poin">{#each lampiran as x}<li>{x}</li>{/each}</ol>
+    </div>
+  </div>
+</section>
+
+<section class="blok">
+  <div class="catatan">
+    <p class="alis">Arsip RW terkait Majelis Taklim</p>
+    <h3 style="margin:4px 0 10px">{nilai("dokumenRwNomor")}</h3>
+    <p><b>{nilai("dokumenRwJudul")}</b></p>
+    <p>{nilai("dokumenRwDasar")}</p>
+    <p>{nilai("dokumenRwCatatan")}</p>
   </div>
 </section>
 
@@ -118,6 +155,8 @@
     <b>Perubahan AD/ART.</b> {nilai("perubahan")}
   </div>
   <p class="verifikasi" style="margin-top:14px">
-    Ringkasan ini disusun dari dokumen SKT dan AD/ART yang diberikan kepada pengelola situs. Jika dokumen resmi diperbarui, pengurus dapat memperbarui isinya lewat halaman Kelola.
+    Ringkasan ini disusun dari dokumen SKT, AD/ART, surat permohonan pendaftaran,
+    dan arsip RW yang diberikan kepada pengelola situs. Dokumen dengan nama/periode berbeda
+    tidak digabungkan secara paksa; masing-masing ditampilkan sesuai konteksnya.
   </p>
 </section>
