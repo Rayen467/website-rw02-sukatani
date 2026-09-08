@@ -227,7 +227,7 @@
   </div>
 </section>
 
-<nav class="gor-nav" role="tablist" aria-label="Bagian GOR Nurani">
+<div class="gor-nav" role="tablist" aria-label="Bagian GOR Nurani">
   {#each TAB as [id, label], i}
     <button
       class:aktif={tab === id}
@@ -240,7 +240,7 @@
       <span>{label}</span>
     </button>
   {/each}
-</nav>
+</div>
 
 {#if tab === "profil"}
   <section class="blok gor-intro">
