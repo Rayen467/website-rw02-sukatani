@@ -1171,3 +1171,28 @@
   justify-content: space-between;
   gap: 16px;
 }
+
+
+.akses-aktor {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.akses-aktor .kartu {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.akses-aktor h3 {
+  margin: 9px 0 7px;
+  font-size: 18px;
+}
+.akses-aktor p {
+  color: var(--tinta-2);
+  font-size: 13.5px;
+}
+.akses-aktor .tombol {
+  margin-top: auto;
+}
