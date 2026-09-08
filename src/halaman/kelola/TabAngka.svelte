@@ -46,10 +46,17 @@
     return { masuk, keluar, saldo: masuk - keluar };
   });
 
+  function normalisasiJenisKas(nilai) {
+    const v = String(nilai || "").trim().toLowerCase();
+    if (["masuk", "pemasukan"].includes(v)) return "masuk";
+    if (["keluar", "pengeluaran"].includes(v)) return "keluar";
+    throw new Error("Jenis kas harus diisi masuk/pemasukan atau keluar/pengeluaran.");
+  }
+
   async function simpan(jenis, aksi) {
     sibuk = jenis;
     try { await aksi(); beriTahu("Tersimpan."); }
-    catch (err) { beriTahu(pesanRamah(err)); }
+    catch (err) { beriTahu(err.code ? pesanRamah(err) : (err.message || "Gagal menyimpan.")); }
     sibuk = "";
   }
 </script>
@@ -107,7 +114,7 @@
     saatSimpan={async (baris) => {
       await tambahIsi(KOLEKSI.KAS, {
         ...baris,
-        jenis: String(baris.jenis).toLowerCase().startsWith("k") ? "keluar" : "masuk"
+        jenis: normalisasiJenisKas(baris.jenis)
       });
       muatKoleksi(KOLEKSI.KAS);
     }}
@@ -122,7 +129,7 @@
       kolom={[
         { nama: "ket", label: "Keterangan" },
         { nama: "periode", label: "Periode" },
-        { nama: "tgl", label: "Tanggal", jenis: "tanggal" },
+        { nama: "tgl", label: "Tanggal" },
         { nama: "jenis", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "masuk", label: "Pemasukan" }, { nilai: "keluar", label: "Pengeluaran" }] },
         { nama: "kategori", label: "Kategori", jenis: "pilih", pilihan: [
           { nilai: "iuran warga", label: "Iuran warga" },
