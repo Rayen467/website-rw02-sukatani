@@ -20,6 +20,7 @@
   .petugas-ringkasan { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .warga-hero { grid-template-columns: minmax(0, 1fr); }
   .warga-ringkasan { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .akses-aktor { grid-template-columns: minmax(0, 1fr); }
   .gor-hero { grid-template-columns: minmax(0, 1fr); }
   .gor-ringkas { max-width: 620px; }
   .gor-layanan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
