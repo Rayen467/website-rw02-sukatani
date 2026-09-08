@@ -144,7 +144,11 @@ service cloud.firestore {
     // ---------- daftar pengurus ----------
 
     match /pengurus/{email} {
-      allow read: if masuk();
+      // Warga terverifikasi hanya boleh membaca dokumen role milik emailnya
+      // sendiri, karena itu yang dipakai untuk mendeteksi apakah ia pengurus.
+      // Daftar seluruh email/nama/jabatan pengurus hanya boleh dilist pengurus.
+      allow get: if masuk() && (email == request.auth.token.email || petugas());
+      allow list: if petugas();
 
       allow create, update: if petugas()
         && teksWajar(request.resource.data.nama, 120)
@@ -402,7 +406,7 @@ service cloud.firestore {
     // Tujuannya satu: pengurus RW tidak pernah perlu menyentuh kode
     // untuk mengubah apa pun yang tampil di situs.
 
-    // Tautan penting: kantor desa, kecamatan, Dukcapil, dan lainnya.
+    // Tautan penting: kantor kelurahan, kecamatan, Dukcapil, dan lainnya.
     match /tautan/{id} {
       allow read: if true;
       allow write: if petugas();
