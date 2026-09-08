@@ -42,11 +42,11 @@
     if (tt.url && tt.url.indexOf("http") !== 0) { beriTahu("Alamat harus diawali http:// atau https://"); return; }
     jalan("tautan", async () => { await tambahIsi(KOLEKSI.TAUTAN, tt); tt = { nama: "", ket: "", url: "" }; muatKoleksi(KOLEKSI.TAUTAN); });
   }}>
-    <div class="isian"><label for="tt-nama">Nama laman</label><input id="tt-nama" bind:value={tt.nama} required placeholder="Kantor Desa Sukatani" /></div>
-    <div class="isian"><label for="tt-ket">Keterangan</label><input id="tt-ket" bind:value={tt.ket} placeholder="Layanan administrasi tingkat desa" /></div>
+    <div class="isian"><label for="tt-nama">Nama laman</label><input id="tt-nama" bind:value={tt.nama} required placeholder="Kelurahan Sukatani" /></div>
+    <div class="isian"><label for="tt-ket">Keterangan</label><input id="tt-ket" bind:value={tt.ket} placeholder="Layanan administrasi tingkat kelurahan" /></div>
     <div class="isian">
       <label for="tt-url">Alamat lengkap</label>
-      <input id="tt-url" type="url" bind:value={tt.url} placeholder="https://contoh.desa.id" />
+      <input id="tt-url" type="url" bind:value={tt.url} placeholder="https://contoh.go.id" />
       <span class="petunjuk">Harus diawali https:// &mdash; salin langsung dari bilah alamat peramban.</span>
     </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "tautan"}>Tambahkan</button></div>
