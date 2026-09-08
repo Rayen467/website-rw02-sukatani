@@ -62,7 +62,9 @@
 
       beriTahu(
         fotoBesar.length
-          ? "Tersimpan dengan " + hasil.masuk + " foto."
+          ? hasil.gagal
+            ? "Album tersimpan. " + hasil.masuk + " foto berhasil, " + hasil.gagal + " foto gagal dikirim. Anda bisa menambahkan ulang foto yang gagal."
+            : "Tersimpan dengan " + hasil.masuk + " foto."
           : "Kegiatan tercatat, belum ada fotonya."
       );
       g = { judul: "", fn: "", jml: "" };
