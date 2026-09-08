@@ -42,3 +42,29 @@ export function bagianWaktu(tanggal = new Date()) {
     tanggal: ambil("weekday") + ", " + ambil("day") + " " + ambil("month") + " " + ambil("year")
   };
 }
+
+/**
+ * Foto kawasan untuk tiap fase.
+ *
+ * KEEMPAT FASE PUNYA FOTONYA SENDIRI. Sebelumnya cuma ada dua berkas,
+ * hero-pagi dan hero-malam, dan siang serta sore ikut memakai yang pagi.
+ * Lebih buruk lagi, berkas hero-pagi itu bukan WebP sama sekali -- tidak
+ * ada tanda RIFF di awalnya, jadi peramban menolaknya dan sorotan halaman
+ * depan kosong dari jam 5 pagi sampai 6 sore. Server tetap menjawab 200,
+ * jadi tidak ada galat apa pun yang menandainya.
+ *
+ * Karena itu daftar ini ditulis lengkap dan di satu tempat: kalau ada
+ * fase yang berkasnya hilang lagi, yang salah kelihatan di sini, bukan
+ * tersebar di dua berkas komponen.
+ */
+export const GAMBAR_WAKTU = Object.freeze({
+  pagi: "./visual/waktu/hero-pagi.webp",
+  siang: "./visual/waktu/hero-siang.webp",
+  sore: "./visual/waktu/hero-sore.webp",
+  malam: "./visual/waktu/hero-malam.webp"
+});
+
+/** Alamat foto untuk sebuah fase. Fase tak dikenal jatuh ke malam. */
+export function gambarWaktu(fase) {
+  return GAMBAR_WAKTU[fase] || GAMBAR_WAKTU.malam;
+}

@@ -2,6 +2,7 @@
   import { KONTEN } from "../inti/nama.js";
   import { BERANDA_BAWAAN } from "../inti/bawaan.js";
   import { isi, konten, kontenNilai } from "../keadaan/isi.svelte.js";
+  import { gambarWaktu } from "../inti/waktu.js";
   import { waktu, FASE_WAKTU, pilihWaktu, kembaliOtomatis } from "../keadaan/waktu.svelte.js";
   import Kosong from "../komponen/Kosong.svelte";
 
@@ -16,7 +17,7 @@
     )
   );
 
-  const gambarHero = $derived("./visual/waktu/hero-" + waktu.fase + ".webp");
+  const gambarHero = $derived(gambarWaktu(waktu.fase));
 
   const layanan = [
     {
