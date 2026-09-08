@@ -22,7 +22,7 @@
   const daftarMenu = $derived([
     ...MENU,
     ...(pengurus()
-      ? [{ label: "Kelola", alamat: "/kelola" }]
+      ? [{ label: sesi.peran === "petugas" ? "Dashboard Petugas" : "Dashboard Admin", alamat: "/kelola" }]
       : sesi.pengguna
         ? [{ label: "Akun Saya", alamat: "/akun" }]
         : [])
