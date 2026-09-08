@@ -8,7 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules --test alat/akun.test.mjs",
+    "test": "node --experimental-vm-modules --test alat/akun.test.mjs alat/petugas.test.mjs",
     "dev": "vite",
     "periksa": "node alat/periksa-arsitektur.mjs",
     "build": "npm run periksa && vite build",
