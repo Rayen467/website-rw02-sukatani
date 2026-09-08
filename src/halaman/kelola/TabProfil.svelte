@@ -2,7 +2,7 @@
   import { KOLEKSI, KONTEN } from "../../inti/nama.js";
   import { isi, konten, muatKoleksi, muatKonten } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { tambahIsi, simpanKonten, simpanDokumen, simpanUsaha, hapusUsaha } from "../../sumber/data.js";
+  import { tambahIsi, simpanKonten, simpanDokumen, ubahDokumen, pindahDokumen, simpanUsaha, hapusUsaha } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { keSlug } from "../../inti/format.js";
   import { kecilkanFoto, SISI_POTRET, SISI_SAMPUL, SISI_FOTO_PENUH, SISI_GAMBAR_PETA } from "../../inti/peramban.js";
@@ -45,8 +45,7 @@
 
   async function bacaFoto(berkas, sisi) {
     if (!berkas) return "";
-    try { return await kecilkanFoto(berkas, sisi); }
-    catch (err) { beriTahu("Foto tidak dipakai: " + err.message); return ""; }
+    return kecilkanFoto(berkas, sisi);
   }
 
   /* Dipakai editor data yang SUDAH ADA. Berbeda dengan bacaFoto(), galat
@@ -54,6 +53,25 @@
      hanya karena file baru gagal diproses. */
   function olahFotoPotret(berkas) {
     return kecilkanFoto(berkas, SISI_POTRET);
+  }
+
+  async function ubahDataRT(id, perubahan) {
+    const lama = (isi.batas_rt || []).find((x) => x.id === id);
+    if (!lama) throw new Error("data RT yang akan diubah tidak ditemukan");
+
+    const lengkap = { ...lama, ...perubahan };
+    delete lengkap.id;
+
+    const idBaru = keSlug(lengkap.rt) || id;
+    if (idBaru !== id && (isi.batas_rt || []).some((x) => x.id === idBaru)) {
+      throw new Error("RT dengan nomor tersebut sudah ada. Gunakan data yang sudah ada atau hapus duplikatnya dulu.");
+    }
+
+    if (idBaru === id) {
+      await ubahDokumen(KOLEKSI.BATAS_RT, id, perubahan);
+    } else {
+      await pindahDokumen(KOLEKSI.BATAS_RT, id, idBaru, lengkap);
+    }
   }
 
   async function jalan(tanda, aksi) {
@@ -155,6 +173,7 @@
       id={o.id}
       judul={o.rt || "-"} baris={[(o.blok || "-") + " \u00B7 " + (o.batas || "-"), (o.ketua || "-") + (o.kontak ? " \u00B7 " + o.kontak : "")]}
       nilai={o}
+      saatUbah={ubahDataRT}
       olahFoto={olahFotoPotret}
       kolom={[
         { nama: "foto", label: "Foto Ketua RT", jenis: "foto", petunjuk: "Pilih foto baru untuk mengganti. Foto juga bisa dihapus tanpa menghapus data RT." },
