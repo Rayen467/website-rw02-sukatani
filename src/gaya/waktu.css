@@ -877,3 +877,64 @@ footer.kaki-waktu {
     transition: none;
   }
 }
+
+/* ===========================================================================
+ *  LAPIS KETERBACAAN DI SOROTAN SIANG HARI
+ *
+ *  Pagi, siang, dan sore memakai tulisan GELAP langsung di atas foto. Itu
+ *  yang membuat halaman depan terasa terang dan lapang, dan memang begitu
+ *  yang diinginkan. Tapi keputusan itu diambil waktu berkas fotonya belum
+ *  benar-benar ada -- hero-pagi.webp bahkan bukan WebP sama sekali, jadi
+ *  yang tergambar selama ini bidang kosong, dan tulisan gelap di atas
+ *  bidang kosong selalu terbaca.
+ *
+ *  Begitu foto sungguhan dipasang, tulisannya HILANG di tempat ia melintas
+ *  pohon atau bayangan. Rata-rata seluruh daerah tulisan masih 5 sampai 7,
+ *  jadi sekilas tidak ada yang aneh; yang gagal titik-titik gelapnya.
+ *  Rasio kontras pada titik TERBURUK, sebelum lapis ini dipasang:
+ *
+ *      pagi 1.19    siang 1.00    sore 1.00      (ambang 4.5)
+ *
+ *  Kekuatan wash-nya diukur, bukan dikira-kira:
+ *
+ *      putih 0.55 / 0.40        pagi 3.79  siang 3.24  sore 3.91   gagal
+ *      putih 0.68 / 0.52        pagi 5.20  siang 4.83  sore 5.95   dipakai
+ *      putih 0.80 / 0.64        pagi 6.84  siang 6.58  sore 8.26   fotonya pudar
+ *
+ *  Gradiennya habis di 76 persen lebar, jadi sisi kanan foto -- gunung,
+ *  sawah, dan papan nama RW -- tetap bersih. Yang ditutupi cuma bagian
+ *  yang memang ada tulisannya.
+ *
+ *  Malam tidak butuh ini: tulisannya terang di atas foto gelap, dan titik
+ *  terburuknya sudah 9.64.
+ * ========================================================================= */
+
+:root[data-waktu="pagi"] .beranda-hero,
+:root[data-waktu="siang"] .beranda-hero,
+:root[data-waktu="sore"] .beranda-hero {
+  background-image:
+    linear-gradient(100deg, rgba(255, 255, 255, .68) 0%, rgba(255, 255, 255, .52) 48%, rgba(255, 255, 255, 0) 76%),
+    linear-gradient(180deg, var(--waktu-hero-gelap), rgba(3, 22, 20, .04)),
+    var(--gambar-hero);
+}
+
+/* Bayangan tulisan ikut dikuatkan. Yang lama 0.18 -- terlalu tipis untuk
+   menolong apa pun, dan justru membuat seolah-olah sudah ditangani. */
+:root[data-waktu="pagi"] .beranda-copy,
+:root[data-waktu="siang"] .beranda-copy,
+:root[data-waktu="sore"] .beranda-copy {
+  text-shadow: 0 1px 10px rgba(255, 255, 255, .55);
+}
+
+/* Di layar sempit tulisannya memakai hampir seluruh lebar, jadi gradien
+   yang habis di 76 persen tidak lagi menutupi ujung kanannya. */
+@media (max-width: 720px) {
+  :root[data-waktu="pagi"] .beranda-hero,
+  :root[data-waktu="siang"] .beranda-hero,
+  :root[data-waktu="sore"] .beranda-hero {
+    background-image:
+      linear-gradient(180deg, rgba(255, 255, 255, .72) 0%, rgba(255, 255, 255, .58) 52%, rgba(255, 255, 255, .1) 100%),
+      linear-gradient(180deg, var(--waktu-hero-gelap), rgba(3, 22, 20, .04)),
+      var(--gambar-hero);
+  }
+}

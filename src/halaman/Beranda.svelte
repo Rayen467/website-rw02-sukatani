@@ -3,6 +3,7 @@
   import { keDaftar } from "../inti/format.js";
   import { SAMBUTAN_BAWAAN, BERANDA_BAWAAN } from "../inti/bawaan.js";
   import { isi, konten, kontenNilai } from "../keadaan/isi.svelte.js";
+  import { gambarWaktu } from "../inti/waktu.js";
   import { waktu, FASE_WAKTU, pilihWaktu, kembaliOtomatis } from "../keadaan/waktu.svelte.js";
   import Belum from "../komponen/Belum.svelte";
   import TombolSalin from "../komponen/TombolSalin.svelte";
@@ -27,11 +28,7 @@
     )
   );
 
-  const gambarHero = $derived(
-    waktu.fase === "malam"
-      ? "./visual/waktu/hero-malam.webp"
-      : "./visual/waktu/hero-pagi.webp"
-  );
+  const gambarHero = $derived(gambarWaktu(waktu.fase));
 
   const layanan = [
     {
