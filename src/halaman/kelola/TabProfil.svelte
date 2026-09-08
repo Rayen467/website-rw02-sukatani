@@ -107,8 +107,7 @@
       kolom={[
         { nama: "jabatan", label: "Jabatan" },
         { nama: "nama", label: "Nama" },
-        { nama: "kontak", label: "Nomor kontak" },
-        { nama: "poligon", label: "Koordinat batas RT", jenis: "panjang" }
+        { nama: "kontak", label: "Nomor kontak" }
       ]}
     />
   {/each}
@@ -152,7 +151,8 @@
         { nama: "blok", label: "Blok" },
         { nama: "batas", label: "Batas wilayah", jenis: "panjang" },
         { nama: "ketua", label: "Ketua RT" },
-        { nama: "kontak", label: "Nomor kontak" }
+        { nama: "kontak", label: "Nomor kontak" },
+        { nama: "poligon", label: "Koordinat batas RT", jenis: "panjang" }
       ]}
     />
   {/each}
@@ -186,9 +186,16 @@
     <div class="isian"><label for="mt-tglskt">Tanggal SKT</label><input id="mt-tglskt" bind:value={mt.tanggalSkt} /></div>
     <div class="isian"><label for="mt-masa">Masa berlaku</label><input id="mt-masa" bind:value={mt.masaBerlaku} /></div>
     <div class="isian"><label for="mt-ketua">Ketua</label><input id="mt-ketua" bind:value={mt.ketua} /></div>
+    <div class="isian"><label for="mt-sekretaris">Sekretaris</label><input id="mt-sekretaris" bind:value={mt.sekretaris} /></div>
     <div class="isian"><label for="mt-berdiri">Tanggal berdiri</label><input id="mt-berdiri" bind:value={mt.tanggalBerdiri} /></div>
     <div class="isian"><label for="mt-periode">Periode</label><input id="mt-periode" bind:value={mt.periode} /></div>
+    <div class="isian"><label for="mt-anggota-jumlah">Jumlah anggota</label><input id="mt-anggota-jumlah" bind:value={mt.jumlahAnggota} /></div>
     <div class="isian"><label for="mt-alamat">Alamat</label><textarea id="mt-alamat" bind:value={mt.alamat}></textarea></div>
+    <div class="catatan"><b>Dokumen pendaftaran KUA.</b> Data berikut berasal dari Surat Permohonan Pendaftaran Majelis Taklim yang ada di arsip.</div>
+    <div class="isian"><label for="mt-permohonan">Nomor permohonan</label><input id="mt-permohonan" bind:value={mt.nomorPermohonan} /></div>
+    <div class="isian"><label for="mt-tgl-permohonan">Tanggal permohonan</label><input id="mt-tgl-permohonan" bind:value={mt.tanggalPermohonan} /></div>
+    <div class="isian"><label for="mt-tujuan-daftar">Tujuan pendaftaran</label><textarea id="mt-tujuan-daftar" bind:value={mt.tujuanPendaftaran}></textarea></div>
+    <div class="isian"><label for="mt-lampiran">Lampiran pendaftaran</label><textarea id="mt-lampiran" bind:value={mt.lampiranPendaftaran}></textarea><span class="petunjuk">Satu lampiran per baris.</span></div>
     <div class="isian"><label for="mt-landasan">Landasan</label><textarea id="mt-landasan" bind:value={mt.landasan}></textarea></div>
     <div class="isian"><label for="mt-visi">Visi</label><textarea id="mt-visi" bind:value={mt.visi}></textarea></div>
     <div class="isian"><label for="mt-misi">Misi</label><textarea id="mt-misi" bind:value={mt.misi}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
@@ -201,6 +208,11 @@
     <div class="isian"><label for="mt-keuangan">Sumber keuangan</label><textarea id="mt-keuangan" bind:value={mt.keuangan}></textarea><span class="petunjuk">Satu sumber per baris.</span></div>
     <div class="isian"><label for="mt-perubahan">Perubahan AD/ART</label><textarea id="mt-perubahan" bind:value={mt.perubahan}></textarea></div>
     <div class="isian"><label for="mt-rapat">Rapat</label><textarea id="mt-rapat" bind:value={mt.rapat}></textarea></div>
+    <div class="catatan"><b>Arsip RW terkait.</b> Jangan dipakai menimpa periode Al-Ikhlas bila judul/periodenya berbeda.</div>
+    <div class="isian"><label for="mt-rw-nomor">Nomor SK RW</label><input id="mt-rw-nomor" bind:value={mt.dokumenRwNomor} /></div>
+    <div class="isian"><label for="mt-rw-judul">Judul SK RW</label><textarea id="mt-rw-judul" bind:value={mt.dokumenRwJudul}></textarea></div>
+    <div class="isian"><label for="mt-rw-dasar">Dasar SK RW</label><textarea id="mt-rw-dasar" bind:value={mt.dokumenRwDasar}></textarea></div>
+    <div class="isian"><label for="mt-rw-catatan">Catatan pemisahan arsip</label><textarea id="mt-rw-catatan" bind:value={mt.dokumenRwCatatan}></textarea></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "majelis"}>Simpan Majelis Taklim</button></div>
   </form>
 </section>
@@ -208,7 +220,7 @@
 <section class="blok">
   <div class="kepala-bagian"><h2>GOR Nurani RW 02</h2></div>
   <div class="catatan" style="margin-bottom:18px">
-    Data awal diisi dari AD/ART Pengelolaan GOR Nurani. Tarif tidak diisi karena dokumen menyatakan tarif ditetapkan pengelola.
+    Data awal diisi dari AD/ART Pengelolaan GOR Nurani. Arsip terbaru juga memuat jadwal tetap, tarif hajatan, pembagian hasil, struktur pengelola, dan aturan pemakaian.
   </div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); jalan("gor", async () => { await simpanKonten(KONTEN.GOR_NURANI, gor); muatKonten(KONTEN.GOR_NURANI); }); }}>
     <div class="isian"><label for="gor-nama">Nama fasilitas</label><input id="gor-nama" bind:value={gor.nama} /></div>
@@ -225,7 +237,36 @@
     <div class="isian"><label for="gor-asas">Asas</label><input id="gor-asas" bind:value={gor.asas} /></div>
     <div class="isian"><label for="gor-tujuan">Tujuan</label><textarea id="gor-tujuan" bind:value={gor.tujuan}></textarea><span class="petunjuk">Satu poin per baris.</span></div>
     <div class="isian"><label for="gor-pemanfaatan">Pemanfaatan</label><textarea id="gor-pemanfaatan" bind:value={gor.pemanfaatan}></textarea></div>
+
+    <div class="catatan"><b>Struktur dan tugas pengelola.</b></div>
+    <div class="isian"><label for="gor-struktur">Struktur pengurus</label><textarea id="gor-struktur" bind:value={gor.strukturPengurus}></textarea><span class="petunjuk">Satu jabatan per baris.</span></div>
+    <div class="isian"><label for="gor-ketentuan-pengurus">Ketentuan pengurus</label><textarea id="gor-ketentuan-pengurus" bind:value={gor.ketentuanPengurus}></textarea></div>
+    <div class="isian"><label for="gor-tugas-ketua">Tugas Ketua GOR</label><textarea id="gor-tugas-ketua" bind:value={gor.tugasKetua}></textarea></div>
+    <div class="isian"><label for="gor-tugas-pelaksana">Tugas Pelaksana Harian</label><textarea id="gor-tugas-pelaksana" bind:value={gor.tugasPelaksana}></textarea></div>
+    <div class="isian"><label for="gor-tugas-bendahara">Tugas Bendahara</label><textarea id="gor-tugas-bendahara" bind:value={gor.tugasBendahara}></textarea></div>
+
+    <div class="catatan"><b>Jadwal, pemakaian, dan tarif.</b></div>
+    <div class="isian"><label for="gor-jadwal">Jadwal penggunaan tetap</label><textarea id="gor-jadwal" bind:value={gor.jadwalTetap}></textarea><span class="petunjuk">Satu jadwal per baris.</span></div>
+    <div class="isian"><label for="gor-badminton">Aturan bulu tangkis</label><textarea id="gor-badminton" bind:value={gor.aturanBadminton}></textarea></div>
+    <div class="isian"><label for="gor-hajatan">Aturan hajatan</label><textarea id="gor-hajatan" bind:value={gor.aturanHajatan}></textarea></div>
+    <div class="isian"><label for="gor-tarif-rt">Tarif warga RT 01/02</label><input id="gor-tarif-rt" bind:value={gor.tarifRt0102} /></div>
+    <div class="isian"><label for="gor-komp-rt">Komposisi tarif RT 01/02</label><textarea id="gor-komp-rt" bind:value={gor.komposisiRt0102}></textarea></div>
+    <div class="isian"><label for="gor-tarif-rw">Tarif warga RW 02 di luar RT 01/02</label><input id="gor-tarif-rw" bind:value={gor.tarifRw02Lain} /></div>
+    <div class="isian"><label for="gor-komp-rw">Komposisi tarif warga RW 02 lain</label><textarea id="gor-komp-rw" bind:value={gor.komposisiRw02Lain}></textarea></div>
+    <div class="isian"><label for="gor-tarif-luar">Tarif penyewa di luar RW 02</label><input id="gor-tarif-luar" bind:value={gor.tarifLuarRw02} /></div>
+    <div class="isian"><label for="gor-komp-luar">Komposisi tarif luar RW 02</label><textarea id="gor-komp-luar" bind:value={gor.komposisiLuarRw02}></textarea></div>
+    <div class="isian"><label for="gor-tarif-catatan">Catatan perubahan tarif</label><textarea id="gor-tarif-catatan" bind:value={gor.tarifCatatan}></textarea></div>
+
+    <div class="catatan"><b>Keuangan dan tata kelola.</b></div>
+    <div class="isian"><label for="gor-profit">Alokasi profit</label><textarea id="gor-profit" bind:value={gor.alokasiProfit}></textarea><span class="petunjuk">Satu alokasi per baris.</span></div>
+    <div class="isian"><label for="gor-profit-tgl">Batas distribusi</label><input id="gor-profit-tgl" bind:value={gor.batasDistribusiProfit} /></div>
+    <div class="isian"><label for="gor-rapat">Tata cara rapat</label><textarea id="gor-rapat" bind:value={gor.rapat}></textarea></div>
+    <div class="isian"><label for="gor-keputusan">Pengambilan keputusan</label><textarea id="gor-keputusan" bind:value={gor.keputusan}></textarea></div>
+    <div class="isian"><label for="gor-renovasi">Pembangunan / renovasi</label><textarea id="gor-renovasi" bind:value={gor.renovasi}></textarea></div>
+    <div class="isian"><label for="gor-adart">Perubahan AD/ART</label><textarea id="gor-adart" bind:value={gor.perubahanAdart}></textarea></div>
+    <div class="isian"><label for="gor-perlengkapan">Perlengkapan</label><textarea id="gor-perlengkapan" bind:value={gor.perlengkapan}></textarea><span class="petunjuk">Satu item per baris.</span></div>
     <div class="isian"><label for="gor-logo">Makna lambang</label><textarea id="gor-logo" bind:value={gor.maknaLogo}></textarea></div>
+    <div class="isian"><label for="gor-sumber">Sumber dokumen</label><textarea id="gor-sumber" bind:value={gor.sumberDokumen}></textarea></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "gor"}>Simpan GOR Nurani</button></div>
   </form>
 </section>
