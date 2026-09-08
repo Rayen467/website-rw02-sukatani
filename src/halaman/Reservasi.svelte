@@ -72,6 +72,11 @@
         <h3>{f.nama}</h3>
         {#if f.kapasitas}<p class="keterangan">Kapasitas {f.kapasitas}</p>{/if}
         <p>{f.ket || ""}</p>
+        {#if f.id === "gor-nurani"}
+          <div class="baris-tombol" style="margin-top:10px">
+            <a class="tombol" href="#/gor-nurani">Lihat jadwal &amp; tarif GOR</a>
+          </div>
+        {/if}
       </div>
     {/each}
   </div>
@@ -101,7 +106,7 @@
       {/each}
     </div>
   </div>
-  <p class="verifikasi">Tanggal bertanda kuning sudah dipakai. Jadwal diperbarui otomatis saat pengurus menyetujui permohonan.</p>
+  <p class="verifikasi">Tanggal bertanda kuning sudah dipakai. Jadwal diperbarui otomatis saat pengurus menyetujui permohonan. Untuk GOR Nurani, cek juga jadwal tetap dan ketentuan hajatan pada halaman GOR Nurani sebelum mengajukan.</p>
 </section>
 
 <section class="blok">
