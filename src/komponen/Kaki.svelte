@@ -49,5 +49,10 @@
       <span class="mono">{alamatKaki}</span>
       <span>Dikelola pengurus {namaRW}.</span>
     </div>
+    <div class="kaki-pembuat">
+      <span>Pengembangan situs</span>
+      <span aria-hidden="true">·</span>
+      <a href="mailto:rayenxtenri@gmail.com">rayenxtenri@gmail.com</a>
+    </div>
   </div>
 </footer>
