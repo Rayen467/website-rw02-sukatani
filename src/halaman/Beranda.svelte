@@ -27,7 +27,11 @@
     )
   );
 
-  const gambarHero = $derived("./visual/waktu/hero-" + waktu.fase + ".webp");
+  const gambarHero = $derived(
+    waktu.fase === "malam"
+      ? "./visual/waktu/hero-malam.webp"
+      : "./visual/waktu/hero-pagi.webp"
+  );
 
   const layanan = [
     {
@@ -204,7 +208,7 @@
   </section>
 
   <section class="panel-rumah panel-tentang">
-    <img class="ornamen-daun" src="./visual/brand/ornamen-daun.png" alt="" aria-hidden="true" />
+    <img class="ornamen-daun" src="./visual/brand/ornamen-daun.webp" alt="" aria-hidden="true" />
     <div class="panel-kepala">
       <h2>Tentang Permai Sukatani</h2>
       <a href="#/profil" aria-label="Buka profil RW">→</a>
