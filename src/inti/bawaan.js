@@ -155,30 +155,30 @@ export const JABATAN_BAWAAN = [
  * tetap boleh dilengkapi dari data pengurus tanpa mengubah nama resmi ini.
  */
 export const PENGURUS_RW_BAWAAN = [
-  { id: "ketua-rw", jabatan: "Ketua RW", nama: "Anto Carmanto, S.T., M.T.", foto: "", kontak: "", periode: "" },
+  { id: "ketua-rw", jabatan: "Ketua RW", nama: "Anto Carmanto, S.T., M.T.", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/65bf8ecc-bfbf-48c7-adf2-620fbd94acb3.png", kontak: "", periode: "" },
   { id: "sekretaris-rw", jabatan: "Sekretaris RW", nama: "Sukarno", foto: "", kontak: "", periode: "" },
-  { id: "bendahara-rw", jabatan: "Bendahara RW", nama: "Achmad Hidayat", foto: "", kontak: "", periode: "" },
-  { id: "seksi-keamanan", jabatan: "Seksi Keamanan", nama: "Samsul Rizal", foto: "", kontak: "", periode: "" }
+  { id: "bendahara-rw", jabatan: "Bendahara RW", nama: "Achmad Hidayat", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/126a6afb-9a54-4b94-987c-7e9ac86d34c4.png", kontak: "", periode: "" },
+  { id: "seksi-keamanan", jabatan: "Seksi Keamanan", nama: "Samsul Rizal", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/52f88307-2546-4133-b832-cd5054438f5d.png", kontak: "", periode: "" }
 ];
 
 /** Ketua RT yang dikonfirmasi RW 02. */
 export const KETUA_RT_BAWAAN = [
-  { id: "RT 01", rt: "RT 01/02", ketua: "Sambudi", foto: "", kontak: "", blok: "" },
-  { id: "RT 02", rt: "RT 02/02", ketua: "Sudir M. Nur", foto: "", kontak: "", blok: "" },
-  { id: "RT 03", rt: "RT 03/02", ketua: "Gunadi", foto: "", kontak: "", blok: "" },
-  { id: "RT 04", rt: "RT 04/02", ketua: "Supomo", foto: "", kontak: "", blok: "" }
+  { id: "RT 01", rt: "RT 01/02", ketua: "Sambudi", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/1ea34a54-86d4-4a40-83fc-c676073cddb8.png", kontak: "", blok: "" },
+  { id: "RT 02", rt: "RT 02/02", ketua: "Sudir M. Nur", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/c04b946b-22cb-4f9b-ae80-ca4e77f15044.png", kontak: "", blok: "" },
+  { id: "RT 03", rt: "RT 03/02", ketua: "Gunadi", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/0632e6f6-f895-497a-9f7f-14ff37df0427.png", kontak: "", blok: "" },
+  { id: "RT 04", rt: "RT 04/02", ketua: "Supomo", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f8323358-8a2f-4b01-83d6-d98fb7932d8b.png", kontak: "", blok: "" }
 ];
 
 /**
  * Lembaga/kelompok warga yang diminta RW untuk dimasukkan ke website.
- * Foto sengaja kosong sampai diterima dari yang bersangkutan.
+ * Foto resmi yang sudah diterima dipasang langsung pada data bawaan.
  */
 export const KELEMBAGAAN_WARGA_BAWAAN = [
-  { id: "kwt", nama: "Kelompok Wanita Tani (KWT)", jabatan: "Ketua", ketua: "Ibu Yusnidawati", foto: "" },
-  { id: "paud", nama: "PAUD (Pendidikan Anak Usia Dini)", jabatan: "Ketua", ketua: "Ibu Pujiati, S.Pd.", foto: "" },
-  { id: "majelis-taklim", nama: "Majelis Taklim Al Ikhlas", jabatan: "Ketua", ketua: "Ibu Suheti", foto: "" },
+  { id: "kwt", nama: "Kelompok Wanita Tani (KWT)", jabatan: "Ketua", ketua: "Ibu Yusnidawati", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/03b31cbe-8bec-45dd-a85b-fee7b6f9f4e9.png" },
+  { id: "paud", nama: "PAUD (Pendidikan Anak Usia Dini)", jabatan: "Ketua", ketua: "Ibu Pujiati, S.Pd.", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/616d26e4-1d96-4dfd-98dd-796cc773ec65.png" },
+  { id: "majelis-taklim", nama: "Majelis Taklim Al Ikhlas RW 02 PSP", jabatan: "Ketua", ketua: "Ibu Suheti", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/d783be68-f2b9-4c6c-8d77-10ece68e74c7.png" },
   { id: "transportasi", nama: "Transportasi Warga", jabatan: "Ketua", ketua: "Bapak Handoko", foto: "" },
-  { id: "posyandu", nama: "Posyandu", jabatan: "Ketua", ketua: "Ibu Pujiati", foto: "" }
+  { id: "posyandu", nama: "Posyandu", jabatan: "Ketua", ketua: "Ibu Pujiati", foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/616d26e4-1d96-4dfd-98dd-796cc773ec65.png" }
 ];
 
 export const IDENTITAS_BAWAAN = {
@@ -200,6 +200,7 @@ export const MAJELIS_TAKLIM_BAWAAN = {
   tanggalSkt: "5 Agustus 2026",
   masaBerlaku: "5 tahun sejak tanggal diterbitkan",
   ketua: "Ibu Suheti",
+  fotoKetua: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/d783be68-f2b9-4c6c-8d77-10ece68e74c7.png",
   sekretaris: "Sri Maryanti",
   tahunBerdiri: "2026",
   tanggalBerdiri: "18 Juli 2026",
