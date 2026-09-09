@@ -32,6 +32,7 @@
   import BeritaRinci from "./halaman/BeritaRinci.svelte";
   import Kalender from "./halaman/Kalender.svelte";
   import Galeri from "./halaman/Galeri.svelte";
+  import Transparansi from "./halaman/Transparansi.svelte";
   import Forum from "./halaman/Forum.svelte";
   import Kas from "./halaman/Kas.svelte";
   import Program from "./halaman/Program.svelte";
@@ -77,6 +78,7 @@
     berita: Berita,
     kalender: Kalender,
     galeri: Galeri,
+    transparansi: Transparansi,
     forum: Forum,
     kas: Kas,
     program: Program,
