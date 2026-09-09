@@ -1,6 +1,6 @@
 <script>
   import { KONTEN, KOLEKSI } from "../inti/nama.js";
-  import { KATEGORI_PENGADUAN } from "../inti/bawaan.js";
+  import { KATEGORI_PENGADUAN, PENGURUS_RW_BAWAAN } from "../inti/bawaan.js";
   import { kontenNilai, isi, muatKoleksi } from "../keadaan/isi.svelte.js";
   import { sesi } from "../keadaan/sesi.svelte.js";
   import { beriTahu } from "../keadaan/pesan.svelte.js";
@@ -32,19 +32,32 @@
   const sekretaris = $derived(kontenNilai(KONTEN.KONTAK, "sekretaris", ""));
   const keamanan = $derived(kontenNilai(KONTEN.KONTAK, "posKeamanan", ""));
 
-  const pengurus = $derived(
-    (isi.pengurus_tampil || []).length
-      ? (isi.pengurus_tampil || []).slice(0, 7)
-      : [
-          { jabatan: "Ketua RW", nama: "Anto Carmanto, S.T., M.T.", kontak: "" },
-          { jabatan: "Sekretaris RW", nama: "", kontak: "" },
-          { jabatan: "Bendahara RW", nama: "", kontak: "" },
-          { jabatan: "Seksi Keamanan", nama: "", kontak: keamanan },
-          { jabatan: "Seksi Kebersihan", nama: "", kontak: "" },
-          { jabatan: "Seksi Sarana & Prasarana", nama: "", kontak: "" },
-          { jabatan: "Seksi UMKM", nama: "", kontak: "" }
-        ]
-  );
+  function normalJabatan(s) {
+    return String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  const pengurus = $derived.by(() => {
+    const dariServer = isi.pengurus_tampil || [];
+    return PENGURUS_RW_BAWAAN.map((bawaan) => {
+      const cocok = dariServer.find((o) => {
+        const a = normalJabatan(o.jabatan);
+        const b = normalJabatan(bawaan.jabatan);
+        return a === b || a.includes(b) || b.includes(a);
+      });
+
+      const hasil = cocok
+        ? {
+            ...cocok,
+            ...bawaan,
+            foto: cocok.foto || bawaan.foto,
+            kontak: cocok.kontak || bawaan.kontak
+          }
+        : { ...bawaan };
+
+      if (hasil.jabatan === "Seksi Keamanan" && !hasil.kontak) hasil.kontak = keamanan;
+      return hasil;
+    });
+  });
 
   const faq = [
     {
@@ -71,7 +84,7 @@
     ["◆", "Keamanan", "Pos keamanan", "#/pengaduan"],
     ["▥", "Kebersihan", "Sampah & lingkungan", "#/pengaduan"],
     ["▰", "UMKM", "Informasi & pendaftaran", "#/umkm"],
-    ["▣", "Transportasi Warga", "Info transportasi", "#/layanan"],
+    ["▣", "Transportasi Warga", "Koordinator: Bapak Handoko", "#/layanan"],
     ["∞", "Kerja Sama", "Untuk instansi/komunitas", "#form-kontak"],
     ["•••", "Lainnya", "Pertanyaan umum", "#form-kontak"]
   ];
