@@ -38,25 +38,36 @@
     return [...resmi, ...tambahan];
   });
 
+  /* Pertahankan perilaku editor lama: selama data belum selesai dimuat,
+     tampilkan bawaan resmi; kalau pengurus memang mengosongkan koleksi RT,
+     jangan menghidupkan data yang telah dihapus. */
+  const barisRTServer = $derived(
+    isi.batas_rt === null
+      ? KETUA_RT_BAWAAN
+      : (isi.batas_rt || [])
+  );
+
   const barisRT = $derived.by(() => {
-    const dariServer = isi.batas_rt || [];
-    return KETUA_RT_BAWAAN.map((bawaan) => {
-      const cocok = dariServer.find((o) => {
-        const id = normal(o.id);
-        const rt = normal(o.rt);
-        const targetId = normal(bawaan.id);
-        const targetRt = normal(bawaan.rt);
-        return id === targetId || rt === targetRt || rt.startsWith(targetId.toLowerCase());
+    const dariServer = barisRTServer;
+    if (!dariServer.length) return [];
+
+    return dariServer.map((server) => {
+      const bawaan = KETUA_RT_BAWAAN.find((b) => {
+        const id = normal(server.id);
+        const rt = normal(server.rt);
+        const targetId = normal(b.id);
+        const targetRt = normal(b.rt);
+        return id === targetId || rt === targetRt || rt.startsWith(targetId);
       });
-      return cocok
-        ? {
-            ...cocok,
-            ...bawaan,
-            foto: cocok.foto || bawaan.foto,
-            kontak: cocok.kontak || bawaan.kontak,
-            blok: cocok.blok || bawaan.blok
-          }
-        : bawaan;
+
+      if (!bawaan) return server;
+      return {
+        ...server,
+        ...bawaan,
+        foto: server.foto || bawaan.foto,
+        kontak: server.kontak || bawaan.kontak,
+        blok: server.blok || bawaan.blok
+      };
     });
   });
 
