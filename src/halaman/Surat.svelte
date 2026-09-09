@@ -11,6 +11,8 @@
   );
 </script>
 
+<div class="mobile-page mobile-surat">
+
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Pengajuan Surat</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Layanan warga</p>
@@ -49,3 +51,5 @@
     </div>
   </div>
 </section>
+
+</div>
