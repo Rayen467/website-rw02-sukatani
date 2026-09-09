@@ -163,7 +163,7 @@
 <section class="sambutan-rw blok" aria-labelledby="judul-sambutan-rw">
   <div class="sambutan-rw-copy">
     <p class="sambutan-rw-label"><span></span>Sambutan Ketua RW 02</p>
-    <h2 id="judul-sambutan-rw">Bersama Mewujudkan<br />Lingkungan yang Lebih Baik</h2>
+    <h2 id="judul-sambutan-rw">Bersama<br />Mewujudkan Lingkungan<br />yang Lebih Baik</h2>
 
     <div class="sambutan-rw-pembuka">
       <p><strong>Assalamu’alaikum Warahmatullahi Wabarakatuh,</strong></p>
