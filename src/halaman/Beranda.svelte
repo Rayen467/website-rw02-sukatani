@@ -229,7 +229,7 @@
     <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
 
     <img
-      src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f4c78b9e-573d-46c2-a76b-534afa6caa8e.png"
+      src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/65bf8ecc-bfbf-48c7-adf2-620fbd94acb3.png"
       alt="Foto Ketua RW 02 Anto Carmanto"
       decoding="async"
     />
