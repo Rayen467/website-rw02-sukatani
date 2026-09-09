@@ -3023,3 +3023,60 @@ body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-rw-lengkap {
     min-height: 0;
   }
 }
+
+
+/* === FOTO KETUA RW UTUH TANPA CROP === */
+
+/* Jangan pernah crop foto Ketua RW. Pertahankan proporsi asli. */
+body:has(.beranda-hero) .sambutan-rw-foto {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255,255,255,.30), transparent 36%),
+    linear-gradient(145deg, rgba(225,236,229,.90), rgba(203,220,211,.90));
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Background ruang kosong di sisi foto ikut fase waktu. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw-foto {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255,213,94,.18), transparent 34%),
+    linear-gradient(145deg, #e8eadb, #d6e1d4);
+}
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw-foto {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(119,202,235,.18), transparent 34%),
+    linear-gradient(145deg, #deecea, #d1e2dc);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw-foto {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(244,165,70,.19), transparent 34%),
+    linear-gradient(145deg, #e6d5bc, #d8cbb5);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(61,126,157,.19), transparent 34%),
+    linear-gradient(145deg, #132b37, #0e252d);
+}
+
+/* Overlay nama tetap berada di bawah foto tanpa menutup muka. */
+body:has(.beranda-hero) .sambutan-rw-foto::after {
+  height: 26%;
+}
+
+@media (max-width: 860px) {
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+}
