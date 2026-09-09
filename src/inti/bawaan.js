@@ -493,7 +493,6 @@ export const MENU = [
     isi: [
       ["/berita", "Berita dan Pengumuman", "Kabar terbaru dari pengurus"],
       ["/kalender", "Kalender Kegiatan", "Jadwal rutin dan acara"],
-      ["/galeri", "Galeri Foto & Video", "Dokumentasi kegiatan, pembangunan, dan acara warga"],
       ["/berkas", "Dokumen dan Video", "Notulen, SK, formulir, rekaman"],
       ["/forum", "Forum dan Polling", "Musyawarah dan survei warga"]
     ]
@@ -501,6 +500,7 @@ export const MENU = [
   {
     label: "Transparansi",
     isi: [
+      ["/transparansi", "Transparansi & Keuangan", "Ringkasan kas dan program RW"],
       ["/kas", "Laporan Kas RW", "Pemasukan, pengeluaran, saldo"],
       ["/program", "Rencana dan Realisasi", "Program yang sudah dan akan dikerjakan"]
     ]
