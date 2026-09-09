@@ -160,3 +160,90 @@ nav.menu-utama { display: flex; gap: 2px; position: relative; }
 }
 .laci a { display: block; padding: 9px 10px; border-radius: 4px; font-size: 15px; font-weight: 600; color: var(--tinta-2); }
 .laci a:hover { background: var(--permukaan-3); text-decoration: none; }
+
+
+/* === BATASI LOGO RESOLUSI TINGGI AGAR TIDAK MEMBESARKAN HEADER === */
+
+/*
+ * Aset logo master berukuran 1254px. Tanpa ukuran CSS eksplisit, browser
+ * memakai ukuran intrinsik gambar dan membuat header setinggi ratusan piksel.
+ * Ukuran di bawah berlaku di SEMUA halaman; homepage boleh menimpa lewat
+ * waktu.css bila perlu.
+ */
+.merek-visual {
+  width: 202px;
+  min-width: 202px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  overflow: hidden;
+}
+
+.merek-logo-ikon {
+  width: 46px !important;
+  height: 46px !important;
+  max-width: 46px !important;
+  max-height: 46px !important;
+  flex: 0 0 46px;
+  display: block;
+  object-fit: contain;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.merek-teks {
+  min-width: 0;
+  display: grid;
+  line-height: 1;
+  color: var(--tinta);
+}
+
+.merek-teks strong {
+  font-family: "Archivo", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.merek-teks b {
+  margin-top: 2px;
+  font-family: "Archivo", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .10em;
+  white-space: nowrap;
+}
+
+.merek-teks small {
+  margin-top: 4px;
+  overflow: hidden;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 5.8px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 760px) {
+  .merek-visual {
+    width: 150px;
+    min-width: 150px;
+    height: 44px;
+    gap: 7px;
+  }
+
+  .merek-logo-ikon {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    flex-basis: 40px;
+  }
+
+  .merek-teks strong { font-size: 10px; }
+  .merek-teks b { font-size: 12px; }
+  .merek-teks small { font-size: 4.8px; }
+}
