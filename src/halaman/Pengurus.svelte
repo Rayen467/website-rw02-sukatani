@@ -20,7 +20,7 @@
         ? {
             ...cocok,
             ...bawaan,
-            foto: cocok.foto || bawaan.foto,
+            foto: bawaan.foto || cocok.foto,
             kontak: cocok.kontak || bawaan.kontak,
             periode: cocok.periode || bawaan.periode
           }
@@ -64,7 +64,7 @@
       return {
         ...server,
         ...bawaan,
-        foto: server.foto || bawaan.foto,
+        foto: bawaan.foto || server.foto,
         kontak: server.kontak || bawaan.kontak,
         blok: server.blok || bawaan.blok
       };
