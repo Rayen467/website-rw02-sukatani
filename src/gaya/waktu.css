@@ -3080,3 +3080,159 @@ body:has(.beranda-hero) .sambutan-rw-foto::after {
     object-position: center center !important;
   }
 }
+
+
+/* === CARD TENTANG IKUT WAKTU + HAPUS ORNAMEN DAUN LAMA === */
+
+/* Ornamen PNG lama disembunyikan total. */
+body:has(.beranda-hero) .panel-tentang .ornamen-daun {
+  display: none !important;
+}
+
+/* Card Tentang memakai token sendiri dan berubah sesuai fase waktu. */
+body:has(.beranda-hero) .panel-tentang {
+  --tentang-bg-1: rgba(31, 73, 58, .95);
+  --tentang-bg-2: rgba(24, 57, 46, .97);
+  --tentang-judul: #f5fbf7;
+  --tentang-teks: rgba(238, 248, 243, .86);
+  --tentang-garis: rgba(232, 246, 239, .15);
+  --tentang-info: rgba(255,255,255,.06);
+  --tentang-quote: #7be1b5;
+  --tentang-border: rgba(209, 235, 222, .14);
+  position: relative;
+  isolation: isolate;
+  color: var(--tentang-judul);
+  border-color: var(--tentang-border);
+  background:
+    radial-gradient(circle at 92% 16%, rgba(255,255,255,.055), transparent 26%),
+    linear-gradient(145deg, var(--tentang-bg-1), var(--tentang-bg-2));
+  box-shadow:
+    0 20px 46px -31px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+/* Ornamen baru: abstrak halus, bukan gambar daun tempelan. */
+body:has(.beranda-hero) .panel-tentang::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: -34px;
+  bottom: -38px;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    radial-gradient(ellipse at 30% 66%, transparent 52%, currentColor 53% 55%, transparent 56%),
+    radial-gradient(ellipse at 58% 42%, transparent 54%, currentColor 55% 57%, transparent 58%),
+    radial-gradient(circle at 38% 72%, currentColor 0 2px, transparent 3px);
+  color: rgba(255,255,255,.28);
+  transform: rotate(-14deg);
+}
+
+body:has(.beranda-hero) .panel-tentang > * {
+  position: relative;
+  z-index: 1;
+}
+
+body:has(.beranda-hero) .panel-tentang .panel-kepala h2 {
+  color: var(--tentang-judul);
+}
+
+body:has(.beranda-hero) .tentang-copy p {
+  color: var(--tentang-teks);
+}
+
+body:has(.beranda-hero) .panel-tentang blockquote {
+  color: var(--tentang-judul);
+  border-top-color: var(--tentang-garis);
+}
+
+body:has(.beranda-hero) .tentang-quote-mark {
+  color: var(--tentang-quote);
+}
+
+body:has(.beranda-hero) .tentang-info {
+  color: var(--tentang-judul);
+  border-color: var(--tentang-garis);
+  background: var(--tentang-info);
+}
+
+body:has(.beranda-hero) .tentang-foto {
+  border-color: var(--tentang-garis);
+}
+
+/* PAGI: sage/cream, nyambung dengan suasana hangat. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .panel-tentang {
+  --tentang-bg-1: rgba(224, 232, 204, .96);
+  --tentang-bg-2: rgba(204, 220, 194, .98);
+  --tentang-judul: #244a36;
+  --tentang-teks: rgba(48, 73, 60, .86);
+  --tentang-garis: rgba(53, 91, 68, .15);
+  --tentang-info: rgba(255,255,255,.28);
+  --tentang-quote: #2f9a68;
+  --tentang-border: rgba(66, 105, 75, .16);
+}
+:root[data-waktu="pagi"] body:has(.beranda-hero) .panel-tentang::after {
+  color: rgba(57, 112, 73, .22);
+}
+
+/* SIANG: aqua/sage terang, tidak lagi navy pekat. */
+:root[data-waktu="siang"] body:has(.beranda-hero) .panel-tentang {
+  --tentang-bg-1: rgba(206, 233, 228, .96);
+  --tentang-bg-2: rgba(188, 220, 210, .98);
+  --tentang-judul: #164b45;
+  --tentang-teks: rgba(40, 77, 71, .86);
+  --tentang-garis: rgba(39, 104, 94, .15);
+  --tentang-info: rgba(255,255,255,.31);
+  --tentang-quote: #168f6d;
+  --tentang-border: rgba(52, 112, 103, .16);
+}
+:root[data-waktu="siang"] body:has(.beranda-hero) .panel-tentang::after {
+  color: rgba(30, 111, 91, .20);
+}
+
+/* SORE: bronze/olive gelap, nyatu dengan background cokelat halaman. */
+:root[data-waktu="sore"] body:has(.beranda-hero) .panel-tentang {
+  --tentang-bg-1: rgba(93, 70, 49, .95);
+  --tentang-bg-2: rgba(71, 61, 45, .98);
+  --tentang-judul: #fff5e8;
+  --tentang-teks: rgba(250, 236, 218, .84);
+  --tentang-garis: rgba(255, 230, 196, .14);
+  --tentang-info: rgba(255,255,255,.055);
+  --tentang-quote: #f1bb63;
+  --tentang-border: rgba(233, 193, 137, .17);
+  box-shadow:
+    0 20px 46px -31px rgba(24, 17, 11, .55),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .panel-tentang::after {
+  color: rgba(241, 193, 120, .20);
+}
+
+/* MALAM: navy/teal tetap dipakai, tapi mengikuti palette halaman malam. */
+:root[data-waktu="malam"] body:has(.beranda-hero) .panel-tentang {
+  --tentang-bg-1: rgba(10, 44, 58, .96);
+  --tentang-bg-2: rgba(8, 34, 46, .98);
+  --tentang-judul: #eff9f7;
+  --tentang-teks: rgba(220, 237, 233, .83);
+  --tentang-garis: rgba(183, 222, 216, .14);
+  --tentang-info: rgba(255,255,255,.055);
+  --tentang-quote: #53d6b4;
+  --tentang-border: rgba(145, 199, 194, .14);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .panel-tentang::after {
+  color: rgba(95, 198, 174, .18);
+}
+
+/* Tombol ikut warna card, bukan hijau permanen yang mencolok. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .panel-tentang .cta-mini,
+:root[data-waktu="siang"] body:has(.beranda-hero) .panel-tentang .cta-mini {
+  background: linear-gradient(180deg, #23825f, #17684d);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .panel-tentang .cta-mini {
+  background: linear-gradient(180deg, #a56d33, #79502a);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .panel-tentang .cta-mini {
+  background: linear-gradient(180deg, #16856d, #106452);
+}
