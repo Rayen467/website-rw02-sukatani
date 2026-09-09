@@ -8,16 +8,17 @@
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
 
   /*
-   * JANGAN pakai footer-*.webp lama di sini.
-   * Aset lama hanya 640x213 / 720x240 dan akan terlihat blur di desktop.
-   * Empat hero panorama berukuran 1400px lebar, jadi dipakai langsung
-   * sebagai latar footer agar tetap tajam pada viewport desktop umum.
+   * Empat panorama footer final. Sumbernya adalah empat gambar yang dipilih
+   * user, disiapkan menjadi 3840x1080 WebP agar footer desktop tidak blur.
    */
-  const gambarKaki = $derived.by(() => {
-    const nama = "hero-" + waktu.fase + ".webp";
-    if (typeof document === "undefined") return "./visual/waktu/" + nama;
-    return new URL("./visual/waktu/" + nama, document.baseURI).href;
+  const FOOTER_4K = Object.freeze({
+    pagi: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ac5972ef-a71b-4fdc-bf3a-f7b9c364f121.webp",
+    siang: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd7cc752-5163-46de-89e3-9da5237b5063.webp",
+    sore: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/5b8146fc-c187-43ac-85c0-11bf4a6eb9cd.webp",
+    malam: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/bd68ce05-84b7-4d7e-a430-e1b4364d2984.webp"
   });
+
+  const gambarKaki = $derived(FOOTER_4K[waktu.fase] || FOOTER_4K.malam);
 </script>
 
 <footer class="tanpa-cetak kaki-waktu kaki-modern" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
