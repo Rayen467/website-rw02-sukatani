@@ -22,6 +22,8 @@
   const agama = $derived(uraiBaris(st.agama));
 </script>
 
+<div class="mobile-page mobile-data">
+
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Data Kependudukan</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Data warga</p>
@@ -95,3 +97,5 @@
   />
   {/if}
 {/if}
+
+</div>
