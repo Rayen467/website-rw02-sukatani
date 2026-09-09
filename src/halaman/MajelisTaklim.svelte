@@ -11,6 +11,7 @@
   const kepengurusan = $derived(keDaftar(nilai("kepengurusan")));
   const keuangan = $derived(keDaftar(nilai("keuangan")));
   const lampiran = $derived(keDaftar(nilai("lampiranPendaftaran")));
+  const ketuaTerkini = MAJELIS_TAKLIM_BAWAAN.ketua;
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>›</span><span>Majelis Taklim Al-Ikhlas</span></nav>
@@ -35,7 +36,7 @@
           <tr><th>Dasar</th><td>{nilai("dasarSkt")}</td></tr>
           <tr><th>Tanggal diterbitkan</th><td>{nilai("tanggalSkt")}</td></tr>
           <tr><th>Masa berlaku</th><td>{nilai("masaBerlaku")}</td></tr>
-          <tr><th>Ketua</th><td>{nilai("ketua")}</td></tr>
+          <tr><th>Ketua saat ini</th><td>{ketuaTerkini}</td></tr>
           <tr><th>Sekretaris</th><td>{nilai("sekretaris")}</td></tr>
           <tr><th>Tahun berdiri</th><td>{nilai("tahunBerdiri")}</td></tr>
         </tbody></table>
