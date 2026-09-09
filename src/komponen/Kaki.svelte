@@ -26,7 +26,7 @@
     <div class="kaki-modern-grid">
       <section class="kaki-modern-brand" aria-label="Identitas RW 02 Sukatani">
         <a class="kaki-lockup" href="#/" aria-label="Beranda RW 02 Sukatani">
-          <img class="kaki-logo-ikon" src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
+          <img class="kaki-logo-ikon" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f2bd27c4-a085-4824-923f-410a06b0adb2.png" alt="" aria-hidden="true" />
           <span class="kaki-logo-teks">
             <strong>RW 02</strong>
             <b>SUKATANI</b>
