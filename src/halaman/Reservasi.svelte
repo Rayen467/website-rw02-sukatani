@@ -79,6 +79,8 @@
   }
 </script>
 
+<div class="mobile-page mobile-reservasi">
+
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Reservasi Fasilitas</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Layanan warga</p>
@@ -147,3 +149,5 @@
     <div><button class="tombol utama" type="submit" disabled={mengirim || bentrok}>{mengirim ? "Mengirim..." : "Kirim permohonan"}</button></div>
   </form>
 </section>
+
+</div>
