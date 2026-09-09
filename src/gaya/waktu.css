@@ -2347,3 +2347,39 @@ body:has(.beranda-hero) .situs-atas > .tombol-tema svg {
     min-height: 36px;
   }
 }
+
+
+/* === LOGO TRANSPARAN FINAL 1254PX === */
+
+/* Logo sumber baru transparan, jadi jangan beri kotak/background tambahan. */
+body:has(.beranda-hero) .merek-logo-ikon,
+body:has(.beranda-hero) .kaki-logo-ikon {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* Sedikit lebih besar karena aset baru jauh lebih bersih dan punya padding transparan. */
+body:has(.beranda-hero) .merek-logo-ikon {
+  width: 50px;
+  height: 50px;
+  flex-basis: 50px;
+}
+
+body:has(.beranda-hero) .kaki-logo-ikon {
+  width: 66px;
+  height: 66px;
+  flex-basis: 66px;
+}
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) .merek-logo-ikon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+}
