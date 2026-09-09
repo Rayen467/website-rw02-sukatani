@@ -2385,703 +2385,6 @@ body:has(.beranda-hero) .kaki-logo-ikon {
 }
 
 
-/* === SAMBUTAN KETUA RW 02 — INLINE EXPAND === */
-
-body:has(.beranda-hero) .sambutan-rw {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(300px, .98fr);
-  gap: clamp(26px, 4vw, 52px);
-  align-items: stretch;
-  margin-top: 8px;
-  padding: clamp(20px, 2.8vw, 34px);
-  overflow: hidden;
-  border: 1px solid rgba(18, 74, 54, .10);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 12% 88%, rgba(41, 132, 89, .07), transparent 22%),
-    linear-gradient(145deg, rgba(255,255,252,.98), rgba(248,247,239,.98));
-  box-shadow: 0 24px 58px -44px rgba(20, 57, 43, .48);
-}
-
-body:has(.beranda-hero) .sambutan-rw::after {
-  content: "";
-  position: absolute;
-  left: 42%;
-  bottom: -55px;
-  width: 180px;
-  height: 180px;
-  opacity: .11;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 82%, transparent 54%, #2c8a62 56% 59%, transparent 61%),
-    radial-gradient(ellipse at 34% 55%, transparent 54%, #2c8a62 56% 59%, transparent 61%),
-    radial-gradient(ellipse at 68% 45%, transparent 54%, #2c8a62 56% 59%, transparent 61%);
-  transform: rotate(-18deg);
-}
-
-body:has(.beranda-hero) .sambutan-rw-copy {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-}
-
-body:has(.beranda-hero) .sambutan-rw-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 10px;
-  color: #65766f;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: .11em;
-  text-transform: uppercase;
-}
-
-body:has(.beranda-hero) .sambutan-rw-label span {
-  width: 18px;
-  height: 2px;
-  flex: none;
-  border-radius: 99px;
-  background: #e4ad19;
-}
-
-body:has(.beranda-hero) .sambutan-rw h2 {
-  max-width: 15ch;
-  margin: 0;
-  color: #103a2f;
-  font-family: "Archivo", sans-serif;
-  font-size: clamp(28px, 3vw, 41px);
-  font-weight: 800;
-  line-height: .99;
-  letter-spacing: -.045em;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka {
-  max-width: 65ch;
-  margin-top: 15px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka p,
-body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  margin: 0 0 9px;
-  color: #53615c;
-  font-size: 10.5px;
-  line-height: 1.58;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka strong,
-body:has(.beranda-hero) .sambutan-rw-lengkap strong {
-  color: #203f35;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail {
-  margin-top: 13px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary {
-  width: fit-content;
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 14px;
-  border-radius: 5px;
-  color: #fff;
-  background: linear-gradient(135deg, #0b744f, #327c2f);
-  box-shadow: 0 12px 24px -18px rgba(14, 91, 58, .70);
-  cursor: pointer;
-  list-style: none;
-  font-size: 9.5px;
-  font-weight: 750;
-  user-select: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary::-webkit-details-marker {
-  display: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary:hover {
-  transform: translateY(-1px);
-}
-
-body:has(.beranda-hero) .sambutan-rw-panah {
-  font-size: 15px;
-  line-height: 1;
-  transition: transform .2s ease;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-rw-panah {
-  transform: rotate(180deg);
-}
-
-body:has(.beranda-hero) .sambutan-tutup {
-  display: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-buka {
-  display: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-tutup {
-  display: inline;
-}
-
-body:has(.beranda-hero) .sambutan-rw-lengkap {
-  max-width: 68ch;
-  margin-top: 15px;
-  padding: 15px 16px 5px;
-  border-left: 2px solid rgba(16, 112, 78, .23);
-  background: rgba(239, 246, 239, .55);
-  border-radius: 0 8px 8px 0;
-  animation: sambutanTurun .22s ease-out;
-}
-
-@keyframes sambutanTurun {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-body:has(.beranda-hero) .sambutan-rw-ttd {
-  display: grid;
-  gap: 2px;
-  margin-top: 17px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(18, 73, 54, .11);
-}
-
-body:has(.beranda-hero) .sambutan-rw-ttd span {
-  color: #71807a;
-  font-size: 8.5px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-ttd strong {
-  font-family: "Archivo", sans-serif;
-  font-size: 12px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  max-width: 440px;
-  margin: 17px 0 0;
-  padding: 12px 14px;
-  border: 1px solid rgba(18, 73, 54, .10);
-  border-radius: 9px;
-  background: rgba(255,255,255,.68);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote > span {
-  color: #e3b12a;
-  font-family: Georgia, serif;
-  font-size: 34px;
-  font-weight: 700;
-  line-height: .75;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote p {
-  margin: 0;
-  color: #355548;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 13px;
-  font-style: italic;
-  line-height: 1.45;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto {
-  position: relative;
-  min-height: 330px;
-  margin: 0;
-  overflow: hidden;
-  border-radius: 15px;
-  background: #dfe7df;
-  box-shadow: 0 22px 46px -31px rgba(13, 57, 39, .58);
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  width: 100%;
-  height: 100%;
-  min-height: 330px;
-  display: block;
-  object-fit: cover;
-  object-position: center 19%;
-  filter: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent, rgba(4, 43, 31, .92));
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr minmax(120px, .72fr);
-  gap: 14px;
-  align-items: end;
-  padding: 18px;
-  color: #fff;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption strong,
-body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
-  display: block;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
-  font-family: "Archivo", sans-serif;
-  font-size: 11px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
-  margin-top: 3px;
-  color: rgba(255,255,255,.78);
-  font-size: 8px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
-  margin: 0;
-  padding-left: 10px;
-  border-left: 2px solid #e6b026;
-  color: rgba(255,255,255,.88);
-  font-family: Georgia, serif;
-  font-size: 8px;
-  font-style: italic;
-  line-height: 1.45;
-}
-
-body:has(.beranda-hero) .sambutan-rw-motto {
-  position: absolute;
-  z-index: 2;
-  top: 17px;
-  right: 18px;
-  color: rgba(255,255,255,.94);
-  font-family: "Segoe Script", "Brush Script MT", cursive;
-  font-size: 18px;
-  font-style: italic;
-  line-height: 1.03;
-  text-align: right;
-  text-shadow: 0 2px 8px rgba(0,0,0,.42);
-  transform: rotate(-7deg);
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw {
-  border-color: rgba(196, 225, 216, .10);
-  background:
-    radial-gradient(circle at 12% 88%, rgba(53, 146, 103, .08), transparent 22%),
-    linear-gradient(145deg, rgba(9, 30, 38, .98), rgba(7, 24, 31, .99));
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw h2 {
-  color: #eff8f5;
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-pembuka p,
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  color: #b8c9c3;
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-pembuka strong,
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap strong {
-  color: #edf7f3;
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap {
-  border-left-color: rgba(92, 195, 151, .24);
-  background: rgba(16, 46, 47, .55);
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-quote {
-  border-color: rgba(200,230,219,.10);
-  background: rgba(14, 39, 42, .62);
-}
-
-:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-quote p {
-  color: #d5e4df;
-}
-
-@media (max-width: 860px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    min-height: 420px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 420px;
-  }
-}
-
-@media (max-width: 560px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    padding: 16px;
-    border-radius: 14px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw h2 {
-    font-size: 29px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    min-height: 330px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 330px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
-    display: none;
-  }
-}
-
-
-/* === SAMBUTAN DINAMIS SESUAI PAGI SIANG SORE MALAM === */
-
-/* Warna dasar isi sambutan mengikuti token per fase, bukan putih permanen. */
-body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-judul: #173f31;
-  --sambutan-teks: #53645b;
-  --sambutan-kuat: #244b3b;
-  --sambutan-label: #6e7a70;
-  --sambutan-garis: rgba(63, 105, 76, .16);
-  --sambutan-expand: rgba(238, 242, 222, .74);
-  --sambutan-quote: rgba(249, 244, 219, .72);
-  --sambutan-quote-teks: #46604e;
-}
-
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-judul: #173f31;
-  --sambutan-teks: #53645b;
-  --sambutan-kuat: #244b3b;
-  --sambutan-label: #6e7a70;
-  --sambutan-garis: rgba(63, 105, 76, .17);
-  --sambutan-expand: rgba(236, 242, 221, .82);
-  --sambutan-quote: rgba(248, 242, 213, .82);
-  --sambutan-quote-teks: #46604e;
-  border-color: rgba(79, 119, 80, .18);
-  background:
-    radial-gradient(circle at 8% 10%, rgba(255, 205, 66, .28), transparent 23%),
-    radial-gradient(circle at 88% 84%, rgba(75, 137, 75, .18), transparent 31%),
-    linear-gradient(135deg, #f0ead0 0%, #e4ebd1 50%, #d7e5d1 100%);
-  box-shadow: 0 26px 58px -43px rgba(47, 83, 56, .50);
-}
-
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-judul: #123f45;
-  --sambutan-teks: #506462;
-  --sambutan-kuat: #214b49;
-  --sambutan-label: #637b79;
-  --sambutan-garis: rgba(62, 124, 125, .17);
-  --sambutan-expand: rgba(221, 239, 232, .80);
-  --sambutan-quote: rgba(225, 242, 232, .80);
-  --sambutan-quote-teks: #315b53;
-  border-color: rgba(65, 130, 132, .18);
-  background:
-    radial-gradient(circle at 13% 12%, rgba(111, 194, 229, .26), transparent 25%),
-    radial-gradient(circle at 91% 78%, rgba(68, 151, 111, .16), transparent 30%),
-    linear-gradient(135deg, #e2f1ef 0%, #d9ece8 50%, #d4e8dd 100%);
-  box-shadow: 0 26px 58px -43px rgba(42, 101, 102, .48);
-}
-
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-judul: #53391f;
-  --sambutan-teks: #6a5949;
-  --sambutan-kuat: #62442a;
-  --sambutan-label: #806e5c;
-  --sambutan-garis: rgba(137, 96, 46, .18);
-  --sambutan-expand: rgba(241, 220, 181, .76);
-  --sambutan-quote: rgba(247, 222, 175, .76);
-  --sambutan-quote-teks: #6b4d2f;
-  border-color: rgba(152, 104, 50, .19);
-  background:
-    radial-gradient(circle at 11% 11%, rgba(247, 168, 55, .31), transparent 26%),
-    radial-gradient(circle at 88% 82%, rgba(93, 119, 59, .16), transparent 31%),
-    linear-gradient(135deg, #ead9ba 0%, #e1ceb0 48%, #d7d3ad 100%);
-  box-shadow: 0 27px 62px -44px rgba(105, 71, 35, .56);
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-judul: #eef8f6;
-  --sambutan-teks: #b8cac7;
-  --sambutan-kuat: #eff9f6;
-  --sambutan-label: #9bb9b5;
-  --sambutan-garis: rgba(164, 209, 205, .15);
-  --sambutan-expand: rgba(13, 45, 54, .76);
-  --sambutan-quote: rgba(12, 42, 50, .78);
-  --sambutan-quote-teks: #d6e8e4;
-  border-color: rgba(155, 205, 204, .13);
-  background:
-    radial-gradient(circle at 12% 13%, rgba(42, 108, 143, .25), transparent 26%),
-    radial-gradient(circle at 91% 80%, rgba(31, 112, 88, .15), transparent 30%),
-    linear-gradient(135deg, #0b2837 0%, #0a2631 48%, #0b2428 100%);
-  box-shadow: 0 30px 72px -45px rgba(0, 0, 0, .82);
-}
-
-body:has(.beranda-hero) .sambutan-rw h2 {
-  color: var(--sambutan-judul);
-}
-
-body:has(.beranda-hero) .sambutan-rw-label {
-  color: var(--sambutan-label);
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka p,
-body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  color: var(--sambutan-teks);
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka strong,
-body:has(.beranda-hero) .sambutan-rw-lengkap strong,
-body:has(.beranda-hero) .sambutan-rw-ttd strong {
-  color: var(--sambutan-kuat);
-}
-
-body:has(.beranda-hero) .sambutan-rw-lengkap {
-  border-left-color: var(--sambutan-garis);
-  background: var(--sambutan-expand);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote {
-  border-color: var(--sambutan-garis);
-  background: var(--sambutan-quote);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote p {
-  color: var(--sambutan-quote-teks);
-}
-
-body:has(.beranda-hero) .sambutan-rw-ttd {
-  border-top-color: var(--sambutan-garis);
-}
-
-body:has(.beranda-hero) .sambutan-rw-ttd span {
-  color: var(--sambutan-label);
-}
-
-/* Ornamen daun mengikuti warna fase agar panel tidak terasa polos. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw::after {
-  opacity: .14;
-  filter: sepia(.12) saturate(.8);
-}
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw::after {
-  opacity: .13;
-  filter: hue-rotate(12deg) saturate(.9);
-}
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw::after {
-  opacity: .12;
-  filter: sepia(.55) saturate(.85);
-}
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw::after {
-  opacity: .10;
-  filter: hue-rotate(18deg) brightness(1.3);
-}
-
-/* Kalau mode Gelap dipilih manual, tiap fase tetap punya aksen waktunya. */
-:root[data-theme="dark"][data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 9% 10%, rgba(202, 167, 53, .12), transparent 24%),
-    linear-gradient(135deg, #102b29, #102522 58%, #172820);
-}
-:root[data-theme="dark"][data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 12% 10%, rgba(63, 145, 171, .15), transparent 25%),
-    linear-gradient(135deg, #0c2933, #0b272c 58%, #102b27);
-}
-:root[data-theme="dark"][data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 11% 10%, rgba(203, 124, 44, .16), transparent 25%),
-    linear-gradient(135deg, #30271d, #29251f 58%, #26291f);
-}
-:root[data-theme="dark"][data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 12% 12%, rgba(43, 101, 145, .18), transparent 26%),
-    linear-gradient(135deg, #081f2c, #071d27 58%, #081f22);
-}
-
-
-/* === SAMBUTAN COMPACT — JANGAN MAKAN SATU LAYAR === */
-
-/* Keadaan tertutup harus ringkas seperti kartu editorial, bukan hero kedua. */
-body:has(.beranda-hero) .sambutan-rw {
-  grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr);
-  gap: clamp(22px, 3vw, 34px);
-  align-items: start;
-  padding: clamp(18px, 2vw, 24px);
-}
-
-body:has(.beranda-hero) .sambutan-rw h2 {
-  max-width: 19ch;
-  font-size: clamp(25px, 2.35vw, 34px);
-  line-height: 1.01;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka {
-  margin-top: 11px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka p,
-body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  margin-bottom: 7px;
-  font-size: 9.7px;
-  line-height: 1.48;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail {
-  margin-top: 10px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary {
-  min-height: 31px;
-  padding: 7px 12px;
-  font-size: 9px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote {
-  max-width: 400px;
-  margin-top: 12px;
-  padding: 9px 12px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote > span {
-  font-size: 29px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote p {
-  font-size: 11.5px;
-}
-
-/* Foto ketua dikunci tinggi. Jangan ikut membesar ketika kolom teks expand. */
-body:has(.beranda-hero) .sambutan-rw-foto {
-  align-self: start;
-  height: 360px;
-  min-height: 0;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  height: 360px;
-  min-height: 0;
-  object-position: center 16%;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-  padding: 13px 14px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-motto {
-  top: 13px;
-  right: 14px;
-  font-size: 15px;
-}
-
-/* Saat sambutan dibuka, hanya sisi teks yang memanjang ke bawah. */
-body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-rw-lengkap {
-  max-height: none;
-}
-
-@media (max-width: 860px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto,
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    height: 340px;
-    min-height: 0;
-  }
-}
-
-@media (max-width: 560px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    padding: 14px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw h2 {
-    max-width: 16ch;
-    font-size: 25px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto,
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    height: 300px;
-    min-height: 0;
-  }
-}
-
-
-/* === FOTO KETUA RW UTUH TANPA CROP === */
-
-/* Jangan pernah crop foto Ketua RW. Pertahankan proporsi asli. */
-body:has(.beranda-hero) .sambutan-rw-foto {
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 20%, rgba(255,255,255,.30), transparent 36%),
-    linear-gradient(145deg, rgba(225,236,229,.90), rgba(203,220,211,.90));
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  object-fit: contain !important;
-  object-position: center center !important;
-  transform: none !important;
-  filter: none !important;
-}
-
-/* Background ruang kosong di sisi foto ikut fase waktu. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw-foto {
-  background:
-    radial-gradient(circle at 50% 12%, rgba(255,213,94,.18), transparent 34%),
-    linear-gradient(145deg, #e8eadb, #d6e1d4);
-}
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw-foto {
-  background:
-    radial-gradient(circle at 50% 12%, rgba(119,202,235,.18), transparent 34%),
-    linear-gradient(145deg, #deecea, #d1e2dc);
-}
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw-foto {
-  background:
-    radial-gradient(circle at 50% 12%, rgba(244,165,70,.19), transparent 34%),
-    linear-gradient(145deg, #e6d5bc, #d8cbb5);
-}
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto {
-  background:
-    radial-gradient(circle at 50% 12%, rgba(61,126,157,.19), transparent 34%),
-    linear-gradient(145deg, #132b37, #0e252d);
-}
-
-/* Overlay nama tetap berada di bawah foto tanpa menutup muka. */
-body:has(.beranda-hero) .sambutan-rw-foto::after {
-  height: 26%;
-}
-
-@media (max-width: 860px) {
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    object-fit: contain !important;
-    object-position: center center !important;
-  }
-}
-
-
 /* === CARD TENTANG IKUT WAKTU + HAPUS ORNAMEN DAUN LAMA === */
 
 /* Ornamen PNG lama disembunyikan total. */
@@ -3561,808 +2864,6 @@ footer.kaki-waktu.kaki-modern::after {
 }
 
 
-/* === SAMBUTAN FOTO TRANSPARAN + BACKGROUND MENYATU === */
-
-/* Foto Ketua RW sudah dibersihkan dari latar putih, jadi card foto sekarang
- * memakai background suasana sendiri agar portrait benar-benar menyatu.
- */
-body:has(.beranda-hero) .sambutan-rw-foto {
-  --sambutan-foto-bg: none;
-  position: relative;
-  isolation: isolate;
-  background-color: transparent !important;
-  background-image:
-    linear-gradient(180deg, rgba(255,255,255,.14), rgba(10,55,42,.12)),
-    var(--sambutan-foto-bg) !important;
-  background-size: cover !important;
-  background-position: center !important;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 72% 18%, rgba(255,255,255,.18), transparent 24%),
-    linear-gradient(180deg, transparent 58%, rgba(5,48,36,.18));
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: contain !important;
-  object-position: center bottom !important;
-  background: transparent !important;
-  mix-blend-mode: normal !important;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption,
-body:has(.beranda-hero) .sambutan-rw-motto {
-  z-index: 3;
-}
-
-/* Panorama tipis di belakang portrait berubah mengikuti waktu. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw-foto {
-  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/675bc197-4517-40a4-a648-4b83ea8c23f0.webp");
-  background-image:
-    linear-gradient(180deg, rgba(244,237,205,.58), rgba(119,156,101,.36)),
-    var(--sambutan-foto-bg) !important;
-}
-
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw-foto {
-  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3456af31-4fbc-4ecf-80a7-7be4c32294fa.webp");
-  background-image:
-    linear-gradient(180deg, rgba(220,239,235,.50), rgba(86,145,126,.32)),
-    var(--sambutan-foto-bg) !important;
-}
-
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw-foto {
-  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/156af0cc-d2dd-4807-a4b9-b468c397bcea.webp");
-  background-image:
-    linear-gradient(180deg, rgba(236,203,157,.45), rgba(91,67,43,.40)),
-    var(--sambutan-foto-bg) !important;
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto {
-  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ebcfc652-2164-4421-844a-88d5f558837b.webp");
-  background-image:
-    linear-gradient(180deg, rgba(13,46,62,.34), rgba(3,29,35,.60)),
-    var(--sambutan-foto-bg) !important;
-}
-
-/* Hilangkan rasa 'kotak putih': panel sambutan dan elemen kecil lebih menyatu. */
-body:has(.beranda-hero) .sambutan-rw {
-  border-color: color-mix(in srgb, var(--sambutan-garis) 72%, transparent);
-  box-shadow:
-    0 24px 58px -44px rgba(20,57,43,.40),
-    inset 0 1px 0 rgba(255,255,255,.14);
-}
-
-body:has(.beranda-hero) .sambutan-rw::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: .55;
-  background:
-    radial-gradient(circle at 5% 0%, rgba(255,255,255,.22), transparent 24%),
-    radial-gradient(circle at 82% 100%, rgba(36,112,77,.10), transparent 28%),
-    repeating-linear-gradient(135deg, rgba(255,255,255,.022) 0 1px, transparent 1px 7px);
-}
-
-body:has(.beranda-hero) .sambutan-rw > * {
-  position: relative;
-  z-index: 1;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote,
-body:has(.beranda-hero) .sambutan-rw-lengkap {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
-  backdrop-filter: blur(5px);
-}
-
-/* Sedikit lebih dalam agar panel tidak terlihat pucat/putih pada fase terang. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 8% 10%, rgba(246,190,54,.24), transparent 22%),
-    radial-gradient(circle at 88% 84%, rgba(70,129,76,.19), transparent 30%),
-    linear-gradient(135deg, #e6ddb9 0%, #dbe4c4 48%, #c9d9c4 100%);
-}
-
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 11% 8%, rgba(83,173,211,.22), transparent 23%),
-    radial-gradient(circle at 90% 82%, rgba(50,136,98,.18), transparent 30%),
-    linear-gradient(135deg, #d5e8e4 0%, #c9e0db 48%, #c2d9cf 100%);
-}
-
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 10% 8%, rgba(231,142,43,.25), transparent 24%),
-    radial-gradient(circle at 90% 82%, rgba(100,115,58,.17), transparent 30%),
-    linear-gradient(135deg, #d9c29f 0%, #cdb895 50%, #beb990 100%);
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
-  background:
-    radial-gradient(circle at 10% 8%, rgba(38,100,138,.22), transparent 24%),
-    radial-gradient(circle at 90% 82%, rgba(31,105,79,.16), transparent 30%),
-    linear-gradient(135deg, #0a2735 0%, #09252e 52%, #0a2326 100%);
-}
-
-
-/* deploy-sync-sambutan-transparent */
-
-
-/* === SAMBUTAN FINAL — MENYATU SEPERTI REFERENSI === */
-
-/*
- * Referensi final: satu panel editorial utuh.
- * Landscape berada di belakang seluruh section, portrait transparan menyatu,
- * bukan gambar kotak terpisah.
- */
-body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-landscape: none;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
-  gap: clamp(18px, 2.6vw, 34px);
-  align-items: stretch;
-  min-height: 410px;
-  padding: clamp(24px, 2.7vw, 34px);
-  border: 1px solid rgba(255,255,255,.38);
-  border-radius: 22px;
-  background-image:
-    linear-gradient(90deg,
-      var(--sambutan-panel-kiri, rgba(239,231,203,.94)) 0%,
-      var(--sambutan-panel-tengah, rgba(227,222,193,.80)) 49%,
-      var(--sambutan-panel-kanan, rgba(173,179,139,.50)) 100%),
-    var(--sambutan-landscape) !important;
-  background-size: cover !important;
-  background-position: center 55% !important;
-  box-shadow:
-    0 28px 62px -43px rgba(23,52,40,.48),
-    inset 0 1px 0 rgba(255,255,255,.32);
-}
-
-body:has(.beranda-hero) .sambutan-rw::before {
-  opacity: 1;
-  background:
-    radial-gradient(circle at 10% 8%, rgba(255,255,255,.32), transparent 24%),
-    radial-gradient(circle at 72% 18%, rgba(255,245,209,.16), transparent 25%),
-    linear-gradient(180deg, transparent 68%, rgba(9,54,40,.08));
-}
-
-body:has(.beranda-hero) .sambutan-rw::after {
-  right: auto;
-  left: 36%;
-  bottom: -58px;
-  width: 190px;
-  height: 190px;
-  opacity: .14;
-  color: var(--sambutan-ornamen, rgba(49,103,71,.28));
-  background:
-    radial-gradient(ellipse at 50% 75%, transparent 51%, currentColor 52% 55%, transparent 56%),
-    radial-gradient(ellipse at 30% 50%, transparent 51%, currentColor 52% 55%, transparent 56%),
-    radial-gradient(ellipse at 70% 38%, transparent 51%, currentColor 52% 55%, transparent 56%);
-  transform: rotate(-18deg);
-}
-
-body:has(.beranda-hero) .sambutan-rw-copy {
-  align-self: center;
-  padding: 2px 0;
-}
-
-body:has(.beranda-hero) .sambutan-rw-label {
-  margin-bottom: 12px;
-  font-size: 8.7px;
-}
-
-body:has(.beranda-hero) .sambutan-rw h2 {
-  max-width: 17ch;
-  font-size: clamp(30px, 3.15vw, 43px);
-  line-height: .98;
-  letter-spacing: -.05em;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka {
-  max-width: 62ch;
-  margin-top: 15px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka p,
-body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  font-size: 9.8px;
-  line-height: 1.52;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary {
-  min-height: 34px;
-  padding: 8px 14px;
-  border-radius: 7px;
-  box-shadow: 0 10px 20px -15px rgba(16,83,56,.62);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote {
-  max-width: 430px;
-  margin-top: 14px;
-  padding: 11px 13px;
-  border-color: rgba(255,255,255,.42);
-  border-radius: 10px;
-  background: var(--sambutan-quote-final, rgba(255,250,232,.58));
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.26),
-    0 12px 28px -24px rgba(34,67,52,.48);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote p {
-  font-size: 11.5px;
-}
-
-/* Figure menjadi lapisan portrait transparan, bukan kartu gambar. */
-body:has(.beranda-hero) .sambutan-rw-foto {
-  align-self: stretch;
-  height: auto;
-  min-height: 360px;
-  margin: -10px -10px -34px 0;
-  overflow: visible;
-  border-radius: 0;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto::before {
-  background:
-    radial-gradient(circle at 52% 27%, rgba(255,244,214,.13), transparent 29%);
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto::after {
-  inset: auto -2px 0;
-  height: 29%;
-  border-radius: 0 0 18px 18px;
-  background:
-    linear-gradient(180deg, transparent, rgba(8,55,41,.84) 72%, rgba(7,47,36,.94));
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  width: 100%;
-  height: 100%;
-  max-height: 430px;
-  min-height: 360px;
-  display: block;
-  object-fit: contain !important;
-  object-position: center bottom !important;
-  filter: drop-shadow(0 16px 24px rgba(27,49,39,.13)) !important;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-  left: 8px;
-  right: 3px;
-  bottom: 0;
-  grid-template-columns: 1fr minmax(126px, .78fr);
-  padding: 15px 15px 17px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
-  font-size: 10.8px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
-  font-size: 7.7px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-motto {
-  top: 18px;
-  right: 10px;
-  font-size: 19px;
-}
-
-/* Fase waktu: landscape dan tone satu paket. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-landscape: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/675bc197-4517-40a4-a648-4b83ea8c23f0.webp");
-  --sambutan-panel-kiri: rgba(240,232,203,.95);
-  --sambutan-panel-tengah: rgba(225,225,195,.82);
-  --sambutan-panel-kanan: rgba(164,183,139,.46);
-  --sambutan-quote-final: rgba(251,246,224,.63);
-  --sambutan-ornamen: rgba(65,112,72,.24);
-}
-
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-landscape: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3456af31-4fbc-4ecf-80a7-7be4c32294fa.webp");
-  --sambutan-panel-kiri: rgba(217,235,230,.95);
-  --sambutan-panel-tengah: rgba(201,227,219,.80);
-  --sambutan-panel-kanan: rgba(122,169,146,.43);
-  --sambutan-quote-final: rgba(236,247,242,.61);
-  --sambutan-ornamen: rgba(39,118,94,.22);
-}
-
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-landscape: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/156af0cc-d2dd-4807-a4b9-b468c397bcea.webp");
-  --sambutan-panel-kiri: rgba(218,196,159,.95);
-  --sambutan-panel-tengah: rgba(199,180,145,.80);
-  --sambutan-panel-kanan: rgba(121,108,75,.48);
-  --sambutan-quote-final: rgba(241,225,195,.60);
-  --sambutan-ornamen: rgba(112,89,48,.24);
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
-  --sambutan-landscape: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ebcfc652-2164-4421-844a-88d5f558837b.webp");
-  --sambutan-panel-kiri: rgba(9,36,47,.96);
-  --sambutan-panel-tengah: rgba(8,33,42,.83);
-  --sambutan-panel-kanan: rgba(7,29,36,.66);
-  --sambutan-quote-final: rgba(12,47,52,.68);
-  --sambutan-ornamen: rgba(78,166,143,.17);
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto::before {
-  background:
-    radial-gradient(circle at 52% 25%, rgba(73,131,157,.12), transparent 30%);
-}
-
-@media (max-width: 860px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    width: min(460px, 100%);
-    min-height: 320px;
-    margin: 0 auto -34px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 320px;
-    max-height: 390px;
-  }
-}
-
-@media (max-width: 560px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    padding: 18px 16px 20px;
-    border-radius: 16px;
-    background-position: 60% center !important;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw h2 {
-    max-width: 15ch;
-    font-size: 28px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    width: 100%;
-    min-height: 285px;
-    margin-bottom: -20px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 285px;
-    max-height: 340px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-motto {
-    top: 10px;
-    right: 8px;
-    font-size: 15px;
-  }
-}
-
-
-/* === SAMBUTAN MASTER V4 — REFERENSI FINAL === */
-
-/* Final override: satu card editorial yang benar-benar terasa menyatu. */
-body:has(.beranda-hero) .sambutan-rw {
-  --sam-judul: #0b3c33;
-  --sam-teks: #44534f;
-  --sam-label: #56645f;
-  --sam-accent: #e4b234;
-  --sam-button-1: #13815c;
-  --sam-button-2: #086849;
-  --sam-panel-left: rgba(239,233,211,.96);
-  --sam-panel-mid: rgba(230,226,202,.84);
-  --sam-panel-right: rgba(189,192,158,.56);
-  --sam-quote-bg: rgba(255,252,238,.58);
-  --sam-quote-text: #3d4e49;
-  --sam-name-bg-1: rgba(12,79,59,.82);
-  --sam-name-bg-2: rgba(5,55,43,.93);
-
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
-  gap: clamp(18px, 2.6vw, 34px);
-  min-height: 430px;
-  padding: clamp(25px, 2.8vw, 36px);
-  border: 1px solid rgba(255,255,255,.40);
-  border-radius: 24px;
-  color: var(--sam-teks);
-  background:
-    linear-gradient(90deg,
-      var(--sam-panel-left) 0%,
-      var(--sam-panel-mid) 51%,
-      var(--sam-panel-right) 100%),
-    var(--sambutan-landscape) center 55% / cover no-repeat !important;
-  box-shadow:
-    0 30px 70px -48px rgba(17,49,37,.56),
-    inset 0 1px 0 rgba(255,255,255,.32);
-}
-
-body:has(.beranda-hero) .sambutan-rw::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 1;
-  background:
-    radial-gradient(circle at 8% 7%, rgba(255,255,255,.30), transparent 23%),
-    radial-gradient(circle at 73% 19%, rgba(255,244,211,.16), transparent 26%),
-    linear-gradient(180deg, transparent 67%, rgba(10,59,44,.07));
-}
-
-body:has(.beranda-hero) .sambutan-rw::after {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  left: 39%;
-  bottom: -72px;
-  width: 210px;
-  height: 210px;
-  opacity: .10;
-  pointer-events: none;
-  color: var(--sambutan-ornamen, rgba(52,105,75,.24));
-  background:
-    radial-gradient(ellipse at 50% 76%, transparent 51%, currentColor 52% 55%, transparent 56%),
-    radial-gradient(ellipse at 29% 49%, transparent 51%, currentColor 52% 55%, transparent 56%),
-    radial-gradient(ellipse at 71% 36%, transparent 51%, currentColor 52% 55%, transparent 56%);
-  transform: rotate(-17deg);
-}
-
-body:has(.beranda-hero) .sambutan-rw > * {
-  position: relative;
-  z-index: 1;
-}
-
-body:has(.beranda-hero) .sambutan-rw-copy {
-  align-self: center;
-  padding: 2px 0 4px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-label {
-  margin-bottom: 13px;
-  color: var(--sam-label);
-  font-size: 8.5px;
-  letter-spacing: .11em;
-}
-
-body:has(.beranda-hero) .sambutan-rw-label span {
-  background: var(--sam-accent);
-}
-
-body:has(.beranda-hero) .sambutan-rw h2 {
-  max-width: 17ch;
-  margin: 0;
-  color: var(--sam-judul);
-  font-family: "Archivo", sans-serif;
-  font-size: clamp(31px, 3.25vw, 46px);
-  font-weight: 800;
-  line-height: .96;
-  letter-spacing: -.052em;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka {
-  max-width: 63ch;
-  margin-top: 16px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka p,
-body:has(.beranda-hero) .sambutan-rw-lengkap p {
-  margin: 0 0 8px;
-  color: var(--sam-teks);
-  font-size: 9.7px;
-  line-height: 1.5;
-}
-
-body:has(.beranda-hero) .sambutan-rw-pembuka strong,
-body:has(.beranda-hero) .sambutan-rw-lengkap strong,
-body:has(.beranda-hero) .sambutan-rw-ttd strong {
-  color: var(--sam-judul);
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail {
-  margin-top: 11px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-detail summary {
-  min-height: 35px;
-  padding: 8px 15px;
-  border: 0;
-  border-radius: 7px;
-  color: #fff;
-  background: linear-gradient(180deg, var(--sam-button-1), var(--sam-button-2));
-  box-shadow: 0 12px 24px -18px rgba(5,73,50,.70);
-  font-size: 9px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-lengkap {
-  margin-top: 13px;
-  padding: 14px 15px 6px;
-  border: 1px solid rgba(255,255,255,.24);
-  border-left: 2px solid color-mix(in srgb, var(--sam-button-1) 70%, transparent);
-  border-radius: 0 10px 10px 0;
-  background: color-mix(in srgb, var(--sam-quote-bg) 68%, transparent);
-  backdrop-filter: blur(8px);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote {
-  max-width: 440px;
-  margin: 15px 0 0;
-  padding: 12px 14px;
-  border: 1px solid rgba(255,255,255,.44);
-  border-radius: 11px;
-  background: var(--sam-quote-bg);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.25),
-    0 14px 30px -26px rgba(28,61,48,.46);
-  backdrop-filter: blur(7px);
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote > span {
-  color: var(--sam-accent);
-  font-size: 34px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-quote p {
-  color: var(--sam-quote-text);
-  font-size: 11.5px;
-  line-height: 1.42;
-}
-
-/* Portrait: jangan lagi terasa sebagai card terpisah. */
-body:has(.beranda-hero) .sambutan-rw-foto {
-  position: relative;
-  align-self: stretch;
-  min-height: 370px;
-  height: auto;
-  margin: -8px -10px -36px 0;
-  overflow: hidden;
-  border: 0;
-  border-radius: 0;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none;
-}
-
-/* Aura lembut menyamarkan sisa matte putih dari sumber foto dan menjadikannya
- * terlihat sebagai highlight desain, bukan kotak background.
- */
-body:has(.beranda-hero) .sambutan-rw-foto::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 54% 37%, var(--sam-portrait-aura, rgba(255,244,215,.35)) 0 31%, transparent 61%);
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto > img {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  bottom: 0;
-  width: min(100%, 500px);
-  height: 100%;
-  max-height: 445px;
-  min-height: 370px;
-  object-fit: contain !important;
-  object-position: center bottom !important;
-  transform: translateX(-50%) !important;
-  transform-origin: center bottom;
-  mix-blend-mode: multiply;
-  filter:
-    contrast(1.02)
-    saturate(.98)
-    drop-shadow(0 17px 25px rgba(26,50,39,.12)) !important;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  left: 3px;
-  right: 3px;
-  bottom: 0;
-  height: 27%;
-  border-radius: 15px 15px 18px 18px;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, transparent 0%, var(--sam-name-bg-1) 58%, var(--sam-name-bg-2) 100%);
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-  position: absolute;
-  z-index: 3;
-  left: 9px;
-  right: 8px;
-  bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr minmax(132px, .80fr);
-  gap: 14px;
-  align-items: end;
-  padding: 15px 16px 17px;
-  color: #fff;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
-  color: #fff;
-  font-size: 10.7px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
-  color: rgba(255,255,255,.78);
-  font-size: 7.5px;
-}
-
-body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
-  margin: 0;
-  padding-left: 10px;
-  border-left: 2px solid var(--sam-accent);
-  color: rgba(255,255,255,.91);
-  font-size: 7.6px;
-  line-height: 1.42;
-}
-
-body:has(.beranda-hero) .sambutan-rw-motto {
-  z-index: 4;
-  top: 17px;
-  right: 10px;
-  color: #fff;
-  font-size: 19px;
-  text-shadow: 0 3px 11px rgba(0,0,0,.30);
-}
-
-/* PAGI — cream/sage seperti referensi. */
-:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
-  --sam-judul: #0b3c33;
-  --sam-teks: #46544f;
-  --sam-label: #58655f;
-  --sam-panel-left: rgba(241,235,213,.96);
-  --sam-panel-mid: rgba(230,226,201,.85);
-  --sam-panel-right: rgba(188,194,157,.55);
-  --sam-quote-bg: rgba(255,251,235,.60);
-  --sam-quote-text: #40504b;
-  --sam-portrait-aura: rgba(255,245,214,.38);
-  --sam-name-bg-1: rgba(17,89,65,.79);
-  --sam-name-bg-2: rgba(5,57,43,.94);
-}
-
-/* SIANG — aqua/sage terang, tetap lembut dan tidak putih polos. */
-:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
-  --sam-judul: #0a433e;
-  --sam-teks: #405a56;
-  --sam-label: #58736e;
-  --sam-panel-left: rgba(222,239,234,.96);
-  --sam-panel-mid: rgba(207,232,224,.84);
-  --sam-panel-right: rgba(133,180,160,.50);
-  --sam-quote-bg: rgba(236,248,243,.62);
-  --sam-quote-text: #315b53;
-  --sam-portrait-aura: rgba(224,244,238,.36);
-  --sam-name-bg-1: rgba(13,91,75,.80);
-  --sam-name-bg-2: rgba(7,61,52,.94);
-}
-
-/* SORE — bronze/olive hangat. */
-:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
-  --sam-judul: #49341f;
-  --sam-teks: #645342;
-  --sam-label: #776758;
-  --sam-button-1: #a56d33;
-  --sam-button-2: #79502a;
-  --sam-panel-left: rgba(223,201,168,.96);
-  --sam-panel-mid: rgba(206,187,151,.84);
-  --sam-panel-right: rgba(131,113,78,.54);
-  --sam-quote-bg: rgba(244,229,203,.62);
-  --sam-quote-text: #6a4c2f;
-  --sam-portrait-aura: rgba(244,211,166,.34);
-  --sam-name-bg-1: rgba(104,72,43,.82);
-  --sam-name-bg-2: rgba(65,48,34,.95);
-}
-
-/* MALAM — layout identik, hanya atmosfer berubah. */
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
-  --sam-judul: #eff8f6;
-  --sam-teks: #c0d1cd;
-  --sam-label: #9cb8b3;
-  --sam-accent: #efbf49;
-  --sam-button-1: #16856d;
-  --sam-button-2: #0d6654;
-  --sam-panel-left: rgba(8,35,47,.96);
-  --sam-panel-mid: rgba(8,33,42,.86);
-  --sam-panel-right: rgba(7,29,36,.70);
-  --sam-quote-bg: rgba(11,47,53,.64);
-  --sam-quote-text: #e0eeeb;
-  --sam-portrait-aura: rgba(72,132,158,.22);
-  --sam-name-bg-1: rgba(9,64,63,.83);
-  --sam-name-bg-2: rgba(5,38,44,.96);
-}
-
-:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto > img {
-  mix-blend-mode: multiply;
-  filter:
-    brightness(1.22)
-    contrast(.96)
-    saturate(.90)
-    drop-shadow(0 17px 27px rgba(0,0,0,.24)) !important;
-}
-
-@media (max-width: 900px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    width: min(470px, 100%);
-    min-height: 335px;
-    margin: 4px auto -36px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 335px;
-    max-height: 405px;
-  }
-}
-
-@media (max-width: 560px) {
-  body:has(.beranda-hero) .sambutan-rw {
-    padding: 18px 16px 20px;
-    border-radius: 17px;
-    background-position: 62% center !important;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw h2 {
-    max-width: 15ch;
-    font-size: 29px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-pembuka p,
-  body:has(.beranda-hero) .sambutan-rw-lengkap p {
-    font-size: 9.2px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto {
-    width: 100%;
-    min-height: 295px;
-    margin-bottom: -20px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto > img {
-    min-height: 295px;
-    max-height: 350px;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto figcaption {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
-    display: none;
-  }
-
-  body:has(.beranda-hero) .sambutan-rw-motto {
-    top: 10px;
-    right: 8px;
-    font-size: 15px;
-  }
-}
-
-
 /* === FIX FINAL PORTRAIT BERSIH TANPA OVAL/KOTAK PUTIH === */
 
 /* Aset portrait sekarang benar-benar transparan. Jangan pakai multiply lagi
@@ -4438,5 +2939,504 @@ body:has(.beranda-hero) .sambutan-rw-foto::after {
     width: min(100%, 390px) !important;
     min-height: 290px !important;
     max-height: 350px !important;
+  }
+}
+
+/* === SAMBUTAN RW FINAL — 4 WAKTU + PORTRAIT BARU === */
+
+/*
+ * Satu layout final saja. Tidak ada lagi card foto terpisah, tidak ada
+ * background pohon rindang. Empat panorama memakai aset 4K yang sama dengan
+ * keluarga visual footer: sawah/perumahan yang lebih lapang dan bersih.
+ */
+body:has(.beranda-hero) .sambutan-rw {
+  --sam-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ac5972ef-a71b-4fdc-bf3a-f7b9c364f121.webp");
+  --sam-judul: #0b3a31;
+  --sam-teks: #46524e;
+  --sam-label: #58635f;
+  --sam-accent: #e4b22d;
+  --sam-button-1: #13845d;
+  --sam-button-2: #08704c;
+  --sam-overlay-left: rgba(244, 238, 217, .96);
+  --sam-overlay-mid: rgba(236, 231, 207, .84);
+  --sam-overlay-right: rgba(206, 199, 165, .42);
+  --sam-quote-bg: rgba(255, 252, 239, .62);
+  --sam-quote-border: rgba(255,255,255,.56);
+  --sam-name-1: rgba(18, 83, 64, .82);
+  --sam-name-2: rgba(7, 55, 43, .95);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr);
+  gap: clamp(20px, 2.8vw, 36px);
+  min-height: 430px;
+  padding: clamp(25px, 2.8vw, 36px);
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 24px;
+  color: var(--sam-teks);
+  background:
+    linear-gradient(
+      90deg,
+      var(--sam-overlay-left) 0%,
+      var(--sam-overlay-mid) 53%,
+      var(--sam-overlay-right) 100%
+    ),
+    var(--sam-bg) center 56% / cover no-repeat !important;
+  box-shadow:
+    0 26px 64px -45px rgba(20, 52, 40, .52),
+    inset 0 1px 0 rgba(255,255,255,.38);
+}
+
+body:has(.beranda-hero) .sambutan-rw::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 7%, rgba(255,255,255,.30), transparent 23%),
+    radial-gradient(circle at 74% 16%, rgba(255,245,214,.14), transparent 24%),
+    linear-gradient(180deg, transparent 66%, rgba(8,52,39,.07));
+}
+
+body:has(.beranda-hero) .sambutan-rw::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 42%;
+  bottom: -72px;
+  width: 210px;
+  height: 210px;
+  opacity: .09;
+  pointer-events: none;
+  color: #477c5f;
+  background:
+    radial-gradient(ellipse at 50% 76%, transparent 51%, currentColor 52% 55%, transparent 56%),
+    radial-gradient(ellipse at 29% 49%, transparent 51%, currentColor 52% 55%, transparent 56%),
+    radial-gradient(ellipse at 71% 36%, transparent 51%, currentColor 52% 55%, transparent 56%);
+  transform: rotate(-17deg);
+}
+
+body:has(.beranda-hero) .sambutan-rw > * {
+  position: relative;
+  z-index: 1;
+}
+
+body:has(.beranda-hero) .sambutan-rw-copy {
+  align-self: center;
+  min-width: 0;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 13px;
+  color: var(--sam-label);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8.7px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label span {
+  width: 28px;
+  height: 2px;
+  flex: none;
+  border-radius: 99px;
+  background: var(--sam-accent);
+}
+
+body:has(.beranda-hero) .sambutan-rw h2 {
+  max-width: 16ch;
+  margin: 0;
+  color: var(--sam-judul);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(32px, 3.2vw, 47px);
+  font-weight: 800;
+  line-height: .96;
+  letter-spacing: -.052em;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka {
+  max-width: 64ch;
+  margin-top: 17px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka p,
+body:has(.beranda-hero) .sambutan-rw-lengkap p {
+  margin: 0 0 9px;
+  color: var(--sam-teks);
+  font-size: 9.8px;
+  line-height: 1.52;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka strong,
+body:has(.beranda-hero) .sambutan-rw-lengkap strong,
+body:has(.beranda-hero) .sambutan-rw-ttd strong {
+  color: var(--sam-judul);
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail {
+  margin-top: 12px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary {
+  width: fit-content;
+  min-height: 35px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 15px;
+  border-radius: 8px;
+  color: #fff;
+  background: linear-gradient(180deg, var(--sam-button-1), var(--sam-button-2));
+  box-shadow: 0 12px 24px -18px rgba(8, 76, 51, .72);
+  cursor: pointer;
+  list-style: none;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-tutup {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-buka {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-tutup {
+  display: inline;
+}
+
+body:has(.beranda-hero) .sambutan-rw-panah {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform .2s ease;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-rw-panah {
+  transform: rotate(90deg);
+}
+
+body:has(.beranda-hero) .sambutan-rw-lengkap {
+  max-width: 67ch;
+  margin-top: 13px;
+  padding: 14px 15px 6px;
+  border: 1px solid rgba(255,255,255,.30);
+  border-left: 2px solid color-mix(in srgb, var(--sam-button-1) 72%, transparent);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--sam-quote-bg) 70%, transparent);
+  backdrop-filter: blur(8px);
+  animation: sambutanMasuk .2s ease-out;
+}
+
+@keyframes sambutanMasuk {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd {
+  display: grid;
+  gap: 2px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(58,91,74,.12);
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd span {
+  color: var(--sam-label);
+  font-size: 8px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd strong {
+  font-size: 10.5px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: 440px;
+  margin: 15px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--sam-quote-border);
+  border-radius: 11px;
+  background: var(--sam-quote-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 14px 30px -26px rgba(31, 63, 49, .42);
+  backdrop-filter: blur(7px);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote > span {
+  color: var(--sam-accent);
+  font-family: Georgia, serif;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: .72;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote p {
+  margin: 0;
+  color: var(--sam-teks);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.42;
+}
+
+/* Portrait memakai foto baru yang dikirim user; transparan, tajam, tanpa crop. */
+body:has(.beranda-hero) .sambutan-rw-foto {
+  position: relative;
+  align-self: stretch;
+  min-height: 375px;
+  margin: -10px -12px -36px 0;
+  overflow: visible;
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 52% 36%, rgba(255,247,220,.24) 0%, rgba(255,255,255,.05) 38%, transparent 67%);
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 0;
+  width: min(106%, 525px);
+  max-width: 525px;
+  height: 100%;
+  max-height: 455px;
+  min-height: 375px;
+  display: block;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  transform: translateX(-50%) !important;
+  filter:
+    saturate(.98)
+    contrast(1.01)
+    drop-shadow(0 17px 24px rgba(20,47,36,.14)) !important;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 5%;
+  right: 1%;
+  bottom: 0;
+  height: 25%;
+  border-radius: 15px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 0%, var(--sam-name-1) 47%, var(--sam-name-2) 100%);
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+  position: absolute;
+  z-index: 3;
+  left: 7%;
+  right: 3%;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr minmax(130px, .82fr);
+  gap: 14px;
+  align-items: end;
+  padding: 14px 15px 16px;
+  color: #fff;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption strong,
+body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
+  display: block;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
+  color: #fff;
+  font-family: "Archivo", sans-serif;
+  font-size: 10.6px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
+  margin-top: 3px;
+  color: rgba(255,255,255,.78);
+  font-size: 7.5px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--sam-accent);
+  color: rgba(255,255,255,.92);
+  font-family: Georgia, serif;
+  font-size: 7.6px;
+  font-style: italic;
+  line-height: 1.42;
+}
+
+body:has(.beranda-hero) .sambutan-rw-motto {
+  position: absolute;
+  z-index: 4;
+  top: 14px;
+  right: 6px;
+  color: #fff;
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 19px;
+  font-style: italic;
+  line-height: .98;
+  text-align: right;
+  text-shadow: 0 3px 11px rgba(0,0,0,.28);
+  transform: rotate(-6deg);
+}
+
+/* Empat background baru: panorama lapang, bukan pepohonan rindang. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ac5972ef-a71b-4fdc-bf3a-f7b9c364f121.webp");
+  --sam-judul: #0b3a31;
+  --sam-teks: #46524e;
+  --sam-label: #58635f;
+  --sam-overlay-left: rgba(244,238,217,.96);
+  --sam-overlay-mid: rgba(236,231,207,.84);
+  --sam-overlay-right: rgba(206,199,165,.42);
+  --sam-quote-bg: rgba(255,252,239,.62);
+  --sam-quote-border: rgba(255,255,255,.58);
+}
+
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd7cc752-5163-46de-89e3-9da5237b5063.webp");
+  --sam-judul: #0b433d;
+  --sam-teks: #405954;
+  --sam-label: #58716c;
+  --sam-overlay-left: rgba(230,243,238,.96);
+  --sam-overlay-mid: rgba(217,238,230,.84);
+  --sam-overlay-right: rgba(157,193,174,.43);
+  --sam-quote-bg: rgba(239,249,245,.62);
+  --sam-quote-border: rgba(255,255,255,.52);
+}
+
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/5b8146fc-c187-43ac-85c0-11bf4a6eb9cd.webp");
+  --sam-judul: #523a22;
+  --sam-teks: #675545;
+  --sam-label: #78685a;
+  --sam-button-1: #a77035;
+  --sam-button-2: #7e532b;
+  --sam-overlay-left: rgba(230,211,181,.96);
+  --sam-overlay-mid: rgba(216,196,160,.84);
+  --sam-overlay-right: rgba(145,123,86,.46);
+  --sam-quote-bg: rgba(245,231,207,.63);
+  --sam-quote-border: rgba(255,244,224,.46);
+  --sam-name-1: rgba(108,75,45,.82);
+  --sam-name-2: rgba(67,48,33,.95);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/bd68ce05-84b7-4d7e-a430-e1b4364d2984.webp");
+  --sam-judul: #f0f8f6;
+  --sam-teks: #c2d2ce;
+  --sam-label: #a0b8b3;
+  --sam-accent: #efbd42;
+  --sam-button-1: #16866c;
+  --sam-button-2: #0c6553;
+  --sam-overlay-left: rgba(6,31,43,.96);
+  --sam-overlay-mid: rgba(7,34,43,.86);
+  --sam-overlay-right: rgba(6,28,34,.68);
+  --sam-quote-bg: rgba(10,45,52,.66);
+  --sam-quote-border: rgba(159,211,201,.18);
+  --sam-name-1: rgba(8,63,62,.84);
+  --sam-name-2: rgba(5,38,43,.96);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto::before {
+  background:
+    radial-gradient(ellipse at 52% 36%, rgba(83,143,164,.13) 0%, rgba(255,255,255,.02) 38%, transparent 67%);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto > img {
+  filter:
+    brightness(.96)
+    saturate(.94)
+    contrast(1.02)
+    drop-shadow(0 18px 26px rgba(0,0,0,.25)) !important;
+}
+
+@media (max-width: 900px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    width: min(470px, 100%);
+    min-height: 340px;
+    margin: 4px auto -36px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    width: min(100%, 470px);
+    min-height: 340px;
+    max-height: 410px;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    padding: 18px 16px 20px;
+    border-radius: 17px;
+    background-position: center 56% !important;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw h2 {
+    max-width: 15ch;
+    font-size: 29px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-pembuka p,
+  body:has(.beranda-hero) .sambutan-rw-lengkap p {
+    font-size: 9.2px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    width: 100%;
+    min-height: 295px;
+    margin-bottom: -20px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    width: min(100%, 390px);
+    min-height: 295px;
+    max-height: 350px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+    display: none;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-motto {
+    top: 10px;
+    right: 6px;
+    font-size: 15px;
   }
 }
