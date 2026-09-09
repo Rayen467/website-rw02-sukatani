@@ -11,7 +11,7 @@
 </script>
 
 <button
-  class="tombol-kecil"
+  class="tombol-kecil tombol-tema"
   type="button"
   onclick={putar}
   title="Tampilan: {KET_TEMA[tema]}. Tekan untuk mengubah."
