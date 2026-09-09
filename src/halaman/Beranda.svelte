@@ -160,6 +160,77 @@
   {/each}
 </section>
 
+<section class="sambutan-rw blok" aria-labelledby="judul-sambutan-rw">
+  <div class="sambutan-rw-copy">
+    <p class="sambutan-rw-label"><span></span>Sambutan Ketua RW 02</p>
+    <h2 id="judul-sambutan-rw">Bersama Mewujudkan<br />Lingkungan yang Lebih Baik</h2>
+
+    <div class="sambutan-rw-pembuka">
+      <p><strong>Assalamu’alaikum Warahmatullahi Wabarakatuh,</strong></p>
+      <p>
+        Selamat datang di Website Resmi RW 02 Perum Pondok Sukatani Permai!
+      </p>
+      <p>
+        Puji syukur kehadirat Allah SWT, Tuhan Yang Maha Esa, atas rahmat dan karunia-Nya,
+        sehingga kita dapat meluncurkan website resmi RW 02 Perumahan Pondok Sukatani
+        Permai, Kecamatan Rajeg, Kabupaten Tangerang.
+      </p>
+    </div>
+
+    <details class="sambutan-rw-detail">
+      <summary>
+        <span class="sambutan-buka">Baca Sambutan Lengkap</span>
+        <span class="sambutan-tutup">Tutup Sambutan</span>
+        <span class="sambutan-rw-panah">⌄</span>
+      </summary>
+
+      <div class="sambutan-rw-lengkap">
+        <p>
+          Website ini hadir sebagai jembatan informasi dan komunikasi antara Pengurus RW,
+          para Ketua RT, dan seluruh warga. Melalui media ini, kami berharap segala informasi
+          terkait kegiatan, pengumuman, program kerja, serta pelayanan publik dapat tersampaikan
+          secara cepat, terbuka, dan transparan.
+        </p>
+        <p>
+          Kami menyadari bahwa kemajuan lingkungan kita tidak terlepas dari kerja sama,
+          kekompakan, dan gotong royong seluruh warga. Oleh karena itu, kami mengajak Bapak,
+          Ibu, dan seluruh warga untuk bersama-sama menjaga kebersihan, keamanan, ketentraman,
+          dan kerukunan di lingkungan yang kita cintai ini.
+        </p>
+        <p>
+          Kami juga membuka ruang seluas-luasnya bagi seluruh warga untuk menyampaikan saran,
+          masukan, dan aspirasi demi kemajuan dan kesejahteraan bersama. Sekali lagi, selamat
+          berkunjung. Semoga website ini bermanfaat dan menjadi sarana yang mempererat tali
+          silaturahmi kita semua.
+        </p>
+        <p><strong>Wassalamu’alaikum Warahmatullahi Wabarakatuh.</strong></p>
+
+        <div class="sambutan-rw-ttd">
+          <span>Ketua RW 02</span>
+          <strong>Anto Carmanto, S.T., M.T.</strong>
+        </div>
+      </div>
+    </details>
+
+    <blockquote class="sambutan-rw-quote">
+      <span aria-hidden="true">“</span>
+      <p>Lingkungan yang baik berawal dari warga yang peduli.</p>
+    </blockquote>
+  </div>
+
+  <figure class="sambutan-rw-foto">
+    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3703961c-902a-4331-a47f-5823c2046fbd.jpg" alt="Foto Ketua RW 02" decoding="async" />
+    <figcaption>
+      <div>
+        <strong>Anto Carmanto, S.T., M.T.</strong>
+        <span>Ketua RW 02</span>
+      </div>
+      <blockquote>“Lingkungan yang baik berawal dari warga yang peduli.”</blockquote>
+    </figcaption>
+    <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
+  </figure>
+</section>
+
 <div class="beranda-grid-utama blok">
   <section class="panel-rumah panel-pengumuman">
     <div class="panel-kepala">
