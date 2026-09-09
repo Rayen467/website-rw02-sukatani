@@ -149,6 +149,38 @@ export const JABATAN_BAWAAN = [
   "Seksi Keamanan", "Seksi Kebersihan", "Ketua PKK"
 ];
 
+/**
+ * Data pengurus yang dikonfirmasi RW 02 pada September 2026.
+ * Nama di sini menjadi identitas publik bawaan. Foto, kontak dan periode
+ * tetap boleh dilengkapi dari data pengurus tanpa mengubah nama resmi ini.
+ */
+export const PENGURUS_RW_BAWAAN = [
+  { id: "ketua-rw", jabatan: "Ketua RW", nama: "Anto Carmanto, S.T., M.T.", foto: "", kontak: "", periode: "" },
+  { id: "sekretaris-rw", jabatan: "Sekretaris RW", nama: "Sukarno", foto: "", kontak: "", periode: "" },
+  { id: "bendahara-rw", jabatan: "Bendahara RW", nama: "Achmad Hidayat", foto: "", kontak: "", periode: "" },
+  { id: "seksi-keamanan", jabatan: "Seksi Keamanan", nama: "Samsul Rizal", foto: "", kontak: "", periode: "" }
+];
+
+/** Ketua RT yang dikonfirmasi RW 02. */
+export const KETUA_RT_BAWAAN = [
+  { id: "RT 01", rt: "RT 01/02", ketua: "Sambudi", foto: "", kontak: "", blok: "" },
+  { id: "RT 02", rt: "RT 02/02", ketua: "Sudir M. Nur", foto: "", kontak: "", blok: "" },
+  { id: "RT 03", rt: "RT 03/02", ketua: "Gunadi", foto: "", kontak: "", blok: "" },
+  { id: "RT 04", rt: "RT 04/02", ketua: "Supomo", foto: "", kontak: "", blok: "" }
+];
+
+/**
+ * Lembaga/kelompok warga yang diminta RW untuk dimasukkan ke website.
+ * Foto sengaja kosong sampai diterima dari yang bersangkutan.
+ */
+export const KELEMBAGAAN_WARGA_BAWAAN = [
+  { id: "kwt", nama: "Kelompok Wanita Tani (KWT)", jabatan: "Ketua", ketua: "Ibu Yusnidawati", foto: "" },
+  { id: "paud", nama: "PAUD (Pendidikan Anak Usia Dini)", jabatan: "Ketua", ketua: "Ibu Pujiati, S.Pd.", foto: "" },
+  { id: "majelis-taklim", nama: "Majelis Taklim Al Ikhlas", jabatan: "Ketua", ketua: "Ibu Suheti", foto: "" },
+  { id: "transportasi", nama: "Transportasi Warga", jabatan: "Ketua", ketua: "Bapak Handoko", foto: "" },
+  { id: "posyandu", nama: "Posyandu", jabatan: "Ketua", ketua: "Ibu Pujiati", foto: "" }
+];
+
 export const IDENTITAS_BAWAAN = {
   lambang: "RW",
   namaSitus: "Warga Permai Sukatani",
@@ -167,7 +199,7 @@ export const MAJELIS_TAKLIM_BAWAAN = {
   dasarSkt: "Peraturan Menteri Agama Republik Indonesia Nomor 29 Tahun 2019 tentang Majelis Taklim",
   tanggalSkt: "5 Agustus 2026",
   masaBerlaku: "5 tahun sejak tanggal diterbitkan",
-  ketua: "Eti Suhaeti",
+  ketua: "Ibu Suheti",
   sekretaris: "Sri Maryanti",
   tahunBerdiri: "2026",
   tanggalBerdiri: "18 Juli 2026",
