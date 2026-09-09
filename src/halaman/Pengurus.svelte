@@ -74,6 +74,8 @@
   const lembaga = KELEMBAGAAN_WARGA_BAWAAN;
 </script>
 
+<div class="mobile-page mobile-pengurus">
+
 <nav class="remah"><a href="#/">Beranda</a><span>›</span><span>Struktur Pengurus</span></nav>
 
 <div class="kepala-halaman">
@@ -162,3 +164,5 @@
     />
   {/if}
 </section>
+
+</div>
