@@ -163,17 +163,24 @@
 <section class="sambutan-rw blok" aria-labelledby="judul-sambutan-rw">
   <div class="sambutan-rw-copy">
     <p class="sambutan-rw-label"><span></span>Sambutan Ketua RW 02</p>
-    <h2 id="judul-sambutan-rw">Bersama<br />Mewujudkan Lingkungan<br />yang Lebih Baik</h2>
+
+    <h2 id="judul-sambutan-rw">
+      Bersama<br />
+      Mewujudkan Lingkungan<br />
+      yang Lebih Baik
+    </h2>
 
     <div class="sambutan-rw-pembuka">
       <p><strong>Assalamu’alaikum Warahmatullahi Wabarakatuh,</strong></p>
       <p>
         Selamat datang di Website Resmi RW 02 Perum Pondok Sukatani Permai!
+        Puji syukur kehadirat Allah SWT, atas rahmat dan karunia-Nya, sehingga
+        website ini dapat menjadi media informasi, layanan, dan komunikasi
+        untuk seluruh warga.
       </p>
       <p>
-        Puji syukur kehadirat Allah SWT, Tuhan Yang Maha Esa, atas rahmat dan karunia-Nya,
-        sehingga kita dapat meluncurkan website resmi RW 02 Perumahan Pondok Sukatani
-        Permai, Kecamatan Rajeg, Kabupaten Tangerang.
+        Mari bersama kita jaga lingkungan yang bersih, aman, nyaman, dan rukun
+        demi terwujudnya Permai Sukatani yang lebih maju, guyub, dan sejahtera.
       </p>
     </div>
 
@@ -181,7 +188,7 @@
       <summary>
         <span class="sambutan-buka">Baca Sambutan Lengkap</span>
         <span class="sambutan-tutup">Tutup Sambutan</span>
-        <span class="sambutan-rw-panah">⌄</span>
+        <span class="sambutan-rw-panah">→</span>
       </summary>
 
       <div class="sambutan-rw-lengkap">
@@ -219,7 +226,14 @@
   </div>
 
   <figure class="sambutan-rw-foto">
-    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/d32f0e4a-253c-4c83-ad30-e1a9444bbbe1.png" alt="Foto Ketua RW 02" decoding="async" />
+    <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
+
+    <img
+      src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f4c78b9e-573d-46c2-a76b-534afa6caa8e.png"
+      alt="Foto Ketua RW 02 Anto Carmanto"
+      decoding="async"
+    />
+
     <figcaption>
       <div>
         <strong>Anto Carmanto, S.T., M.T.</strong>
@@ -227,7 +241,6 @@
       </div>
       <blockquote>“Lingkungan yang baik berawal dari warga yang peduli.”</blockquote>
     </figcaption>
-    <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
   </figure>
 </section>
 
