@@ -2383,3 +2383,370 @@ body:has(.beranda-hero) .kaki-logo-ikon {
     flex-basis: 40px;
   }
 }
+
+
+/* === SAMBUTAN KETUA RW 02 — INLINE EXPAND === */
+
+body:has(.beranda-hero) .sambutan-rw {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(300px, .98fr);
+  gap: clamp(26px, 4vw, 52px);
+  align-items: stretch;
+  margin-top: 8px;
+  padding: clamp(20px, 2.8vw, 34px);
+  overflow: hidden;
+  border: 1px solid rgba(18, 74, 54, .10);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 12% 88%, rgba(41, 132, 89, .07), transparent 22%),
+    linear-gradient(145deg, rgba(255,255,252,.98), rgba(248,247,239,.98));
+  box-shadow: 0 24px 58px -44px rgba(20, 57, 43, .48);
+}
+
+body:has(.beranda-hero) .sambutan-rw::after {
+  content: "";
+  position: absolute;
+  left: 42%;
+  bottom: -55px;
+  width: 180px;
+  height: 180px;
+  opacity: .11;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 82%, transparent 54%, #2c8a62 56% 59%, transparent 61%),
+    radial-gradient(ellipse at 34% 55%, transparent 54%, #2c8a62 56% 59%, transparent 61%),
+    radial-gradient(ellipse at 68% 45%, transparent 54%, #2c8a62 56% 59%, transparent 61%);
+  transform: rotate(-18deg);
+}
+
+body:has(.beranda-hero) .sambutan-rw-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: #65766f;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label span {
+  width: 18px;
+  height: 2px;
+  flex: none;
+  border-radius: 99px;
+  background: #e4ad19;
+}
+
+body:has(.beranda-hero) .sambutan-rw h2 {
+  max-width: 15ch;
+  margin: 0;
+  color: #103a2f;
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(28px, 3vw, 41px);
+  font-weight: 800;
+  line-height: .99;
+  letter-spacing: -.045em;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka {
+  max-width: 65ch;
+  margin-top: 15px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka p,
+body:has(.beranda-hero) .sambutan-rw-lengkap p {
+  margin: 0 0 9px;
+  color: #53615c;
+  font-size: 10.5px;
+  line-height: 1.58;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka strong,
+body:has(.beranda-hero) .sambutan-rw-lengkap strong {
+  color: #203f35;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail {
+  margin-top: 13px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary {
+  width: fit-content;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 5px;
+  color: #fff;
+  background: linear-gradient(135deg, #0b744f, #327c2f);
+  box-shadow: 0 12px 24px -18px rgba(14, 91, 58, .70);
+  cursor: pointer;
+  list-style: none;
+  font-size: 9.5px;
+  font-weight: 750;
+  user-select: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary:hover {
+  transform: translateY(-1px);
+}
+
+body:has(.beranda-hero) .sambutan-rw-panah {
+  font-size: 15px;
+  line-height: 1;
+  transition: transform .2s ease;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-rw-panah {
+  transform: rotate(180deg);
+}
+
+body:has(.beranda-hero) .sambutan-tutup {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-buka {
+  display: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail[open] .sambutan-tutup {
+  display: inline;
+}
+
+body:has(.beranda-hero) .sambutan-rw-lengkap {
+  max-width: 68ch;
+  margin-top: 15px;
+  padding: 15px 16px 5px;
+  border-left: 2px solid rgba(16, 112, 78, .23);
+  background: rgba(239, 246, 239, .55);
+  border-radius: 0 8px 8px 0;
+  animation: sambutanTurun .22s ease-out;
+}
+
+@keyframes sambutanTurun {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd {
+  display: grid;
+  gap: 2px;
+  margin-top: 17px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(18, 73, 54, .11);
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd span {
+  color: #71807a;
+  font-size: 8.5px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd strong {
+  font-family: "Archivo", sans-serif;
+  font-size: 12px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 440px;
+  margin: 17px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(18, 73, 54, .10);
+  border-radius: 9px;
+  background: rgba(255,255,255,.68);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote > span {
+  color: #e3b12a;
+  font-family: Georgia, serif;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: .75;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote p {
+  margin: 0;
+  color: #355548;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto {
+  position: relative;
+  min-height: 330px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #dfe7df;
+  box-shadow: 0 22px 46px -31px rgba(13, 57, 39, .58);
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  width: 100%;
+  height: 100%;
+  min-height: 330px;
+  display: block;
+  object-fit: cover;
+  object-position: center 19%;
+  filter: none;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(4, 43, 31, .92));
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, .72fr);
+  gap: 14px;
+  align-items: end;
+  padding: 18px;
+  color: #fff;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption strong,
+body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
+  display: block;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
+  font-family: "Archivo", sans-serif;
+  font-size: 11px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
+  margin-top: 3px;
+  color: rgba(255,255,255,.78);
+  font-size: 8px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid #e6b026;
+  color: rgba(255,255,255,.88);
+  font-family: Georgia, serif;
+  font-size: 8px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+body:has(.beranda-hero) .sambutan-rw-motto {
+  position: absolute;
+  z-index: 2;
+  top: 17px;
+  right: 18px;
+  color: rgba(255,255,255,.94);
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.03;
+  text-align: right;
+  text-shadow: 0 2px 8px rgba(0,0,0,.42);
+  transform: rotate(-7deg);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw {
+  border-color: rgba(196, 225, 216, .10);
+  background:
+    radial-gradient(circle at 12% 88%, rgba(53, 146, 103, .08), transparent 22%),
+    linear-gradient(145deg, rgba(9, 30, 38, .98), rgba(7, 24, 31, .99));
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw h2 {
+  color: #eff8f5;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-pembuka p,
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap p {
+  color: #b8c9c3;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-pembuka strong,
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap strong {
+  color: #edf7f3;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-lengkap {
+  border-left-color: rgba(92, 195, 151, .24);
+  background: rgba(16, 46, 47, .55);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-quote {
+  border-color: rgba(200,230,219,.10);
+  background: rgba(14, 39, 42, .62);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .sambutan-rw-quote p {
+  color: #d5e4df;
+}
+
+@media (max-width: 860px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    min-height: 420px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw h2 {
+    font-size: 29px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    min-height: 330px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    min-height: 330px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+    display: none;
+  }
+}
