@@ -34,6 +34,17 @@
           </span>
         </a>
         <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
+
+        <div class="kaki-kkn-kolaborasi" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai">
+          <span>Kolaborasi bersama:</span>
+          <img
+            src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/314565b4-15b2-452c-a959-ca5fad840eae.png"
+            alt="KKN 20 Perum Sukatani Permai - Global Institute"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
         <a class="kaki-hubungi" href="mailto:rayenxtenri@gmail.com">Hubungi pengelola →</a>
       </section>
 
