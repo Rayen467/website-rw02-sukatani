@@ -58,10 +58,12 @@ export function bagianWaktu(tanggal = new Date()) {
  * tersebar di dua berkas komponen.
  */
 export const GAMBAR_WAKTU = Object.freeze({
-  pagi: "./visual/waktu/hero-pagi.webp",
-  siang: "./visual/waktu/hero-siang.webp",
-  sore: "./visual/waktu/hero-sore.webp",
-  malam: "./visual/waktu/hero-malam.webp"
+  // Hero final khusus — terpisah total dari aset footer.
+  // Empat gambar disiapkan sebagai WebP 3840×1800.
+  pagi: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/675bc197-4517-40a4-a648-4b83ea8c23f0.webp",
+  siang: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3456af31-4fbc-4ecf-80a7-7be4c32294fa.webp",
+  sore: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/156af0cc-d2dd-4807-a4b9-b468c397bcea.webp",
+  malam: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ebcfc652-2164-4421-844a-88d5f558837b.webp"
 });
 
 /** Alamat foto untuk sebuah fase. Fase tak dikenal jatuh ke malam. */
@@ -80,6 +82,7 @@ export function gambarWaktu(fase) {
  */
 export function gambarWaktuAbsolut(fase) {
   const sumber = gambarWaktu(fase);
+  if (/^https?:\/\//i.test(sumber)) return sumber;
   if (typeof document === "undefined") return sumber;
   return new URL(sumber, document.baseURI).href;
 }
