@@ -3950,3 +3950,414 @@ body:has(.beranda-hero) .sambutan-rw-motto {
     font-size: 15px;
   }
 }
+
+
+/* === SAMBUTAN MASTER V4 — REFERENSI FINAL === */
+
+/* Final override: satu card editorial yang benar-benar terasa menyatu. */
+body:has(.beranda-hero) .sambutan-rw {
+  --sam-judul: #0b3c33;
+  --sam-teks: #44534f;
+  --sam-label: #56645f;
+  --sam-accent: #e4b234;
+  --sam-button-1: #13815c;
+  --sam-button-2: #086849;
+  --sam-panel-left: rgba(239,233,211,.96);
+  --sam-panel-mid: rgba(230,226,202,.84);
+  --sam-panel-right: rgba(189,192,158,.56);
+  --sam-quote-bg: rgba(255,252,238,.58);
+  --sam-quote-text: #3d4e49;
+  --sam-name-bg-1: rgba(12,79,59,.82);
+  --sam-name-bg-2: rgba(5,55,43,.93);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+  gap: clamp(18px, 2.6vw, 34px);
+  min-height: 430px;
+  padding: clamp(25px, 2.8vw, 36px);
+  border: 1px solid rgba(255,255,255,.40);
+  border-radius: 24px;
+  color: var(--sam-teks);
+  background:
+    linear-gradient(90deg,
+      var(--sam-panel-left) 0%,
+      var(--sam-panel-mid) 51%,
+      var(--sam-panel-right) 100%),
+    var(--sambutan-landscape) center 55% / cover no-repeat !important;
+  box-shadow:
+    0 30px 70px -48px rgba(17,49,37,.56),
+    inset 0 1px 0 rgba(255,255,255,.32);
+}
+
+body:has(.beranda-hero) .sambutan-rw::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+  background:
+    radial-gradient(circle at 8% 7%, rgba(255,255,255,.30), transparent 23%),
+    radial-gradient(circle at 73% 19%, rgba(255,244,211,.16), transparent 26%),
+    linear-gradient(180deg, transparent 67%, rgba(10,59,44,.07));
+}
+
+body:has(.beranda-hero) .sambutan-rw::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 39%;
+  bottom: -72px;
+  width: 210px;
+  height: 210px;
+  opacity: .10;
+  pointer-events: none;
+  color: var(--sambutan-ornamen, rgba(52,105,75,.24));
+  background:
+    radial-gradient(ellipse at 50% 76%, transparent 51%, currentColor 52% 55%, transparent 56%),
+    radial-gradient(ellipse at 29% 49%, transparent 51%, currentColor 52% 55%, transparent 56%),
+    radial-gradient(ellipse at 71% 36%, transparent 51%, currentColor 52% 55%, transparent 56%);
+  transform: rotate(-17deg);
+}
+
+body:has(.beranda-hero) .sambutan-rw > * {
+  position: relative;
+  z-index: 1;
+}
+
+body:has(.beranda-hero) .sambutan-rw-copy {
+  align-self: center;
+  padding: 2px 0 4px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label {
+  margin-bottom: 13px;
+  color: var(--sam-label);
+  font-size: 8.5px;
+  letter-spacing: .11em;
+}
+
+body:has(.beranda-hero) .sambutan-rw-label span {
+  background: var(--sam-accent);
+}
+
+body:has(.beranda-hero) .sambutan-rw h2 {
+  max-width: 17ch;
+  margin: 0;
+  color: var(--sam-judul);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(31px, 3.25vw, 46px);
+  font-weight: 800;
+  line-height: .96;
+  letter-spacing: -.052em;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka {
+  max-width: 63ch;
+  margin-top: 16px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka p,
+body:has(.beranda-hero) .sambutan-rw-lengkap p {
+  margin: 0 0 8px;
+  color: var(--sam-teks);
+  font-size: 9.7px;
+  line-height: 1.5;
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka strong,
+body:has(.beranda-hero) .sambutan-rw-lengkap strong,
+body:has(.beranda-hero) .sambutan-rw-ttd strong {
+  color: var(--sam-judul);
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail {
+  margin-top: 11px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-detail summary {
+  min-height: 35px;
+  padding: 8px 15px;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: linear-gradient(180deg, var(--sam-button-1), var(--sam-button-2));
+  box-shadow: 0 12px 24px -18px rgba(5,73,50,.70);
+  font-size: 9px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-lengkap {
+  margin-top: 13px;
+  padding: 14px 15px 6px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-left: 2px solid color-mix(in srgb, var(--sam-button-1) 70%, transparent);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--sam-quote-bg) 68%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote {
+  max-width: 440px;
+  margin: 15px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,.44);
+  border-radius: 11px;
+  background: var(--sam-quote-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 14px 30px -26px rgba(28,61,48,.46);
+  backdrop-filter: blur(7px);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote > span {
+  color: var(--sam-accent);
+  font-size: 34px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote p {
+  color: var(--sam-quote-text);
+  font-size: 11.5px;
+  line-height: 1.42;
+}
+
+/* Portrait: jangan lagi terasa sebagai card terpisah. */
+body:has(.beranda-hero) .sambutan-rw-foto {
+  position: relative;
+  align-self: stretch;
+  min-height: 370px;
+  height: auto;
+  margin: -8px -10px -36px 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none;
+}
+
+/* Aura lembut menyamarkan sisa matte putih dari sumber foto dan menjadikannya
+ * terlihat sebagai highlight desain, bukan kotak background.
+ */
+body:has(.beranda-hero) .sambutan-rw-foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 54% 37%, var(--sam-portrait-aura, rgba(255,244,215,.35)) 0 31%, transparent 61%);
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 0;
+  width: min(100%, 500px);
+  height: 100%;
+  max-height: 445px;
+  min-height: 370px;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  transform: translateX(-50%) !important;
+  transform-origin: center bottom;
+  mix-blend-mode: multiply;
+  filter:
+    contrast(1.02)
+    saturate(.98)
+    drop-shadow(0 17px 25px rgba(26,50,39,.12)) !important;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 3px;
+  right: 3px;
+  bottom: 0;
+  height: 27%;
+  border-radius: 15px 15px 18px 18px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 0%, var(--sam-name-bg-1) 58%, var(--sam-name-bg-2) 100%);
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+  position: absolute;
+  z-index: 3;
+  left: 9px;
+  right: 8px;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr minmax(132px, .80fr);
+  gap: 14px;
+  align-items: end;
+  padding: 15px 16px 17px;
+  color: #fff;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption strong {
+  color: #fff;
+  font-size: 10.7px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption span {
+  color: rgba(255,255,255,.78);
+  font-size: 7.5px;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--sam-accent);
+  color: rgba(255,255,255,.91);
+  font-size: 7.6px;
+  line-height: 1.42;
+}
+
+body:has(.beranda-hero) .sambutan-rw-motto {
+  z-index: 4;
+  top: 17px;
+  right: 10px;
+  color: #fff;
+  font-size: 19px;
+  text-shadow: 0 3px 11px rgba(0,0,0,.30);
+}
+
+/* PAGI — cream/sage seperti referensi. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-judul: #0b3c33;
+  --sam-teks: #46544f;
+  --sam-label: #58655f;
+  --sam-panel-left: rgba(241,235,213,.96);
+  --sam-panel-mid: rgba(230,226,201,.85);
+  --sam-panel-right: rgba(188,194,157,.55);
+  --sam-quote-bg: rgba(255,251,235,.60);
+  --sam-quote-text: #40504b;
+  --sam-portrait-aura: rgba(255,245,214,.38);
+  --sam-name-bg-1: rgba(17,89,65,.79);
+  --sam-name-bg-2: rgba(5,57,43,.94);
+}
+
+/* SIANG — aqua/sage terang, tetap lembut dan tidak putih polos. */
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-judul: #0a433e;
+  --sam-teks: #405a56;
+  --sam-label: #58736e;
+  --sam-panel-left: rgba(222,239,234,.96);
+  --sam-panel-mid: rgba(207,232,224,.84);
+  --sam-panel-right: rgba(133,180,160,.50);
+  --sam-quote-bg: rgba(236,248,243,.62);
+  --sam-quote-text: #315b53;
+  --sam-portrait-aura: rgba(224,244,238,.36);
+  --sam-name-bg-1: rgba(13,91,75,.80);
+  --sam-name-bg-2: rgba(7,61,52,.94);
+}
+
+/* SORE — bronze/olive hangat. */
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-judul: #49341f;
+  --sam-teks: #645342;
+  --sam-label: #776758;
+  --sam-button-1: #a56d33;
+  --sam-button-2: #79502a;
+  --sam-panel-left: rgba(223,201,168,.96);
+  --sam-panel-mid: rgba(206,187,151,.84);
+  --sam-panel-right: rgba(131,113,78,.54);
+  --sam-quote-bg: rgba(244,229,203,.62);
+  --sam-quote-text: #6a4c2f;
+  --sam-portrait-aura: rgba(244,211,166,.34);
+  --sam-name-bg-1: rgba(104,72,43,.82);
+  --sam-name-bg-2: rgba(65,48,34,.95);
+}
+
+/* MALAM — layout identik, hanya atmosfer berubah. */
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
+  --sam-judul: #eff8f6;
+  --sam-teks: #c0d1cd;
+  --sam-label: #9cb8b3;
+  --sam-accent: #efbf49;
+  --sam-button-1: #16856d;
+  --sam-button-2: #0d6654;
+  --sam-panel-left: rgba(8,35,47,.96);
+  --sam-panel-mid: rgba(8,33,42,.86);
+  --sam-panel-right: rgba(7,29,36,.70);
+  --sam-quote-bg: rgba(11,47,53,.64);
+  --sam-quote-text: #e0eeeb;
+  --sam-portrait-aura: rgba(72,132,158,.22);
+  --sam-name-bg-1: rgba(9,64,63,.83);
+  --sam-name-bg-2: rgba(5,38,44,.96);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto > img {
+  mix-blend-mode: multiply;
+  filter:
+    brightness(1.22)
+    contrast(.96)
+    saturate(.90)
+    drop-shadow(0 17px 27px rgba(0,0,0,.24)) !important;
+}
+
+@media (max-width: 900px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    width: min(470px, 100%);
+    min-height: 335px;
+    margin: 4px auto -36px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    min-height: 335px;
+    max-height: 405px;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.beranda-hero) .sambutan-rw {
+    padding: 18px 16px 20px;
+    border-radius: 17px;
+    background-position: 62% center !important;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw h2 {
+    max-width: 15ch;
+    font-size: 29px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-pembuka p,
+  body:has(.beranda-hero) .sambutan-rw-lengkap p {
+    font-size: 9.2px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    width: 100%;
+    min-height: 295px;
+    margin-bottom: -20px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    min-height: 295px;
+    max-height: 350px;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-foto figcaption blockquote {
+    display: none;
+  }
+
+  body:has(.beranda-hero) .sambutan-rw-motto {
+    top: 10px;
+    right: 8px;
+    font-size: 15px;
+  }
+}
