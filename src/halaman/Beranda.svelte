@@ -265,7 +265,6 @@
   </section>
 
   <section class="panel-rumah panel-tentang">
-    <img class="ornamen-daun" src="./visual/brand/ornamen-daun.webp" alt="" aria-hidden="true" />
     <div class="panel-kepala tentang-kepala">
       <h2>Tentang Permai Sukatani</h2>
       <span class="tentang-info" aria-hidden="true">i</span>
