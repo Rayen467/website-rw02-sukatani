@@ -206,6 +206,7 @@ export const JALUR = Object.freeze({
   BERITA: "/berita",
   KALENDER: "/kalender",
   GALERI: "/galeri",
+  TRANSPARANSI: "/transparansi",
   FORUM: "/forum",
   KAS: "/kas",
   PROGRAM: "/program",
