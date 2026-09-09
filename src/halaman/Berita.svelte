@@ -60,7 +60,7 @@
     { tanggal: "28", bulan: "SEP", judul: "Pemeriksaan Kesehatan Gratis", jam: "08.00 – 12.00 WIB", lokasi: "Poskes RW 02" }
   ];
 
-  const galeri = [
+  const galeriFallback = [
     { foto: "./foto/kegiatan-kerja-bakti.jpg", judul: "Kerja Bakti September 2026" },
     { foto: "./foto/kegiatan-posyandu.jpg", judul: "Posyandu RW 02" },
     { foto: "./foto/kegiatan-rapat-warga.jpg", judul: "Rapat Warga" },
@@ -71,6 +71,16 @@
 
   const beritaAktif = $derived(daftar.length ? daftar.slice(0, 5) : beritaContoh);
   const unggulan = $derived(beritaAktif[0] || beritaContoh[0]);
+
+  const galeriBerita = $derived.by(() => {
+    const dariServer = isi.galeri || [];
+    if (!dariServer.length) return galeriFallback;
+
+    return dariServer.slice(0, 6).map((g, i) => ({
+      foto: g.sampul || g.foto || galeriFallback[i % galeriFallback.length].foto,
+      judul: g.judul || "Dokumentasi kegiatan RW 02"
+    }));
+  });
 
   function fotoUntuk(k, i = 0) {
     return k?.foto || k?.sampul || fotoBerita[i % fotoBerita.length];
@@ -255,17 +265,17 @@
             <p>Dokumentasi kegiatan, pembangunan, dan momen kebersamaan warga.</p>
           </div>
         </div>
-        <a href="#/galeri">Lihat Semua Galeri <span>→</span></a>
+        <span class="galeri-di-berita">Galeri terintegrasi di halaman Berita</span>
       </div>
 
       <div class="galeri-berita-grid">
-        {#each galeri as g, i}
-          <a href="#/galeri" class="galeri-berita-card">
+        {#each galeriBerita as g, i}
+          <article class="galeri-berita-card">
             <img src={g.foto} alt="" decoding="async" />
             <span class="galeri-lapis"></span>
             {#if i === 5}<span class="galeri-play">▶</span>{/if}
             <strong>{g.judul}</strong>
-          </a>
+          </article>
         {/each}
       </div>
     </section>
@@ -943,6 +953,12 @@
 
   .galeri-berita {
     margin-top: 18px;
+  }
+
+  .galeri-di-berita {
+    color: var(--news-green);
+    font-size: 6.5px;
+    font-weight: 700;
   }
 
   .galeri-berita-grid {
