@@ -136,98 +136,88 @@
   }
 </script>
 
-<div class="kontak-modern">
-  <section class="kontak-hero">
-    <div class="kontak-hero-lapis"></div>
-    <div class="kontak-wadah kontak-hero-grid">
-      <nav class="kontak-remah"><a href="#/">Beranda</a><span>›</span><span>Kontak</span></nav>
-      <div class="kontak-hero-copy">
-        <p class="kontak-kicker"><span>⌁</span> Kontak & Lokasi</p>
+<div class="kontak-final">
+  <section class="kontak-final__hero">
+    <div class="kontak-final__hero-shade"></div>
+    <div class="kontak-final__wrap kontak-final__hero-grid">
+      <nav class="kontak-final__crumb"><a href="#/">Beranda</a><span>›</span><span>Kontak</span></nav>
+
+      <div class="kontak-final__hero-copy">
         <h1>Hubungi Kami</h1>
         <h2>Kami Siap Melayani Warga RW 02</h2>
-        <p>
-          Sampaikan pertanyaan, saran, aspirasi, atau kebutuhan Anda.
-          Bersama kita wujudkan lingkungan Sukatani yang lebih baik,
-          guyub, maju, dan sejahtera.
-        </p>
-        <div class="kontak-pill-row">
-          <span>◉ Respon Cepat</span>
-          <span>◉ Pelayanan Ramah</span>
-          <span>◉ Untuk Semua Warga</span>
+        <p>Sampaikan pertanyaan, saran, atau kebutuhan Anda. Bersama kita wujudkan Sukatani yang lebih baik, guyub, maju, dan sejahtera.</p>
+        <div class="kontak-final__hero-pills">
+          <span>✓ Respon Cepat</span>
+          <span>✓ Pelayanan Ramah</span>
+          <span>✓ Untuk Semua Warga</span>
         </div>
       </div>
 
-      <div class="kontak-hero-badge">
+      <aside class="kontak-final__hero-quote">
         <span>“</span>
         <strong>Warga<br />Bersuara,<br />RW Bergerak</strong>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <main class="kontak-wadah kontak-isi">
-    <nav class="kontak-shortcut" aria-label="Kontak cepat">
+  <main class="kontak-final__wrap kontak-final__main">
+    <nav class="kontak-final__shortcuts" aria-label="Kontak cepat">
       <a href={sekretaris ? "https://wa.me/" + nomorWa(sekretaris) : "#form-kontak"} target={sekretaris ? "_blank" : undefined} rel={sekretaris ? "noopener noreferrer" : undefined}>
-        <span class="shortcut-icon whatsapp">◉</span>
+        <span class="kontak-final__shortcut-icon">◉</span>
         <span><strong>Chat WhatsApp</strong><small>Respon lebih cepat</small></span>
       </a>
       <a href={email ? "mailto:" + email : "#form-kontak"}>
-        <span class="shortcut-icon mail">✉</span>
+        <span class="kontak-final__shortcut-icon">✉</span>
         <span><strong>Kirim Email</strong><small>Untuk surat resmi</small></span>
       </a>
       <a href="#lokasi-kontak">
-        <span class="shortcut-icon map">●</span>
+        <span class="kontak-final__shortcut-icon">●</span>
         <span><strong>Datang Langsung</strong><small>Ke sekretariat RW 02</small></span>
       </a>
       <a href="#form-kontak">
-        <span class="shortcut-icon form">▤</span>
+        <span class="kontak-final__shortcut-icon">▤</span>
         <span><strong>Form Online</strong><small>Saran & pengaduan</small></span>
       </a>
       <a href="#/galeri">
-        <span class="shortcut-icon social">♟</span>
+        <span class="kontak-final__shortcut-icon">♟</span>
         <span><strong>Ikuti Media Sosial</strong><small>Update kegiatan</small></span>
       </a>
     </nav>
 
-    <section class="kontak-grid-utama">
-      <article class="kontak-panel sekretariat">
-        <div class="panel-title">
+    <section class="kontak-final__topgrid">
+      <article class="kontak-final__card kontak-final__sekretariat">
+        <header class="kontak-final__title">
           <span>▥</span>
-          <div><h2>Informasi Sekretariat RW</h2><p>Informasi layanan dan lokasi sekretariat RW 02 Sukatani.</p></div>
-        </div>
+          <div><h2>Informasi Sekretariat RW</h2><p>Informasi lengkap sekretariat RW 02 Sukatani.</p></div>
+        </header>
 
-        <div class="sekretariat-foto">
+        <div class="kontak-final__sekretariat-photo">
           <img src="./foto/kegiatan-rapat-warga.jpg" alt="" decoding="async" />
           <div><strong>SEKRETARIAT</strong><small>RW 02 SUKATANI</small></div>
         </div>
 
-        <dl class="info-list">
+        <dl class="kontak-final__info">
           <div><dt><span>●</span>Alamat</dt><dd>{alamat}</dd></div>
           <div><dt><span>◷</span>Jam Pelayanan</dt><dd>Senin – Jumat · {jamSeninJumat}<br />Sabtu · {jamSabtu}<br />Minggu · Libur / sesuai kebutuhan</dd></div>
           <div><dt><span>✉</span>Email</dt><dd>{email || "Belum dicantumkan pengurus"}</dd></div>
-          <div><dt><span>⌕</span>Kontak Sekretariat</dt><dd>{sekretaris || "Belum dicantumkan pengurus"}</dd></div>
+          <div><dt><span>⌕</span>Telepon / WhatsApp</dt><dd>{sekretaris || "Belum dicantumkan pengurus"}</dd></div>
         </dl>
 
-        <div class="sekretariat-actions">
-          <a href="#lokasi-kontak">⌖ &nbsp; Lihat Lokasi di Peta</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Perum+Pondok+Sukatani+Permai+Rajeg" target="_blank" rel="noopener noreferrer">Dapatkan Rute →</a>
+        <div class="kontak-final__sekretariat-actions">
+          <a href="#lokasi-kontak">⌖ &nbsp; Lihat Lokasi di Maps</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Perum+Pondok+Sukatani+Permai+Rajeg" target="_blank" rel="noopener noreferrer">Dapatkan Rute</a>
         </div>
       </article>
 
-      <article class="kontak-panel pesan" id="form-kontak">
-        <div class="panel-title">
+      <article class="kontak-final__card kontak-final__form-card" id="form-kontak">
+        <header class="kontak-final__title">
           <span>✎</span>
-          <div><h2>Kirim Pesan / Pertanyaan</h2><p>Sampaikan pertanyaan, saran, kritik, atau aspirasi secara langsung melalui form berikut.</p></div>
-        </div>
+          <div><h2>Kirim Pesan / Pertanyaan</h2><p>Sampaikan pertanyaan, saran, kritik, atau pengaduan secara langsung.</p></div>
+        </header>
 
-        <form onsubmit={kirimPesan}>
-          <label>
-            <span>Nama Lengkap *</span>
-            <input bind:value={form.nama} placeholder="Masukkan nama lengkap" required />
-          </label>
-          <label>
-            <span>Email / WhatsApp *</span>
-            <input bind:value={form.kontak} placeholder="Masukkan email atau nomor WhatsApp" required />
-          </label>
+        <form class="kontak-final__form" onsubmit={kirimPesan}>
+          <label><span>Nama Lengkap *</span><input bind:value={form.nama} placeholder="Masukkan nama lengkap Anda" required /></label>
+          <label><span>Email / WhatsApp *</span><input bind:value={form.kontak} placeholder="Masukkan email atau nomor WhatsApp" required /></label>
           <label>
             <span>Kategori *</span>
             <select bind:value={form.kategori}>
@@ -240,82 +230,69 @@
               <option>Saran / Aspirasi</option>
             </select>
           </label>
-          <label>
-            <span>Pesan *</span>
-            <textarea bind:value={form.pesan} placeholder="Tulis pesan Anda di sini..." required></textarea>
-          </label>
+          <label><span>Pesan *</span><textarea bind:value={form.pesan} placeholder="Tulis pesan Anda di sini..." required></textarea></label>
 
-          <label class="pesan-file">
-            <input
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onchange={(e) => (lampiranNama = e.currentTarget.files?.[0]?.name || "")}
-            />
+          <label class="kontak-final__file">
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange={(e) => (lampiranNama = e.currentTarget.files?.[0]?.name || "")} />
             <span>⌕</span>
-            <div>
-              <strong>Lampirkan File (Opsional)</strong>
-              <small>{lampiranNama || "PDF, JPG, PNG (Maks. 5MB)"}</small>
-            </div>
+            <div><strong>Lampirkan File (Opsional)</strong><small>{lampiranNama || "PDF, JPG, PNG (Maks. 5MB)"}</small></div>
             <b>Pilih File</b>
           </label>
 
           <button type="submit" disabled={mengirim}>{mengirim ? "Mengirim..." : "➤  Kirim Pesan"}</button>
-          <p class="form-foot">Pesan masuk sebagai tiket layanan agar dapat ditindaklanjuti pengurus.</p>
+          <p class="kontak-final__form-note">Kami akan merespon pesan Anda secepat mungkin.</p>
         </form>
       </article>
 
-      <aside class="kontak-panel pengurus">
-        <div class="panel-title">
+      <aside class="kontak-final__card kontak-final__pengurus">
+        <header class="kontak-final__title">
           <span>♟</span>
           <div><h2>Kontak Pengurus RW</h2><p>Hubungi pengurus sesuai kebutuhan Anda.</p></div>
-        </div>
+        </header>
 
-        <div class="pengurus-list">
-          {#each pengurus as o, i}
-            <div class="pengurus-row">
-              <span class="pengurus-avatar">
+        <div class="kontak-final__pengurus-list">
+          {#each pengurus as o}
+            <div class="kontak-final__pengurus-row">
+              <span class="kontak-final__avatar">
                 {#if o.foto}<img src={o.foto} alt="" decoding="async" />{:else}{String(o.nama || o.jabatan || "?").trim().charAt(0) || "?"}{/if}
               </span>
-              <div>
-                <strong>{o.jabatan || "Pengurus RW"}</strong>
-                <small>{o.nama || "Nama belum tersedia"}</small>
-              </div>
+              <div><strong>{o.jabatan || "Pengurus RW"}</strong><small>{o.nama || "Nama belum tersedia"}</small></div>
               {#if o.kontak}
-                <a class="wa-icon" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label={"WhatsApp " + (o.nama || o.jabatan)}>◉</a>
-                <a class="tel-icon" href={"tel:" + o.kontak} aria-label={"Telepon " + (o.nama || o.jabatan)}>⌕</a>
+                <a class="kontak-final__wa" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer">◉</a>
+                <a class="kontak-final__tel" href={"tel:" + o.kontak}>⌕</a>
               {:else}
-                <span class="wa-icon mati" title="Kontak belum diizinkan">—</span>
-                <span class="tel-icon mati" title="Kontak belum diizinkan">—</span>
+                <span class="kontak-final__wa is-off">—</span>
+                <span class="kontak-final__tel is-off">—</span>
               {/if}
             </div>
           {/each}
         </div>
 
-        <p class="pengurus-note">Nomor hanya ditampilkan setelah pemiliknya memberikan izin.</p>
+        <p class="kontak-final__privacy">Nomor hanya ditampilkan setelah pemiliknya memberikan izin.</p>
       </aside>
     </section>
 
-    <section class="kontak-grid-bawah">
-      <article class="kontak-panel lokasi" id="lokasi-kontak">
-        <div class="panel-title">
+    <section class="kontak-final__midgrid">
+      <article class="kontak-final__card kontak-final__map-card" id="lokasi-kontak">
+        <header class="kontak-final__title">
           <span>▣</span>
           <div><h2>Lokasi RW 02 Sukatani</h2><p>Peta wilayah RW 02 dan lokasi sekretariat.</p></div>
+        </header>
+        <div class="kontak-final__map"><Peta perbesaran={18} /></div>
+        <div class="kontak-final__map-legend">
+          <span><i class="red"></i>Batas wilayah RW 02</span>
+          <span><i class="green"></i>Sekretariat RW 02</span>
+          <span><i class="blue"></i>Fasilitas umum</span>
         </div>
-        <div class="map-wrap"><Peta perbesaran={18} /></div>
-        <div class="map-caption">
-          <span><i class="merah"></i>Sekretariat RW 02</span>
-          <span><i class="hijau"></i>Fasilitas umum</span>
-          <span><i class="biru"></i>Wilayah Permai Sukatani</span>
-        </div>
-        <p>{alamat}. Peta membantu warga menemukan lokasi layanan dan fasilitas lingkungan.</p>
+        <p class="kontak-final__map-copy">Wilayah RW 02 Permai Sukatani, Rajeg. Peta membantu warga melihat lokasi sekretariat, fasilitas umum, dan area lingkungan RW 02.</p>
       </article>
 
-      <article class="kontak-panel layanan-cepat">
-        <div class="panel-title">
+      <article class="kontak-final__card kontak-final__services">
+        <header class="kontak-final__title">
           <span>◉</span>
-          <div><h2>Layanan & Kontak Cepat</h2><p>Pilih kebutuhan Anda untuk menuju layanan terkait.</p></div>
-        </div>
-        <div class="layanan-kontak-grid">
+          <div><h2>Layanan & Kontak Cepat</h2><p>Pilih kebutuhan Anda untuk menghubungi langsung.</p></div>
+        </header>
+        <div class="kontak-final__services-grid">
           {#each layananCepat as l}
             <a href={l[3]}>
               <span>{l[0]}</span>
@@ -327,17 +304,17 @@
       </article>
     </section>
 
-    <section class="kontak-faq-quote">
-      <article class="kontak-panel faq">
-        <div class="panel-title faq-title">
+    <section class="kontak-final__bottomgrid">
+      <article class="kontak-final__card kontak-final__faq">
+        <header class="kontak-final__title kontak-final__faq-title">
           <span>?</span>
           <div><h2>Pertanyaan yang Sering Diajukan</h2><p>Temukan jawaban cepat untuk pertanyaan umum.</p></div>
           <a href="#/layanan">Lihat Semua FAQ →</a>
-        </div>
+        </header>
 
-        <div class="faq-list">
+        <div class="kontak-final__faq-list">
           {#each faq as f, i}
-            <button type="button" class:terbuka={bukaFaq === i} onclick={() => (bukaFaq = bukaFaq === i ? -1 : i)}>
+            <button type="button" class:is-open={bukaFaq === i} onclick={() => (bukaFaq = bukaFaq === i ? -1 : i)}>
               <span><strong>{f.q}</strong>{#if bukaFaq === i}<small>{f.a}</small>{/if}</span>
               <b>{bukaFaq === i ? "−" : "⌄"}</b>
             </button>
@@ -345,9 +322,9 @@
         </div>
       </article>
 
-      <aside class="kontak-quote">
+      <aside class="kontak-final__quote-card">
         <img src="./foto/kegiatan-kerja-bakti.jpg" alt="" decoding="async" />
-        <span></span>
+        <div></div>
         <blockquote>“Komunikasi yang baik adalah awal dari lingkungan yang lebih harmonis.”</blockquote>
         <small>— RW 02 Sukatani</small>
       </aside>
@@ -356,1544 +333,561 @@
 </div>
 
 <style>
-  .kontak-modern {
-    --k-bg: #f5f8f4;
-    --k-card: #ffffff;
-    --k-ink: #102f3a;
-    --k-text: #596b6c;
-    --k-line: #dce6df;
-    --k-green: #08765d;
-    --k-green-2: #0e9970;
+  .kontak-final,
+  .kontak-final * {
+    box-sizing: border-box;
+  }
+
+  .kontak-final {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-top: -32px;
     margin-bottom: -64px;
     overflow: hidden;
-    color: var(--k-ink);
-    background:
-      radial-gradient(circle at 3% 37%, rgba(50,136,91,.06), transparent 18%),
-      radial-gradient(circle at 96% 54%, rgba(50,136,91,.05), transparent 19%),
-      var(--k-bg);
+    color: #102c3b !important;
+    background: #f7faf7 !important;
     font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   }
 
-  .kontak-wadah {
-    width: min(1180px, calc(100% - 40px));
+  .kontak-final__wrap {
+    width: min(1120px, calc(100% - 42px));
     margin-inline: auto;
   }
 
-  .kontak-hero {
+  .kontak-final__hero {
     position: relative;
-    min-height: 340px;
+    min-height: 292px;
     color: #fff;
     background:
-      linear-gradient(90deg, rgba(3,48,41,.08), rgba(3,48,41,.08)),
+      linear-gradient(90deg, rgba(3,46,39,.95), rgba(4,58,48,.72) 43%, rgba(4,50,43,.24) 74%, rgba(3,42,37,.35)),
       url("./foto/kegiatan-pengecatan.jpg") center 52% / cover no-repeat;
   }
 
-  .kontak-hero-lapis {
+  .kontak-final__hero-shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(90deg, rgba(3,43,37,.94) 0%, rgba(5,58,48,.72) 45%, rgba(5,49,41,.22) 72%, rgba(3,42,37,.55)),
-      linear-gradient(180deg, rgba(3,24,22,.10), rgba(3,39,34,.42));
+    background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(2,37,31,.20));
   }
 
-  .kontak-hero-grid {
+  .kontak-final__hero-grid {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 230px;
-    gap: 35px;
-    align-items: center;
-    min-height: 340px;
-    padding: 52px 0 42px;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    grid-template-rows: auto 1fr;
+    gap: 8px 28px;
+    min-height: 292px;
+    padding: 22px 0 25px;
   }
 
-  .kontak-hero-copy { max-width: 650px; }
-
-  .kontak-kicker {
+  .kontak-final__crumb {
+    grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 0 0 10px;
-    color: #d8f6ea;
-    font-size: 8.5px;
-    font-weight: 700;
+    gap: 5px;
+    color: rgba(255,255,255,.9);
+    font-size: 8px;
   }
 
-  .kontak-kicker span { color: #65e7ba; font-size: 17px; }
+  .kontak-final__crumb a { color: inherit; text-decoration: none; }
 
-  .kontak-hero h1 {
+  .kontak-final__hero-copy {
+    align-self: center;
+    max-width: 610px;
+  }
+
+  .kontak-final__hero-copy h1 {
     margin: 0;
     color: #fff;
-    font-size: clamp(42px, 5vw, 62px);
-    line-height: .95;
-    letter-spacing: -.045em;
+    font-size: clamp(39px, 4.3vw, 52px);
+    line-height: .98;
+    letter-spacing: -.04em;
   }
 
-  .kontak-hero h2 {
+  .kontak-final__hero-copy h2 {
     margin: 5px 0 0;
     color: #fff;
-    font-size: clamp(20px, 2.4vw, 29px);
-    line-height: 1.05;
+    font-size: clamp(20px, 2.1vw, 25px);
+    line-height: 1.08;
   }
 
-  .kontak-hero-copy > p:last-of-type {
+  .kontak-final__hero-copy > p {
     max-width: 49ch;
-    margin: 12px 0 0;
-    color: rgba(244,252,249,.91);
-    font-size: 11.5px;
-    line-height: 1.55;
+    margin: 10px 0 0;
+    color: rgba(255,255,255,.92);
+    font-size: 11px;
+    line-height: 1.5;
   }
 
-  .kontak-pill-row {
+  .kontak-final__hero-pills {
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
-    margin-top: 15px;
+    margin-top: 13px;
   }
 
-  .kontak-pill-row span {
-    padding: 6px 9px;
-    border: 1px solid rgba(101,232,192,.26);
+  .kontak-final__hero-pills span {
+    padding: 5px 8px;
+    border: 1px solid rgba(93,225,185,.32);
     border-radius: 999px;
-    color: #eefcf7;
-    background: rgba(4,79,63,.46);
+    color: #effcf8;
+    background: rgba(4,79,63,.48);
     font-size: 7px;
     font-weight: 700;
-    backdrop-filter: blur(6px);
   }
 
-  .kontak-hero-badge {
+  .kontak-final__hero-quote {
     align-self: center;
     justify-self: end;
-    width: 190px;
-    padding: 18px 18px 20px;
-    border: 1px solid rgba(255,255,255,.30);
-    border-radius: 13px;
-    background: rgba(4,48,42,.56);
-    backdrop-filter: blur(9px);
+    width: 174px;
+    padding: 15px 16px 18px;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 12px;
+    background: rgba(4,49,42,.54);
+    backdrop-filter: blur(8px);
   }
 
-  .kontak-hero-badge > span {
+  .kontak-final__hero-quote > span {
     color: #fff;
     font-family: Georgia, serif;
     font-size: 28px;
     line-height: .7;
   }
 
-  .kontak-hero-badge strong {
+  .kontak-final__hero-quote strong {
     display: block;
     margin-top: 7px;
     color: #fff;
     font-family: Georgia, serif;
     font-size: 20px;
     font-style: italic;
-    line-height: 1.12;
+    line-height: 1.08;
   }
 
-  .kontak-isi {
+  .kontak-final__main {
     position: relative;
     z-index: 2;
-    padding: 0 0 48px;
+    padding-bottom: 38px;
   }
 
-  .kontak-shortcut {
+  .kontak-final__shortcuts {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 8px;
-    margin-top: -18px;
-    padding: 9px;
-    border: 1px solid var(--k-line);
-    border-radius: 13px;
-    background: rgba(255,255,255,.95);
-    box-shadow: 0 15px 38px -31px rgba(18,66,50,.45);
-    backdrop-filter: blur(10px);
+    margin-top: -16px;
+    padding: 8px;
+    border: 1px solid #dfe8e2;
+    border-radius: 12px;
+    background: rgba(255,255,255,.97);
+    box-shadow: 0 15px 34px -28px rgba(20,62,48,.36);
   }
 
-  .kontak-shortcut a {
+  .kontak-final__shortcuts a {
     min-width: 0;
-    min-height: 58px;
+    min-height: 63px;
     display: grid;
     grid-template-columns: 42px minmax(0, 1fr);
     gap: 9px;
     align-items: center;
     padding: 7px 8px;
+    border: 1px solid #edf2ef;
     border-radius: 8px;
-    color: var(--k-ink);
+    color: #102c3b;
     background: #fff;
     text-decoration: none;
   }
 
-  .shortcut-icon {
+  .kontak-final__shortcut-icon {
     width: 42px;
     height: 42px;
     display: grid;
     place-items: center;
     border-radius: 10px;
     color: #fff;
-    background: linear-gradient(180deg, #18b984, #08735c);
-    font-size: 17px;
+    background: linear-gradient(180deg,#19b985,#08745c);
+    font-size: 16px;
   }
 
-  .kontak-shortcut strong,
-  .kontak-shortcut small { display: block; }
+  .kontak-final__shortcuts strong,
+  .kontak-final__shortcuts small { display:block; }
 
-  .kontak-shortcut strong {
-    font-size: 9px;
-  }
+  .kontak-final__shortcuts strong { font-size: 9px; }
+  .kontak-final__shortcuts small { margin-top:2px; color:#66777a; font-size:6.4px; }
 
-  .kontak-shortcut small {
-    margin-top: 2px;
-    color: var(--k-text);
-    font-size: 6.5px;
-  }
-
-  .kontak-grid-utama {
+  .kontak-final__topgrid {
     display: grid;
-    grid-template-columns: .98fr 1.06fr .84fr;
-    gap: 11px;
-    margin-top: 12px;
+    grid-template-columns: minmax(0,.98fr) minmax(0,1.04fr) minmax(0,.86fr);
+    gap: 10px;
+    align-items: stretch;
+    margin-top: 10px;
   }
 
-  .kontak-panel {
+  .kontak-final__card {
     min-width: 0;
-    border: 1px solid var(--k-line);
-    border-radius: 10px;
-    background: var(--k-card);
-    box-shadow: 0 12px 28px -25px rgba(24,65,51,.32);
+    padding: 10px;
+    border: 1px solid #e1e9e4;
+    border-radius: 9px;
+    color: #102c3b;
+    background: #fff;
+    box-shadow: 0 12px 28px -26px rgba(24,65,51,.28);
   }
 
-  .sekretariat,
-  .pesan,
-  .pengurus,
-  .lokasi,
-  .layanan-cepat,
-  .faq {
-    padding: 11px;
-  }
-
-  .panel-title {
+  .kontak-final__title {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    min-height: 35px;
+    gap: 7px;
+    min-height: 33px;
   }
 
-  .panel-title > span {
-    width: 30px;
-    height: 30px;
+  .kontak-final__title > span {
+    width: 28px;
+    height: 28px;
     display: grid;
     place-items: center;
-    flex: 0 0 30px;
+    flex: 0 0 28px;
     border-radius: 7px;
     color: #fff;
-    background: linear-gradient(180deg, #179d74, #087259);
-    font-size: 13px;
+    background: linear-gradient(180deg,#179d74,#087259);
+    font-size: 12px;
   }
 
-  .panel-title h2 {
-    margin: 0;
-    color: var(--k-ink);
-    font-size: 14px;
-    line-height: 1.1;
-  }
+  .kontak-final__title h2 { margin:0; color:#102c3b; font-size:13px; line-height:1.1; }
+  .kontak-final__title p { margin:3px 0 0; color:#6b7b7b; font-size:6px; line-height:1.35; }
 
-  .panel-title p {
-    margin: 3px 0 0;
-    color: var(--k-text);
-    font-size: 6.5px;
-    line-height: 1.35;
-  }
-
-  .sekretariat-foto {
+  .kontak-final__sekretariat-photo {
     position: relative;
     height: 130px;
     overflow: hidden;
-    margin-top: 8px;
+    margin-top: 7px;
     border-radius: 8px;
   }
 
-  .sekretariat-foto img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .kontak-final__sekretariat-photo img { width:100%; height:100%; object-fit:cover; }
+  .kontak-final__sekretariat-photo::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(4,48,42,.16),transparent); }
+
+  .kontak-final__sekretariat-photo > div {
+    position:absolute;
+    z-index:1;
+    left:50%;
+    top:50%;
+    padding:7px 11px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:4px;
+    color:#fff;
+    background:rgba(5,50,44,.76);
+    text-align:center;
+    transform:translate(-50%,-50%);
   }
 
-  .sekretariat-foto::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(4,48,42,.18), rgba(4,48,42,.02));
+  .kontak-final__sekretariat-photo strong,
+  .kontak-final__sekretariat-photo small { display:block; }
+  .kontak-final__sekretariat-photo strong { font-size:10px; }
+  .kontak-final__sekretariat-photo small { margin-top:2px; font-size:7px; }
+
+  .kontak-final__info {
+    display:grid;
+    margin:6px 0 0;
   }
 
-  .sekretariat-foto > div {
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    top: 50%;
-    padding: 8px 12px;
-    border: 1px solid rgba(255,255,255,.62);
-    border-radius: 4px;
-    color: #fff;
-    background: rgba(5,50,44,.74);
-    text-align: center;
-    transform: translate(-50%, -50%);
+  .kontak-final__info > div {
+    display:grid;
+    grid-template-columns:100px minmax(0,1fr);
+    gap:6px;
+    padding:7px 0;
+    border-bottom:1px solid #edf2ef;
   }
 
-  .sekretariat-foto strong,
-  .sekretariat-foto small { display: block; }
+  .kontak-final__info > div:last-child { border-bottom:0; }
 
-  .sekretariat-foto strong { font-size: 10px; }
-  .sekretariat-foto small { margin-top: 2px; font-size: 7px; }
+  .kontak-final__info dt { color:#16353e; font-size:6.7px; font-weight:800; }
+  .kontak-final__info dt span {
+    width:20px; height:20px; display:inline-grid; place-items:center; margin-right:5px;
+    border-radius:5px; color:#fff; background:#0d8b68; font-size:8px;
+  }
+  .kontak-final__info dd { margin:0; color:#40565a; font-size:6.8px; line-height:1.5; }
 
-  .info-list {
-    display: grid;
-    gap: 0;
-    margin: 8px 0 0;
+  .kontak-final__sekretariat-actions {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+    margin-top:5px;
   }
 
-  .info-list > div {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 7px;
-    padding: 8px 0;
-    border-bottom: 1px solid #edf1ee;
+  .kontak-final__sekretariat-actions a {
+    min-height:31px; display:grid; place-items:center; padding:6px;
+    border:1px solid #cfdcd5; border-radius:6px; color:#173e37; font-size:6.3px; font-weight:700; text-decoration:none;
   }
 
-  .info-list > div:last-child { border-bottom: 0; }
+  .kontak-final__sekretariat-actions a:first-child { color:#fff; border-color:#0a785e; background:linear-gradient(180deg,#0c735e,#07513f); }
 
-  .info-list dt {
-    color: var(--k-ink);
-    font-size: 7px;
-    font-weight: 800;
+  .kontak-final__form {
+    display:grid;
+    gap:6px;
+    margin-top:7px;
   }
 
-  .info-list dt span {
-    width: 20px;
-    height: 20px;
-    display: inline-grid;
-    place-items: center;
-    margin-right: 5px;
-    border-radius: 5px;
-    color: #fff;
-    background: #0d8b68;
-    font-size: 8px;
+  .kontak-final__form label > span { display:block; margin-bottom:4px; color:#16353e; font-size:6.5px; font-weight:750; }
+  .kontak-final__form input,
+  .kontak-final__form select,
+  .kontak-final__form textarea {
+    width:100%; min-height:33px; padding:7px 8px;
+    border:1px solid #d8e1dc; border-radius:6px; outline:0;
+    color:#273f43; background:#fbfcfb; font:inherit; font-size:6.9px;
+  }
+  .kontak-final__form textarea { min-height:92px; resize:vertical; }
+  .kontak-final__form input:focus,
+  .kontak-final__form select:focus,
+  .kontak-final__form textarea:focus { border-color:#32b58c; box-shadow:0 0 0 2px rgba(50,181,140,.1); }
+
+  .kontak-final__file {
+    min-height:48px;
+    display:grid !important;
+    grid-template-columns:30px minmax(0,1fr) auto;
+    gap:7px;
+    align-items:center;
+    padding:7px !important;
+    border-radius:6px;
+    background:#f1f5f3;
+    cursor:pointer;
   }
 
-  .info-list dd {
-    margin: 0;
-    color: #40565a;
-    font-size: 7px;
-    line-height: 1.5;
+  .kontak-final__file > input { position:absolute; width:1px!important; height:1px!important; opacity:0; pointer-events:none; }
+  .kontak-final__file > span {
+    width:30px; height:30px; display:grid!important; place-items:center; margin:0!important;
+    border-radius:6px; color:#0a795d!important; background:#e0efea; font-size:13px!important;
+  }
+  .kontak-final__file strong,
+  .kontak-final__file small { display:block; }
+  .kontak-final__file strong { color:#203c3d; font-size:6.3px; }
+  .kontak-final__file small { margin-top:2px; color:#71817d; font-size:5.2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .kontak-final__file > b { padding:5px 8px; border-radius:5px; color:#24483f; background:#dfe9e5; font-size:5.7px; }
+
+  .kontak-final__form > button {
+    min-height:35px; border:0; border-radius:6px; color:#fff;
+    background:linear-gradient(180deg,#138768,#087159); font-size:7px; font-weight:800; cursor:pointer;
+  }
+  .kontak-final__form > button:disabled { opacity:.6; cursor:wait; }
+  .kontak-final__form-note { margin:0; color:#83918d; font-size:5.5px; text-align:center; }
+
+  .kontak-final__pengurus-list { display:grid; margin-top:7px; }
+  .kontak-final__pengurus-row {
+    min-height:44px;
+    display:grid;
+    grid-template-columns:32px minmax(0,1fr) 25px 25px;
+    gap:6px;
+    align-items:center;
+    border-bottom:1px solid #edf2ef;
+  }
+  .kontak-final__pengurus-row:last-child { border-bottom:0; }
+
+  .kontak-final__avatar {
+    width:30px; height:30px; display:grid; place-items:center; overflow:hidden;
+    border-radius:50%; color:#0a6652; background:#dceee8; font-size:8px; font-weight:800;
+  }
+  .kontak-final__avatar img { width:100%; height:100%; object-fit:cover; }
+
+  .kontak-final__pengurus-row strong,
+  .kontak-final__pengurus-row small { display:block; }
+  .kontak-final__pengurus-row strong { color:#102c3b; font-size:6.4px; }
+  .kontak-final__pengurus-row small { margin-top:2px; color:#66777a; font-size:5.3px; }
+
+  .kontak-final__wa,
+  .kontak-final__tel {
+    width:24px; height:24px; display:grid; place-items:center; border-radius:50%; text-decoration:none;
+  }
+  .kontak-final__wa { color:#fff; background:#12b76a; }
+  .kontak-final__tel { color:#0c725a; background:#edf6f2; border:1px solid #dceae4; font-size:8px; }
+  .is-off { color:#8b9b96!important; background:#eef3f0!important; border-color:#e5ece8!important; }
+
+  .kontak-final__privacy {
+    margin:7px 0 0;
+    padding:7px;
+    border-radius:6px;
+    color:#657a73;
+    background:#edf4f1;
+    font-size:5.6px;
+    line-height:1.4;
   }
 
-  .sekretariat-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 7px;
+  .kontak-final__midgrid {
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(0,.92fr);
+    gap:10px;
+    margin-top:10px;
   }
 
-  .sekretariat-actions a {
-    min-height: 31px;
-    display: grid;
-    place-items: center;
-    padding: 6px;
-    border: 1px solid #cfdcd5;
-    border-radius: 6px;
-    color: #173e37;
-    font-size: 6.3px;
-    font-weight: 700;
-    text-decoration: none;
+  .kontak-final__map {
+    position:relative;
+    height:218px;
+    overflow:hidden;
+    margin-top:7px;
+    border:1px solid #dfe7e2;
+    border-radius:8px;
+    background:#dfe7e2;
   }
 
-  .sekretariat-actions a:first-child {
-    color: #fff;
-    border-color: #0a785e;
-    background: linear-gradient(180deg, #0c735e, #07513f);
+  .kontak-final__map :global(.petabox) { height:100%!important; min-height:100%!important; }
+  .kontak-final__map :global(.peta-sendiri),
+  .kontak-final__map :global(.peta-gambar),
+  .kontak-final__map :global(iframe) { width:100%!important; height:100%!important; min-height:100%!important; }
+  .kontak-final__map :global(.keterangan-batas),
+  .kontak-final__map :global(.baris-tombol),
+  .kontak-final__map :global(.verifikasi) { display:none!important; }
+
+  .kontak-final__map-legend {
+    display:flex; flex-wrap:wrap; gap:14px; margin-top:6px; color:#536a65; font-size:5.6px;
+  }
+  .kontak-final__map-legend span { display:flex; align-items:center; gap:5px; }
+  .kontak-final__map-legend i { width:8px; height:8px; display:inline-block; border-radius:50%; }
+  .kontak-final__map-legend .red { background:#ff4f60; }
+  .kontak-final__map-legend .green { background:#19ad6c; }
+  .kontak-final__map-legend .blue { background:#319be8; }
+
+  .kontak-final__map-copy { margin:6px 0 0; color:#607078; font-size:5.8px; line-height:1.45; }
+
+  .kontak-final__services-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    margin-top:7px;
   }
 
-  .pesan form {
-    display: grid;
-    gap: 7px;
-    margin-top: 8px;
+  .kontak-final__services-grid a {
+    min-width:0;
+    min-height:50px;
+    display:grid;
+    grid-template-columns:29px minmax(0,1fr) 10px;
+    gap:6px;
+    align-items:center;
+    padding:6px;
+    border:1px solid #e0e8e3;
+    border-radius:7px;
+    color:#102c3b;
+    background:#fbfcfb;
+    text-decoration:none;
   }
 
-  .pesan label > span {
-    display: block;
-    margin-bottom: 4px;
-    color: var(--k-ink);
-    font-size: 6.7px;
-    font-weight: 750;
+  .kontak-final__services-grid > a > span {
+    width:29px; height:29px; display:grid; place-items:center;
+    border-radius:7px; color:#fff; background:#0b8866; font-size:10px;
+  }
+  .kontak-final__services-grid strong,
+  .kontak-final__services-grid small { display:block; }
+  .kontak-final__services-grid strong { font-size:6.2px; }
+  .kontak-final__services-grid small { margin-top:2px; color:#66777a; font-size:5px; }
+  .kontak-final__services-grid b { color:#0a795d; font-size:14px; }
+
+  .kontak-final__bottomgrid {
+    display:grid;
+    grid-template-columns:minmax(0,1.28fr) minmax(0,.95fr);
+    gap:10px;
+    margin-top:10px;
   }
 
-  .pesan input,
-  .pesan select,
-  .pesan textarea {
-    width: 100%;
-    min-height: 34px;
-    border: 1px solid #d8e1dc;
-    border-radius: 6px;
-    outline: none;
-    padding: 8px 9px;
-    color: #273f43;
-    background: #fbfcfb;
-    font: inherit;
-    font-size: 7px;
+  .kontak-final__faq-title > a {
+    margin-left:auto;
+    color:#08765d;
+    font-size:6px;
+    font-weight:700;
+    text-decoration:none;
   }
 
-  .pesan textarea {
-    min-height: 92px;
-    resize: vertical;
+  .kontak-final__faq-list { display:grid; gap:3px; margin-top:7px; }
+  .kontak-final__faq-list button {
+    width:100%;
+    min-height:33px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 18px;
+    gap:8px;
+    align-items:center;
+    padding:6px 8px;
+    border:1px solid #e1e8e4;
+    border-radius:5px;
+    color:#223e3f;
+    background:#fbfcfb;
+    text-align:left;
+    cursor:pointer;
   }
+  .kontak-final__faq-list button strong { display:block; font-size:6.3px; }
+  .kontak-final__faq-list button small { display:block; margin-top:5px; color:#6a7b77; font-size:5.5px; line-height:1.45; }
+  .kontak-final__faq-list button b { color:#0a765d; text-align:center; }
+  .kontak-final__faq-list button.is-open { border-color:#bcded1; background:#f4faf7; }
 
-  .pesan input:focus,
-  .pesan select:focus,
-  .pesan textarea:focus {
-    border-color: #32b58c;
-    box-shadow: 0 0 0 2px rgba(50,181,140,.10);
+  .kontak-final__quote-card {
+    position:relative;
+    min-height:184px;
+    overflow:hidden;
+    border-radius:10px;
   }
-
-  .pesan-note {
-    min-height: 48px;
-    display: grid;
-    grid-template-columns: 29px minmax(0, 1fr) auto;
-    gap: 7px;
-    align-items: center;
-    padding: 7px;
-    border-radius: 6px;
-    background: #f1f5f3;
+  .kontak-final__quote-card img,
+  .kontak-final__quote-card > div {
+    position:absolute; inset:0; width:100%; height:100%;
   }
-
-  .pesan-note > span {
-    width: 29px;
-    height: 29px;
-    display: grid;
-    place-items: center;
-    border-radius: 6px;
-    color: #0a795d;
-    background: #e1efea;
+  .kontak-final__quote-card img { object-fit:cover; filter:saturate(.9) brightness(.82); }
+  .kontak-final__quote-card > div { background:linear-gradient(90deg,rgba(3,48,38,.72),rgba(4,54,40,.26)); }
+  .kontak-final__quote-card blockquote {
+    position:absolute; z-index:1; left:21px; top:31px; max-width:20ch; margin:0;
+    color:#fff; font-family:Georgia,serif; font-size:17px; font-style:italic; line-height:1.25;
+    text-shadow:0 2px 10px rgba(0,0,0,.3);
   }
-
-  .pesan-note strong,
-  .pesan-note small { display: block; }
-  .pesan-note strong { color: #203c3d; font-size: 6.5px; }
-  .pesan-note small { margin-top: 2px; color: #71817d; font-size: 5.3px; }
-  .pesan-note a {
-    padding: 5px 7px;
-    border-radius: 5px;
-    color: #1b4a3f;
-    background: #d9e9e3;
-    font-size: 5.5px;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .pesan form > button {
-    min-height: 35px;
-    border: 0;
-    border-radius: 6px;
-    color: #fff;
-    background: linear-gradient(180deg, #138768, #087159);
-    font-size: 7px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-
-  .pesan form > button:disabled { opacity: .6; cursor: wait; }
-
-  .form-foot {
-    margin: 0;
-    color: #82908c;
-    font-size: 5.5px;
-    text-align: center;
-  }
-
-  .pengurus-list {
-    display: grid;
-    margin-top: 7px;
-  }
-
-  .pengurus-row {
-    min-height: 45px;
-    display: grid;
-    grid-template-columns: 34px minmax(0, 1fr) 28px;
-    gap: 7px;
-    align-items: center;
-    border-bottom: 1px solid #edf1ee;
-  }
-
-  .pengurus-row:last-child { border-bottom: 0; }
-
-  .pengurus-avatar {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    border-radius: 50%;
-    color: #0a6652;
-    background: #dceee8;
-    font-size: 8px;
-    font-weight: 800;
-  }
-
-  .pengurus-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .pengurus-row strong,
-  .pengurus-row small { display: block; }
-
-  .pengurus-row strong {
-    color: var(--k-ink);
-    font-size: 6.7px;
-  }
-
-  .pengurus-row small {
-    margin-top: 2px;
-    color: var(--k-text);
-    font-size: 5.6px;
-  }
-
-  .wa-icon {
-    width: 25px;
-    height: 25px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: #fff;
-    background: #12b76a;
-    font-size: 9px;
-    text-decoration: none;
-  }
-
-  .wa-icon.mati {
-    color: #80928d;
-    background: #edf2ef;
-  }
-
-  .pengurus-note {
-    margin: 8px 0 0;
-    padding: 8px;
-    border-radius: 6px;
-    color: #657a73;
-    background: #edf4f1;
-    font-size: 5.6px;
-    line-height: 1.4;
-  }
-
-  .kontak-grid-bawah {
-    display: grid;
-    grid-template-columns: 1.55fr 1fr;
-    gap: 11px;
-    margin-top: 11px;
-  }
-
-  .map-wrap {
-    height: 215px;
-    overflow: hidden;
-    margin-top: 8px;
-    border-radius: 8px;
-  }
-
-  .map-wrap :global(.peta),
-  .map-wrap :global(iframe) {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .map-caption {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 7px;
-    color: #536a65;
-    font-size: 5.6px;
-  }
-
-  .map-caption span { display: flex; align-items: center; gap: 5px; }
-
-  .map-caption i {
-    width: 8px;
-    height: 8px;
-    display: inline-block;
-    border-radius: 50%;
-  }
-
-  .map-caption .merah { background: #ff4f60; }
-  .map-caption .hijau { background: #19ad6c; }
-  .map-caption .biru { background: #319be8; }
-
-  .lokasi > p {
-    margin: 8px 0 0;
-    color: var(--k-text);
-    font-size: 6px;
-    line-height: 1.45;
-  }
-
-  .layanan-kontak-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .layanan-kontak-grid a {
-    min-width: 0;
-    min-height: 52px;
-    display: grid;
-    grid-template-columns: 30px minmax(0, 1fr) 12px;
-    gap: 7px;
-    align-items: center;
-    padding: 7px;
-    border: 1px solid #e0e8e3;
-    border-radius: 7px;
-    color: var(--k-ink);
-    background: #fbfcfb;
-    text-decoration: none;
-  }
-
-  .layanan-kontak-grid > a > span {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border-radius: 7px;
-    color: #fff;
-    background: #0b8866;
-    font-size: 11px;
-  }
-
-  .layanan-kontak-grid strong,
-  .layanan-kontak-grid small { display: block; }
-
-  .layanan-kontak-grid strong {
-    font-size: 6.3px;
-  }
-
-  .layanan-kontak-grid small {
-    margin-top: 2px;
-    color: var(--k-text);
-    font-size: 5.2px;
-  }
-
-  .layanan-kontak-grid b {
-    color: #0a795d;
-    font-size: 14px;
-  }
-
-  .kontak-faq-quote {
-    display: grid;
-    grid-template-columns: 1.35fr .85fr;
-    gap: 11px;
-    margin-top: 11px;
-  }
-
-  .faq-title > a {
-    margin-left: auto;
-    color: #08765d;
-    font-size: 6px;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .faq-list {
-    display: grid;
-    gap: 4px;
-    margin-top: 8px;
-  }
-
-  .faq-list button {
-    width: 100%;
-    min-height: 34px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 18px;
-    gap: 8px;
-    align-items: center;
-    padding: 7px 9px;
-    border: 1px solid #e1e8e4;
-    border-radius: 5px;
-    color: #223e3f;
-    background: #fbfcfb;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .faq-list button strong {
-    display: block;
-    font-size: 6.5px;
-  }
-
-  .faq-list button small {
-    display: block;
-    margin-top: 5px;
-    color: #6a7b77;
-    font-size: 5.5px;
-    line-height: 1.45;
-  }
-
-  .faq-list button b {
-    color: #0a765d;
-    text-align: center;
-  }
-
-  .faq-list button.terbuka {
-    border-color: #bcded1;
-    background: #f4faf7;
-  }
-
-  .kontak-quote {
-    position: relative;
-    min-height: 218px;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-
-  .kontak-quote img,
-  .kontak-quote > span {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .kontak-quote img { object-fit: cover; }
-
-  .kontak-quote > span {
-    background: linear-gradient(90deg, rgba(3,48,38,.70), rgba(4,54,40,.30));
-  }
-
-  .kontak-quote blockquote {
-    position: absolute;
-    z-index: 1;
-    left: 23px;
-    top: 35px;
-    max-width: 17ch;
-    margin: 0;
-    color: #fff;
-    font-family: Georgia, serif;
-    font-size: 20px;
-    font-style: italic;
-    line-height: 1.25;
-    text-shadow: 0 2px 10px rgba(0,0,0,.30);
-  }
-
-  .kontak-quote small {
-    position: absolute;
-    z-index: 1;
-    left: 24px;
-    bottom: 24px;
-    color: rgba(255,255,255,.86);
-    font-size: 6px;
-  }
-
-  :global(:root[data-waktu="malam"]) .kontak-modern {
-    --k-bg: #071b21;
-    --k-card: #0b252a;
-    --k-ink: #edf8f5;
-    --k-text: #adc2bc;
-    --k-line: rgba(190,224,213,.12);
-  }
-
-  :global(:root[data-waktu="malam"]) .kontak-shortcut {
-    background: rgba(9,33,38,.95);
-  }
-
-  :global(:root[data-waktu="malam"]) .kontak-shortcut a,
-  :global(:root[data-waktu="malam"]) .pesan input,
-  :global(:root[data-waktu="malam"]) .pesan select,
-  :global(:root[data-waktu="malam"]) .pesan textarea,
-  :global(:root[data-waktu="malam"]) .layanan-kontak-grid a,
-  :global(:root[data-waktu="malam"]) .faq-list button {
-    color: var(--k-ink);
-    border-color: var(--k-line);
-    background: rgba(13,42,47,.86);
-  }
-
-  :global(:root[data-waktu="malam"]) .info-list > div,
-  :global(:root[data-waktu="malam"]) .pengurus-row {
-    border-color: var(--k-line);
-  }
+  .kontak-final__quote-card small { position:absolute; z-index:1; left:22px; bottom:20px; color:rgba(255,255,255,.88); font-size:6px; }
 
   @media (max-width: 980px) {
-    .kontak-grid-utama {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .pengurus {
-      grid-column: 1 / -1;
-    }
-
-    .pengurus-list {
-      grid-template-columns: 1fr 1fr;
-      gap: 0 14px;
-    }
-
-    .kontak-grid-bawah,
-    .kontak-faq-quote {
-      grid-template-columns: 1fr;
-    }
-
-    .kontak-quote {
-      min-height: 190px;
-    }
+    .kontak-final__wrap { width:min(900px,calc(100% - 30px)); }
+    .kontak-final__topgrid { grid-template-columns:1fr 1fr; }
+    .kontak-final__pengurus { grid-column:1 / -1; }
+    .kontak-final__pengurus-list { grid-template-columns:1fr 1fr; column-gap:14px; }
+    .kontak-final__midgrid,
+    .kontak-final__bottomgrid { grid-template-columns:1fr; }
   }
 
   @media (max-width: 680px) {
-    .kontak-modern {
-      margin-top: -18px;
-      margin-bottom: -44px;
-    }
+    .kontak-final { margin-top:-18px; margin-bottom:-44px; }
+    .kontak-final__wrap { width:100%; max-width:100%; padding-inline:14px; }
 
-    .kontak-wadah {
-      width: 100%;
-      max-width: 100%;
-      padding-left: 14px;
-      padding-right: 14px;
+    .kontak-final__hero { min-height:360px; background-position:62% center; }
+    .kontak-final__hero-grid {
+      grid-template-columns:1fr;
+      grid-template-rows:auto auto auto;
+      gap:8px;
+      min-height:360px;
+      padding:23px 0 24px;
     }
+    .kontak-final__crumb { grid-column:auto; }
+    .kontak-final__hero-copy h1 { font-size:36px; }
+    .kontak-final__hero-copy h2 { font-size:19px; }
+    .kontak-final__hero-copy > p { font-size:10px; }
+    .kontak-final__hero-quote { width:165px; justify-self:end; padding:10px 12px; }
+    .kontak-final__hero-quote strong { font-size:16px; }
 
-    .kontak-hero {
-      min-height: 390px;
-      background-position: 62% center;
+    .kontak-final__shortcuts {
+      grid-template-columns:1fr 1fr;
+      gap:5px;
+      margin-top:-12px;
+      padding:6px;
     }
+    .kontak-final__shortcuts a { min-height:54px; grid-template-columns:36px 1fr; padding:5px; }
+    .kontak-final__shortcut-icon { width:36px; height:36px; }
+    .kontak-final__shortcuts a:last-child { grid-column:1 / -1; }
 
-    .kontak-hero-grid {
-      grid-template-columns: 1fr;
-      gap: 14px;
-      min-height: 390px;
-      padding: 38px 0 26px;
-    }
+    .kontak-final__topgrid,
+    .kontak-final__midgrid,
+    .kontak-final__bottomgrid { grid-template-columns:1fr; }
 
-    .kontak-hero h1 {
-      font-size: 40px;
-    }
-
-    .kontak-hero h2 {
-      max-width: 18ch;
-      font-size: 22px;
-    }
-
-    .kontak-hero-copy > p:last-of-type {
-      max-width: 42ch;
-      font-size: 10px;
-    }
-
-    .kontak-hero-badge {
-      width: min(190px, 68%);
-      justify-self: end;
-      padding: 12px;
-    }
-
-    .kontak-hero-badge strong {
-      font-size: 16px;
-    }
-
-    .kontak-shortcut {
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin-top: -13px;
-      padding: 6px;
-    }
-
-    .kontak-shortcut a {
-      min-height: 54px;
-      grid-template-columns: 36px 1fr;
-      padding: 5px;
-    }
-
-    .kontak-shortcut a:last-child {
-      grid-column: 1 / -1;
-    }
-
-    .shortcut-icon {
-      width: 36px;
-      height: 36px;
-    }
-
-    .kontak-grid-utama,
-    .kontak-grid-bawah,
-    .kontak-faq-quote {
-      grid-template-columns: 1fr;
-    }
-
-    .pengurus {
-      grid-column: auto;
-    }
-
-    .pengurus-list {
-      grid-template-columns: 1fr;
-    }
-
-    .sekretariat-foto {
-      height: 160px;
-    }
-
-    .info-list > div {
-      grid-template-columns: 100px 1fr;
-    }
-
-    .map-wrap {
-      height: 220px;
-    }
-
-    .layanan-kontak-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .kontak-quote {
-      min-height: 175px;
-    }
+    .kontak-final__pengurus { grid-column:auto; }
+    .kontak-final__pengurus-list { grid-template-columns:1fr; }
+    .kontak-final__sekretariat-photo { height:160px; }
+    .kontak-final__map { height:220px; }
+    .kontak-final__services-grid { grid-template-columns:1fr 1fr; }
   }
 
   @media (max-width: 420px) {
-    .kontak-hero h1 {
-      font-size: 36px;
-    }
-
-    .kontak-hero h2 {
-      font-size: 19px;
-    }
-
-    .kontak-pill-row {
-      gap: 4px;
-    }
-
-    .kontak-pill-row span {
-      font-size: 6.2px;
-    }
-
-    .kontak-shortcut {
-      grid-template-columns: 1fr;
-    }
-
-    .kontak-shortcut a:last-child {
-      grid-column: auto;
-    }
-
-    .info-list > div {
-      grid-template-columns: 1fr;
-      gap: 3px;
-    }
-
-    .sekretariat-actions,
-    .layanan-kontak-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .pesan-note {
-      grid-template-columns: 29px 1fr;
-    }
-
-    .pesan-note a {
-      grid-column: 1 / -1;
-      text-align: center;
-    }
+    .kontak-final__shortcuts { grid-template-columns:1fr; }
+    .kontak-final__shortcuts a:last-child { grid-column:auto; }
+    .kontak-final__info > div { grid-template-columns:1fr; gap:3px; }
+    .kontak-final__sekretariat-actions,
+    .kontak-final__services-grid { grid-template-columns:1fr; }
+    .kontak-final__file { grid-template-columns:30px 1fr; }
+    .kontak-final__file > b { grid-column:1 / -1; text-align:center; }
   }
-
-
-/* === KONTAK FINAL MATCH REFERENSI 2026-09-09 === */
-  /*
-   * Override final untuk menyamakan proporsi screenshot referensi:
-   * hero lebih pendek, shortcut rapat, 3 kolom utama seimbang,
-   * peta bersih tanpa elemen bawaan yang menumpuk, dan footer tetap global.
-   */
-  .kontak-modern {
-    --k-bg: #f7faf7;
-    --k-card: #ffffff;
-    --k-ink: #102c3b;
-    --k-text: #607078;
-    --k-line: #dfe8e2;
-    background:
-      radial-gradient(circle at 2% 34%, rgba(57,145,101,.045), transparent 19%),
-      radial-gradient(circle at 98% 54%, rgba(57,145,101,.04), transparent 19%),
-      #f8faf8 !important;
-  }
-
-  .kontak-wadah {
-    width: min(1110px, calc(100% - 46px)) !important;
-  }
-
-  .kontak-hero {
-    min-height: 278px !important;
-    background:
-      linear-gradient(90deg,
-        rgba(3,45,38,.96) 0%,
-        rgba(4,57,47,.84) 36%,
-        rgba(6,61,50,.45) 61%,
-        rgba(3,43,37,.34) 100%
-      ),
-      url("./foto/kegiatan-pengecatan.jpg") center 50% / cover no-repeat !important;
-  }
-
-  .kontak-hero-lapis {
-    background:
-      linear-gradient(180deg, rgba(2,28,25,.06), rgba(2,35,30,.28)),
-      radial-gradient(circle at 76% 45%, transparent 0 24%, rgba(3,42,35,.20) 70%) !important;
-  }
-
-  .kontak-hero-grid {
-    grid-template-columns: minmax(0, 1fr) 205px !important;
-    grid-template-rows: auto 1fr !important;
-    gap: 8px 34px !important;
-    min-height: 278px !important;
-    padding: 22px 0 25px !important;
-  }
-
-  .kontak-remah {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 0 0 3px;
-    color: rgba(255,255,255,.90);
-    font-size: 7px;
-  }
-
-  .kontak-remah a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .kontak-hero-copy {
-    align-self: center;
-    max-width: 560px !important;
-  }
-
-  .kontak-kicker {
-    display: none !important;
-  }
-
-  .kontak-hero h1 {
-    font-size: clamp(38px, 4.3vw, 50px) !important;
-    line-height: .98 !important;
-  }
-
-  .kontak-hero h2 {
-    margin-top: 6px !important;
-    font-size: clamp(19px, 2vw, 24px) !important;
-  }
-
-  .kontak-hero-copy > p:last-of-type {
-    max-width: 46ch !important;
-    margin-top: 9px !important;
-    font-size: 10px !important;
-    line-height: 1.45 !important;
-  }
-
-  .kontak-pill-row {
-    gap: 6px !important;
-    margin-top: 12px !important;
-  }
-
-  .kontak-pill-row span {
-    padding: 5px 8px !important;
-    font-size: 6.4px !important;
-  }
-
-  .kontak-hero-badge {
-    align-self: center !important;
-    width: 170px !important;
-    padding: 14px 15px 17px !important;
-    border-radius: 12px !important;
-    background: rgba(4,47,40,.50) !important;
-  }
-
-  .kontak-hero-badge strong {
-    font-size: 18px !important;
-  }
-
-  .kontak-isi {
-    padding-bottom: 35px !important;
-  }
-
-  .kontak-shortcut {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    margin-top: -14px !important;
-    padding: 8px !important;
-    border-radius: 12px !important;
-    box-shadow: 0 15px 35px -28px rgba(24,65,51,.30) !important;
-  }
-
-  .kontak-shortcut a {
-    min-height: 62px !important;
-    grid-template-columns: 42px minmax(0, 1fr) !important;
-    gap: 9px !important;
-    padding: 7px 8px !important;
-    border: 1px solid #edf2ef;
-    border-radius: 8px !important;
-  }
-
-  .kontak-shortcut strong {
-    font-size: 8.5px !important;
-  }
-
-  .kontak-shortcut small {
-    font-size: 6.3px !important;
-  }
-
-  .kontak-grid-utama {
-    grid-template-columns:
-      minmax(0, .98fr)
-      minmax(0, 1.02fr)
-      minmax(0, .82fr) !important;
-    gap: 10px !important;
-    align-items: stretch;
-    margin-top: 10px !important;
-  }
-
-  .kontak-panel {
-    border-color: #e3eae6 !important;
-    border-radius: 9px !important;
-    box-shadow: 0 12px 28px -26px rgba(24,65,51,.26) !important;
-  }
-
-  .sekretariat,
-  .pesan,
-  .pengurus,
-  .lokasi,
-  .layanan-cepat,
-  .faq {
-    padding: 10px !important;
-  }
-
-  .panel-title {
-    min-height: 32px !important;
-    gap: 7px !important;
-  }
-
-  .panel-title > span {
-    width: 28px !important;
-    height: 28px !important;
-    flex-basis: 28px !important;
-  }
-
-  .panel-title h2 {
-    font-size: 13px !important;
-  }
-
-  .panel-title p {
-    font-size: 6px !important;
-  }
-
-  .sekretariat-foto {
-    height: 124px !important;
-    margin-top: 7px !important;
-  }
-
-  .sekretariat-foto > div {
-    padding: 7px 11px !important;
-  }
-
-  .info-list {
-    margin-top: 6px !important;
-  }
-
-  .info-list > div {
-    grid-template-columns: 100px minmax(0, 1fr) !important;
-    gap: 6px !important;
-    padding: 7px 0 !important;
-  }
-
-  .info-list dt {
-    font-size: 6.6px !important;
-  }
-
-  .info-list dd {
-    font-size: 6.7px !important;
-  }
-
-  .sekretariat-actions {
-    gap: 5px !important;
-    margin-top: 5px !important;
-  }
-
-  .pesan form {
-    gap: 6px !important;
-    margin-top: 7px !important;
-  }
-
-  .pesan label > span {
-    font-size: 6.5px !important;
-  }
-
-  .pesan input,
-  .pesan select,
-  .pesan textarea {
-    min-height: 33px !important;
-    padding: 7px 8px !important;
-    font-size: 6.8px !important;
-  }
-
-  .pesan textarea {
-    min-height: 90px !important;
-  }
-
-  .pesan-file {
-    min-height: 48px;
-    display: grid !important;
-    grid-template-columns: 30px minmax(0, 1fr) auto;
-    gap: 7px;
-    align-items: center;
-    padding: 7px !important;
-    border: 0 !important;
-    border-radius: 6px;
-    background: #f1f5f3;
-    cursor: pointer;
-  }
-
-  .pesan-file > input {
-    position: absolute;
-    width: 1px !important;
-    height: 1px !important;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .pesan-file > span {
-    width: 30px;
-    height: 30px;
-    display: grid !important;
-    place-items: center;
-    margin: 0 !important;
-    border-radius: 6px;
-    color: #0a795d !important;
-    background: #e0efea;
-    font-size: 13px !important;
-  }
-
-  .pesan-file strong,
-  .pesan-file small {
-    display: block;
-  }
-
-  .pesan-file strong {
-    color: #203c3d;
-    font-size: 6.2px;
-  }
-
-  .pesan-file small {
-    margin-top: 2px;
-    color: #71817d;
-    font-size: 5.2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .pesan-file > b {
-    padding: 5px 8px;
-    border-radius: 5px;
-    color: #24483f;
-    background: #dfe9e5;
-    font-size: 5.7px;
-  }
-
-  .pesan form > button {
-    min-height: 34px !important;
-  }
-
-  .pengurus-row {
-    min-height: 44px !important;
-    grid-template-columns: 32px minmax(0, 1fr) 25px 25px !important;
-    gap: 6px !important;
-  }
-
-  .pengurus-avatar {
-    width: 30px !important;
-    height: 30px !important;
-  }
-
-  .pengurus-row strong {
-    font-size: 6.4px !important;
-  }
-
-  .pengurus-row small {
-    font-size: 5.3px !important;
-  }
-
-  .wa-icon,
-  .tel-icon {
-    width: 24px;
-    height: 24px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    text-decoration: none;
-  }
-
-  .wa-icon {
-    color: #fff;
-    background: #12b76a;
-  }
-
-  .tel-icon {
-    color: #0c725a;
-    background: #edf6f2;
-    border: 1px solid #dceae4;
-    font-size: 8px;
-  }
-
-  .wa-icon.mati,
-  .tel-icon.mati {
-    color: #8b9b96 !important;
-    background: #eef3f0 !important;
-    border-color: #e5ece8 !important;
-  }
-
-  .pengurus-note {
-    margin-top: 7px !important;
-    padding: 7px !important;
-  }
-
-  .kontak-grid-bawah {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, .92fr) !important;
-    gap: 10px !important;
-    margin-top: 10px !important;
-  }
-
-  .map-wrap {
-    position: relative;
-    height: 205px !important;
-    margin-top: 7px !important;
-    border: 1px solid #dfe7e2;
-    border-radius: 8px !important;
-    background: #dfe7e2;
-  }
-
-  /* Peta.svelte membawa keterangan, tombol, dan verifikasi panjang.
-     Di halaman kontak elemen-elemen itu sengaja disembunyikan agar layout
-     sama seperti referensi dan tidak menumpuk di dalam card. */
-  .map-wrap :global(.petabox) {
-    height: 100% !important;
-    min-height: 100% !important;
-  }
-
-  .map-wrap :global(.peta-sendiri),
-  .map-wrap :global(.peta-gambar),
-  .map-wrap :global(iframe) {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 100% !important;
-  }
-
-  .map-wrap :global(.keterangan-batas),
-  .map-wrap :global(.baris-tombol),
-  .map-wrap :global(.verifikasi) {
-    display: none !important;
-  }
-
-  .map-caption {
-    margin-top: 6px !important;
-    font-size: 5.4px !important;
-  }
-
-  .lokasi > p {
-    margin-top: 6px !important;
-    font-size: 5.7px !important;
-  }
-
-  .layanan-kontak-grid {
-    gap: 5px !important;
-    margin-top: 7px !important;
-  }
-
-  .layanan-kontak-grid a {
-    min-height: 49px !important;
-    grid-template-columns: 28px minmax(0, 1fr) 10px !important;
-    gap: 6px !important;
-    padding: 6px !important;
-  }
-
-  .layanan-kontak-grid > a > span {
-    width: 28px !important;
-    height: 28px !important;
-  }
-
-  .layanan-kontak-grid strong {
-    font-size: 6px !important;
-  }
-
-  .layanan-kontak-grid small {
-    font-size: 4.9px !important;
-  }
-
-  .kontak-faq-quote {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr) !important;
-    gap: 10px !important;
-    margin-top: 10px !important;
-  }
-
-  .faq-list {
-    gap: 3px !important;
-    margin-top: 7px !important;
-  }
-
-  .faq-list button {
-    min-height: 32px !important;
-    padding: 6px 8px !important;
-  }
-
-  .faq-list button strong {
-    font-size: 6.2px !important;
-  }
-
-  .kontak-quote {
-    min-height: 182px !important;
-    background: #174b3b;
-  }
-
-  .kontak-quote img {
-    filter: saturate(.85) brightness(.82);
-  }
-
-  .kontak-quote blockquote {
-    left: 20px !important;
-    top: 31px !important;
-    max-width: 20ch !important;
-    font-size: 17px !important;
-  }
-
-  .kontak-quote small {
-    left: 21px !important;
-    bottom: 20px !important;
-  }
-
-  :global(:root[data-waktu="malam"]) .pesan-file {
-    background: rgba(17,49,52,.92) !important;
-  }
-
-  :global(:root[data-waktu="malam"]) .pesan-file strong,
-  :global(:root[data-waktu="malam"]) .pesan-file small {
-    color: var(--k-ink) !important;
-  }
-
-  @media (max-width: 980px) {
-    .kontak-wadah {
-      width: min(900px, calc(100% - 30px)) !important;
-    }
-
-    .kontak-grid-utama {
-      grid-template-columns: 1fr 1fr !important;
-    }
-
-    .pengurus {
-      grid-column: 1 / -1 !important;
-    }
-
-    .pengurus-list {
-      grid-template-columns: 1fr 1fr !important;
-      column-gap: 14px;
-    }
-
-    .kontak-grid-bawah,
-    .kontak-faq-quote {
-      grid-template-columns: 1fr !important;
-    }
-  }
-
-  @media (max-width: 680px) {
-    .kontak-wadah {
-      width: 100% !important;
-      padding-left: 14px !important;
-      padding-right: 14px !important;
-    }
-
-    .kontak-hero {
-      min-height: 360px !important;
-      background-position: 63% center !important;
-    }
-
-    .kontak-hero-grid {
-      grid-template-columns: 1fr !important;
-      grid-template-rows: auto auto auto !important;
-      min-height: 360px !important;
-      gap: 8px !important;
-      padding: 23px 0 24px !important;
-    }
-
-    .kontak-remah {
-      grid-column: auto !important;
-    }
-
-    .kontak-hero h1 {
-      font-size: 36px !important;
-    }
-
-    .kontak-hero h2 {
-      font-size: 19px !important;
-    }
-
-    .kontak-hero-badge {
-      width: 165px !important;
-      justify-self: end !important;
-      padding: 10px 12px !important;
-    }
-
-    .kontak-shortcut {
-      grid-template-columns: 1fr 1fr !important;
-      gap: 5px !important;
-      margin-top: -12px !important;
-    }
-
-    .kontak-shortcut a:last-child {
-      grid-column: 1 / -1 !important;
-    }
-
-    .kontak-grid-utama,
-    .kontak-grid-bawah,
-    .kontak-faq-quote {
-      grid-template-columns: 1fr !important;
-    }
-
-    .pengurus {
-      grid-column: auto !important;
-    }
-
-    .pengurus-list {
-      grid-template-columns: 1fr !important;
-    }
-
-    .map-wrap {
-      height: 220px !important;
-    }
-
-    .layanan-kontak-grid {
-      grid-template-columns: 1fr 1fr !important;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .kontak-shortcut {
-      grid-template-columns: 1fr !important;
-    }
-
-    .kontak-shortcut a:last-child {
-      grid-column: auto !important;
-    }
-
-    .info-list > div {
-      grid-template-columns: 1fr !important;
-    }
-
-    .sekretariat-actions,
-    .layanan-kontak-grid {
-      grid-template-columns: 1fr !important;
-    }
-
-    .pesan-file {
-      grid-template-columns: 30px 1fr !important;
-    }
-
-    .pesan-file > b {
-      grid-column: 1 / -1;
-      text-align: center;
-    }
-  }
-
 </style>
