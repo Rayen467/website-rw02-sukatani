@@ -83,7 +83,7 @@
   <div class="wadah">
     <div class="situs-atas">
       <a class="merek merek-visual" href="#/" aria-label={ident.namaSitus}>
-        <img class="merek-logo-ikon" src="./visual/brand/logo-icon.webp" alt="" aria-hidden="true" />
+        <img class="merek-logo-ikon" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f2bd27c4-a085-4824-923f-410a06b0adb2.png" alt="" aria-hidden="true" />
         <span class="merek-teks">
           <strong>RW 02</strong>
           <b>SUKATANI</b>
