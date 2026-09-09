@@ -3694,3 +3694,6 @@ body:has(.beranda-hero) .sambutan-rw-lengkap {
     radial-gradient(circle at 90% 82%, rgba(31,105,79,.16), transparent 30%),
     linear-gradient(135deg, #0a2735 0%, #09252e 52%, #0a2326 100%);
 }
+
+
+/* deploy-sync-sambutan-transparent */
