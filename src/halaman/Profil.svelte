@@ -2,7 +2,7 @@
   import { KONTEN } from "../inti/nama.js";
   import { konten, isi } from "../keadaan/isi.svelte.js";
   import { keDaftar } from "../inti/format.js";
-  import { RT_BAWAAN } from "../inti/bawaan.js";
+  import { RT_BAWAAN, PENGURUS_RW_BAWAAN } from "../inti/bawaan.js";
   import { GAMBAR_WAKTU } from "../inti/waktu.js";
 
   const LOGO_RW =
@@ -33,13 +33,7 @@
     { ikon: "surat", label: "Kode Pos", nilai: "15540", kecil: "" }
   ]);
 
-  const jabatanPrioritas = [
-    { jabatan: "Ketua RW", nama: "Anto Carmanto" },
-    { jabatan: "Sekretaris", nama: "" },
-    { jabatan: "Bendahara", nama: "" },
-    { jabatan: "Seksi Keamanan", nama: "" },
-    { jabatan: "Seksi Kebersihan", nama: "" }
-  ];
+  const jabatanPrioritas = PENGURUS_RW_BAWAAN;
 
   function normal(s) {
     return String(s || "").trim().toLowerCase();
@@ -52,7 +46,15 @@
         const target = normal(bawaan.jabatan);
         return j === target || j.includes(target) || target.includes(j);
       });
-      return cocok || { ...bawaan, foto: "", periode: "", kontak: "" };
+      return cocok
+        ? {
+            ...cocok,
+            ...bawaan,
+            foto: cocok.foto || bawaan.foto,
+            periode: cocok.periode || bawaan.periode,
+            kontak: cocok.kontak || bawaan.kontak
+          }
+        : { ...bawaan };
     })
   );
 
