@@ -2177,3 +2177,173 @@ body:has(.beranda-hero) .kaki-modern-kkn {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* === PULIHKAN DARK MODE HOMEPAGE === */
+
+/*
+ * Tombol tema sebelumnya disembunyikan khusus di Beranda untuk menghemat
+ * ruang navbar. Itu membuat fitur Gelap tidak dapat ditemukan pengguna.
+ * Sekarang tombol selalu hadir sebagai ikon kompak pada navbar homepage.
+ */
+body:has(.beranda-hero) .situs-atas > .tombol-tema,
+body:has(.beranda-hero) .situs-atas > .tombol-kecil[title^="Tampilan:"] {
+  display: inline-flex !important;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  min-height: 38px;
+  padding: 0 !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+}
+
+body:has(.beranda-hero) .situs-atas > .tombol-tema .teks,
+body:has(.beranda-hero) .situs-atas > .tombol-kecil[title^="Tampilan:"] .teks {
+  display: none;
+}
+
+body:has(.beranda-hero) .situs-atas > .tombol-tema svg {
+  width: 17px;
+  height: 17px;
+}
+
+/*
+ * Mode Gelap harus terpisah dari suasana waktu.
+ * Pagi/Siang/Sore/Malam menentukan FOTO dan atmosfer waktu.
+ * Tema Gelap menentukan permukaan antarmuka, panel, teks, navbar, dsb.
+ */
+:root[data-theme="dark"] {
+  --waktu-cahaya: rgba(7, 25, 36, .88);
+  --waktu-panel: rgba(9, 30, 40, .90);
+  --waktu-panel-kuat: rgba(11, 35, 46, .96);
+  --waktu-panel-teks: #f2f7f6;
+  --waktu-panel-teks-2: #a9bdbb;
+  --waktu-panel-garis: rgba(190, 222, 221, .14);
+  --waktu-bayang: 0 28px 82px -38px rgba(0, 0, 0, .78);
+}
+
+:root[data-theme="dark"] main {
+  background:
+    radial-gradient(circle at 75% -8%, rgba(56, 124, 145, .12), transparent 34%),
+    linear-gradient(180deg, #071722 0, #0a1c25 260px, var(--dasar) 680px);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .situs {
+  color: #eff8f7;
+  background: rgba(6, 25, 36, .86);
+  border-color: rgba(181, 220, 220, .16);
+  box-shadow: 0 16px 46px -28px rgba(0,0,0,.82);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .merek-teks {
+  color: #eff8f7;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .menu-ringkas .menu-butir > a {
+  color: rgba(237,248,246,.78);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .menu-ringkas .menu-butir.terpilih > a {
+  color: #8be2c5;
+  border-bottom-color: #54c9a4;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .cari-kotak,
+:root[data-theme="dark"] body:has(.beranda-hero) .situs-atas > .tombol-kecil {
+  color: #e9f4f2;
+  background: rgba(5, 22, 32, .78);
+  border-color: rgba(190, 222, 221, .16);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .cari-kotak input {
+  color: #eef8f6;
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .cari-kotak input::placeholder {
+  color: rgba(224,240,237,.48);
+}
+
+:root[data-theme="dark"] body:has(.beranda-hero) .layanan-cepat,
+:root[data-theme="dark"] body:has(.beranda-hero) .panel-rumah,
+:root[data-theme="dark"] body:has(.beranda-hero) .kegiatan-card,
+:root[data-theme="dark"] body:has(.beranda-hero) .umkm-home > a {
+  color: var(--waktu-panel-teks);
+  background: var(--waktu-panel);
+  border-color: var(--waktu-panel-garis);
+}
+
+/* Card Tentang memang punya identitas navy sendiri; gelapkan sedikit saja. */
+:root[data-theme="dark"] body:has(.beranda-hero) .panel-tentang {
+  background:
+    linear-gradient(145deg, rgba(5, 30, 47, .98), rgba(4, 22, 36, .99));
+  border-color: rgba(143, 203, 217, .13);
+}
+
+/* Sistem ikut gelap bila OS/perangkat pengguna memakai dark mode. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --waktu-cahaya: rgba(7, 25, 36, .88);
+    --waktu-panel: rgba(9, 30, 40, .90);
+    --waktu-panel-kuat: rgba(11, 35, 46, .96);
+    --waktu-panel-teks: #f2f7f6;
+    --waktu-panel-teks-2: #a9bdbb;
+    --waktu-panel-garis: rgba(190, 222, 221, .14);
+    --waktu-bayang: 0 28px 82px -38px rgba(0, 0, 0, .78);
+  }
+
+  :root:not([data-theme="light"]) main {
+    background:
+      radial-gradient(circle at 75% -8%, rgba(56, 124, 145, .12), transparent 34%),
+      linear-gradient(180deg, #071722 0, #0a1c25 260px, var(--dasar) 680px);
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .situs {
+    color: #eff8f7;
+    background: rgba(6, 25, 36, .86);
+    border-color: rgba(181, 220, 220, .16);
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .merek-teks {
+    color: #eff8f7;
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .menu-ringkas .menu-butir > a {
+    color: rgba(237,248,246,.78);
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .menu-ringkas .menu-butir.terpilih > a {
+    color: #8be2c5;
+    border-bottom-color: #54c9a4;
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .cari-kotak,
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .situs-atas > .tombol-kecil {
+    color: #e9f4f2;
+    background: rgba(5, 22, 32, .78);
+    border-color: rgba(190, 222, 221, .16);
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .cari-kotak input {
+    color: #eef8f6;
+  }
+
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .layanan-cepat,
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .panel-rumah,
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .kegiatan-card,
+  :root:not([data-theme="light"]) body:has(.beranda-hero) .umkm-home > a {
+    color: var(--waktu-panel-teks);
+    background: var(--waktu-panel);
+    border-color: var(--waktu-panel-garis);
+  }
+}
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) .situs-atas > .tombol-tema {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    min-height: 36px;
+  }
+}
