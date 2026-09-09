@@ -35,7 +35,7 @@
     { label: "Profil", alamat: "/profil" },
     { label: "Layanan", alamat: "/layanan" },
     { label: "Berita", alamat: "/berita" },
-    { label: "Galeri", alamat: "/galeri" },
+    { label: "Transparansi", alamat: "/transparansi" },
     { label: "UMKM", alamat: "/umkm" },
     { label: "Kontak", alamat: "/kontak" }
   ];
