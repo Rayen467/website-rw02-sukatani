@@ -136,6 +136,19 @@
 
     {#if laciTerbuka}
       <div class="laci">
+        <form class="cari-laci" role="search" onsubmit={cari}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.6-3.6" />
+          </svg>
+          <input
+            type="search"
+            bind:value={kataCari}
+            placeholder="Cari informasi di situs..."
+            aria-label="Cari di situs ini"
+          />
+          <button type="submit">Cari</button>
+        </form>
         {#each daftarMenu as g}
           {#if g.alamat}
             <a href="#{g.alamat}">{g.label}</a>
