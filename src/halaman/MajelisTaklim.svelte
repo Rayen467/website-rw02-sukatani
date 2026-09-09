@@ -12,6 +12,7 @@
   const keuangan = $derived(keDaftar(nilai("keuangan")));
   const lampiran = $derived(keDaftar(nilai("lampiranPendaftaran")));
   const ketuaTerkini = MAJELIS_TAKLIM_BAWAAN.ketua;
+  const fotoKetuaTerkini = MAJELIS_TAKLIM_BAWAAN.fotoKetua || "";
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>›</span><span>Majelis Taklim Al-Ikhlas</span></nav>
@@ -30,6 +31,15 @@
     <div class="kartu">
       <p class="alis">Status terdaftar</p>
       <h3>Surat Keterangan Terdaftar</h3>
+      {#if fotoKetuaTerkini}
+        <div class="majelis-ketua">
+          <img src={fotoKetuaTerkini} alt="Foto Ketua Majelis Taklim Al-Ikhlas RW 02 PSP" decoding="async" />
+          <div>
+            <span>Ketua Majelis Taklim</span>
+            <strong>{ketuaTerkini}</strong>
+          </div>
+        </div>
+      {/if}
       <div class="tabel-bungkus" style="border:0;background:none">
         <table class="data"><tbody>
           <tr><th>No. SKT</th><td>{nilai("noSkt")}</td></tr>
@@ -161,3 +171,29 @@
     tidak digabungkan secara paksa; masing-masing ditampilkan sesuai konteksnya.
   </p>
 </section>
+
+
+<style>
+  .majelis-ketua {
+    display: grid;
+    grid-template-columns: 72px minmax(0,1fr);
+    gap: 12px;
+    align-items: center;
+    margin: 12px 0 14px;
+    padding: 10px;
+    border: 1px solid var(--garis);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--permukaan) 88%, transparent);
+  }
+  .majelis-ketua img {
+    width: 72px;
+    height: 86px;
+    object-fit: cover;
+    object-position: center 18%;
+    border-radius: 9px;
+  }
+  .majelis-ketua span,
+  .majelis-ketua strong { display: block; }
+  .majelis-ketua span { color: var(--tinta-3); font-size: 11px; }
+  .majelis-ketua strong { margin-top: 3px; color: var(--tinta); font-size: 15px; }
+</style>
