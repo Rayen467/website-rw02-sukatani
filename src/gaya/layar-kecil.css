@@ -1097,3 +1097,742 @@
     transform-origin: center;
   }
 }
+
+
+/* === MOBILE UX V2 — COMPACT, SWIPEABLE, PHONE-FIRST === */
+/*
+ * Revisi mobile menyeluruh berdasarkan pengujian nyata di HP.
+ * Fokus: header lebih pendek, tidak ada blok kosong, hero tidak boros,
+ * pilihan waktu jadi segmented control, shortcut jadi carousel yang bisa
+ * diswipe, dan halaman layanan/data dibuat lebih padat tanpa mengecilkan
+ * target sentuh.
+ */
+@media (max-width: 680px) {
+  /* Header cukup satu baris. Search tetap tersedia di dalam drawer. */
+  .situs-atas,
+  body:has(.beranda-hero) .situs-atas {
+    grid-template-columns: minmax(0, 1fr) 40px 40px 40px !important;
+    grid-template-rows: 50px !important;
+    gap: 6px !important;
+    padding: 5px 0 7px !important;
+  }
+
+  .merek-visual,
+  body:has(.beranda-hero) .merek-visual {
+    width: 154px !important;
+    max-width: 154px !important;
+    height: 44px !important;
+  }
+
+  .merek-logo-ikon,
+  body:has(.beranda-hero) .merek-logo-ikon {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    flex-basis: 40px !important;
+  }
+
+  .merek-teks strong { font-size: 9.5px !important; }
+  .merek-teks b { font-size: 12px !important; }
+  .merek-teks small { font-size: 4.5px !important; }
+
+  .cari-kotak,
+  body:has(.beranda-hero) .cari-kotak {
+    display: none !important;
+  }
+
+  .situs-atas > button.tombol-kecil:not(.tombol-tema):not(.burger) {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+  .situs-atas > .tombol-tema,
+  body:has(.beranda-hero) .situs-atas > .tombol-tema {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+  }
+  .situs-atas > .burger {
+    grid-column: 4 !important;
+    grid-row: 1 !important;
+  }
+
+  .situs-atas > .tombol-kecil,
+  body:has(.beranda-hero) .situs-atas > .tombol-kecil {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    border-radius: 11px !important;
+  }
+
+  .laci {
+    max-height: calc(100dvh - 64px) !important;
+    padding: 10px 2px 18px !important;
+  }
+
+  .cari-laci {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin: 2px 4px 10px;
+    padding: 8px 8px 8px 11px;
+    border: 1px solid var(--garis);
+    border-radius: 12px;
+    background: var(--permukaan-3);
+  }
+  .cari-laci svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    color: var(--tinta-3);
+  }
+  .cari-laci input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    color: var(--tinta);
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+  }
+  .cari-laci button {
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 9px;
+    color: var(--brand-ink);
+    background: var(--brand);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* Global rhythm untuk halaman biasa. */
+  .remah {
+    margin-bottom: 10px !important;
+    font-size: 10.5px !important;
+  }
+  .kepala-halaman {
+    gap: 7px !important;
+    margin-bottom: 18px !important;
+  }
+  .kepala-halaman h1 {
+    font-size: clamp(27px, 8.5vw, 34px) !important;
+    line-height: 1.03 !important;
+  }
+  .kepala-halaman p {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+  .alis {
+    font-size: 10.5px !important;
+  }
+  .kepala-bagian {
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+    padding-top: 10px !important;
+  }
+  .kepala-bagian h2 {
+    font-size: 20px !important;
+  }
+  .blok {
+    margin-bottom: 24px !important;
+  }
+  .kartu {
+    padding: 14px !important;
+    border-radius: 10px !important;
+  }
+  .kartu h3 { font-size: 15px !important; }
+  .kartu p { font-size: 12.5px !important; line-height: 1.5 !important; }
+  .catatan,
+  .catatan-borang,
+  .kunci {
+    padding: 12px 13px !important;
+    border-radius: 10px !important;
+    font-size: 12.5px !important;
+  }
+  .isian-borang {
+    width: 100% !important;
+    max-width: none !important;
+    gap: 12px !important;
+  }
+  .isian input,
+  .isian select,
+  .isian textarea {
+    min-height: 44px !important;
+    padding: 10px 11px !important;
+    border-radius: 9px !important;
+    font-size: 14px !important;
+  }
+  .isian textarea { min-height: 108px !important; }
+  .tombol {
+    min-height: 42px;
+    padding: 9px 13px !important;
+    border-radius: 9px !important;
+  }
+  .kosong {
+    padding: 16px !important;
+    border-radius: 10px !important;
+  }
+
+  /* BERANDA — lebih pendek dan tidak ada tab waktu yang menempel ke kartu. */
+  body:has(.beranda-hero) .beranda-hero {
+    min-height: 455px !important;
+    background-position: 61% center !important;
+  }
+  body:has(.beranda-hero) .beranda-hero-dalam {
+    min-height: 455px !important;
+    padding-top: 27px !important;
+    padding-bottom: 72px !important;
+  }
+  body:has(.beranda-hero) .beranda-copy h1 {
+    max-width: 100% !important;
+    font-size: clamp(34px, 10vw, 40px) !important;
+    line-height: .98 !important;
+    text-wrap: balance !important;
+  }
+  body:has(.beranda-hero) .beranda-ringkas {
+    max-width: 32ch !important;
+    margin-top: 11px !important;
+    font-size: 12px !important;
+  }
+  body:has(.beranda-hero) .beranda-cta {
+    margin-top: 14px !important;
+  }
+  body:has(.beranda-hero) .beranda-cta a {
+    min-height: 40px !important;
+    padding: 9px 13px !important;
+    font-size: 10.5px !important;
+  }
+  body:has(.beranda-hero) .beranda-meta {
+    grid-template-columns: minmax(0,1fr) auto !important;
+    gap: 10px !important;
+    margin-top: 22px !important;
+  }
+  body:has(.beranda-hero) .beranda-meta-item {
+    min-width: 0 !important;
+  }
+  body:has(.beranda-hero) .beranda-meta-item b {
+    font-size: 10.5px !important;
+  }
+  body:has(.beranda-hero) .beranda-meta-item small {
+    font-size: 7.5px !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu {
+    left: 14px !important;
+    right: 14px !important;
+    bottom: 12px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 3px !important;
+    padding: 4px !important;
+    border: 1px solid rgba(255,255,255,.24) !important;
+    border-radius: 14px !important;
+    background: rgba(10, 28, 35, .26) !important;
+    box-shadow: 0 10px 28px -20px rgba(0,0,0,.5) !important;
+    backdrop-filter: blur(12px) saturate(1.1) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
+  }
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+    min-height: 33px !important;
+    padding: 0 3px !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    color: inherit !important;
+    font-size: 8.8px !important;
+    justify-content: center !important;
+  }
+  body:has(.beranda-hero) .pemilih-waktu > button.aktif:not(.kembali-waktu) {
+    background: rgba(255,255,255,.88) !important;
+    color: #173b34 !important;
+    box-shadow: 0 5px 14px -10px rgba(0,0,0,.45) !important;
+  }
+  body:has(.beranda-hero) .pemilih-waktu .titik {
+    display: none !important;
+  }
+  body:has(.beranda-hero) .kembali-waktu {
+    top: -25px !important;
+    right: 0 !important;
+    border: 0 !important;
+    background: rgba(0,0,0,.28) !important;
+  }
+
+  /* Enam shortcut beranda jadi carousel swipe, bukan 2x3 kotak besar. */
+  body:has(.beranda-hero) .layanan-cepat {
+    width: 100vw !important;
+    display: flex !important;
+    gap: 8px !important;
+    margin: 12px 0 26px calc(50% - 50vw) !important;
+    padding: 0 14px 4px !important;
+    overflow-x: auto !important;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  body:has(.beranda-hero) .layanan-cepat::-webkit-scrollbar { display: none; }
+  body:has(.beranda-hero) .layanan-cepat-item {
+    flex: 0 0 min(58vw, 190px) !important;
+    min-height: 116px !important;
+    padding: 12px !important;
+    border: 1px solid var(--waktu-panel-garis) !important;
+    border-radius: 14px !important;
+    background: var(--waktu-panel) !important;
+    box-shadow: var(--waktu-bayang) !important;
+    scroll-snap-align: start;
+  }
+  body:has(.beranda-hero) .layanan-cepat-item small {
+    display: -webkit-box !important;
+    margin-top: 2px !important;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+  }
+  body:has(.beranda-hero) .layanan-panah {
+    margin-top: auto !important;
+  }
+
+  body:has(.beranda-hero) .kegiatan-grid,
+  body:has(.beranda-hero) .galeri-home,
+  body:has(.beranda-hero) .umkm-home {
+    width: 100vw !important;
+    display: flex !important;
+    gap: 9px !important;
+    margin-left: calc(50% - 50vw) !important;
+    padding: 0 14px 5px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  body:has(.beranda-hero) .kegiatan-grid::-webkit-scrollbar,
+  body:has(.beranda-hero) .galeri-home::-webkit-scrollbar,
+  body:has(.beranda-hero) .umkm-home::-webkit-scrollbar { display:none; }
+
+  body:has(.beranda-hero) .kegiatan-card {
+    flex: 0 0 min(68vw, 230px) !important;
+    scroll-snap-align: start;
+  }
+  body:has(.beranda-hero) .kegiatan-card img { height: 122px !important; }
+  body:has(.beranda-hero) .galeri-home a {
+    flex: 0 0 min(64vw, 220px) !important;
+    height: 126px !important;
+  }
+  body:has(.beranda-hero) .umkm-home > a {
+    flex: 0 0 min(56vw, 185px) !important;
+  }
+
+  /* Sambutan lebih ringkas tetapi foto tetap utuh. */
+  body:has(.beranda-hero) .sambutan-rw {
+    gap: 12px !important;
+    padding: 16px 14px 18px !important;
+  }
+  body:has(.beranda-hero) .sambutan-rw h2 {
+    max-width: 16ch !important;
+    font-size: clamp(26px, 8.2vw, 31px) !important;
+    line-height: 1 !important;
+  }
+  body:has(.beranda-hero) .sambutan-rw-pembuka p,
+  body:has(.beranda-hero) .sambutan-rw-lengkap p {
+    font-size: 11px !important;
+  }
+  body:has(.beranda-hero) .sambutan-rw-foto {
+    min-height: 265px !important;
+  }
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    min-height: 255px !important;
+    max-height: 300px !important;
+  }
+
+  /* LAYANAN — 4 layanan utama jadi grid 2x2 compact. */
+  .layanan-modern .layanan-hero {
+    min-height: 255px !important;
+  }
+  .layanan-modern .layanan-hero-grid {
+    padding: 30px 0 20px !important;
+  }
+  .layanan-modern .layanan-hero h1 {
+    font-size: 28px !important;
+  }
+  .layanan-modern .layanan-hero-quote {
+    width: min(190px, 68%) !important;
+    padding: 9px 11px !important;
+  }
+  .layanan-modern .layanan-status-ringkas {
+    display: flex !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+  .layanan-modern .layanan-status-ringkas::-webkit-scrollbar { display:none; }
+  .layanan-modern .status-item {
+    flex: 0 0 112px !important;
+    min-height: 48px !important;
+  }
+  .layanan-modern .layanan-kartu-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  .layanan-modern .layanan-kartu {
+    min-height: 238px !important;
+    padding: 11px !important;
+    border-radius: 14px !important;
+  }
+  .layanan-modern .layanan-kartu h3 {
+    font-size: 15.5px !important;
+    line-height: 1.05 !important;
+  }
+  .layanan-modern .layanan-kartu-copy {
+    min-height: 70px !important;
+  }
+  .layanan-modern .layanan-kartu-copy p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-size: 8.8px !important;
+  }
+  .layanan-modern .layanan-kartu-visual {
+    height: 62px !important;
+    margin-left: -11px !important;
+    margin-right: -11px !important;
+  }
+  .layanan-modern .layanan-kartu ul {
+    display: none !important;
+  }
+  .layanan-modern .layanan-kartu-aksi {
+    margin-top: auto !important;
+  }
+  .layanan-modern .layanan-kartu-aksi a {
+    min-height: 36px !important;
+    padding: 7px 8px !important;
+    font-size: 9px !important;
+  }
+
+  /* BERITA — hero & shortcut lebih padat. */
+  .berita-modern .berita-hero {
+    min-height: 340px !important;
+  }
+  .berita-modern .berita-hero-grid {
+    padding: 25px 0 20px !important;
+  }
+  .berita-modern .berita-hero h1 {
+    font-size: 34px !important;
+  }
+  .berita-modern .berita-hero h2 {
+    font-size: 20px !important;
+  }
+  .berita-modern .berita-hero-kanan {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .berita-modern .berita-shortcut {
+    width: 100vw !important;
+    display: flex !important;
+    gap: 7px !important;
+    margin: 10px 0 16px calc(50% - 50vw) !important;
+    padding: 0 14px 4px !important;
+    overflow-x: auto !important;
+    border: 0 !important;
+    background: transparent !important;
+    scrollbar-width: none;
+  }
+  .berita-modern .berita-shortcut::-webkit-scrollbar { display:none; }
+  .berita-modern .berita-shortcut a {
+    flex: 0 0 160px !important;
+    min-height: 58px !important;
+    padding: 8px !important;
+    border: 1px solid var(--news-line) !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+  }
+  .berita-modern .berita-unggulan { min-height: 270px !important; }
+  .berita-modern .berita-unggulan h3 { font-size: 22px !important; }
+
+  /* TRANSPARANSI — stats tetap 2 kolom bahkan di 360px. */
+  .transparansi-modern .trans-hero {
+    min-height: 330px !important;
+  }
+  .transparansi-modern .trans-hero-grid {
+    min-height: 330px !important;
+    padding: 24px 0 20px !important;
+  }
+  .transparansi-modern .trans-hero h1 {
+    font-size: 34px !important;
+  }
+  .transparansi-modern .trans-stat-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+  .transparansi-modern .trans-stat {
+    min-height: 66px !important;
+    padding: 7px !important;
+  }
+
+  /* UMKM — tidak menumpuk satu per satu di HP. */
+  .umkm-modern .umkm-hero-grid {
+    padding: 24px 0 19px !important;
+  }
+  .umkm-modern .umkm-hero h1 {
+    font-size: 32px !important;
+  }
+  .umkm-modern .umkm-hero-visual {
+    min-height: 165px !important;
+  }
+  .umkm-modern .umkm-statistik {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+  .umkm-modern .umkm-card-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  .umkm-modern .umkm-card-foto {
+    height: 115px !important;
+  }
+  .umkm-modern .umkm-kategori {
+    display: flex !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+  }
+  .umkm-modern .umkm-kategori::-webkit-scrollbar { display:none; }
+
+  /* KONTAK — shortcut swipe, bukan lima baris penuh. */
+  .kontak-final .kontak-final__hero {
+    min-height: 315px !important;
+  }
+  .kontak-final .kontak-final__hero-grid {
+    min-height: 315px !important;
+    padding: 20px 0 !important;
+  }
+  .kontak-final .kontak-final__hero-copy h1 {
+    font-size: 32px !important;
+  }
+  .kontak-final .kontak-final__shortcuts {
+    width: 100vw !important;
+    display: flex !important;
+    gap: 7px !important;
+    margin: 10px 0 12px calc(50% - 50vw) !important;
+    padding: 0 14px 4px !important;
+    overflow-x: auto !important;
+    border: 0 !important;
+    background: transparent !important;
+    scrollbar-width: none;
+  }
+  .kontak-final .kontak-final__shortcuts::-webkit-scrollbar { display:none; }
+  .kontak-final .kontak-final__shortcuts a,
+  .kontak-final .kontak-final__shortcuts a:last-child {
+    grid-column: auto !important;
+    flex: 0 0 170px !important;
+    min-height: 58px !important;
+    padding: 7px !important;
+    border: 1px solid #e1e9e4 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+  }
+  .kontak-final .kontak-final__card {
+    padding: 11px !important;
+  }
+
+  /* PROFIL — hero tidak sepanjang satu layar penuh. */
+  .profil-modern .profil-hero {
+    min-height: 350px !important;
+  }
+  .profil-modern .profil-hero-isi {
+    padding: 42px 0 25px !important;
+  }
+  .profil-modern .profil-hero h1 {
+    font-size: 36px !important;
+  }
+  .profil-modern .profil-hero h2 {
+    font-size: 19px !important;
+  }
+  .profil-modern .profil-bagian {
+    padding: 26px 0 !important;
+  }
+  .profil-modern .profil-copy-besar h2 {
+    font-size: 29px !important;
+  }
+
+  /* SURAT — daftar jenis surat jadi 2 kolom compact, bukan 8 kartu panjang. */
+  .mobile-surat .petak-2 {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  .mobile-surat .petak-2 > a.kartu {
+    min-height: 128px;
+    padding: 12px !important;
+    justify-content: flex-start;
+  }
+  .mobile-surat .petak-2 > a.kartu h3 {
+    font-size: 13px !important;
+    line-height: 1.18 !important;
+  }
+  .mobile-surat .petak-2 > a.kartu .keterangan {
+    margin-top: auto;
+    font-size: 9.5px !important;
+  }
+  .mobile-surat .petak-2 > a.kartu p:not(.keterangan) {
+    display: none !important;
+  }
+  .mobile-surat .langkah-butir {
+    grid-template-columns: 28px minmax(0,1fr) !important;
+    gap: 10px !important;
+    padding: 11px 0 !important;
+  }
+
+  /* RESERVASI — fasilitas 2 kolom ringkas; kalender tetap terbaca. */
+  .mobile-reservasi .petak-2 {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  .mobile-reservasi .petak-2 > .kartu {
+    min-height: 150px;
+    padding: 11px !important;
+  }
+  .mobile-reservasi .petak-2 > .kartu p:not(.keterangan) {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-size: 10.5px !important;
+  }
+  .mobile-reservasi .petak-2 .baris-tombol .tombol {
+    width: 100%;
+    min-height: 34px;
+    padding: 6px !important;
+    font-size: 9px !important;
+  }
+  .mobile-reservasi .kalender {
+    overflow: hidden !important;
+  }
+  .mobile-reservasi .kalender-kepala {
+    padding: 10px !important;
+  }
+  .mobile-reservasi .kalender-kepala .tombol {
+    min-height: 36px;
+    padding: 7px 9px !important;
+    font-size: 10px !important;
+  }
+  .mobile-reservasi .kalender-sel {
+    min-height: 52px !important;
+  }
+
+  /* PENGADUAN / DATA — kontrol tidak meluber. */
+  .mobile-pengaduan .pilihan-baris {
+    margin-bottom: 12px !important;
+  }
+  .mobile-pengaduan .jumlah-kecil {
+    margin-left: 6px !important;
+    white-space: nowrap;
+  }
+  .mobile-data .deret-angka {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  .mobile-data .angka {
+    padding: 12px !important;
+  }
+  .mobile-data .angka .besar {
+    font-size: 22px !important;
+  }
+
+  /* Struktur pengurus — foto lebih proporsional tanpa kartu raksasa. */
+  .mobile-pengurus .orang {
+    grid-template-columns: 74px minmax(0,1fr) !important;
+    gap: 11px !important;
+  }
+  .mobile-pengurus .orang .foto {
+    width: 74px !important;
+    height: 86px !important;
+    border-radius: 10px !important;
+  }
+  .mobile-pengurus .orang .foto img {
+    object-position: center 18% !important;
+  }
+
+  /* Footer tetap 2 kolom di HP, brand & lokasi melebar penuh. */
+  .kaki-modern-grid,
+  body:has(.beranda-hero) .kaki-modern-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 18px 12px !important;
+  }
+  .kaki-modern-brand,
+  .kaki-lokasi {
+    grid-column: 1 / -1 !important;
+  }
+  .kaki-modern-kolom h4 {
+    margin-bottom: 7px !important;
+  }
+  .kaki-modern-kolom a,
+  .kaki-lokasi p {
+    font-size: 9.5px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Jangan kembali ke layout satu kolom yang terlalu panjang. */
+  .kaki-modern-grid,
+  body:has(.beranda-hero) .kaki-modern-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .umkm-modern .umkm-statistik,
+  .umkm-modern .umkm-card-grid,
+  .transparansi-modern .trans-stat-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .kontak-final .kontak-final__shortcuts {
+    display: flex !important;
+  }
+
+  body:has(.beranda-hero) .beranda-meta {
+    grid-template-columns: 1fr !important;
+  }
+  body:has(.beranda-hero) .beranda-meta-item:nth-child(2) {
+    display: none !important;
+  }
+
+  body:has(.beranda-hero) .layanan-cepat-item {
+    flex-basis: min(64vw, 184px) !important;
+  }
+
+  .layanan-modern .layanan-kartu-grid,
+  .mobile-surat .petak-2,
+  .mobile-reservasi .petak-2 {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .layanan-modern .layanan-kartu {
+    min-height: 230px !important;
+    padding: 10px !important;
+  }
+
+  .layanan-modern .layanan-kartu h3 {
+    font-size: 14.5px !important;
+  }
+
+  .mobile-surat .petak-2 > a.kartu h3,
+  .mobile-reservasi .petak-2 > .kartu h3 {
+    font-size: 12.5px !important;
+  }
+}
+
+@media (max-width: 340px) {
+  /* Hanya perangkat sangat sempit yang kembali satu kolom. */
+  .layanan-modern .layanan-kartu-grid,
+  .mobile-surat .petak-2,
+  .mobile-reservasi .petak-2,
+  .umkm-modern .umkm-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
