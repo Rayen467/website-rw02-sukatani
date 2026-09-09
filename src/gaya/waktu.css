@@ -4361,3 +4361,82 @@ body:has(.beranda-hero) .sambutan-rw-motto {
     font-size: 15px;
   }
 }
+
+
+/* === FIX FINAL PORTRAIT BERSIH TANPA OVAL/KOTAK PUTIH === */
+
+/* Aset portrait sekarang benar-benar transparan. Jangan pakai multiply lagi
+ * karena itu justru mengotori warna kulit/jas dan bikin hasil beda dari referensi.
+ */
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  mix-blend-mode: normal !important;
+  width: min(108%, 520px) !important;
+  max-width: 520px !important;
+  height: 100% !important;
+  max-height: 448px !important;
+  min-height: 372px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  filter:
+    saturate(.98)
+    contrast(1.01)
+    drop-shadow(0 17px 24px rgba(20,47,36,.14)) !important;
+}
+
+/* Figure transparan total: tidak ada panel persegi di kanan. */
+body:has(.beranda-hero) .sambutan-rw-foto {
+  background: transparent !important;
+  background-image: none !important;
+  overflow: visible !important;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::before {
+  background:
+    radial-gradient(
+      ellipse at 52% 37%,
+      var(--sam-portrait-aura, rgba(255,244,215,.28)) 0%,
+      rgba(255,255,255,.06) 34%,
+      transparent 66%
+    ) !important;
+}
+
+/* Nameplate hanya menempel di bawah badan, bukan jadi blok besar di belakang foto. */
+body:has(.beranda-hero) .sambutan-rw-foto::after {
+  left: 5% !important;
+  right: 3% !important;
+  height: 24% !important;
+  border-radius: 15px !important;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--sam-name-bg-1) 86%, transparent) 44%,
+      var(--sam-name-bg-2) 100%
+    ) !important;
+}
+
+/* Malam tetap mempertahankan wajah natural, hanya auranya yang mengikuti suasana. */
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto > img {
+  mix-blend-mode: normal !important;
+  filter:
+    brightness(.96)
+    saturate(.92)
+    contrast(1.02)
+    drop-shadow(0 18px 27px rgba(0,0,0,.26)) !important;
+}
+
+@media (max-width: 900px) {
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    width: min(100%, 470px) !important;
+    min-height: 330px !important;
+    max-height: 405px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.beranda-hero) .sambutan-rw-foto > img {
+    width: min(100%, 390px) !important;
+    min-height: 290px !important;
+    max-height: 350px !important;
+  }
+}
