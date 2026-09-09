@@ -67,6 +67,8 @@
   }
 </script>
 
+<div class="mobile-page mobile-pengaduan">
+
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Pengaduan dan Aspirasi</span></nav>
 <div class="kepala-halaman">
   <p class="alis">Layanan warga</p>
@@ -135,3 +137,5 @@
     <p class="catatan-borang">Nama dan nomor pelapor disimpan terpisah dari isi laporan, dan tidak ikut terbaca warga lain di daftar di atas.</p>
   </form>
 </section>
+
+</div>
