@@ -17,6 +17,7 @@
   });
   let mengirim = $state(false);
   let bukaFaq = $state(-1);
+  let lampiranNama = $state("");
 
   const alamat = $derived(
     kontenNilai(
@@ -139,6 +140,7 @@
   <section class="kontak-hero">
     <div class="kontak-hero-lapis"></div>
     <div class="kontak-wadah kontak-hero-grid">
+      <nav class="kontak-remah"><a href="#/">Beranda</a><span>›</span><span>Kontak</span></nav>
       <div class="kontak-hero-copy">
         <p class="kontak-kicker"><span>⌁</span> Kontak & Lokasi</p>
         <h1>Hubungi Kami</h1>
@@ -182,7 +184,7 @@
       </a>
       <a href="#/galeri">
         <span class="shortcut-icon social">♟</span>
-        <span><strong>Ikuti Kegiatan</strong><small>Update warga RW 02</small></span>
+        <span><strong>Ikuti Media Sosial</strong><small>Update kegiatan</small></span>
       </a>
     </nav>
 
@@ -243,11 +245,19 @@
             <textarea bind:value={form.pesan} placeholder="Tulis pesan Anda di sini..." required></textarea>
           </label>
 
-          <div class="pesan-note">
+          <label class="pesan-file">
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onchange={(e) => (lampiranNama = e.currentTarget.files?.[0]?.name || "")}
+            />
             <span>⌕</span>
-            <div><strong>Butuh mengirim foto atau berkas?</strong><small>Gunakan halaman Pengaduan setelah pesan dikirim untuk melengkapi laporan jika diperlukan.</small></div>
-            <a href="#/pengaduan">Buka Pengaduan</a>
-          </div>
+            <div>
+              <strong>Lampirkan File (Opsional)</strong>
+              <small>{lampiranNama || "PDF, JPG, PNG (Maks. 5MB)"}</small>
+            </div>
+            <b>Pilih File</b>
+          </label>
 
           <button type="submit" disabled={mengirim}>{mengirim ? "Mengirim..." : "➤  Kirim Pesan"}</button>
           <p class="form-foot">Pesan masuk sebagai tiket layanan agar dapat ditindaklanjuti pengurus.</p>
@@ -272,8 +282,10 @@
               </div>
               {#if o.kontak}
                 <a class="wa-icon" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label={"WhatsApp " + (o.nama || o.jabatan)}>◉</a>
+                <a class="tel-icon" href={"tel:" + o.kontak} aria-label={"Telepon " + (o.nama || o.jabatan)}>⌕</a>
               {:else}
                 <span class="wa-icon mati" title="Kontak belum diizinkan">—</span>
+                <span class="tel-icon mati" title="Kontak belum diizinkan">—</span>
               {/if}
             </div>
           {/each}
@@ -336,7 +348,7 @@
       <aside class="kontak-quote">
         <img src="./foto/kegiatan-kerja-bakti.jpg" alt="" decoding="async" />
         <span></span>
-        <blockquote>“Lingkungan yang baik dimulai dari komunikasi yang terbuka.”</blockquote>
+        <blockquote>“Komunikasi yang baik adalah awal dari lingkungan yang lebih harmonis.”</blockquote>
         <small>— RW 02 Sukatani</small>
       </aside>
     </section>
@@ -1282,4 +1294,606 @@
       text-align: center;
     }
   }
+
+
+/* === KONTAK FINAL MATCH REFERENSI 2026-09-09 === */
+  /*
+   * Override final untuk menyamakan proporsi screenshot referensi:
+   * hero lebih pendek, shortcut rapat, 3 kolom utama seimbang,
+   * peta bersih tanpa elemen bawaan yang menumpuk, dan footer tetap global.
+   */
+  .kontak-modern {
+    --k-bg: #f7faf7;
+    --k-card: #ffffff;
+    --k-ink: #102c3b;
+    --k-text: #607078;
+    --k-line: #dfe8e2;
+    background:
+      radial-gradient(circle at 2% 34%, rgba(57,145,101,.045), transparent 19%),
+      radial-gradient(circle at 98% 54%, rgba(57,145,101,.04), transparent 19%),
+      #f8faf8 !important;
+  }
+
+  .kontak-wadah {
+    width: min(1110px, calc(100% - 46px)) !important;
+  }
+
+  .kontak-hero {
+    min-height: 278px !important;
+    background:
+      linear-gradient(90deg,
+        rgba(3,45,38,.96) 0%,
+        rgba(4,57,47,.84) 36%,
+        rgba(6,61,50,.45) 61%,
+        rgba(3,43,37,.34) 100%
+      ),
+      url("./foto/kegiatan-pengecatan.jpg") center 50% / cover no-repeat !important;
+  }
+
+  .kontak-hero-lapis {
+    background:
+      linear-gradient(180deg, rgba(2,28,25,.06), rgba(2,35,30,.28)),
+      radial-gradient(circle at 76% 45%, transparent 0 24%, rgba(3,42,35,.20) 70%) !important;
+  }
+
+  .kontak-hero-grid {
+    grid-template-columns: minmax(0, 1fr) 205px !important;
+    grid-template-rows: auto 1fr !important;
+    gap: 8px 34px !important;
+    min-height: 278px !important;
+    padding: 22px 0 25px !important;
+  }
+
+  .kontak-remah {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 0 3px;
+    color: rgba(255,255,255,.90);
+    font-size: 7px;
+  }
+
+  .kontak-remah a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .kontak-hero-copy {
+    align-self: center;
+    max-width: 560px !important;
+  }
+
+  .kontak-kicker {
+    display: none !important;
+  }
+
+  .kontak-hero h1 {
+    font-size: clamp(38px, 4.3vw, 50px) !important;
+    line-height: .98 !important;
+  }
+
+  .kontak-hero h2 {
+    margin-top: 6px !important;
+    font-size: clamp(19px, 2vw, 24px) !important;
+  }
+
+  .kontak-hero-copy > p:last-of-type {
+    max-width: 46ch !important;
+    margin-top: 9px !important;
+    font-size: 10px !important;
+    line-height: 1.45 !important;
+  }
+
+  .kontak-pill-row {
+    gap: 6px !important;
+    margin-top: 12px !important;
+  }
+
+  .kontak-pill-row span {
+    padding: 5px 8px !important;
+    font-size: 6.4px !important;
+  }
+
+  .kontak-hero-badge {
+    align-self: center !important;
+    width: 170px !important;
+    padding: 14px 15px 17px !important;
+    border-radius: 12px !important;
+    background: rgba(4,47,40,.50) !important;
+  }
+
+  .kontak-hero-badge strong {
+    font-size: 18px !important;
+  }
+
+  .kontak-isi {
+    padding-bottom: 35px !important;
+  }
+
+  .kontak-shortcut {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: -14px !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 15px 35px -28px rgba(24,65,51,.30) !important;
+  }
+
+  .kontak-shortcut a {
+    min-height: 62px !important;
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    gap: 9px !important;
+    padding: 7px 8px !important;
+    border: 1px solid #edf2ef;
+    border-radius: 8px !important;
+  }
+
+  .kontak-shortcut strong {
+    font-size: 8.5px !important;
+  }
+
+  .kontak-shortcut small {
+    font-size: 6.3px !important;
+  }
+
+  .kontak-grid-utama {
+    grid-template-columns:
+      minmax(0, .98fr)
+      minmax(0, 1.02fr)
+      minmax(0, .82fr) !important;
+    gap: 10px !important;
+    align-items: stretch;
+    margin-top: 10px !important;
+  }
+
+  .kontak-panel {
+    border-color: #e3eae6 !important;
+    border-radius: 9px !important;
+    box-shadow: 0 12px 28px -26px rgba(24,65,51,.26) !important;
+  }
+
+  .sekretariat,
+  .pesan,
+  .pengurus,
+  .lokasi,
+  .layanan-cepat,
+  .faq {
+    padding: 10px !important;
+  }
+
+  .panel-title {
+    min-height: 32px !important;
+    gap: 7px !important;
+  }
+
+  .panel-title > span {
+    width: 28px !important;
+    height: 28px !important;
+    flex-basis: 28px !important;
+  }
+
+  .panel-title h2 {
+    font-size: 13px !important;
+  }
+
+  .panel-title p {
+    font-size: 6px !important;
+  }
+
+  .sekretariat-foto {
+    height: 124px !important;
+    margin-top: 7px !important;
+  }
+
+  .sekretariat-foto > div {
+    padding: 7px 11px !important;
+  }
+
+  .info-list {
+    margin-top: 6px !important;
+  }
+
+  .info-list > div {
+    grid-template-columns: 100px minmax(0, 1fr) !important;
+    gap: 6px !important;
+    padding: 7px 0 !important;
+  }
+
+  .info-list dt {
+    font-size: 6.6px !important;
+  }
+
+  .info-list dd {
+    font-size: 6.7px !important;
+  }
+
+  .sekretariat-actions {
+    gap: 5px !important;
+    margin-top: 5px !important;
+  }
+
+  .pesan form {
+    gap: 6px !important;
+    margin-top: 7px !important;
+  }
+
+  .pesan label > span {
+    font-size: 6.5px !important;
+  }
+
+  .pesan input,
+  .pesan select,
+  .pesan textarea {
+    min-height: 33px !important;
+    padding: 7px 8px !important;
+    font-size: 6.8px !important;
+  }
+
+  .pesan textarea {
+    min-height: 90px !important;
+  }
+
+  .pesan-file {
+    min-height: 48px;
+    display: grid !important;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 7px;
+    align-items: center;
+    padding: 7px !important;
+    border: 0 !important;
+    border-radius: 6px;
+    background: #f1f5f3;
+    cursor: pointer;
+  }
+
+  .pesan-file > input {
+    position: absolute;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pesan-file > span {
+    width: 30px;
+    height: 30px;
+    display: grid !important;
+    place-items: center;
+    margin: 0 !important;
+    border-radius: 6px;
+    color: #0a795d !important;
+    background: #e0efea;
+    font-size: 13px !important;
+  }
+
+  .pesan-file strong,
+  .pesan-file small {
+    display: block;
+  }
+
+  .pesan-file strong {
+    color: #203c3d;
+    font-size: 6.2px;
+  }
+
+  .pesan-file small {
+    margin-top: 2px;
+    color: #71817d;
+    font-size: 5.2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pesan-file > b {
+    padding: 5px 8px;
+    border-radius: 5px;
+    color: #24483f;
+    background: #dfe9e5;
+    font-size: 5.7px;
+  }
+
+  .pesan form > button {
+    min-height: 34px !important;
+  }
+
+  .pengurus-row {
+    min-height: 44px !important;
+    grid-template-columns: 32px minmax(0, 1fr) 25px 25px !important;
+    gap: 6px !important;
+  }
+
+  .pengurus-avatar {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .pengurus-row strong {
+    font-size: 6.4px !important;
+  }
+
+  .pengurus-row small {
+    font-size: 5.3px !important;
+  }
+
+  .wa-icon,
+  .tel-icon {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    text-decoration: none;
+  }
+
+  .wa-icon {
+    color: #fff;
+    background: #12b76a;
+  }
+
+  .tel-icon {
+    color: #0c725a;
+    background: #edf6f2;
+    border: 1px solid #dceae4;
+    font-size: 8px;
+  }
+
+  .wa-icon.mati,
+  .tel-icon.mati {
+    color: #8b9b96 !important;
+    background: #eef3f0 !important;
+    border-color: #e5ece8 !important;
+  }
+
+  .pengurus-note {
+    margin-top: 7px !important;
+    padding: 7px !important;
+  }
+
+  .kontak-grid-bawah {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, .92fr) !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+  }
+
+  .map-wrap {
+    position: relative;
+    height: 205px !important;
+    margin-top: 7px !important;
+    border: 1px solid #dfe7e2;
+    border-radius: 8px !important;
+    background: #dfe7e2;
+  }
+
+  /* Peta.svelte membawa keterangan, tombol, dan verifikasi panjang.
+     Di halaman kontak elemen-elemen itu sengaja disembunyikan agar layout
+     sama seperti referensi dan tidak menumpuk di dalam card. */
+  .map-wrap :global(.petabox) {
+    height: 100% !important;
+    min-height: 100% !important;
+  }
+
+  .map-wrap :global(.peta-sendiri),
+  .map-wrap :global(.peta-gambar),
+  .map-wrap :global(iframe) {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+  }
+
+  .map-wrap :global(.keterangan-batas),
+  .map-wrap :global(.baris-tombol),
+  .map-wrap :global(.verifikasi) {
+    display: none !important;
+  }
+
+  .map-caption {
+    margin-top: 6px !important;
+    font-size: 5.4px !important;
+  }
+
+  .lokasi > p {
+    margin-top: 6px !important;
+    font-size: 5.7px !important;
+  }
+
+  .layanan-kontak-grid {
+    gap: 5px !important;
+    margin-top: 7px !important;
+  }
+
+  .layanan-kontak-grid a {
+    min-height: 49px !important;
+    grid-template-columns: 28px minmax(0, 1fr) 10px !important;
+    gap: 6px !important;
+    padding: 6px !important;
+  }
+
+  .layanan-kontak-grid > a > span {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .layanan-kontak-grid strong {
+    font-size: 6px !important;
+  }
+
+  .layanan-kontak-grid small {
+    font-size: 4.9px !important;
+  }
+
+  .kontak-faq-quote {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr) !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+  }
+
+  .faq-list {
+    gap: 3px !important;
+    margin-top: 7px !important;
+  }
+
+  .faq-list button {
+    min-height: 32px !important;
+    padding: 6px 8px !important;
+  }
+
+  .faq-list button strong {
+    font-size: 6.2px !important;
+  }
+
+  .kontak-quote {
+    min-height: 182px !important;
+    background: #174b3b;
+  }
+
+  .kontak-quote img {
+    filter: saturate(.85) brightness(.82);
+  }
+
+  .kontak-quote blockquote {
+    left: 20px !important;
+    top: 31px !important;
+    max-width: 20ch !important;
+    font-size: 17px !important;
+  }
+
+  .kontak-quote small {
+    left: 21px !important;
+    bottom: 20px !important;
+  }
+
+  :global(:root[data-waktu="malam"]) .pesan-file {
+    background: rgba(17,49,52,.92) !important;
+  }
+
+  :global(:root[data-waktu="malam"]) .pesan-file strong,
+  :global(:root[data-waktu="malam"]) .pesan-file small {
+    color: var(--k-ink) !important;
+  }
+
+  @media (max-width: 980px) {
+    .kontak-wadah {
+      width: min(900px, calc(100% - 30px)) !important;
+    }
+
+    .kontak-grid-utama {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    .pengurus {
+      grid-column: 1 / -1 !important;
+    }
+
+    .pengurus-list {
+      grid-template-columns: 1fr 1fr !important;
+      column-gap: 14px;
+    }
+
+    .kontak-grid-bawah,
+    .kontak-faq-quote {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .kontak-wadah {
+      width: 100% !important;
+      padding-left: 14px !important;
+      padding-right: 14px !important;
+    }
+
+    .kontak-hero {
+      min-height: 360px !important;
+      background-position: 63% center !important;
+    }
+
+    .kontak-hero-grid {
+      grid-template-columns: 1fr !important;
+      grid-template-rows: auto auto auto !important;
+      min-height: 360px !important;
+      gap: 8px !important;
+      padding: 23px 0 24px !important;
+    }
+
+    .kontak-remah {
+      grid-column: auto !important;
+    }
+
+    .kontak-hero h1 {
+      font-size: 36px !important;
+    }
+
+    .kontak-hero h2 {
+      font-size: 19px !important;
+    }
+
+    .kontak-hero-badge {
+      width: 165px !important;
+      justify-self: end !important;
+      padding: 10px 12px !important;
+    }
+
+    .kontak-shortcut {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 5px !important;
+      margin-top: -12px !important;
+    }
+
+    .kontak-shortcut a:last-child {
+      grid-column: 1 / -1 !important;
+    }
+
+    .kontak-grid-utama,
+    .kontak-grid-bawah,
+    .kontak-faq-quote {
+      grid-template-columns: 1fr !important;
+    }
+
+    .pengurus {
+      grid-column: auto !important;
+    }
+
+    .pengurus-list {
+      grid-template-columns: 1fr !important;
+    }
+
+    .map-wrap {
+      height: 220px !important;
+    }
+
+    .layanan-kontak-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .kontak-shortcut {
+      grid-template-columns: 1fr !important;
+    }
+
+    .kontak-shortcut a:last-child {
+      grid-column: auto !important;
+    }
+
+    .info-list > div {
+      grid-template-columns: 1fr !important;
+    }
+
+    .sekretariat-actions,
+    .layanan-kontak-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .pesan-file {
+      grid-template-columns: 30px 1fr !important;
+    }
+
+    .pesan-file > b {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+  }
+
 </style>
