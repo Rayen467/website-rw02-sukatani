@@ -2750,3 +2750,167 @@ body:has(.beranda-hero) .sambutan-rw-motto {
     display: none;
   }
 }
+
+
+/* === SAMBUTAN DINAMIS SESUAI PAGI SIANG SORE MALAM === */
+
+/* Warna dasar isi sambutan mengikuti token per fase, bukan putih permanen. */
+body:has(.beranda-hero) .sambutan-rw {
+  --sambutan-judul: #173f31;
+  --sambutan-teks: #53645b;
+  --sambutan-kuat: #244b3b;
+  --sambutan-label: #6e7a70;
+  --sambutan-garis: rgba(63, 105, 76, .16);
+  --sambutan-expand: rgba(238, 242, 222, .74);
+  --sambutan-quote: rgba(249, 244, 219, .72);
+  --sambutan-quote-teks: #46604e;
+}
+
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
+  --sambutan-judul: #173f31;
+  --sambutan-teks: #53645b;
+  --sambutan-kuat: #244b3b;
+  --sambutan-label: #6e7a70;
+  --sambutan-garis: rgba(63, 105, 76, .17);
+  --sambutan-expand: rgba(236, 242, 221, .82);
+  --sambutan-quote: rgba(248, 242, 213, .82);
+  --sambutan-quote-teks: #46604e;
+  border-color: rgba(79, 119, 80, .18);
+  background:
+    radial-gradient(circle at 8% 10%, rgba(255, 205, 66, .28), transparent 23%),
+    radial-gradient(circle at 88% 84%, rgba(75, 137, 75, .18), transparent 31%),
+    linear-gradient(135deg, #f0ead0 0%, #e4ebd1 50%, #d7e5d1 100%);
+  box-shadow: 0 26px 58px -43px rgba(47, 83, 56, .50);
+}
+
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
+  --sambutan-judul: #123f45;
+  --sambutan-teks: #506462;
+  --sambutan-kuat: #214b49;
+  --sambutan-label: #637b79;
+  --sambutan-garis: rgba(62, 124, 125, .17);
+  --sambutan-expand: rgba(221, 239, 232, .80);
+  --sambutan-quote: rgba(225, 242, 232, .80);
+  --sambutan-quote-teks: #315b53;
+  border-color: rgba(65, 130, 132, .18);
+  background:
+    radial-gradient(circle at 13% 12%, rgba(111, 194, 229, .26), transparent 25%),
+    radial-gradient(circle at 91% 78%, rgba(68, 151, 111, .16), transparent 30%),
+    linear-gradient(135deg, #e2f1ef 0%, #d9ece8 50%, #d4e8dd 100%);
+  box-shadow: 0 26px 58px -43px rgba(42, 101, 102, .48);
+}
+
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
+  --sambutan-judul: #53391f;
+  --sambutan-teks: #6a5949;
+  --sambutan-kuat: #62442a;
+  --sambutan-label: #806e5c;
+  --sambutan-garis: rgba(137, 96, 46, .18);
+  --sambutan-expand: rgba(241, 220, 181, .76);
+  --sambutan-quote: rgba(247, 222, 175, .76);
+  --sambutan-quote-teks: #6b4d2f;
+  border-color: rgba(152, 104, 50, .19);
+  background:
+    radial-gradient(circle at 11% 11%, rgba(247, 168, 55, .31), transparent 26%),
+    radial-gradient(circle at 88% 82%, rgba(93, 119, 59, .16), transparent 31%),
+    linear-gradient(135deg, #ead9ba 0%, #e1ceb0 48%, #d7d3ad 100%);
+  box-shadow: 0 27px 62px -44px rgba(105, 71, 35, .56);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
+  --sambutan-judul: #eef8f6;
+  --sambutan-teks: #b8cac7;
+  --sambutan-kuat: #eff9f6;
+  --sambutan-label: #9bb9b5;
+  --sambutan-garis: rgba(164, 209, 205, .15);
+  --sambutan-expand: rgba(13, 45, 54, .76);
+  --sambutan-quote: rgba(12, 42, 50, .78);
+  --sambutan-quote-teks: #d6e8e4;
+  border-color: rgba(155, 205, 204, .13);
+  background:
+    radial-gradient(circle at 12% 13%, rgba(42, 108, 143, .25), transparent 26%),
+    radial-gradient(circle at 91% 80%, rgba(31, 112, 88, .15), transparent 30%),
+    linear-gradient(135deg, #0b2837 0%, #0a2631 48%, #0b2428 100%);
+  box-shadow: 0 30px 72px -45px rgba(0, 0, 0, .82);
+}
+
+body:has(.beranda-hero) .sambutan-rw h2 {
+  color: var(--sambutan-judul);
+}
+
+body:has(.beranda-hero) .sambutan-rw-label {
+  color: var(--sambutan-label);
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka p,
+body:has(.beranda-hero) .sambutan-rw-lengkap p {
+  color: var(--sambutan-teks);
+}
+
+body:has(.beranda-hero) .sambutan-rw-pembuka strong,
+body:has(.beranda-hero) .sambutan-rw-lengkap strong,
+body:has(.beranda-hero) .sambutan-rw-ttd strong {
+  color: var(--sambutan-kuat);
+}
+
+body:has(.beranda-hero) .sambutan-rw-lengkap {
+  border-left-color: var(--sambutan-garis);
+  background: var(--sambutan-expand);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote {
+  border-color: var(--sambutan-garis);
+  background: var(--sambutan-quote);
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote p {
+  color: var(--sambutan-quote-teks);
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd {
+  border-top-color: var(--sambutan-garis);
+}
+
+body:has(.beranda-hero) .sambutan-rw-ttd span {
+  color: var(--sambutan-label);
+}
+
+/* Ornamen daun mengikuti warna fase agar panel tidak terasa polos. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw::after {
+  opacity: .14;
+  filter: sepia(.12) saturate(.8);
+}
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw::after {
+  opacity: .13;
+  filter: hue-rotate(12deg) saturate(.9);
+}
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw::after {
+  opacity: .12;
+  filter: sepia(.55) saturate(.85);
+}
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw::after {
+  opacity: .10;
+  filter: hue-rotate(18deg) brightness(1.3);
+}
+
+/* Kalau mode Gelap dipilih manual, tiap fase tetap punya aksen waktunya. */
+:root[data-theme="dark"][data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 9% 10%, rgba(202, 167, 53, .12), transparent 24%),
+    linear-gradient(135deg, #102b29, #102522 58%, #172820);
+}
+:root[data-theme="dark"][data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(63, 145, 171, .15), transparent 25%),
+    linear-gradient(135deg, #0c2933, #0b272c 58%, #102b27);
+}
+:root[data-theme="dark"][data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 11% 10%, rgba(203, 124, 44, .16), transparent 25%),
+    linear-gradient(135deg, #30271d, #29251f 58%, #26291f);
+}
+:root[data-theme="dark"][data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(43, 101, 145, .18), transparent 26%),
+    linear-gradient(135deg, #081f2c, #071d27 58%, #081f22);
+}
