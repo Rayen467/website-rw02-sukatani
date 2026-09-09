@@ -3559,3 +3559,138 @@ footer.kaki-waktu.kaki-modern::after {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* === SAMBUTAN FOTO TRANSPARAN + BACKGROUND MENYATU === */
+
+/* Foto Ketua RW sudah dibersihkan dari latar putih, jadi card foto sekarang
+ * memakai background suasana sendiri agar portrait benar-benar menyatu.
+ */
+body:has(.beranda-hero) .sambutan-rw-foto {
+  --sambutan-foto-bg: none;
+  position: relative;
+  isolation: isolate;
+  background-color: transparent !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(10,55,42,.12)),
+    var(--sambutan-foto-bg) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255,255,255,.18), transparent 24%),
+    linear-gradient(180deg, transparent 58%, rgba(5,48,36,.18));
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  background: transparent !important;
+  mix-blend-mode: normal !important;
+}
+
+body:has(.beranda-hero) .sambutan-rw-foto figcaption,
+body:has(.beranda-hero) .sambutan-rw-motto {
+  z-index: 3;
+}
+
+/* Panorama tipis di belakang portrait berubah mengikuti waktu. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw-foto {
+  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/675bc197-4517-40a4-a648-4b83ea8c23f0.webp");
+  background-image:
+    linear-gradient(180deg, rgba(244,237,205,.58), rgba(119,156,101,.36)),
+    var(--sambutan-foto-bg) !important;
+}
+
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw-foto {
+  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3456af31-4fbc-4ecf-80a7-7be4c32294fa.webp");
+  background-image:
+    linear-gradient(180deg, rgba(220,239,235,.50), rgba(86,145,126,.32)),
+    var(--sambutan-foto-bg) !important;
+}
+
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw-foto {
+  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/156af0cc-d2dd-4807-a4b9-b468c397bcea.webp");
+  background-image:
+    linear-gradient(180deg, rgba(236,203,157,.45), rgba(91,67,43,.40)),
+    var(--sambutan-foto-bg) !important;
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw-foto {
+  --sambutan-foto-bg: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ebcfc652-2164-4421-844a-88d5f558837b.webp");
+  background-image:
+    linear-gradient(180deg, rgba(13,46,62,.34), rgba(3,29,35,.60)),
+    var(--sambutan-foto-bg) !important;
+}
+
+/* Hilangkan rasa 'kotak putih': panel sambutan dan elemen kecil lebih menyatu. */
+body:has(.beranda-hero) .sambutan-rw {
+  border-color: color-mix(in srgb, var(--sambutan-garis) 72%, transparent);
+  box-shadow:
+    0 24px 58px -44px rgba(20,57,43,.40),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+body:has(.beranda-hero) .sambutan-rw::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .55;
+  background:
+    radial-gradient(circle at 5% 0%, rgba(255,255,255,.22), transparent 24%),
+    radial-gradient(circle at 82% 100%, rgba(36,112,77,.10), transparent 28%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.022) 0 1px, transparent 1px 7px);
+}
+
+body:has(.beranda-hero) .sambutan-rw > * {
+  position: relative;
+  z-index: 1;
+}
+
+body:has(.beranda-hero) .sambutan-rw-quote,
+body:has(.beranda-hero) .sambutan-rw-lengkap {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter: blur(5px);
+}
+
+/* Sedikit lebih dalam agar panel tidak terlihat pucat/putih pada fase terang. */
+:root[data-waktu="pagi"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(246,190,54,.24), transparent 22%),
+    radial-gradient(circle at 88% 84%, rgba(70,129,76,.19), transparent 30%),
+    linear-gradient(135deg, #e6ddb9 0%, #dbe4c4 48%, #c9d9c4 100%);
+}
+
+:root[data-waktu="siang"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 11% 8%, rgba(83,173,211,.22), transparent 23%),
+    radial-gradient(circle at 90% 82%, rgba(50,136,98,.18), transparent 30%),
+    linear-gradient(135deg, #d5e8e4 0%, #c9e0db 48%, #c2d9cf 100%);
+}
+
+:root[data-waktu="sore"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(231,142,43,.25), transparent 24%),
+    radial-gradient(circle at 90% 82%, rgba(100,115,58,.17), transparent 30%),
+    linear-gradient(135deg, #d9c29f 0%, #cdb895 50%, #beb990 100%);
+}
+
+:root[data-waktu="malam"] body:has(.beranda-hero) .sambutan-rw {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(38,100,138,.22), transparent 24%),
+    radial-gradient(circle at 90% 82%, rgba(31,105,79,.16), transparent 30%),
+    linear-gradient(135deg, #0a2735 0%, #09252e 52%, #0a2326 100%);
+}
