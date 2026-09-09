@@ -168,6 +168,29 @@
               <p>{l.ringkas}</p>
             </div>
 
+            <div class="layanan-kartu-visual {l.jenis}" aria-hidden="true">
+              {#if l.jenis === "surat"}
+                <span class="visual-kertas satu"></span>
+                <span class="visual-kertas dua"></span>
+                <span class="visual-centang">✓</span>
+              {:else if l.jenis === "pengaduan"}
+                <span class="visual-ponsel"><i></i></span>
+                <span class="visual-label">Laporan terkirim</span>
+                <span class="visual-centang">✓</span>
+              {:else if l.jenis === "reservasi"}
+                <span class="visual-tenda"></span>
+                <span class="visual-kursi k1"></span>
+                <span class="visual-kursi k2"></span>
+                <span class="visual-kalender">▦</span>
+              {:else}
+                <span class="visual-grafik"><i></i><i></i><i></i><i></i></span>
+                <span class="visual-pie"></span>
+                <span class="visual-orang o1"></span>
+                <span class="visual-orang o2"></span>
+                <span class="visual-orang o3"></span>
+              {/if}
+            </div>
+
             <a class="layanan-kartu-aksi" href={l.href}>
               {l.aksi}<span>→</span>
             </a>
@@ -1164,6 +1187,347 @@
 
     .bantuan-umum {
       grid-column: auto;
+    }
+  }
+
+
+  /* === LAYANAN FINAL — VISUAL CARD SEPERTI REFERENSI === */
+
+  /* Tinggi dan ritme dibuat mendekati referensi tanpa memboroskan satu layar. */
+  .layanan-hero {
+    min-height: 228px;
+  }
+
+  .layanan-hero-grid {
+    padding: 40px 0 32px;
+  }
+
+  .layanan-hero h1 {
+    font-size: clamp(32px, 4vw, 45px);
+    max-width: 18ch;
+  }
+
+  .layanan-hero-copy > p:last-child {
+    font-size: 12px;
+    line-height: 1.48;
+  }
+
+  .layanan-hero-quote {
+    min-height: 136px;
+    padding: 18px;
+  }
+
+  .layanan-status {
+    margin-top: -2px;
+    min-height: 74px;
+    padding: 9px 14px;
+  }
+
+  .layanan-kartu {
+    min-height: 365px;
+    padding: 14px;
+  }
+
+  .layanan-kartu-copy {
+    min-height: 94px;
+  }
+
+  .layanan-kartu h3 {
+    font-size: 18px;
+  }
+
+  .layanan-kartu-copy p {
+    font-size: 9.4px;
+    line-height: 1.42;
+  }
+
+  .layanan-kartu-visual {
+    position: relative;
+    z-index: 1;
+    height: 92px;
+    margin: 1px -14px 10px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .layanan-kartu-visual::before {
+    content: "";
+    position: absolute;
+    inset: 14px 0 0;
+    background:
+      linear-gradient(180deg, transparent, rgba(255,255,255,.64));
+  }
+
+  /* SURAT — tumpukan formulir + tanda selesai */
+  .layanan-kartu-visual.surat .visual-kertas {
+    position: absolute;
+    width: 92px;
+    height: 55px;
+    border: 1px solid rgba(27,76,61,.15);
+    border-radius: 3px;
+    background:
+      linear-gradient(#b6c7c1 0 0) 12px 13px / 49px 2px no-repeat,
+      linear-gradient(#d0dad6 0 0) 12px 20px / 60px 2px no-repeat,
+      linear-gradient(#d0dad6 0 0) 12px 27px / 51px 2px no-repeat,
+      linear-gradient(#d0dad6 0 0) 12px 34px / 58px 2px no-repeat,
+      #fff;
+    box-shadow: 0 10px 20px -14px rgba(22,64,50,.35);
+  }
+
+  .layanan-kartu-visual.surat .visual-kertas.satu {
+    left: 15px;
+    top: 28px;
+    transform: rotate(-8deg);
+  }
+
+  .layanan-kartu-visual.surat .visual-kertas.dua {
+    left: 57px;
+    top: 18px;
+    transform: rotate(5deg);
+  }
+
+  .visual-centang {
+    position: absolute;
+    right: 16px;
+    bottom: 9px;
+    width: 37px;
+    height: 37px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: #21a768;
+    box-shadow: 0 5px 12px rgba(7,104,64,.27);
+    font-size: 21px;
+    font-weight: 900;
+  }
+
+  /* PENGADUAN — ilustrasi ponsel kecil seperti referensi */
+  .layanan-kartu-visual.pengaduan .visual-ponsel {
+    position: absolute;
+    right: 25px;
+    top: 4px;
+    width: 52px;
+    height: 88px;
+    border: 4px solid #173847;
+    border-radius: 11px;
+    background:
+      linear-gradient(145deg, rgba(80,135,120,.35), rgba(238,214,180,.78)),
+      linear-gradient(#8aaea1, #d7b789);
+    transform: rotate(-4deg);
+    box-shadow: 0 9px 20px -12px rgba(0,0,0,.35);
+  }
+
+  .layanan-kartu-visual.pengaduan .visual-ponsel::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    width: 17px;
+    height: 3px;
+    border-radius: 99px;
+    background: #173847;
+    transform: translateX(-50%);
+  }
+
+  .layanan-kartu-visual.pengaduan .visual-ponsel i {
+    position: absolute;
+    left: 7px;
+    right: 7px;
+    bottom: 10px;
+    height: 24px;
+    border-radius: 5px;
+    background:
+      radial-gradient(circle at 30% 45%, #557e6d 0 5px, transparent 6px),
+      linear-gradient(135deg, #92b594, #d2bf96);
+  }
+
+  .layanan-kartu-visual.pengaduan .visual-label {
+    position: absolute;
+    left: 16px;
+    bottom: 13px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    color: #3f4e4a;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 8px 18px -14px rgba(0,0,0,.35);
+    font-size: 7px;
+    font-weight: 750;
+    text-transform: capitalize;
+  }
+
+  .layanan-kartu-visual.pengaduan .visual-centang {
+    right: 9px;
+    bottom: 5px;
+    width: 31px;
+    height: 31px;
+    font-size: 17px;
+  }
+
+  /* RESERVASI — tenda, kursi dan kalender */
+  .layanan-kartu-visual.reservasi .visual-tenda {
+    position: absolute;
+    right: 12px;
+    top: 17px;
+    width: 105px;
+    height: 55px;
+    clip-path: polygon(50% 0, 100% 58%, 91% 58%, 91% 100%, 9% 100%, 9% 58%, 0 58%);
+    background:
+      repeating-linear-gradient(103deg, rgba(26,97,149,.34) 0 2px, transparent 2px 16px),
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(210,232,248,.88));
+    border-bottom: 2px solid rgba(17,91,145,.25);
+  }
+
+  .layanan-kartu-visual.reservasi .visual-kursi {
+    position: absolute;
+    bottom: 8px;
+    width: 27px;
+    height: 25px;
+    border: 2px solid rgba(55,81,96,.42);
+    border-top-width: 5px;
+    border-radius: 3px 3px 1px 1px;
+  }
+
+  .layanan-kartu-visual.reservasi .visual-kursi.k1 { left: 22px; }
+  .layanan-kartu-visual.reservasi .visual-kursi.k2 { left: 54px; }
+
+  .layanan-kartu-visual.reservasi .visual-kalender {
+    position: absolute;
+    left: 91px;
+    bottom: 6px;
+    width: 44px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    color: #1a71aa;
+    background: rgba(255,255,255,.90);
+    font-size: 20px;
+    box-shadow: 0 8px 16px -12px rgba(0,0,0,.3);
+  }
+
+  /* DATA — grafik + pie + ikon warga */
+  .layanan-kartu-visual.data .visual-grafik {
+    position: absolute;
+    left: 17px;
+    bottom: 7px;
+    width: 82px;
+    height: 54px;
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    padding: 7px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.86);
+  }
+
+  .layanan-kartu-visual.data .visual-grafik i {
+    width: 10px;
+    border-radius: 2px 2px 0 0;
+    background: linear-gradient(#65a8dc, #477cc8);
+  }
+
+  .layanan-kartu-visual.data .visual-grafik i:nth-child(1) { height: 15px; }
+  .layanan-kartu-visual.data .visual-grafik i:nth-child(2) { height: 24px; }
+  .layanan-kartu-visual.data .visual-grafik i:nth-child(3) { height: 33px; }
+  .layanan-kartu-visual.data .visual-grafik i:nth-child(4) { height: 42px; }
+
+  .layanan-kartu-visual.data .visual-pie {
+    position: absolute;
+    right: 18px;
+    top: 3px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: conic-gradient(#62a9e7 0 31%, #6a4bd2 31% 71%, #b7d8f2 71% 100%);
+    box-shadow: 0 8px 15px -13px rgba(0,0,0,.3);
+  }
+
+  .layanan-kartu-visual.data .visual-pie::after {
+    content: "";
+    position: absolute;
+    inset: 15px;
+    border-radius: 50%;
+    background: #f2eeff;
+  }
+
+  .layanan-kartu-visual.data .visual-orang {
+    position: absolute;
+    bottom: 7px;
+    width: 15px;
+    height: 30px;
+    border-radius: 8px 8px 3px 3px;
+    background: #314976;
+  }
+
+  .layanan-kartu-visual.data .visual-orang::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e6b89b;
+  }
+
+  .layanan-kartu-visual.data .visual-orang.o1 { right: 68px; }
+  .layanan-kartu-visual.data .visual-orang.o2 { right: 48px; height: 35px; background: #6a4bd2; }
+  .layanan-kartu-visual.data .visual-orang.o3 { right: 28px; height: 27px; background: #173e63; }
+
+  .layanan-kartu-aksi {
+    margin-top: 0;
+  }
+
+  .layanan-kartu ul {
+    margin-top: 10px;
+  }
+
+  /* Isi bawah dibuat lebih rapat seperti referensi. */
+  .layanan-pendukung,
+  .layanan-proses {
+    margin-top: 23px;
+  }
+
+  .layanan-pendukung-kartu {
+    min-height: 70px;
+  }
+
+  .layanan-langkah {
+    margin-top: 11px;
+  }
+
+  .layanan-langkah-item p {
+    font-size: 8px;
+  }
+
+  .layanan-bantuan {
+    margin-top: 22px;
+  }
+
+  @media (max-width: 680px) {
+    .layanan-hero {
+      min-height: 280px;
+    }
+
+    .layanan-hero-grid {
+      padding: 50px 0 21px;
+    }
+
+    .layanan-hero h1 {
+      font-size: 29px;
+    }
+
+    .layanan-kartu {
+      min-height: 345px;
+    }
+
+    .layanan-kartu-visual {
+      height: 82px;
+    }
+
+    .layanan-kartu-copy {
+      min-height: 82px;
     }
   }
 </style>
