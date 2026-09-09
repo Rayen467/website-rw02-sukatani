@@ -50,7 +50,7 @@
         ? {
             ...cocok,
             ...bawaan,
-            foto: cocok.foto || bawaan.foto,
+            foto: bawaan.foto || cocok.foto,
             periode: cocok.periode || bawaan.periode,
             kontak: cocok.kontak || bawaan.kontak
           }
