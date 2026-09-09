@@ -219,7 +219,7 @@
   </div>
 
   <figure class="sambutan-rw-foto">
-    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/3703961c-902a-4331-a47f-5823c2046fbd.jpg" alt="Foto Ketua RW 02" decoding="async" />
+    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/120530f0-88bd-4e3d-82bc-67b6a35eeadf.png" alt="Foto Ketua RW 02" decoding="async" />
     <figcaption>
       <div>
         <strong>Anto Carmanto, S.T., M.T.</strong>
