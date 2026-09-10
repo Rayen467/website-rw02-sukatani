@@ -28,6 +28,58 @@ function cek(kondisi, pesan) {
   if (!kondisi) gagal.push(pesan);
 }
 
+/* Mengambil tag pembuka tanpa keliru berhenti pada tanda > di dalam ekspresi
+   Svelte, misalnya disabled={jumlah > 0}. */
+function tagPembuka(teks, namaTag) {
+  const hasil = [];
+  const awal = `<${namaTag}`;
+  let pos = 0;
+
+  while ((pos = teks.indexOf(awal, pos)) !== -1) {
+    const sebelum = teks[pos + awal.length] || "";
+    if (/[A-Za-z0-9_-]/.test(sebelum)) {
+      pos += awal.length;
+      continue;
+    }
+
+    let kutip = "";
+    let kurungKurawal = 0;
+    let akhir = pos + awal.length;
+
+    for (; akhir < teks.length; akhir++) {
+      const ch = teks[akhir];
+      const prev = teks[akhir - 1];
+
+      if (kutip) {
+        if (ch === kutip && prev !== "\\") kutip = "";
+        continue;
+      }
+
+      if (ch === '"' || ch === "'") {
+        kutip = ch;
+        continue;
+      }
+      if (ch === "{") {
+        kurungKurawal++;
+        continue;
+      }
+      if (ch === "}") {
+        kurungKurawal = Math.max(0, kurungKurawal - 1);
+        continue;
+      }
+      if (ch === ">" && kurungKurawal === 0) {
+        hasil.push(teks.slice(pos, akhir + 1));
+        akhir++;
+        break;
+      }
+    }
+
+    pos = Math.max(akhir, pos + awal.length);
+  }
+
+  return hasil;
+}
+
 const rute = new Set([
   "",
   "profil",
@@ -60,6 +112,10 @@ const rute = new Set([
 ]);
 
 const app = baca("src/App.svelte");
+const main = baca("src/main.js");
+const interaksiUi = baca("src/inti/interaksi-ui.js");
+const delegasiAktif = main.includes("./inti/interaksi-ui.js") && main.includes("aktifkanInteraksiUi()");
+
 for (const nama of rute) {
   if (!nama) continue;
   const biasa = new RegExp(`(^|\\n)\\s*${nama.replaceAll("-", "\\-")}\\s*:`, "m");
@@ -71,21 +127,31 @@ const berkas = semuaBerkas(src);
 let jumlahTombol = 0;
 let jumlahTautan = 0;
 let jumlahAset = 0;
+let jumlahDelegasi = 0;
 
 for (const file of berkas) {
   const teks = fs.readFileSync(file, "utf8");
   const namaFile = rel(file);
 
-  for (const cocok of teks.matchAll(/<button\b[^>]*>/gs)) {
+  for (const tag of tagPembuka(teks, "button")) {
     jumlahTombol++;
-    const tag = cocok[0];
-    const beraksi = /\bonclick\s*=|\bon:click\s*=|\btype\s*=\s*["'](?:submit|reset)["']/i.test(tag);
-    cek(beraksi, `${namaFile}: tombol tanpa aksi/submit -> ${tag.replace(/\s+/g, " ").slice(0, 150)}`);
+    const langsung = /\bonclick\s*=|\bon:click\s*=|\btype\s*=\s*["'](?:submit|reset)["']/i.test(tag);
+    const tombolCariUmkm =
+      namaFile === "src/halaman/Umkm.svelte" &&
+      /<button\s+type=["']button["']\s*>/i.test(tag) &&
+      interaksiUi.includes(".umkm-cari button");
+    const tombolFavoritUmkm =
+      namaFile === "src/halaman/Umkm.svelte" &&
+      tag.includes('aria-label="Simpan usaha"') &&
+      interaksiUi.includes('button[aria-label="Simpan usaha"]');
+    const terdelegasi = delegasiAktif && (tombolCariUmkm || tombolFavoritUmkm);
+    if (terdelegasi) jumlahDelegasi++;
+
+    cek(langsung || terdelegasi, `${namaFile}: tombol tanpa aksi/submit -> ${tag.replace(/\s+/g, " ").slice(0, 190)}`);
   }
 
-  for (const cocok of teks.matchAll(/<a\b[^>]*>/gs)) {
+  for (const tag of tagPembuka(teks, "a")) {
     jumlahTautan++;
-    const tag = cocok[0];
     const statis = tag.match(/\bhref\s*=\s*["']([^"']*)["']/i);
     if (!statis) continue;
     const href = statis[1].trim();
@@ -116,6 +182,9 @@ for (const file of berkas) {
   }
 }
 
+cek(delegasiAktif, "Penjaga interaksi UI belum diaktifkan di src/main.js");
+cek(interaksiUi.includes("KONTAK_KETUA_RW"), "Fallback WhatsApp Ketua RW belum terhubung pada penjaga UI");
+
 const fitur = [
   ["A1 Beranda", ["src/halaman/Beranda.svelte"], ["sambutan-rw", "isi.pengumuman", "#/berita"]],
   ["A2 Profil RW", ["src/halaman/Profil.svelte"], ["Visi &amp; Misi", "Batas Wilayah", "Perjalanan Permai Sukatani"]],
@@ -134,7 +203,7 @@ const fitur = [
   ["E1 Direktori UMKM", ["src/halaman/Umkm.svelte", "src/halaman/DaftarUsaha.svelte"], ["UMKM", "Kirim pendaftaran"]],
   ["E2 Bantuan Sosial", ["src/halaman/Bansos.svelte"], ["Informasi Bantuan Sosial", "Syarat & jalur pengajuan"]],
   ["E3 Link Penting", ["src/halaman/Tautan.svelte"], ["TAUTAN_BAWAAN", "Buka laman resmi"]],
-  ["E4 Kontak & Lokasi", ["src/halaman/Kontak.svelte"], ["Kirim Pesan / Pertanyaan", "Lokasi RW 02 Sukatani", "WhatsApp"]],
+  ["E4 Kontak & Lokasi", ["src/halaman/Kontak.svelte", "src/inti/interaksi-ui.js"], ["Kirim Pesan / Pertanyaan", "Lokasi RW 02 Sukatani", "KONTAK_KETUA_RW"]],
   ["E5 Mobile Friendly", ["src/gaya/layar-kecil.css", "src/komponen/Kepala.svelte"], ["@media", "max-width", "burger"]]
 ];
 
@@ -144,7 +213,7 @@ for (const [nama, daftarFile, token] of fitur) {
   info.push(`${nama}: sumber fitur ditemukan`);
 }
 
-console.log(`Audit UI: ${jumlahTombol} tombol, ${jumlahTautan} tautan, ${jumlahAset} referensi aset diperiksa.`);
+console.log(`Audit UI: ${jumlahTombol} tombol, ${jumlahTautan} tautan, ${jumlahAset} referensi aset diperiksa (${jumlahDelegasi} tombol memakai delegasi teruji).`);
 for (const baris of info) console.log(`✓ ${baris}`);
 
 if (gagal.length) {
