@@ -1,6 +1,7 @@
 <script>
   import { isi } from "../keadaan/isi.svelte.js";
   import { PENGURUS_RW_BAWAAN, KETUA_RT_BAWAAN, KELEMBAGAAN_WARGA_BAWAAN } from "../inti/bawaan.js";
+  import { KONTAK_KETUA_RW } from "../inti/kontak-resmi.js";
   import Belum from "../komponen/Belum.svelte";
   import Kosong from "../komponen/Kosong.svelte";
 
@@ -17,6 +18,10 @@
   function nomorWa(n) {
     if (!n) return "";
     return String(n).replace(/[^0-9]/g, "").replace(/^0/, "62");
+  }
+
+  function hrefKontak(nomor) {
+    return "https://wa.me/" + nomorWa(nomor || KONTAK_KETUA_RW);
   }
 
   const FOTO_HANDOKO = "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd57c52e-1c82-4ccc-8800-458a0206d3ad.png";
@@ -129,7 +134,7 @@
 <div class="kepala-halaman">
   <p class="alis">Struktur</p>
   <h1>Pengurus RW dan Ketua RT</h1>
-  <p>Susunan pengurus RW 02 dan para Ketua RT Perum Sukatani. Detail profil masing-masing pengurus akan ditampilkan pada halaman profilnya.</p>
+  <p>Susunan pengurus RW 02 dan para Ketua RT Perum Sukatani. Setiap kartu mempunyai jalur kontak. Jika nomor pribadi belum dipublikasikan, tombol diarahkan melalui Ketua RW agar warga tetap bisa menghubungi pengurus tanpa menampilkan nomor yang belum mendapat izin.</p>
 </div>
 
 <section class="blok">
@@ -147,11 +152,15 @@
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
               <span class="nama"><Belum nilai={tanpaSapaan(o.nama)} /></span>
-              {#if o.kontak}
-                <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {tanpaSapaan(o.nama) || o.jabatan} melalui WhatsApp">
-                  WhatsApp {o.kontak}
-                </a>
-              {/if}
+              <a
+                class="kontak"
+                href={hrefKontak(o.kontak)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={o.kontak ? "Hubungi " + (tanpaSapaan(o.nama) || o.jabatan) + " melalui WhatsApp" : "Hubungi " + (tanpaSapaan(o.nama) || o.jabatan) + " melalui Ketua RW"}
+              >
+                {o.kontak ? "WhatsApp " + o.kontak : "Hubungi via Ketua RW"}
+              </a>
             </div>
           </div>
         </div>
@@ -179,17 +188,21 @@
           <div>
             <span class="jabatan">{o.rt || "-"}</span>
             <span class="nama"><Belum nilai={tanpaSapaan(o.ketua)} /></span>
-            {#if o.kontak}
-              <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {tanpaSapaan(o.ketua) || o.rt} melalui WhatsApp">
-                WhatsApp {o.kontak}
-              </a>
-            {/if}
+            <a
+              class="kontak"
+              href={hrefKontak(o.kontak)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={o.kontak ? "Hubungi " + (tanpaSapaan(o.ketua) || o.rt) + " melalui WhatsApp" : "Hubungi " + (tanpaSapaan(o.ketua) || o.rt) + " melalui Ketua RW"}
+            >
+              {o.kontak ? "WhatsApp " + o.kontak : "Hubungi via Ketua RW"}
+            </a>
           </div>
         </div>
       </div>
     {/each}
   </div>
-  <p class="verifikasi">Foto dan kontak Ketua RT yang sudah diterima ditampilkan pada struktur. Kontak yang tersedia langsung membuka WhatsApp.</p>
+  <p class="verifikasi">Nomor pribadi hanya ditampilkan bila sudah tersedia untuk publik. Ketua RT yang belum mempunyai nomor publik tetap dapat dihubungi melalui Ketua RW, sehingga tidak ada tombol kontak yang buntu.</p>
 </section>
 
 <section class="blok">
