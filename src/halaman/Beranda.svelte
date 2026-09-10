@@ -53,6 +53,18 @@
     ["Berita RW 02", "Pengumuman, informasi, dan kabar terbaru dari lingkungan.", "#/berita", "N", "berita"]
   ];
 
+  const panduan = [
+    ["Pengajuan surat", "Pilih jenis surat", "Isi data yang diminta", "Pantau status pengajuan", "#/surat", "01"],
+    ["Pengaduan warga", "Tulis laporan dengan jelas", "Tambahkan bukti bila ada", "Pantau tindak lanjut", "#/pengaduan", "02"],
+    ["Reservasi fasilitas", "Pilih fasilitas", "Cek jadwal tersedia", "Ajukan penggunaan", "#/reservasi", "03"]
+  ];
+
+  const videoWarga = [
+    { judul: "Dokumentasi kegiatan warga", sub: "Tempat video utama kegiatan RW 02", poster: "./foto/kegiatan-kerja-bakti.jpg", src: "" },
+    { judul: "Program & pelayanan RW", sub: "Tempat video informasi atau sosialisasi", poster: "./foto/kegiatan-rapat-warga.jpg", src: "" },
+    { judul: "Cerita lingkungan", sub: "Tempat video kebersamaan dan profil wilayah", poster: "./foto/kegiatan-kemerdekaan.jpg", src: "" }
+  ];
+
   const kegiatan = [
     { judul: "Kerja Bakti Lingkungan", tanggal: "Kegiatan warga", foto: "./foto/kegiatan-kerja-bakti.jpg" },
     { judul: "Kegiatan Kemerdekaan", tanggal: "Kebersamaan warga", foto: "./foto/kegiatan-kemerdekaan.jpg" },
@@ -141,6 +153,38 @@
   {/each}
 </section>
 
+<section class="sambutan-rw blok" aria-labelledby="judul-sambutan-rw">
+  <div class="sambutan-rw-copy">
+    <p class="sambutan-rw-label"><span></span>Sambutan Ketua RW 02</p>
+    <h2 id="judul-sambutan-rw">Bersama<br />Mewujudkan Lingkungan<br />yang Lebih Baik</h2>
+
+    <div class="sambutan-rw-pembuka">
+      <p><strong>Assalamu’alaikum Warahmatullahi Wabarakatuh,</strong></p>
+      <p>Selamat datang di Website Resmi RW 02 Perum Pondok Sukatani Permai. Website ini hadir sebagai media informasi, layanan, dan komunikasi agar warga lebih mudah terhubung dengan pengurus dan lingkungan.</p>
+      <p>Mari bersama menjaga lingkungan yang bersih, aman, nyaman, rukun, guyub, maju, dan sejahtera.</p>
+    </div>
+
+    <details class="sambutan-rw-detail">
+      <summary><span class="sambutan-buka">Baca Sambutan Lengkap</span><span class="sambutan-tutup">Tutup Sambutan</span><span class="sambutan-rw-panah">→</span></summary>
+      <div class="sambutan-rw-lengkap">
+        <p>Website ini hadir sebagai jembatan informasi dan komunikasi antara Pengurus RW, para Ketua RT, dan seluruh warga. Melalui media ini, kami berharap segala informasi terkait kegiatan, pengumuman, program kerja, serta pelayanan publik dapat tersampaikan secara cepat, terbuka, dan transparan.</p>
+        <p>Kami menyadari bahwa kemajuan lingkungan kita tidak terlepas dari kerja sama, kekompakan, dan gotong royong seluruh warga. Oleh karena itu, kami mengajak Bapak, Ibu, dan seluruh warga untuk bersama-sama menjaga kebersihan, keamanan, ketentraman, dan kerukunan di lingkungan yang kita cintai ini.</p>
+        <p>Kami juga membuka ruang seluas-luasnya bagi seluruh warga untuk menyampaikan saran, masukan, dan aspirasi demi kemajuan dan kesejahteraan bersama. Semoga website ini bermanfaat dan menjadi sarana yang mempererat tali silaturahmi kita semua.</p>
+        <p><strong>Wassalamu’alaikum Warahmatullahi Wabarakatuh.</strong></p>
+        <div class="sambutan-rw-ttd"><span>Ketua RW 02</span><strong>Anto Carmanto, S.T., M.T.</strong></div>
+      </div>
+    </details>
+
+    <blockquote class="sambutan-rw-quote"><span aria-hidden="true">“</span><p>Lingkungan yang baik berawal dari warga yang peduli.</p></blockquote>
+  </div>
+
+  <figure class="sambutan-rw-foto">
+    <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
+    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/65bf8ecc-bfbf-48c7-adf2-620fbd94acb3.png" alt="Foto Ketua RW 02 Anto Carmanto" decoding="async" />
+    <figcaption><div><strong>Anto Carmanto, S.T., M.T.</strong><span>Ketua RW 02</span></div><blockquote>“Lingkungan yang baik berawal dari warga yang peduli.”</blockquote></figcaption>
+  </figure>
+</section>
+
 <section class="home-section blok" id="informasi-penting" aria-labelledby="judul-informasi-penting">
   <div class="home-section-head">
     <div>
@@ -192,6 +236,23 @@
   </div>
 </section>
 
+<section class="home-section blok" aria-labelledby="judul-panduan-cepat">
+  <div class="home-section-head compact">
+    <div><p class="home-kicker">Panduan Cepat</p><h2 id="judul-panduan-cepat">Urus kebutuhan tanpa bingung</h2></div>
+    <p class="home-section-copy">Tiga alur layanan yang paling sering dibutuhkan warga, diringkas langsung di Beranda.</p>
+  </div>
+  <div class="home-guide-grid">
+    {#each panduan as p}
+      <a class="home-guide-card" href={p[4]}>
+        <span class="home-guide-no">{p[5]}</span>
+        <strong>{p[0]}</strong>
+        <ol><li>{p[1]}</li><li>{p[2]}</li><li>{p[3]}</li></ol>
+        <span class="home-guide-go">Mulai layanan <b>→</b></span>
+      </a>
+    {/each}
+  </div>
+</section>
+
 <section class="home-section blok" aria-labelledby="judul-jelajah-rw">
   <div class="home-section-head compact">
     <div><p class="home-kicker">Kenali Lingkungan</p><h2 id="judul-jelajah-rw">Jelajah RW 02</h2></div>
@@ -225,42 +286,10 @@
   </div>
 </section>
 
-<section class="sambutan-rw blok" aria-labelledby="judul-sambutan-rw">
-  <div class="sambutan-rw-copy">
-    <p class="sambutan-rw-label"><span></span>Sambutan Ketua RW 02</p>
-    <h2 id="judul-sambutan-rw">Bersama<br />Mewujudkan Lingkungan<br />yang Lebih Baik</h2>
-
-    <div class="sambutan-rw-pembuka">
-      <p><strong>Assalamu’alaikum Warahmatullahi Wabarakatuh,</strong></p>
-      <p>Selamat datang di Website Resmi RW 02 Perum Pondok Sukatani Permai. Website ini hadir sebagai media informasi, layanan, dan komunikasi agar warga lebih mudah terhubung dengan pengurus dan lingkungan.</p>
-      <p>Mari bersama menjaga lingkungan yang bersih, aman, nyaman, rukun, guyub, maju, dan sejahtera.</p>
-    </div>
-
-    <details class="sambutan-rw-detail">
-      <summary><span class="sambutan-buka">Baca Sambutan Lengkap</span><span class="sambutan-tutup">Tutup Sambutan</span><span class="sambutan-rw-panah">→</span></summary>
-      <div class="sambutan-rw-lengkap">
-        <p>Website ini hadir sebagai jembatan informasi dan komunikasi antara Pengurus RW, para Ketua RT, dan seluruh warga. Melalui media ini, kami berharap segala informasi terkait kegiatan, pengumuman, program kerja, serta pelayanan publik dapat tersampaikan secara cepat, terbuka, dan transparan.</p>
-        <p>Kami menyadari bahwa kemajuan lingkungan kita tidak terlepas dari kerja sama, kekompakan, dan gotong royong seluruh warga. Oleh karena itu, kami mengajak Bapak, Ibu, dan seluruh warga untuk bersama-sama menjaga kebersihan, keamanan, ketentraman, dan kerukunan di lingkungan yang kita cintai ini.</p>
-        <p>Kami juga membuka ruang seluas-luasnya bagi seluruh warga untuk menyampaikan saran, masukan, dan aspirasi demi kemajuan dan kesejahteraan bersama. Semoga website ini bermanfaat dan menjadi sarana yang mempererat tali silaturahmi kita semua.</p>
-        <p><strong>Wassalamu’alaikum Warahmatullahi Wabarakatuh.</strong></p>
-        <div class="sambutan-rw-ttd"><span>Ketua RW 02</span><strong>Anto Carmanto, S.T., M.T.</strong></div>
-      </div>
-    </details>
-
-    <blockquote class="sambutan-rw-quote"><span aria-hidden="true">“</span><p>Lingkungan yang baik berawal dari warga yang peduli.</p></blockquote>
-  </div>
-
-  <figure class="sambutan-rw-foto">
-    <span class="sambutan-rw-motto" aria-hidden="true">Guyub<br />Maju<br />Sejahtera</span>
-    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/65bf8ecc-bfbf-48c7-adf2-620fbd94acb3.png" alt="Foto Ketua RW 02 Anto Carmanto" decoding="async" />
-    <figcaption><div><strong>Anto Carmanto, S.T., M.T.</strong><span>Ketua RW 02</span></div><blockquote>“Lingkungan yang baik berawal dari warga yang peduli.”</blockquote></figcaption>
-  </figure>
-</section>
-
 <section class="home-section blok" aria-labelledby="judul-kegiatan-warga">
   <div class="home-section-head compact">
     <div><p class="home-kicker">Kehidupan Lingkungan</p><h2 id="judul-kegiatan-warga">Kegiatan warga</h2></div>
-    <a class="home-link-all" href="#/galeri">Lihat galeri lengkap <span>→</span></a>
+    <a class="home-link-all" href="#/galeri">Lihat dokumentasi <span>→</span></a>
   </div>
 
   <div class="home-activity-grid">
@@ -268,15 +297,50 @@
       <a class:unggulan={i === 0} class="home-activity-card" href="#/galeri">
         <img src={k.foto} alt="" decoding="async" />
         <span class="home-activity-shade"></span>
-        <span class="home-activity-copy"><small>{k.tanggal}</small><strong>{k.judul}</strong><b>Jelajahi dokumentasi →</b></span>
+        <span class="home-activity-copy"><small>{k.tanggal}</small><strong>{k.judul}</strong><b>Lihat dokumentasi →</b></span>
       </a>
     {/each}
   </div>
 </section>
 
+<section class="home-section blok home-video-section" aria-labelledby="judul-video-warga">
+  <div class="home-section-head">
+    <div>
+      <p class="home-kicker">Video RW 02</p>
+      <h2 id="judul-video-warga">Video kegiatan & informasi</h2>
+      <p class="home-section-copy">Video dipisahkan dari galeri foto supaya dokumentasi bergerak, sosialisasi, dan rekaman kegiatan punya ruang sendiri.</p>
+    </div>
+    <span class="home-video-label">VIDEO · RUANG KHUSUS</span>
+  </div>
+
+  <div class="home-video-grid">
+    {#each videoWarga as v, i}
+      <article class:utama={i === 0} class="home-video-card">
+        {#if v.src}
+          <video controls preload="metadata" poster={v.poster}>
+            <source src={v.src} />
+            Browser tidak mendukung pemutar video.
+          </video>
+        {:else}
+          <div class="home-video-poster" style={"--poster:url('" + v.poster + "')"}>
+            <span class="home-video-shade"></span>
+            <span class="home-play" aria-hidden="true">▶</span>
+            <span class="home-video-slot">Slot video {String(i + 1).padStart(2, "0")}</span>
+          </div>
+        {/if}
+        <div class="home-video-copy"><strong>{v.judul}</strong><span>{v.sub}</span></div>
+      </article>
+    {/each}
+  </div>
+</section>
+
 <div class="home-bottom-grid blok">
-  <section class="home-bottom-panel">
-    <div class="home-section-head mini"><div><p class="home-kicker">Dokumentasi</p><h2>Galeri lingkungan</h2></div><a class="home-link-all" href="#/galeri">Lihat semua →</a></div>
+  <section class="home-bottom-panel home-photo-panel">
+    <div class="home-section-head mini">
+      <div><p class="home-kicker">Galeri Foto</p><h2>Foto lingkungan</h2></div>
+      <a class="home-link-all" href="#/galeri">Lihat semua foto →</a>
+    </div>
+    <p class="home-photo-note">Bagian ini khusus gambar/foto. Video tidak dicampur di sini.</p>
     <div class="home-gallery">
       {#if album.length}
         {#each album as g, i}<a href="#/galeri"><img src={g.sampul || g.foto || galeriFallback[i % galeriFallback.length]} alt="" decoding="async" /></a>{/each}
@@ -307,18 +371,12 @@
   .home-section,
   .home-bottom-grid { color: var(--waktu-panel-teks); }
 
-  .home-section-head {
-    display:flex;align-items:end;justify-content:space-between;gap:26px;margin-bottom:18px;
-  }
+  .home-section-head { display:flex;align-items:end;justify-content:space-between;gap:26px;margin-bottom:18px; }
   .home-section-head.compact,.home-section-head.mini { align-items:center; }
-  .home-section-head.mini { margin-bottom:14px; }
-  .home-section-head h2 {
-    margin:4px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(25px,3vw,35px);line-height:1.06;letter-spacing:-.035em;color:var(--waktu-panel-teks);
-  }
+  .home-section-head.mini { margin-bottom:10px; }
+  .home-section-head h2 { margin:4px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(25px,3vw,35px);line-height:1.06;letter-spacing:-.035em;color:var(--waktu-panel-teks); }
   .home-section-head.mini h2 { font-size:24px; }
-  .home-kicker {
-    margin:0;color:#177457;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
-  }
+  .home-kicker { margin:0;color:#177457;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase; }
   .home-section-copy { max-width:56ch;margin:0;color:var(--waktu-panel-teks-2);font-size:11px;line-height:1.6; }
   .home-section-head > div .home-section-copy { margin-top:7px; }
   .home-link-all { color:var(--waktu-panel-teks);font-size:10.5px;font-weight:750;white-space:nowrap; }
@@ -356,6 +414,14 @@
   .home-important-go { display:flex;align-items:center;justify-content:space-between;margin-top:auto;color:var(--waktu-panel-teks);font-size:8.5px;font-weight:750; }
   .home-important-go b { font-size:14px; }
 
+  .home-guide-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px; }
+  .home-guide-card { min-width:0;padding:18px;border:1px solid var(--waktu-panel-garis);border-radius:15px;background:var(--waktu-panel);box-shadow:var(--waktu-bayang);color:var(--waktu-panel-teks);text-decoration:none;transition:transform .18s ease; }
+  .home-guide-card:hover { text-decoration:none;transform:translateY(-2px); }
+  .home-guide-no { display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(30,135,98,.1);color:#177457;font-size:9px;font-weight:900; }
+  .home-guide-card > strong { display:block;margin-top:12px;font-size:13px; }
+  .home-guide-card ol { margin:11px 0 12px;padding-left:18px;color:var(--waktu-panel-teks-2);font-size:9px;line-height:1.8; }
+  .home-guide-go { display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:800;color:#126e53; }
+
   .home-explore-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px; }
   .home-explore-card { min-width:0;min-height:92px;display:grid;grid-template-columns:42px minmax(0,1fr) 20px;gap:10px;align-items:center;padding:13px;border:1px solid var(--waktu-panel-garis);border-radius:12px;color:var(--waktu-panel-teks);background:var(--waktu-panel);box-shadow:var(--waktu-bayang);text-decoration:none;transition:transform .16s ease; }
   .home-explore-card:hover { text-decoration:none;transform:translateY(-1px); }
@@ -387,8 +453,25 @@
   .home-activity-card.unggulan .home-activity-copy strong { font-size:23px; }
   .home-activity-copy b { margin-top:9px;font-size:8.5px;font-weight:700;opacity:.9; }
 
+  .home-video-section { padding-top:20px; }
+  .home-video-label { padding:7px 10px;border-radius:999px;border:1px solid var(--waktu-panel-garis);color:var(--waktu-panel-teks-2);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:8px;font-weight:850;letter-spacing:.1em;white-space:nowrap; }
+  .home-video-grid { display:grid;grid-template-columns:1.25fr .875fr .875fr;gap:12px; }
+  .home-video-card { min-width:0;border:1px solid var(--waktu-panel-garis);border-radius:16px;overflow:hidden;background:var(--waktu-panel);box-shadow:var(--waktu-bayang); }
+  .home-video-poster { position:relative;height:175px;background-image:var(--poster);background-size:cover;background-position:center;overflow:hidden; }
+  .home-video-card.utama .home-video-poster { height:235px; }
+  .home-video-card video { width:100%;height:175px;display:block;object-fit:cover;background:#06120f; }
+  .home-video-card.utama video { height:235px; }
+  .home-video-shade { position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,20,15,.08),rgba(2,20,15,.62)); }
+  .home-play { position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;display:grid;place-items:center;padding-left:3px;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(8px);font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.2); }
+  .home-video-slot { position:absolute;left:12px;top:12px;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,.34);color:#fff;font-size:7.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase; }
+  .home-video-copy { padding:13px 14px 15px; }
+  .home-video-copy strong,.home-video-copy span { display:block; }
+  .home-video-copy strong { font-size:12px; }
+  .home-video-copy span { margin-top:4px;color:var(--waktu-panel-teks-2);font-size:8.5px;line-height:1.45; }
+
   .home-bottom-grid { display:grid;grid-template-columns:1fr 1fr;gap:18px; }
   .home-bottom-panel { min-width:0; }
+  .home-photo-note { margin:-2px 0 10px;color:var(--waktu-panel-teks-2);font-size:8.5px;line-height:1.45; }
   .home-gallery { display:grid;grid-template-columns:1.35fr .65fr;grid-template-rows:110px 110px;gap:7px; }
   .home-gallery a { overflow:hidden;border-radius:11px;border:1px solid var(--waktu-panel-garis);box-shadow:var(--waktu-bayang); }
   .home-gallery a:first-child { grid-row:span 2; }
@@ -411,6 +494,9 @@
   @media (max-width: 980px) {
     .home-info-grid,.home-bottom-grid { grid-template-columns:1fr; }
     .home-important-grid,.home-explore-grid,.home-hub-grid,.home-activity-grid { grid-template-columns:1fr 1fr; }
+    .home-guide-grid { grid-template-columns:1fr; }
+    .home-video-grid { grid-template-columns:1fr 1fr; }
+    .home-video-card.utama { grid-column:span 2; }
     .home-activity-card.unggulan { grid-column:span 2; }
     .home-activity-card { min-height:230px; }
   }
@@ -418,9 +504,12 @@
   @media (max-width: 680px) {
     .home-section-head,.home-section-head.compact,.home-section-head.mini { align-items:flex-start;flex-direction:column;gap:8px; }
     .home-section-head h2 { font-size:26px; }
-    .home-important-grid,.home-explore-grid,.home-hub-grid,.home-activity-grid { grid-template-columns:1fr; }
+    .home-important-grid,.home-explore-grid,.home-hub-grid,.home-activity-grid,.home-video-grid { grid-template-columns:1fr; }
     .home-important-card { min-height:155px; }
     .home-hub-card { min-height:104px; }
+    .home-video-card.utama { grid-column:auto; }
+    .home-video-card.utama .home-video-poster,.home-video-card.utama video { height:210px; }
+    .home-video-poster,.home-video-card video { height:190px; }
     .home-activity-card.unggulan { grid-column:auto; }
     .home-activity-card,.home-activity-card.unggulan { min-height:220px; }
     .home-latest { min-height:0;padding:17px; }
