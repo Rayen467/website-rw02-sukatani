@@ -13,7 +13,7 @@
  * ikut berubah tanpa reload.
  */
 
-:root[data-waktu] {
+:root[data-waktu="pagi"] {
   --suasana-atas: rgba(247, 251, 247, .34);
   --suasana-tengah: rgba(238, 245, 239, .78);
   --suasana-aksen: #d6a83a;
