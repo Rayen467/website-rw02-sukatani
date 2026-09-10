@@ -8,6 +8,21 @@
     return String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
 
+  const FOTO_PENGURUS = Object.freeze({
+    sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
+  });
+
+  const PENGURUS_TAMBAHAN_LOKAL = [
+    {
+      id: "handoko",
+      jabatan: "Pengurus RW",
+      nama: "Handoko",
+      foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd57c52e-1c82-4ccc-8800-458a0206d3ad.png",
+      kontak: "",
+      periode: ""
+    }
+  ];
+
   const daftar = $derived.by(() => {
     const dariServer = isi.pengurus_tampil || [];
     const resmi = PENGURUS_RW_BAWAAN.map((bawaan) => {
@@ -16,15 +31,20 @@
         const b = normal(bawaan.jabatan);
         return a === b || a.includes(b) || b.includes(a);
       });
+      const fotoBawaan = FOTO_PENGURUS[normal(bawaan.nama)] || bawaan.foto;
+
       return cocok
         ? {
             ...cocok,
             ...bawaan,
-            foto: bawaan.foto || cocok.foto,
+            foto: fotoBawaan || cocok.foto,
             kontak: cocok.kontak || bawaan.kontak,
             periode: cocok.periode || bawaan.periode
           }
-        : bawaan;
+        : {
+            ...bawaan,
+            foto: fotoBawaan
+          };
     });
 
     const tambahan = dariServer.filter((o) =>
@@ -35,7 +55,12 @@
       })
     );
 
-    return [...resmi, ...tambahan];
+    const semua = [...resmi, ...tambahan];
+    const tambahanLokal = PENGURUS_TAMBAHAN_LOKAL.filter(
+      (lokal) => !semua.some((o) => normal(o.nama) === normal(lokal.nama))
+    );
+
+    return [...semua, ...tambahanLokal];
   });
 
   /* Empat Ketua RT berikut sudah dikonfirmasi sebagai struktur resmi RW 02.
@@ -98,7 +123,7 @@
         <div class="kartu">
           <div class="orang">
             <span class="foto">
-              {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="" decoding="async" />{/if}
+              {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {o.nama || o.jabatan}" decoding="async" />{/if}
             </span>
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
