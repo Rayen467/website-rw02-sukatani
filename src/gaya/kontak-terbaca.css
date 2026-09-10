@@ -1,0 +1,388 @@
+/* ========================================================================== 
+ * KETERBACAAN HALAMAN KONTAK
+ * --------------------------------------------------------------------------
+ * Mockup awal memakai teks 5–9px untuk banyak isi, sehingga pada layar
+ * desktop normal warga harus melakukan zoom agar dapat membacanya. Aturan
+ * ini menjaga layout tetap ringkas, tetapi menaikkan ukuran teks ke rentang
+ * yang nyaman dibaca di desktop, tablet, dan HP.
+ * ========================================================================== */
+
+/* Hero dan navigasi kecil */
+.kontak-final .kontak-final__crumb {
+  font-size: 11px !important;
+}
+
+.kontak-final .kontak-final__hero-copy > p {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+
+.kontak-final .kontak-final__hero-pills span {
+  font-size: 11.5px !important;
+  padding: 6px 10px !important;
+}
+
+/* Lima shortcut kontak */
+.kontak-final .kontak-final__shortcuts strong {
+  font-size: 12.5px !important;
+  line-height: 1.25 !important;
+}
+
+.kontak-final .kontak-final__shortcuts small {
+  font-size: 10.5px !important;
+  line-height: 1.35 !important;
+}
+
+/* Judul kartu */
+.kontak-final .kontak-final__card {
+  padding: 14px !important;
+}
+
+.kontak-final .kontak-final__title {
+  min-height: 42px !important;
+  gap: 9px !important;
+}
+
+.kontak-final .kontak-final__title > span {
+  width: 32px !important;
+  height: 32px !important;
+  flex-basis: 32px !important;
+  font-size: 14px !important;
+}
+
+.kontak-final .kontak-final__title h2 {
+  font-size: 16.5px !important;
+  line-height: 1.18 !important;
+}
+
+.kontak-final .kontak-final__title p {
+  margin-top: 4px !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+/* Foto sekretariat */
+.kontak-final .kontak-final__sekretariat-photo strong {
+  font-size: 12px !important;
+}
+
+.kontak-final .kontak-final__sekretariat-photo small {
+  font-size: 10px !important;
+}
+
+/* Informasi sekretariat */
+.kontak-final .kontak-final__info > div {
+  grid-template-columns: 112px minmax(0, 1fr) !important;
+  gap: 9px !important;
+  padding: 9px 0 !important;
+}
+
+.kontak-final .kontak-final__info dt {
+  font-size: 11.5px !important;
+  line-height: 1.45 !important;
+}
+
+.kontak-final .kontak-final__info dt span {
+  width: 23px !important;
+  height: 23px !important;
+  font-size: 9px !important;
+}
+
+.kontak-final .kontak-final__info dd {
+  font-size: 11.5px !important;
+  line-height: 1.55 !important;
+}
+
+.kontak-final .kontak-final__sekretariat-actions a {
+  min-height: 38px !important;
+  padding: 8px !important;
+  font-size: 11.5px !important;
+  line-height: 1.25 !important;
+}
+
+/* Formulir */
+.kontak-final .kontak-final__form {
+  gap: 9px !important;
+  margin-top: 9px !important;
+}
+
+.kontak-final .kontak-final__form label > span {
+  margin-bottom: 5px !important;
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+}
+
+.kontak-final .kontak-final__form input,
+.kontak-final .kontak-final__form select,
+.kontak-final .kontak-final__form textarea {
+  min-height: 40px !important;
+  padding: 9px 10px !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+}
+
+.kontak-final .kontak-final__form textarea {
+  min-height: 116px !important;
+}
+
+.kontak-final .kontak-final__file {
+  min-height: 58px !important;
+  grid-template-columns: 34px minmax(0, 1fr) auto !important;
+  gap: 9px !important;
+  padding: 9px !important;
+}
+
+.kontak-final .kontak-final__file > span {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 15px !important;
+}
+
+.kontak-final .kontak-final__file strong {
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+}
+
+.kontak-final .kontak-final__file small {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.kontak-final .kontak-final__file > b {
+  padding: 7px 10px !important;
+  font-size: 10.5px !important;
+}
+
+.kontak-final .kontak-final__form > button {
+  min-height: 41px !important;
+  font-size: 12.5px !important;
+}
+
+.kontak-final .kontak-final__form-note {
+  font-size: 10.5px !important;
+  line-height: 1.4 !important;
+}
+
+/* Daftar pengurus */
+.kontak-final .kontak-final__pengurus-row {
+  min-height: 54px !important;
+  grid-template-columns: 36px minmax(0, 1fr) 29px 29px !important;
+  gap: 8px !important;
+}
+
+.kontak-final .kontak-final__avatar {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 10px !important;
+}
+
+.kontak-final .kontak-final__pengurus-row strong {
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+}
+
+.kontak-final .kontak-final__pengurus-row small {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+.kontak-final .kontak-final__wa,
+.kontak-final .kontak-final__tel {
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 10px !important;
+}
+
+.kontak-final .kontak-final__privacy {
+  padding: 9px !important;
+  font-size: 10.5px !important;
+  line-height: 1.45 !important;
+}
+
+/* Peta */
+.kontak-final .kontak-final__map-legend {
+  margin-top: 8px !important;
+  font-size: 10.5px !important;
+  line-height: 1.35 !important;
+}
+
+.kontak-final .kontak-final__map-copy {
+  margin-top: 8px !important;
+  font-size: 10.5px !important;
+  line-height: 1.5 !important;
+}
+
+/* Layanan & kontak cepat */
+.kontak-final .kontak-final__services-grid {
+  gap: 8px !important;
+  margin-top: 9px !important;
+}
+
+.kontak-final .kontak-final__services-grid a {
+  min-height: 60px !important;
+  grid-template-columns: 34px minmax(0, 1fr) 12px !important;
+  gap: 8px !important;
+  padding: 8px !important;
+}
+
+.kontak-final .kontak-final__services-grid > a > span {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 11px !important;
+}
+
+.kontak-final .kontak-final__services-grid strong {
+  font-size: 11.5px !important;
+  line-height: 1.28 !important;
+}
+
+.kontak-final .kontak-final__services-grid small {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+.kontak-final .kontak-final__services-grid b {
+  font-size: 18px !important;
+}
+
+/* FAQ */
+.kontak-final .kontak-final__faq-title > a {
+  font-size: 10.5px !important;
+}
+
+.kontak-final .kontak-final__faq-list {
+  gap: 5px !important;
+  margin-top: 9px !important;
+}
+
+.kontak-final .kontak-final__faq-list button {
+  min-height: 42px !important;
+  padding: 9px 10px !important;
+}
+
+.kontak-final .kontak-final__faq-list button strong {
+  font-size: 11.5px !important;
+  line-height: 1.35 !important;
+}
+
+.kontak-final .kontak-final__faq-list button small {
+  font-size: 10.5px !important;
+  line-height: 1.5 !important;
+}
+
+.kontak-final .kontak-final__quote-card small {
+  font-size: 10.5px !important;
+}
+
+/* Tablet dan HP: jangan mengecilkan teks lagi. */
+@media (max-width: 680px) {
+  .kontak-final .kontak-final__crumb {
+    font-size: 11px !important;
+  }
+
+  .kontak-final .kontak-final__hero-copy > p {
+    font-size: 13.5px !important;
+  }
+
+  .kontak-final .kontak-final__hero-pills span {
+    font-size: 11.5px !important;
+  }
+
+  .kontak-final .kontak-final__shortcuts strong {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__shortcuts small {
+    font-size: 11.5px !important;
+  }
+
+  .kontak-final .kontak-final__title h2 {
+    font-size: 18px !important;
+  }
+
+  .kontak-final .kontak-final__title p {
+    font-size: 12.5px !important;
+  }
+
+  .kontak-final .kontak-final__info > div {
+    grid-template-columns: 118px minmax(0, 1fr) !important;
+  }
+
+  .kontak-final .kontak-final__info dt,
+  .kontak-final .kontak-final__info dd {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__sekretariat-actions a {
+    font-size: 12.5px !important;
+  }
+
+  .kontak-final .kontak-final__form label > span {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__form input,
+  .kontak-final .kontak-final__form select,
+  .kontak-final .kontak-final__form textarea {
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+
+  .kontak-final .kontak-final__file strong {
+    font-size: 12.5px !important;
+  }
+
+  .kontak-final .kontak-final__file small,
+  .kontak-final .kontak-final__file > b,
+  .kontak-final .kontak-final__form-note {
+    font-size: 11px !important;
+  }
+
+  .kontak-final .kontak-final__form > button {
+    min-height: 44px !important;
+    font-size: 13.5px !important;
+  }
+
+  .kontak-final .kontak-final__pengurus-row strong {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__pengurus-row small,
+  .kontak-final .kontak-final__privacy {
+    font-size: 11.5px !important;
+  }
+
+  .kontak-final .kontak-final__map-legend,
+  .kontak-final .kontak-final__map-copy {
+    font-size: 11.5px !important;
+  }
+
+  .kontak-final .kontak-final__services-grid strong {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__services-grid small {
+    font-size: 11px !important;
+  }
+
+  .kontak-final .kontak-final__faq-title > a {
+    font-size: 11px !important;
+  }
+
+  .kontak-final .kontak-final__faq-list button strong {
+    font-size: 13px !important;
+  }
+
+  .kontak-final .kontak-final__faq-list button small,
+  .kontak-final .kontak-final__quote-card small {
+    font-size: 11.5px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .kontak-final .kontak-final__info > div {
+    grid-template-columns: 1fr !important;
+  }
+}
