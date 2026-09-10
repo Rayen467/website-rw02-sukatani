@@ -34,7 +34,21 @@
             <small>GUYUB · MAJU · SEJAHTERA</small>
           </span>
         </a>
+
         <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
+
+        <div class="kaki-kolaborasi-mini" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai dan Global Institute">
+          <span>Kolaborasi:</span>
+          <div class="kaki-kolaborasi-lockup">
+            <img
+              src={logoKolaborasi}
+              alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+
         <a class="kaki-hubungi" href="mailto:rayenxtenri@gmail.com">Hubungi pengelola →</a>
       </section>
 
@@ -87,55 +101,63 @@
       <span class="kaki-modern-tagline">Rumah bukan hanya tempat, tapi tentang kebersamaan.</span>
       <span class="kaki-modern-kkn">KKN 20 · rayenxtenri@gmail.com</span>
     </div>
-
-    <section class="kaki-kolaborasi-bawah" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai dan Global Institute">
-      <span class="kaki-kolaborasi-label">Kolaborasi & kontribusi digital</span>
-      <img
-        src={logoKolaborasi}
-        alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
-        loading="lazy"
-        decoding="async"
-      />
-    </section>
   </div>
 </footer>
 
 <style>
-  .kaki-kolaborasi-bawah {
-    margin-top: 18px;
-    padding: 18px 20px 10px;
-    border-top: 1px solid rgba(255, 255, 255, .18);
+  .kaki-kolaborasi-mini {
     display: grid;
-    justify-items: center;
-    gap: 9px;
-    text-align: center;
+    gap: 7px;
+    margin: 14px 0 10px;
+    width: min(100%, 290px);
   }
 
-  .kaki-kolaborasi-label {
-    color: rgba(255,255,255,.74);
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: .14em;
-    text-transform: uppercase;
+  .kaki-kolaborasi-mini > span {
+    color: rgba(255,255,255,.8);
+    font-size: 9px;
+    font-weight: 650;
   }
 
-  .kaki-kolaborasi-bawah img {
+  .kaki-kolaborasi-lockup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 58px;
+    padding: 7px 11px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 15px;
+    background: rgba(10,25,38,.28);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 22px rgba(0,0,0,.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .kaki-kolaborasi-lockup img {
     display: block;
-    width: min(100%, 560px);
+    width: 100%;
+    max-width: 255px;
+    max-height: 66px;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,.18));
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,.18));
   }
 
   @media (max-width: 680px) {
-    .kaki-kolaborasi-bawah {
-      margin-top: 14px;
-      padding: 16px 8px 4px;
+    .kaki-kolaborasi-mini {
+      width: min(100%, 270px);
+      margin: 12px 0 9px;
     }
 
-    .kaki-kolaborasi-bawah img {
-      width: min(100%, 420px);
+    .kaki-kolaborasi-lockup {
+      min-height: 54px;
+      padding: 6px 9px;
+      border-radius: 13px;
+    }
+
+    .kaki-kolaborasi-lockup img {
+      max-width: 235px;
+      max-height: 60px;
     }
   }
 </style>
