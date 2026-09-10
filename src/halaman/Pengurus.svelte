@@ -40,7 +40,7 @@
 
   /* Empat Ketua RT berikut sudah dikonfirmasi sebagai struktur resmi RW 02.
      Karena itu mereka tetap tampil walaupun koleksi Firestore belum diisi.
-     Data server hanya melengkapi kontak/cakupan dan tetap boleh menambahkan RT lain. */
+     Data server tetap dapat melengkapi data internal dan menambahkan RT lain. */
   const barisRT = $derived.by(() => {
     const dariServer = isi.batas_rt || [];
 
@@ -87,7 +87,7 @@
 <div class="kepala-halaman">
   <p class="alis">Struktur</p>
   <h1>Pengurus RW dan Ketua RT</h1>
-  <p>Susunan pengurus beserta kontak yang bisa dihubungi warga. Nomor hanya ditampilkan setelah pemiliknya memberi izin.</p>
+  <p>Susunan pengurus RW 02 dan para Ketua RT Perum Sukatani. Detail profil masing-masing pengurus akan ditampilkan pada halaman profilnya.</p>
 </div>
 
 <section class="blok">
@@ -103,7 +103,6 @@
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
               <span class="nama"><Belum nilai={o.nama} /></span>
-              <span class="kontak">Kontak <Belum nilai={o.kontak} /></span>
             </div>
           </div>
         </div>
@@ -131,14 +130,12 @@
           <div>
             <span class="jabatan">{o.rt || "-"}</span>
             <span class="nama"><Belum nilai={o.ketua} /></span>
-            <span class="kontak">Kontak <Belum nilai={o.kontak} /></span>
-            <span class="kontak">Cakupan <Belum nilai={o.blok} /></span>
           </div>
         </div>
       </div>
     {/each}
   </div>
-  <p class="verifikasi">Foto Ketua RT yang sudah diterima ditampilkan pada struktur. Kontak dan cakupan wilayah dapat dilengkapi pengurus setelah mendapat izin yang bersangkutan.</p>
+  <p class="verifikasi">Foto Ketua RT yang sudah diterima ditampilkan pada struktur. Detail profil masing-masing Ketua RT akan dilengkapi pada halaman profil.</p>
 </section>
 
 <section class="blok">
