@@ -32,15 +32,17 @@ export const rute = $state({
 function terapkanTemaWaktuHalaman() {
   if (typeof document === "undefined") return;
 
-  const halaman = rute.bagian[0] || "";
-  const halamanUmkm = halaman === "umkm" || halaman === "daftar-usaha";
+  const halaman = rute.bagian[0] || "beranda";
 
-  /*
-   * Seluruh situs mengikuti atmosfer pagi/siang/sore/malam, kecuali
-   * keluarga halaman UMKM yang mempertahankan identitas visualnya sendiri.
-   * Atribut ini dibaca oleh gaya/waktu-situs.css.
-   */
-  document.documentElement.dataset.waktuSitus = halamanUmkm ? "nonaktif" : "aktif";
+  /* Seluruh website sekarang mengikuti atmosfer pagi/siang/sore/malam.
+     Sebelumnya keluarga UMKM sengaja dikecualikan sehingga saat pindah dari
+     Beranda ke UMKM suasananya mendadak kembali netral. Itu membuat fitur
+     waktu terasa hanya milik Beranda. Sekarang tidak ada pengecualian rute.
+
+     data-halaman dipakai CSS untuk membedakan Beranda (sudah punya hero
+     penuh) dari halaman lain (memakai panorama waktu yang lebih lembut). */
+  document.documentElement.dataset.waktuSitus = "aktif";
+  document.documentElement.dataset.halaman = halaman;
 }
 
 function baca() {
