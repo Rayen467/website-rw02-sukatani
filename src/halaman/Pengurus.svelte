@@ -8,6 +8,11 @@
     return String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
 
+  function nomorWa(n) {
+    if (!n) return "";
+    return String(n).replace(/[^0-9]/g, "").replace(/^0/, "62");
+  }
+
   const FOTO_PENGURUS = Object.freeze({
     sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
   });
@@ -44,7 +49,7 @@
             ...cocok,
             ...bawaan,
             foto: fotoBawaan || cocok.foto,
-            kontak: cocok.kontak || bawaan.kontak,
+            kontak: bawaan.kontak || cocok.kontak,
             periode: cocok.periode || bawaan.periode
           }
         : {
@@ -138,6 +143,11 @@
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
               <span class="nama"><Belum nilai={o.nama} /></span>
+              {#if o.kontak}
+                <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {o.nama || o.jabatan} melalui WhatsApp">
+                  WhatsApp {o.kontak}
+                </a>
+              {/if}
             </div>
           </div>
         </div>
@@ -166,14 +176,16 @@
             <span class="jabatan">{o.rt || "-"}</span>
             <span class="nama"><Belum nilai={o.ketua} /></span>
             {#if o.kontak}
-              <a class="kontak" href={"tel:" + String(o.kontak).replace(/[^\d+]/g, "")}>{o.kontak}</a>
+              <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {o.ketua || o.rt} melalui WhatsApp">
+                WhatsApp {o.kontak}
+              </a>
             {/if}
           </div>
         </div>
       </div>
     {/each}
   </div>
-  <p class="verifikasi">Foto dan kontak Ketua RT yang sudah diterima ditampilkan pada struktur. Detail profil masing-masing Ketua RT akan dilengkapi pada halaman profil.</p>
+  <p class="verifikasi">Foto dan kontak Ketua RT yang sudah diterima ditampilkan pada struktur. Kontak yang tersedia langsung membuka WhatsApp.</p>
 </section>
 
 <section class="blok">
