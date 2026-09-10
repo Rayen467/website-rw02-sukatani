@@ -38,36 +38,43 @@
     return [...resmi, ...tambahan];
   });
 
-  /* Selama data RT belum selesai dimuat, tampilkan bawaan resmi.
-     Kalau pengurus memang mengosongkan koleksi RT, hormati data server. */
-  const barisRTServer = $derived(
-    isi.batas_rt === null
-      ? KETUA_RT_BAWAAN
-      : (isi.batas_rt || [])
-  );
-
+  /* Empat Ketua RT berikut sudah dikonfirmasi sebagai struktur resmi RW 02.
+     Karena itu mereka tetap tampil walaupun koleksi Firestore belum diisi.
+     Data server hanya melengkapi kontak/cakupan dan tetap boleh menambahkan RT lain. */
   const barisRT = $derived.by(() => {
-    const dariServer = barisRTServer;
-    if (!dariServer.length) return [];
+    const dariServer = isi.batas_rt || [];
 
-    return dariServer.map((server) => {
-      const bawaan = KETUA_RT_BAWAAN.find((b) => {
+    const resmi = KETUA_RT_BAWAAN.map((bawaan) => {
+      const cocok = dariServer.find((server) => {
+        const id = normal(server.id);
+        const rt = normal(server.rt);
+        const targetId = normal(bawaan.id);
+        const targetRt = normal(bawaan.rt);
+        return id === targetId || rt === targetRt || rt.startsWith(targetId);
+      });
+
+      return cocok
+        ? {
+            ...cocok,
+            ...bawaan,
+            foto: bawaan.foto || cocok.foto,
+            kontak: cocok.kontak || bawaan.kontak,
+            blok: cocok.blok || bawaan.blok
+          }
+        : bawaan;
+    });
+
+    const tambahan = dariServer.filter((server) =>
+      !KETUA_RT_BAWAAN.some((b) => {
         const id = normal(server.id);
         const rt = normal(server.rt);
         const targetId = normal(b.id);
         const targetRt = normal(b.rt);
         return id === targetId || rt === targetRt || rt.startsWith(targetId);
-      });
+      })
+    );
 
-      if (!bawaan) return server;
-      return {
-        ...server,
-        ...bawaan,
-        foto: bawaan.foto || server.foto,
-        kontak: server.kontak || bawaan.kontak,
-        blok: server.blok || bawaan.blok
-      };
-    });
+    return [...resmi, ...tambahan];
   });
 
   const lembaga = KELEMBAGAAN_WARGA_BAWAAN;
@@ -114,33 +121,24 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Ketua RT</h2></div>
-  {#if barisRT.length}
-    <div class="petak petak-2">
-      {#each barisRT as o}
-        <div class="kartu">
-          <div class="orang">
-            <span class="foto">
-              {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {o.ketua || o.rt}" decoding="async" />{/if}
-            </span>
-            <div>
-              <span class="jabatan">{o.rt || "-"}</span>
-              <span class="nama"><Belum nilai={o.ketua} /></span>
-              <span class="kontak">Kontak <Belum nilai={o.kontak} /></span>
-              <span class="kontak">Cakupan <Belum nilai={o.blok} /></span>
-            </div>
+  <div class="petak petak-2">
+    {#each barisRT as o}
+      <div class="kartu">
+        <div class="orang">
+          <span class="foto">
+            {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {o.ketua || o.rt}" decoding="async" />{/if}
+          </span>
+          <div>
+            <span class="jabatan">{o.rt || "-"}</span>
+            <span class="nama"><Belum nilai={o.ketua} /></span>
+            <span class="kontak">Kontak <Belum nilai={o.kontak} /></span>
+            <span class="kontak">Cakupan <Belum nilai={o.blok} /></span>
           </div>
         </div>
-      {/each}
-    </div>
-    <p class="verifikasi">Foto Ketua RT yang sudah diterima ditampilkan pada struktur. Kontak dan cakupan wilayah dapat dilengkapi pengurus setelah mendapat izin yang bersangkutan.</p>
-  {:else}
-    <Kosong
-      judul="Data Ketua RT belum diisi"
-      ket="Nomor RT, nama Ketua RT, cakupan blok, kontak, dan foto dapat ditambahkan pengurus dari halaman Kelola."
-      tab="profil"
-      aksi="Isi data Ketua RT"
-    />
-  {/if}
+      </div>
+    {/each}
+  </div>
+  <p class="verifikasi">Foto Ketua RT yang sudah diterima ditampilkan pada struktur. Kontak dan cakupan wilayah dapat dilengkapi pengurus setelah mendapat izin yang bersangkutan.</p>
 </section>
 
 <section class="blok">
