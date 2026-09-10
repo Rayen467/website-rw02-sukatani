@@ -1,0 +1,16 @@
+/*
+ * Perbaikan khusus ringkasan pengurus di halaman Profil RW.
+ * Kartu kedua adalah Sekretaris RW (Sukarno). Foto dibuat sebagai
+ * background fallback agar tetap tampil meski data lama dari server
+ * belum memiliki field foto.
+ */
+.profil-pengurus-grid .profil-orang:nth-child(2) .profil-avatar {
+  background-image: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png") !important;
+  background-size: cover !important;
+  background-position: center top !important;
+  background-repeat: no-repeat !important;
+}
+
+.profil-pengurus-grid .profil-orang:nth-child(2) .profil-avatar > svg {
+  display: none !important;
+}
