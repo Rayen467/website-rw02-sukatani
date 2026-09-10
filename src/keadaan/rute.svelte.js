@@ -33,15 +33,12 @@ function terapkanTemaWaktuHalaman() {
   if (typeof document === "undefined") return;
 
   const halaman = rute.bagian[0] || "beranda";
+  const halamanUmkm = halaman === "umkm" || halaman === "daftar-usaha";
 
-  /* Seluruh website sekarang mengikuti atmosfer pagi/siang/sore/malam.
-     Sebelumnya keluarga UMKM sengaja dikecualikan sehingga saat pindah dari
-     Beranda ke UMKM suasananya mendadak kembali netral. Itu membuat fitur
-     waktu terasa hanya milik Beranda. Sekarang tidak ada pengecualian rute.
-
-     data-halaman dipakai CSS untuk membedakan Beranda (sudah punya hero
-     penuh) dari halaman lain (memakai panorama waktu yang lebih lembut). */
-  document.documentElement.dataset.waktuSitus = "aktif";
+  /* Tema waktu tetap aktif di seluruh website, kecuali keluarga UMKM sesuai
+     arahan desain. Hanya token warna yang mengikuti fase; panorama foto global
+     sengaja tidak dipakai karena menutupi layout halaman khusus. */
+  document.documentElement.dataset.waktuSitus = halamanUmkm ? "nonaktif" : "aktif";
   document.documentElement.dataset.halaman = halaman;
 }
 
