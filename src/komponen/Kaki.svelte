@@ -7,10 +7,6 @@
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
 
-  /*
-   * Empat panorama footer final. Sumbernya adalah empat gambar yang dipilih
-   * user, disiapkan menjadi 3840x1080 WebP agar footer desktop tidak blur.
-   */
   const FOOTER_4K = Object.freeze({
     pagi: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/ac5972ef-a71b-4fdc-bf3a-f7b9c364f121.webp",
     siang: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd7cc752-5163-46de-89e3-9da5237b5063.webp",
@@ -35,7 +31,11 @@
           </span>
         </a>
 
-        <div class="kaki-kolaborasi-inline" aria-label="KKN 20 Perum Sukatani Permai bersama Global Institute">
+        <p class="kaki-tagline-brand">Membangun lingkungan bersama lebih baik, guyub, maju, dan sejahtera.</p>
+
+        <div class="kaki-kolaborasi" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai dan Global Institute">
+          <div class="kaki-kolaborasi-garis" aria-hidden="true"></div>
+          <span class="kaki-kolaborasi-label">Kolaborasi</span>
           <img
             src={logoKolaborasi}
             alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
@@ -43,8 +43,6 @@
             decoding="async"
           />
         </div>
-
-        <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
 
         <a class="kaki-hubungi" href="mailto:rayenxtenri@gmail.com">Hubungi pengelola →</a>
       </section>
@@ -102,24 +100,37 @@
 </footer>
 
 <style>
-  .kaki-kolaborasi-inline {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: min(100%, 250px);
-    margin: 8px 0 10px 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
+  .kaki-tagline-brand {
+    margin: 12px 0 0;
+    max-width: 300px;
   }
 
-  .kaki-kolaborasi-inline img {
+  .kaki-kolaborasi {
+    width: min(100%, 265px);
+    margin: 13px 0 10px;
+    display: grid;
+    justify-items: start;
+    gap: 7px;
+  }
+
+  .kaki-kolaborasi-garis {
+    width: 42px;
+    height: 1px;
+    background: rgba(255,255,255,.7);
+  }
+
+  .kaki-kolaborasi-label {
+    color: rgba(255,255,255,.82);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  .kaki-kolaborasi img {
     display: block;
     width: 100%;
     max-width: 245px;
-    max-height: 62px;
+    max-height: 60px;
     height: auto;
     object-fit: contain;
     object-position: left center;
@@ -127,14 +138,19 @@
   }
 
   @media (max-width: 680px) {
-    .kaki-kolaborasi-inline {
-      width: min(100%, 225px);
-      margin: 7px 0 9px;
+    .kaki-tagline-brand {
+      max-width: 280px;
     }
 
-    .kaki-kolaborasi-inline img {
+    .kaki-kolaborasi {
+      width: min(100%, 230px);
+      margin: 12px 0 9px;
+      gap: 6px;
+    }
+
+    .kaki-kolaborasi img {
       max-width: 220px;
-      max-height: 56px;
+      max-height: 54px;
     }
   }
 </style>
