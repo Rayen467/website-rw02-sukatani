@@ -1,0 +1,128 @@
+/* =======================================================================
+ * Navbar halaman lain mengikuti BERANDA — bukan sebaliknya.
+ * =======================================================================
+ * Beranda tetap memakai aturan aslinya di waktu.css. File ini hanya
+ * menyalin bahasa visual Beranda ke halaman SELAIN Beranda pada desktop.
+ * Mobile sudah memakai struktur header Beranda yang sama lewat
+ * layar-kecil.css, jadi tidak perlu ditimpa di sini.
+ */
+
+@media (min-width: 861px) {
+  body:not(:has(.beranda-hero)) .situs {
+    position: sticky;
+    top: 12px;
+    left: auto;
+    width: min(1160px, calc(100% - 40px));
+    margin: 12px auto 0;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.34);
+    border-radius: 17px;
+    background-image: none;
+    background-color: rgba(248,252,250,.72);
+    box-shadow: 0 18px 48px -34px rgba(5,35,29,.48);
+    backdrop-filter: blur(18px) saturate(1.16);
+    -webkit-backdrop-filter: blur(18px) saturate(1.16);
+  }
+
+  :root[data-waktu="sore"] body:not(:has(.beranda-hero)) .situs {
+    color: #fffaf3;
+    border-color: rgba(255,245,228,.24);
+    background-color: rgba(76,62,54,.34);
+  }
+
+  :root[data-waktu="malam"] body:not(:has(.beranda-hero)) .situs {
+    color: #f5fbfa;
+    border-color: rgba(177,218,221,.16);
+    background-color: rgba(5,27,43,.68);
+  }
+
+  body:not(:has(.beranda-hero)) .situs > .wadah {
+    max-width: none;
+    padding: 0 16px;
+  }
+
+  body:not(:has(.beranda-hero)) .situs-atas {
+    min-height: 66px;
+    padding: 7px 0;
+    gap: 9px;
+  }
+
+  body:not(:has(.beranda-hero)) .merek-visual {
+    width: 154px;
+    min-width: 154px;
+    height: 52px;
+    gap: 0;
+  }
+
+  body:not(:has(.beranda-hero)) nav.menu-ringkas {
+    margin-left: auto;
+    display: flex;
+    gap: 0;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir > a {
+    padding: 9px 8px 10px;
+    border-radius: 0;
+    border-bottom-width: 2px;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 650;
+    color: color-mix(in srgb, var(--waktu-hero-teks) 82%, transparent);
+  }
+
+  body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir > a:hover {
+    background: transparent;
+    color: #0b684f;
+  }
+
+  body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir.terpilih > a {
+    color: #0b684f;
+  }
+
+  :root[data-waktu="sore"] body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir > a,
+  :root[data-waktu="malam"] body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir > a {
+    color: rgba(255,255,255,.88);
+  }
+
+  :root[data-waktu="sore"] body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir.terpilih > a {
+    color: #fff4dc;
+    border-bottom-color: #ffd596;
+  }
+
+  :root[data-waktu="malam"] body:not(:has(.beranda-hero)) .menu-ringkas .menu-butir.terpilih > a {
+    color: #83e3bd;
+    border-bottom-color: #4ed2a1;
+  }
+
+  body:not(:has(.beranda-hero)) .cari-kotak {
+    margin-left: 7px;
+    max-width: 172px;
+    flex: 0 1 172px;
+    padding: 7px 10px;
+    background: rgba(255,255,255,.84);
+    border-color: rgba(16,61,49,.12);
+  }
+
+  body:not(:has(.beranda-hero)) .cari-kotak input {
+    font-size: 11.5px;
+  }
+
+  body:not(:has(.beranda-hero)) .cari-kotak button {
+    display: none;
+  }
+
+  body:not(:has(.beranda-hero)) .situs-atas > .tombol-kecil {
+    min-height: 38px;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+  }
+
+  /* Beranda memang tidak menampilkan tombol tema sebagai pil tambahan pada
+     navbar desktop; halaman lain mengikuti keputusan visual itu. */
+  body:not(:has(.beranda-hero)) .situs-atas > .tombol-kecil[title^="Tampilan:"] {
+    display: none;
+  }
+}
