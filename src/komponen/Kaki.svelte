@@ -3,6 +3,7 @@
   import { kontenNilai } from "../keadaan/isi.svelte.js";
   import { IDENTITAS_BAWAAN } from "../inti/bawaan.js";
   import { waktu } from "../keadaan/waktu.svelte.js";
+  import { rute } from "../keadaan/rute.svelte.js";
 
   const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
   const alamatKaki = $derived(kontenNilai(KONTEN.IDENTITAS, "alamatKaki", IDENTITAS_BAWAAN.alamatKaki));
@@ -14,7 +15,9 @@
     malam: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/bd68ce05-84b7-4d7e-a430-e1b4364d2984.webp"
   });
 
-  const gambarKaki = $derived(FOOTER_4K[waktu.fase] || FOOTER_4K.malam);
+  const halamanUmkm = $derived((rute.bagian[0] || "") === "umkm" || (rute.bagian[0] || "") === "daftar-usaha");
+  const faseKaki = $derived(halamanUmkm ? "siang" : waktu.fase);
+  const gambarKaki = $derived(FOOTER_4K[faseKaki] || FOOTER_4K.siang);
   const logoKolaborasi = "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/47ada69c-77aa-4585-bb50-972c20f0a533.png";
 </script>
 
