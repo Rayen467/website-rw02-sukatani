@@ -1,6 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { faseUntukJam, labelFase, bagianWaktu, ZONA_WAKTU_RW } from "../src/inti/waktu.js";
+
+const rute = readFileSync("src/keadaan/rute.svelte.js", "utf8");
+const app = readFileSync("src/App.svelte", "utf8");
+const gayaSemua = readFileSync("src/gaya/waktu-semua.css", "utf8");
+const globalCss = readFileSync("src/gaya/global.css", "utf8");
 
 test("batas fase waktu RW 02 tepat", () => {
   const kasus = [
@@ -44,4 +50,18 @@ test("jam situs memakai zona Asia/Jakarta", () => {
 test("perpindahan 10:59 ke 11:00 WIB tanpa reload", () => {
   assert.equal(bagianWaktu(new Date("2026-09-08T03:59:00Z")).fase, "pagi");
   assert.equal(bagianWaktu(new Date("2026-09-08T04:00:00Z")).fase, "siang");
+});
+
+test("atmosfer pagi siang sore malam berlaku untuk seluruh rute", () => {
+  assert.match(rute, /dataset\.waktuSitus\s*=\s*["']aktif["']/);
+  assert.doesNotMatch(rute, /halamanUmkm/);
+  assert.match(rute, /dataset\.halaman\s*=\s*halaman/);
+  assert.match(app, /gambarWaktuAbsolut\(waktu\.fase\)/);
+  assert.match(app, /--gambar-waktu-situs/);
+  assert.match(globalCss, /waktu-semua\.css/);
+  assert.match(gayaSemua, /:root:not\(\[data-halaman="beranda"\]\)\[data-waktu\] main::before/);
+  assert.match(gayaSemua, /data-waktu="pagi"/);
+  assert.match(gayaSemua, /data-waktu="siang"/);
+  assert.match(gayaSemua, /data-waktu="sore"/);
+  assert.match(gayaSemua, /data-waktu="malam"/);
 });
