@@ -74,11 +74,11 @@ test("hapus satu Pengurus RW atau RT tetap tersedia lewat BarisKelola", () => {
   assert.match(baris, /Tindakan ini tidak bisa dibatalkan/);
 });
 
-test("setelah semua RT dihapus, data bawaan tidak hidup lagi", () => {
-  assert.match(publik, /isi\.batas_rt === null/);
-  assert.match(publik, /: \(isi\.batas_rt \|\| \[\]\)/);
-  assert.doesNotMatch(publik, /pakai\("batas_rt"/);
-  assert.match(publik, /Data Ketua RT belum diisi/);
+test("empat Ketua RT resmi tetap tampil walau koleksi server kosong", () => {
+  assert.match(publik, /const resmi = KETUA_RT_BAWAAN\.map/);
+  assert.match(publik, /return \[\.\.\.resmi, \.\.\.tambahan\]/);
+  assert.match(publik, /const dariServer = isi\.batas_rt \|\| \[\]/);
+  assert.doesNotMatch(publik, /Data Ketua RT belum diisi/);
 });
 
 test("rename nomor RT memindahkan ID dokumen secara atomik", () => {
