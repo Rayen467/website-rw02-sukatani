@@ -102,7 +102,17 @@ export function pakai(kunci, bawaan) {
 
 /** Membaca satu dokumen tetap, misalnya konten profil. */
 export function konten(bagian) {
-  return isi.konten[bagian] || null;
+  const nilai = isi.konten[bagian] || null;
+
+  /* Luas wilayah RW 02 dikonfirmasi dari pengukuran area pada peta yang
+     diterima September 2026. Nilai dari server tetap diprioritaskan jika
+     nanti pengurus memperbaruinya melalui halaman Kelola. */
+  if (bagian === KONTEN.PROFIL) {
+    const profil = nilai || {};
+    return { ...profil, luas: profil.luas || "3,51" };
+  }
+
+  return nilai;
 }
 
 /** Membaca satu kolom dari dokumen tetap, dengan nilai cadangan. */
