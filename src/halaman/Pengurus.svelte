@@ -12,6 +12,12 @@
     sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
   });
 
+  const KONTAK_RT = Object.freeze({
+    "rt 01": "+62 878-7708-4596",
+    "rt 03": "+62 813-1708-1950",
+    "rt 04": "+62 857-7271-1169"
+  });
+
   const PENGURUS_TAMBAHAN_LOKAL = [
     {
       id: "handoko",
@@ -77,16 +83,20 @@
         const targetRt = normal(bawaan.rt);
         return id === targetId || rt === targetRt || rt.startsWith(targetId);
       });
+      const kontakBawaan = KONTAK_RT[normal(bawaan.id)] || bawaan.kontak;
 
       return cocok
         ? {
             ...cocok,
             ...bawaan,
             foto: bawaan.foto || cocok.foto,
-            kontak: cocok.kontak || bawaan.kontak,
+            kontak: kontakBawaan || cocok.kontak,
             blok: cocok.blok || bawaan.blok
           }
-        : bawaan;
+        : {
+            ...bawaan,
+            kontak: kontakBawaan
+          };
     });
 
     const tambahan = dariServer.filter((server) =>
@@ -155,12 +165,15 @@
           <div>
             <span class="jabatan">{o.rt || "-"}</span>
             <span class="nama"><Belum nilai={o.ketua} /></span>
+            {#if o.kontak}
+              <a class="kontak" href={"tel:" + String(o.kontak).replace(/[^\d+]/g, "")}>{o.kontak}</a>
+            {/if}
           </div>
         </div>
       </div>
     {/each}
   </div>
-  <p class="verifikasi">Foto Ketua RT yang sudah diterima ditampilkan pada struktur. Detail profil masing-masing Ketua RT akan dilengkapi pada halaman profil.</p>
+  <p class="verifikasi">Foto dan kontak Ketua RT yang sudah diterima ditampilkan pada struktur. Detail profil masing-masing Ketua RT akan dilengkapi pada halaman profil.</p>
 </section>
 
 <section class="blok">
