@@ -53,6 +53,11 @@ export const KOLEKSI = Object.freeze({
   BANSOS_PENERIMA: "bansos_penerima",
   BERKAS: "berkas",
 
+  /* Forum warga: topik dan komentar sama-sama terbuka untuk dibaca.
+     Penulisannya dibatasi ke akun terverifikasi lewat Firestore Rules. */
+  FORUM_TOPIK: "forum_topik",
+  FORUM_KOMENTAR: "forum_komentar",
+
   /* Isi berkas dipisah dari keterangannya, dan ini BUKAN kerapian belaka.
      Koleksi "berkas" ikut diambil setiap kali situs dibuka. Kalau isi
      base64-nya ikut di dokumen yang sama, sepuluh PDF berarti 5 MB
@@ -142,7 +147,9 @@ export const KOLEKSI_UMUM = Object.freeze([
   KOLEKSI.FASUM,
   KOLEKSI.RUTIN,
   KOLEKSI.BANSOS,
-  KOLEKSI.BERKAS
+  KOLEKSI.BERKAS,
+  KOLEKSI.FORUM_TOPIK,
+  KOLEKSI.FORUM_KOMENTAR
 ]);
 
 /** Dimuat hanya setelah pengurus masuk. Warga akan ditolak aturan Firestore. */
