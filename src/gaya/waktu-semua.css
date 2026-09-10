@@ -1,0 +1,169 @@
+/* ===========================================================================
+ * ATMOSFER WAKTU UNTUK SELURUH WEBSITE
+ * ===========================================================================
+ *
+ * Beranda memang memakai foto pagi/siang/sore/malam sebagai hero penuh.
+ * Halaman lain sebelumnya hanya mengganti token warna, sehingga perubahan
+ * waktunya terasa terlalu tipis. Lapisan ini memakai foto fase yang SAMA
+ * sebagai panorama lembut di bagian atas setiap halaman, lalu memudar ke
+ * warna dasar agar formulir, tabel, peta, dan data tetap nyaman dibaca.
+ *
+ * --gambar-waktu-situs dipasang reaktif dari App.svelte. Jadi saat fase
+ * berpindah otomatis atau pengguna memilih preview di Beranda, halaman lain
+ * ikut berubah tanpa reload.
+ */
+
+:root[data-waktu] {
+  --suasana-atas: rgba(247, 251, 247, .34);
+  --suasana-tengah: rgba(238, 245, 239, .78);
+  --suasana-aksen: #d6a83a;
+  --suasana-posisi: center 48%;
+}
+
+:root[data-waktu="siang"] {
+  --suasana-atas: rgba(249, 252, 253, .31);
+  --suasana-tengah: rgba(238, 244, 245, .80);
+  --suasana-aksen: #4d9fc0;
+  --suasana-posisi: center 47%;
+}
+
+:root[data-waktu="sore"] {
+  --suasana-atas: rgba(253, 242, 230, .34);
+  --suasana-tengah: rgba(242, 235, 228, .76);
+  --suasana-aksen: #c9793f;
+  --suasana-posisi: center 50%;
+}
+
+:root[data-waktu="malam"] {
+  --suasana-atas: rgba(4, 15, 25, .31);
+  --suasana-tengah: rgba(9, 23, 34, .82);
+  --suasana-aksen: #70c9bd;
+  --suasana-posisi: center 51%;
+}
+
+/* Semua rute memakai tema waktu. Beranda dikecualikan dari panorama tambahan
+   karena sudah mempunyai hero waktunya sendiri. */
+:root:not([data-halaman="beranda"])[data-waktu] main {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--dasar);
+}
+
+:root:not([data-halaman="beranda"])[data-waktu] main::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 auto;
+  height: clamp(390px, 46vw, 650px);
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      180deg,
+      var(--suasana-atas) 0%,
+      var(--suasana-tengah) 58%,
+      var(--dasar) 100%
+    ),
+    var(--gambar-waktu-situs);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top, var(--suasana-posisi);
+  box-shadow: inset 0 -34px 46px -38px color-mix(in srgb, var(--dasar) 88%, transparent);
+  transition: opacity .7s ease, filter .7s ease;
+}
+
+:root:not([data-halaman="beranda"])[data-waktu] main > .wadah {
+  position: relative;
+  z-index: 1;
+}
+
+/* Kepala halaman dibuat seperti lembar kaca tipis di atas panorama. Bukan
+   hero kedua: ukurannya tetap ringkas supaya isi utama tidak terdorong jauh. */
+:root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman {
+  position: relative;
+  max-width: min(76ch, 100%);
+  padding: 18px 20px 19px;
+  border: 1px solid color-mix(in srgb, var(--garis) 72%, transparent);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--permukaan) 78%, transparent);
+  box-shadow: var(--bayang);
+  backdrop-filter: blur(14px) saturate(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(1.06);
+  overflow: hidden;
+}
+
+:root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  bottom: 0;
+  width: 86px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--suasana-aksen);
+  opacity: .92;
+}
+
+:root:not([data-halaman="beranda"])[data-waktu] .remah {
+  width: fit-content;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--garis) 66%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--permukaan) 66%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Sedikit transparansi pada permukaan teratas membuat atmosfer terlihat,
+   tetapi isi kartu tetap punya kontras tinggi. Form dan tabel tidak dibuat
+   transparan agar data administrasi tetap jelas. */
+:root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman + .blok > .kartu:first-child,
+:root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman + .blok > .petak > .kartu {
+  box-shadow: var(--bayang);
+}
+
+/* Night mode membutuhkan sedikit penekanan supaya foto tidak membuat teks
+   kepala halaman kalah terang. */
+:root:not([data-halaman="beranda"])[data-waktu="malam"] main::before {
+  filter: saturate(.9) brightness(.86);
+}
+
+:root:not([data-halaman="beranda"])[data-waktu="malam"] .kepala-halaman,
+:root:not([data-halaman="beranda"])[data-waktu="malam"] .remah {
+  border-color: rgba(158, 205, 209, .17);
+  background: rgba(12, 34, 46, .78);
+  box-shadow: 0 18px 50px -34px rgba(0, 0, 0, .82);
+}
+
+/* Di HP panorama dipadatkan. Tetap cukup terlihat di belakang breadcrumb dan
+   judul, tetapi tidak menghabiskan satu layar penuh seperti hero Beranda. */
+@media (max-width: 680px) {
+  :root:not([data-halaman="beranda"])[data-waktu] main::before {
+    height: 430px;
+    background-position: center top, center 45%;
+  }
+
+  :root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman {
+    padding: 15px 16px 17px;
+    border-radius: 16px;
+    backdrop-filter: blur(11px) saturate(1.04);
+    -webkit-backdrop-filter: blur(11px) saturate(1.04);
+  }
+
+  :root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman::after {
+    left: 16px;
+    width: 68px;
+  }
+
+  :root:not([data-halaman="beranda"])[data-waktu] .remah {
+    padding: 6px 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-halaman="beranda"])[data-waktu] main::before,
+  :root:not([data-halaman="beranda"])[data-waktu] .kepala-halaman,
+  :root:not([data-halaman="beranda"])[data-waktu] .remah {
+    transition: none;
+  }
+}
