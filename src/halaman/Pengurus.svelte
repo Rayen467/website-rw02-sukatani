@@ -17,6 +17,11 @@
     sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
   });
 
+  function fotoPengurus(o) {
+    const nama = normal(o?.nama);
+    return FOTO_PENGURUS[nama] || o?.foto || "";
+  }
+
   const KONTAK_RT = Object.freeze({
     "rt 01": "+62 878-7708-4596",
     "rt 03": "+62 813-1708-1950",
@@ -74,9 +79,6 @@
     return [...semua, ...tambahanLokal];
   });
 
-  /* Empat Ketua RT berikut sudah dikonfirmasi sebagai struktur resmi RW 02.
-     Karena itu mereka tetap tampil walaupun koleksi Firestore belum diisi.
-     Data server tetap dapat melengkapi data internal dan menambahkan RT lain. */
   const barisRT = $derived.by(() => {
     const dariServer = isi.batas_rt || [];
 
@@ -138,7 +140,9 @@
         <div class="kartu">
           <div class="orang">
             <span class="foto">
-              {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {o.nama || o.jabatan}" decoding="async" />{/if}
+              {#if fotoPengurus(o)}
+                <img class="gambar-penuh" src={fotoPengurus(o)} alt="Foto {o.nama || o.jabatan}" decoding="async" />
+              {/if}
             </span>
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
