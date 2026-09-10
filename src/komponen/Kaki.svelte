@@ -57,7 +57,7 @@
           <li><a href="#/profil">Profil</a></li>
           <li><a href="#/layanan">Layanan</a></li>
           <li><a href="#/berita">Berita</a></li>
-          <li><a href="#/galeri">Galeri</a></li>
+          <li><a href="#/transparansi">Transparansi</a></li>
           <li><a href="#/umkm">UMKM</a></li>
           <li><a href="#/kontak">Kontak</a></li>
         </ul>
