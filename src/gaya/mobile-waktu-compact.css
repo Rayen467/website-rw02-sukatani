@@ -1,0 +1,119 @@
+/* ===========================================================================
+ * PEMILIH WAKTU — MODE MOBILE KOMPAK
+ * ===========================================================================
+ * Di HP, kontrol Pagi/Siang/Sore/Malam sebelumnya memenuhi hampir seluruh
+ * lebar hero dan terasa seperti navigasi utama. Override ini mempertahankan
+ * fungsi pratinjau waktu tetapi menjadikannya kontrol kecil, ringan, dan
+ * tidak memakan banyak ruang visual.
+ */
+
+@media (max-width: 680px) {
+  body:has(.beranda-hero) .pemilih-waktu {
+    left: auto !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    width: min(232px, calc(100% - 24px)) !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 2px !important;
+    padding: 3px !important;
+    border: 1px solid rgba(255, 255, 255, .18) !important;
+    border-radius: 999px !important;
+    color: var(--waktu-hero-teks) !important;
+    background: rgba(18, 31, 34, .16) !important;
+    box-shadow: 0 5px 18px -15px rgba(0, 0, 0, .48) !important;
+    backdrop-filter: blur(8px) saturate(1.05) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(1.05) !important;
+    transform: none !important;
+    transform-origin: initial !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+    min-width: 0 !important;
+    min-height: 27px !important;
+    height: 27px !important;
+    padding: 0 4px !important;
+    border: 1px solid transparent !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    justify-content: center !important;
+    font-size: 8.2px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu)::after,
+  body:has(.beranda-hero) .pemilih-waktu .titik {
+    display: none !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu > button.aktif:not(.kembali-waktu) {
+    border-color: rgba(255, 255, 255, .24) !important;
+    background: rgba(255, 255, 255, .55) !important;
+    color: #183a33 !important;
+    box-shadow: none !important;
+  }
+
+  :root[data-waktu="malam"] body:has(.beranda-hero) .pemilih-waktu {
+    background: rgba(4, 18, 29, .30) !important;
+    border-color: rgba(213, 235, 235, .14) !important;
+  }
+
+  :root[data-waktu="malam"] body:has(.beranda-hero) .pemilih-waktu > button.aktif:not(.kembali-waktu) {
+    color: #eef8f6 !important;
+    background: rgba(113, 207, 178, .24) !important;
+    border-color: rgba(153, 226, 204, .28) !important;
+  }
+
+  /* Saat pengguna memilih fase manual, tombol kembali ke otomatis tidak
+     membuat baris kelima. Ia tampil sebagai chip mini di atas kontrol. */
+  body:has(.beranda-hero) .pemilih-waktu .kembali-waktu {
+    position: absolute !important;
+    top: -21px !important;
+    right: 2px !important;
+    margin: 0 !important;
+    min-height: 17px !important;
+    padding: 2px 7px !important;
+    border: 1px solid rgba(255, 255, 255, .18) !important;
+    border-radius: 999px !important;
+    color: inherit !important;
+    background: rgba(18, 31, 34, .25) !important;
+    font-size: 6.8px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(7px) !important;
+    -webkit-backdrop-filter: blur(7px) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body:has(.beranda-hero) .pemilih-waktu {
+    right: 10px !important;
+    bottom: 10px !important;
+    width: 212px !important;
+    max-width: calc(100% - 20px) !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+    min-height: 26px !important;
+    height: 26px !important;
+    padding: 0 2px !important;
+    font-size: 7.7px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  body:has(.beranda-hero) .pemilih-waktu {
+    width: 196px !important;
+  }
+
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
+    font-size: 7.2px !important;
+  }
+}
