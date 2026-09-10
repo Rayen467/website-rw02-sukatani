@@ -10,6 +10,8 @@
   let menuTerbuka = $state(null);
   let laciTerbuka = $state(false);
   let kataCari = $state("");
+  let navbarTersembunyi = $state(false);
+  let gulirTerakhir = 0;
 
   const ident = $derived({
     lambang: kontenNilai(KONTEN.IDENTITAS, "lambang", IDENTITAS_BAWAAN.lambang),
@@ -28,8 +30,9 @@
         : [])
   ]);
 
-  /* Menu desktop dibuat ringkas seperti referensi visual. Semua menu lengkap
-     tetap tersedia di laci HP dan halaman terkait tetap dapat diakses. */
+  /* Navbar ini dipakai global di seluruh halaman supaya tampilan Profil,
+     Layanan, Berita, Transparansi, UMKM, Kontak, dan halaman lain selalu
+     sama dengan navbar Beranda. */
   const menuRingkas = [
     { label: "Beranda", alamat: "/" },
     { label: "Profil", alamat: "/profil" },
@@ -40,7 +43,7 @@
     { label: "Kontak", alamat: "/kontak" }
   ];
 
-    /* Menandai menu induk dari halaman yang sedang dibuka. */
+  /* Menandai menu induk dari halaman yang sedang dibuka. */
   const induk = $derived.by(() => {
     const jalur = "/" + (rute.bagian[0] || "");
     for (const g of daftarMenu) {
@@ -66,20 +69,52 @@
     tutupSemua();
   }
 
+  /* Smart navbar:
+   * - selalu terlihat di bagian paling atas halaman;
+   * - scroll turun -> navbar masuk ke atas agar konten lebih luas;
+   * - scroll naik -> navbar langsung muncul lagi;
+   * - saat menu HP terbuka navbar tidak boleh menghilang.
+   * Ambang kecil dipakai supaya getaran jari 1-2 px tidak membuat navbar
+   * berkedip bolak-balik. */
+  function pantauGulir() {
+    const sekarang = Math.max(window.scrollY || 0, 0);
+    const selisih = sekarang - gulirTerakhir;
+
+    if (laciTerbuka || menuTerbuka || sekarang <= 18) {
+      navbarTersembunyi = false;
+    } else if (selisih > 7 && sekarang > 96) {
+      navbarTersembunyi = true;
+    } else if (selisih < -5) {
+      navbarTersembunyi = false;
+    }
+
+    gulirTerakhir = sekarang;
+  }
+
   $effect(() => {
     rute.jalur;
     tutupSemua();
+    navbarTersembunyi = false;
+    gulirTerakhir = typeof window !== "undefined" ? window.scrollY : 0;
+  });
+
+  $effect(() => {
+    if (laciTerbuka || menuTerbuka) navbarTersembunyi = false;
   });
 </script>
 
 <svelte:window
+  onscroll={pantauGulir}
   onclick={(e) => {
     if (!e.target.closest(".menu-butir") && !e.target.closest(".burger")) tutupSemua();
   }}
   onkeydown={(e) => e.key === "Escape" && tutupSemua()}
 />
 
-<header class="situs tanpa-cetak">
+<header
+  class="situs tanpa-cetak navbar-pintar"
+  class:navbar-tersembunyi={navbarTersembunyi}
+>
   <div class="wadah">
     <div class="situs-atas">
       <a class="merek merek-visual" href="#/" aria-label={ident.namaSitus}>
@@ -126,13 +161,13 @@
         onclick={(e) => {
           e.stopPropagation();
           laciTerbuka = !laciTerbuka;
+          navbarTersembunyi = false;
         }}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
         <span class="teks">Menu</span>
       </button>
     </div>
-
 
     {#if laciTerbuka}
       <div class="laci">
@@ -163,3 +198,28 @@
     {/if}
   </div>
 </header>
+
+<style>
+  /* Berlaku desktop + tablet + HP karena Kepala adalah komponen global. */
+  .navbar-pintar {
+    transform: translate3d(0, 0, 0);
+    transition:
+      transform 220ms cubic-bezier(.22, .61, .36, 1),
+      background-color .75s ease,
+      border-color .75s ease,
+      color .75s ease,
+      box-shadow .3s ease;
+    will-change: transform;
+  }
+
+  .navbar-pintar.navbar-tersembunyi {
+    transform: translate3d(0, calc(-100% - 8px), 0);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar-pintar {
+      transition: none;
+    }
+  }
+</style>
