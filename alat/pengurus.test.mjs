@@ -22,18 +22,23 @@ test("tiga komponen struktur pengurus tetap valid secara sintaks Svelte", () => 
   }
 });
 
-test("semua field Pengurus RW yang tampil publik punya pasangan editor", () => {
-  for (const field of ["foto", "jabatan", "nama", "kontak"]) {
+test("field utama Pengurus RW yang tampil publik punya pasangan editor", () => {
+  for (const field of ["foto", "jabatan", "nama"]) {
     assert.match(publik, new RegExp("o\\." + field));
     assert.match(kelola, new RegExp('nama: "' + field + '"'));
   }
 });
 
-test("semua field Ketua RT yang tampil publik punya pasangan editor", () => {
-  for (const field of ["foto", "rt", "ketua", "kontak", "blok"]) {
+test("field utama Ketua RT yang tampil publik punya pasangan editor", () => {
+  for (const field of ["foto", "rt", "ketua"]) {
     assert.match(publik, new RegExp("o\\." + field));
     assert.match(kelola, new RegExp('nama: "' + field + '"'));
   }
+});
+
+test("kontak dan cakupan tidak ditampilkan sebagai placeholder pada kartu publik", () => {
+  assert.doesNotMatch(publik, /Kontak\s*<Belum\s+nilai=\{o\.kontak\}/);
+  assert.doesNotMatch(publik, /Cakupan\s*<Belum\s+nilai=\{o\.blok\}/);
 });
 
 test("Petugas bisa menambah Pengurus RW dengan upload foto", () => {
