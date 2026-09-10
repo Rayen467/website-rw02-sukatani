@@ -1,0 +1,359 @@
+/* ===========================================================================
+ * TEMA WAKTU SELURUH SITUS
+ * ===========================================================================
+ *
+ * Beranda sudah memiliki atmosfer waktu sendiri. Berkas ini memperluas
+ * suasana pagi / siang / sore / malam ke halaman lain dengan cara mengganti
+ * token warna global. Keluarga halaman UMKM sengaja dikecualikan lewat
+ * data-waktu-situs="nonaktif" agar identitas visual UMKM tetap stabil.
+ */
+
+:root[data-waktu-situs="aktif"] {
+  color-scheme: light;
+
+  /* Transisi cukup lambat agar pergantian fase tidak terasa berkedip. */
+  --transisi-waktu: background-color .75s ease, color .75s ease,
+    border-color .75s ease, box-shadow .75s ease;
+}
+
+:root[data-waktu-situs="aktif"] body,
+:root[data-waktu-situs="aktif"] main,
+:root[data-waktu-situs="aktif"] .situs,
+:root[data-waktu-situs="aktif"] .kartu,
+:root[data-waktu-situs="aktif"] .tabel-bungkus,
+:root[data-waktu-situs="aktif"] .angka,
+:root[data-waktu-situs="aktif"] .kunci,
+:root[data-waktu-situs="aktif"] .catatan,
+:root[data-waktu-situs="aktif"] .catatan-borang,
+:root[data-waktu-situs="aktif"] .kosong,
+:root[data-waktu-situs="aktif"] .pilihan,
+:root[data-waktu-situs="aktif"] .tombol,
+:root[data-waktu-situs="aktif"] .isian input,
+:root[data-waktu-situs="aktif"] .isian select,
+:root[data-waktu-situs="aktif"] .isian textarea {
+  transition: var(--transisi-waktu);
+}
+
+/* ---------------------------------------------------------------------------
+ * PAGI — segar, hijau muda, sedikit hangat seperti cahaya matahari awal.
+ * ------------------------------------------------------------------------ */
+:root[data-waktu-situs="aktif"][data-waktu="pagi"] {
+  --dasar: #eef5ef;
+  --permukaan: #fbfdf9;
+  --permukaan-2: #e5eee6;
+  --permukaan-3: #f4f8f3;
+
+  --tinta: #14251f;
+  --tinta-2: #52675e;
+  --tinta-3: #778b82;
+
+  --garis: #d1dfd3;
+  --garis-2: #e3ebe4;
+
+  --brand: #17634f;
+  --brand-2: #1d7961;
+  --brand-soft: #dcece4;
+  --brand-ink: #ffffff;
+
+  --action: #a96f12;
+  --action-soft: #f8ecd2;
+  --wa: #14765f;
+  --wa-soft: #dff0e9;
+  --bahaya: #9b372c;
+  --bahaya-soft: #f8e5e1;
+  --info: #315f7f;
+  --info-soft: #e2edf4;
+
+  --bayang: 0 1px 2px rgba(35, 67, 50, .04), 0 12px 32px -22px rgba(35, 76, 55, .24);
+  --bayang-kuat: 0 2px 6px rgba(35, 67, 50, .06), 0 22px 48px -26px rgba(35, 76, 55, .32);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="pagi"] main {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255, 216, 121, .19), transparent 28%),
+    radial-gradient(circle at 92% 13%, rgba(135, 206, 158, .14), transparent 27%),
+    linear-gradient(180deg, #f7fbf6 0, #eef5ef 430px, var(--dasar) 100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * SIANG — terang, bersih, sedikit biru agar berbeda jelas dari pagi.
+ * ------------------------------------------------------------------------ */
+:root[data-waktu-situs="aktif"][data-waktu="siang"] {
+  --dasar: #eef4f5;
+  --permukaan: #ffffff;
+  --permukaan-2: #e4edf0;
+  --permukaan-3: #f5f9fa;
+
+  --tinta: #10252a;
+  --tinta-2: #52686d;
+  --tinta-3: #778c91;
+
+  --garis: #cfdddf;
+  --garis-2: #e2eaec;
+
+  --brand: #0e6657;
+  --brand-2: #14806c;
+  --brand-soft: #dceee9;
+  --brand-ink: #ffffff;
+
+  --action: #9b6a14;
+  --action-soft: #f6ecd6;
+  --wa: #0f7967;
+  --wa-soft: #dff1eb;
+  --bahaya: #96342c;
+  --bahaya-soft: #f7e4e0;
+  --info: #286889;
+  --info-soft: #deedf5;
+
+  --bayang: 0 1px 2px rgba(20, 55, 62, .04), 0 12px 34px -22px rgba(27, 79, 90, .22);
+  --bayang-kuat: 0 2px 6px rgba(20, 55, 62, .06), 0 22px 50px -26px rgba(27, 79, 90, .3);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="siang"] main {
+  background:
+    radial-gradient(circle at 12% -2%, rgba(125, 199, 235, .18), transparent 30%),
+    radial-gradient(circle at 90% 8%, rgba(107, 205, 169, .11), transparent 25%),
+    linear-gradient(180deg, #fbfdfd 0, #eef4f5 460px, var(--dasar) 100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * SORE — hangat, krem/amber. Tetap terang agar halaman layanan mudah dibaca.
+ * ------------------------------------------------------------------------ */
+:root[data-waktu-situs="aktif"][data-waktu="sore"] {
+  --dasar: #f2ebe4;
+  --permukaan: #fffaf5;
+  --permukaan-2: #eadfd4;
+  --permukaan-3: #f8f1ea;
+
+  --tinta: #2a201a;
+  --tinta-2: #6f5d51;
+  --tinta-3: #927f71;
+
+  --garis: #dfd0c2;
+  --garis-2: #eee3d9;
+
+  --brand: #315f4d;
+  --brand-2: #3c755f;
+  --brand-soft: #e1ebe4;
+  --brand-ink: #ffffff;
+
+  --action: #a85a1a;
+  --action-soft: #f8e3cf;
+  --wa: #2e725d;
+  --wa-soft: #e1eee8;
+  --bahaya: #a13d31;
+  --bahaya-soft: #f8e3df;
+  --info: #536b82;
+  --info-soft: #e5ebf0;
+
+  --bayang: 0 1px 2px rgba(72, 45, 27, .05), 0 14px 36px -22px rgba(104, 60, 31, .27);
+  --bayang-kuat: 0 2px 6px rgba(72, 45, 27, .07), 0 24px 52px -26px rgba(104, 60, 31, .34);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="sore"] main {
+  background:
+    radial-gradient(circle at 9% 0%, rgba(255, 151, 66, .19), transparent 31%),
+    radial-gradient(circle at 88% 10%, rgba(248, 197, 111, .17), transparent 28%),
+    linear-gradient(180deg, #f9f0e8 0, #f2ebe4 500px, var(--dasar) 100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * MALAM — biru gelap, panel navy, teks terang. Ini perubahan paling kuat.
+ * ------------------------------------------------------------------------ */
+:root[data-waktu-situs="aktif"][data-waktu="malam"] {
+  color-scheme: dark;
+
+  --dasar: #091722;
+  --permukaan: #10232e;
+  --permukaan-2: #172f3b;
+  --permukaan-3: #0d1d27;
+
+  --tinta: #eef5f4;
+  --tinta-2: #b5c8c6;
+  --tinta-3: #829b9a;
+
+  --garis: #27414a;
+  --garis-2: #1c343d;
+
+  --brand: #6bc9ad;
+  --brand-2: #8bdac3;
+  --brand-soft: #16382f;
+  --brand-ink: #08231c;
+
+  --action: #e7ad55;
+  --action-soft: #3b2b17;
+  --wa: #58c9aa;
+  --wa-soft: #14372d;
+  --bahaya: #ec8b80;
+  --bahaya-soft: #421f1c;
+  --info: #93c4e3;
+  --info-soft: #153247;
+
+  --bayang: 0 1px 2px rgba(0, 0, 0, .35), 0 16px 44px -22px rgba(0, 0, 0, .68);
+  --bayang-kuat: 0 3px 8px rgba(0, 0, 0, .42), 0 28px 62px -28px rgba(0, 0, 0, .82);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="malam"] body {
+  background: #07131c;
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="malam"] main {
+  background:
+    radial-gradient(circle at 76% -8%, rgba(77, 143, 178, .22), transparent 34%),
+    radial-gradient(circle at 12% 8%, rgba(35, 117, 95, .12), transparent 28%),
+    linear-gradient(180deg, #071722 0, #0a1c28 260px, #091722 760px, var(--dasar) 100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * Permukaan umum. Token sudah mengubah warnanya; lapisan ini memberi sedikit
+ * karakter agar perubahan waktu terasa pada halaman yang banyak kartunya.
+ * ------------------------------------------------------------------------ */
+:root[data-waktu-situs="aktif"] main {
+  min-height: 62vh;
+  transition: background .9s ease;
+}
+
+:root[data-waktu-situs="aktif"] .kartu,
+:root[data-waktu-situs="aktif"] .tabel-bungkus,
+:root[data-waktu-situs="aktif"] .angka,
+:root[data-waktu-situs="aktif"] .kunci,
+:root[data-waktu-situs="aktif"] .kosong {
+  box-shadow: var(--bayang);
+}
+
+:root[data-waktu-situs="aktif"] .kepala-halaman,
+:root[data-waktu-situs="aktif"] .kepala-bagian,
+:root[data-waktu-situs="aktif"] .remah,
+:root[data-waktu-situs="aktif"] .verifikasi {
+  transition: color .75s ease, border-color .75s ease;
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="malam"] .gambar-penuh,
+:root[data-waktu-situs="aktif"][data-waktu="malam"] .foto img {
+  box-shadow: 0 7px 22px rgba(0, 0, 0, .22);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="malam"] input::placeholder,
+:root[data-waktu-situs="aktif"][data-waktu="malam"] textarea::placeholder {
+  color: #78908f;
+}
+
+/* Header mengikuti fase waktu pada seluruh halaman aktif, bukan hanya beranda. */
+:root[data-waktu-situs="aktif"][data-waktu="pagi"] .situs {
+  background-color: rgba(247, 251, 246, .88);
+  border-color: rgba(40, 91, 70, .08);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="siang"] .situs {
+  background-color: rgba(249, 252, 252, .9);
+  border-color: rgba(29, 93, 82, .08);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="sore"] .situs {
+  background-color: rgba(251, 242, 232, .87);
+  border-color: rgba(118, 73, 42, .1);
+}
+
+:root[data-waktu-situs="aktif"][data-waktu="malam"] .situs {
+  color: var(--tinta);
+  background-color: rgba(7, 27, 40, .91);
+  background-image:
+    linear-gradient(var(--brand), var(--brand)),
+    linear-gradient(var(--brand), var(--brand));
+  background-size: 100% 1px, 100% 3px;
+  background-position: 0 100%, 0 calc(100% - 3px);
+  background-repeat: no-repeat;
+  box-shadow: 0 16px 38px -28px rgba(0, 0, 0, .82);
+}
+
+/* ---------------------------------------------------------------------------
+ * PENGECUALIAN UMKM
+ * ---------------------------------------------------------------------------
+ * waktu.css yang lebih dulu dimuat sudah memberi latar waktu pada main/header.
+ * Bagian ini mengembalikan keluarga halaman UMKM ke gaya netral situs sehingga
+ * tidak berubah pagi/siang/sore/malam.
+ */
+:root[data-waktu-situs="nonaktif"] {
+  color-scheme: light;
+
+  --waktu-cahaya: rgba(255, 255, 255, .9);
+  --waktu-panel: rgba(255, 255, 255, .93);
+  --waktu-panel-kuat: rgba(255, 255, 255, .98);
+  --waktu-panel-teks: #10241e;
+  --waktu-panel-teks-2: #58706a;
+  --waktu-panel-garis: rgba(25, 64, 51, .12);
+  --waktu-bayang: 0 22px 70px -40px rgba(25, 52, 43, .34);
+}
+
+:root[data-waktu-situs="nonaktif"] main {
+  background: var(--dasar);
+}
+
+:root[data-waktu-situs="nonaktif"] .situs {
+  color: var(--tinta);
+  background-color: var(--permukaan);
+  background-image:
+    linear-gradient(var(--brand), var(--brand)),
+    linear-gradient(var(--brand), var(--brand));
+  background-size: 100% 1px, 100% 3px;
+  background-position: 0 100%, 0 calc(100% - 3px);
+  background-repeat: no-repeat;
+  box-shadow: none;
+}
+
+:root[data-waktu-situs="nonaktif"] .situs .merek .sub,
+:root[data-waktu-situs="nonaktif"] .situs .menu-butir > a,
+:root[data-waktu-situs="nonaktif"] .situs .menu-butir > button {
+  color: var(--tinta-2);
+}
+
+:root[data-waktu-situs="nonaktif"] .situs .menu-butir.terpilih > a,
+:root[data-waktu-situs="nonaktif"] .situs .menu-butir.terpilih > button {
+  color: var(--brand);
+}
+
+:root[data-waktu-situs="nonaktif"] .situs .cari-kotak {
+  background: var(--permukaan-3);
+  border-color: var(--garis);
+  color: var(--tinta);
+}
+
+:root[data-waktu-situs="nonaktif"] .situs .tombol-kecil {
+  background: var(--permukaan);
+  border-color: var(--garis);
+  color: var(--tinta-2);
+}
+
+:root[data-waktu-situs="nonaktif"] .situs .cari-kotak input {
+  color: var(--tinta);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-waktu-situs="nonaktif"]:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
+:root[data-waktu-situs="nonaktif"][data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-waktu-situs="aktif"] body,
+  :root[data-waktu-situs="aktif"] main,
+  :root[data-waktu-situs="aktif"] .situs,
+  :root[data-waktu-situs="aktif"] .kartu,
+  :root[data-waktu-situs="aktif"] .tabel-bungkus,
+  :root[data-waktu-situs="aktif"] .angka,
+  :root[data-waktu-situs="aktif"] .kunci,
+  :root[data-waktu-situs="aktif"] .catatan,
+  :root[data-waktu-situs="aktif"] .catatan-borang,
+  :root[data-waktu-situs="aktif"] .kosong,
+  :root[data-waktu-situs="aktif"] .pilihan,
+  :root[data-waktu-situs="aktif"] .tombol,
+  :root[data-waktu-situs="aktif"] .isian input,
+  :root[data-waktu-situs="aktif"] .isian select,
+  :root[data-waktu-situs="aktif"] .isian textarea {
+    transition: none;
+  }
+}
