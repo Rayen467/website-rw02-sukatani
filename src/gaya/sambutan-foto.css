@@ -1,0 +1,12 @@
+/* ========================================================================== 
+ * FOTO SAMBUTAN KETUA RW
+ * --------------------------------------------------------------------------
+ * Foto resmi terbaru yang berlatar biru terlihat seperti kotak foto studio
+ * yang ditempel di atas panel sambutan. Untuk Beranda, gunakan kembali aset
+ * portrait sebelumnya yang sudah cocok dengan background suasana waktu.
+ * Background card tetap mengikuti pagi / siang / sore / malam dari waktu.css.
+ * ========================================================================== */
+
+body:has(.beranda-hero) .sambutan-rw-foto > img {
+  content: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f4c78b9e-573d-46c2-a76b-534afa6caa8e.png") !important;
+}
