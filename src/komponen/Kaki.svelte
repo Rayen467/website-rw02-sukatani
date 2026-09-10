@@ -35,19 +35,16 @@
           </span>
         </a>
 
-        <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
-
-        <div class="kaki-kolaborasi-mini" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai dan Global Institute">
-          <span>Kolaborasi:</span>
-          <div class="kaki-kolaborasi-lockup">
-            <img
-              src={logoKolaborasi}
-              alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+        <div class="kaki-kolaborasi-inline" aria-label="KKN 20 Perum Sukatani Permai bersama Global Institute">
+          <img
+            src={logoKolaborasi}
+            alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
+
+        <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
 
         <a class="kaki-hubungi" href="mailto:rayenxtenri@gmail.com">Hubungi pengelola →</a>
       </section>
@@ -105,59 +102,39 @@
 </footer>
 
 <style>
-  .kaki-kolaborasi-mini {
-    display: grid;
-    gap: 7px;
-    margin: 14px 0 10px;
-    width: min(100%, 290px);
-  }
-
-  .kaki-kolaborasi-mini > span {
-    color: rgba(255,255,255,.8);
-    font-size: 9px;
-    font-weight: 650;
-  }
-
-  .kaki-kolaborasi-lockup {
+  .kaki-kolaborasi-inline {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 58px;
-    padding: 7px 11px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 15px;
-    background: rgba(10,25,38,.28);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 22px rgba(0,0,0,.08);
-    backdrop-filter: blur(8px);
+    justify-content: flex-start;
+    width: min(100%, 250px);
+    margin: 8px 0 10px 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
-  .kaki-kolaborasi-lockup img {
+  .kaki-kolaborasi-inline img {
     display: block;
     width: 100%;
-    max-width: 255px;
-    max-height: 66px;
+    max-width: 245px;
+    max-height: 62px;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 3px 8px rgba(0,0,0,.18));
+    object-position: left center;
+    filter: none;
   }
 
   @media (max-width: 680px) {
-    .kaki-kolaborasi-mini {
-      width: min(100%, 270px);
-      margin: 12px 0 9px;
+    .kaki-kolaborasi-inline {
+      width: min(100%, 225px);
+      margin: 7px 0 9px;
     }
 
-    .kaki-kolaborasi-lockup {
-      min-height: 54px;
-      padding: 6px 9px;
-      border-radius: 13px;
-    }
-
-    .kaki-kolaborasi-lockup img {
-      max-width: 235px;
-      max-height: 60px;
+    .kaki-kolaborasi-inline img {
+      max-width: 220px;
+      max-height: 56px;
     }
   }
 </style>
