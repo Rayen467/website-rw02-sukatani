@@ -19,6 +19,7 @@
   });
 
   const gambarKaki = $derived(FOOTER_4K[waktu.fase] || FOOTER_4K.malam);
+  const logoKolaborasi = "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/47ada69c-77aa-4585-bb50-972c20f0a533.png";
 </script>
 
 <footer class="tanpa-cetak kaki-waktu kaki-modern" style={"--gambar-kaki:url('" + gambarKaki + "')"}>
@@ -34,17 +35,6 @@
           </span>
         </a>
         <p>Bersama membangun lingkungan yang lebih baik, guyub, maju dan sejahtera.</p>
-
-        <div class="kaki-kkn-kolaborasi" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai">
-          <span>Kolaborasi bersama:</span>
-          <img
-            src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/314565b4-15b2-452c-a959-ca5fad840eae.png"
-            alt="KKN 20 Perum Sukatani Permai - Global Institute"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
         <a class="kaki-hubungi" href="mailto:rayenxtenri@gmail.com">Hubungi pengelola →</a>
       </section>
 
@@ -97,5 +87,55 @@
       <span class="kaki-modern-tagline">Rumah bukan hanya tempat, tapi tentang kebersamaan.</span>
       <span class="kaki-modern-kkn">KKN 20 · rayenxtenri@gmail.com</span>
     </div>
+
+    <section class="kaki-kolaborasi-bawah" aria-label="Kolaborasi KKN 20 Perum Sukatani Permai dan Global Institute">
+      <span class="kaki-kolaborasi-label">Kolaborasi & kontribusi digital</span>
+      <img
+        src={logoKolaborasi}
+        alt="KKN 20 Perum Sukatani Permai dan Global Institute of Technology & Business"
+        loading="lazy"
+        decoding="async"
+      />
+    </section>
   </div>
 </footer>
+
+<style>
+  .kaki-kolaborasi-bawah {
+    margin-top: 18px;
+    padding: 18px 20px 10px;
+    border-top: 1px solid rgba(255, 255, 255, .18);
+    display: grid;
+    justify-items: center;
+    gap: 9px;
+    text-align: center;
+  }
+
+  .kaki-kolaborasi-label {
+    color: rgba(255,255,255,.74);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .kaki-kolaborasi-bawah img {
+    display: block;
+    width: min(100%, 560px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,.18));
+  }
+
+  @media (max-width: 680px) {
+    .kaki-kolaborasi-bawah {
+      margin-top: 14px;
+      padding: 16px 8px 4px;
+    }
+
+    .kaki-kolaborasi-bawah img {
+      width: min(100%, 420px);
+    }
+  }
+</style>
