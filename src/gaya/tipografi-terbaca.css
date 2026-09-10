@@ -1,45 +1,20 @@
 /* ===========================================================================
- * TIPOGRAFI TERBACA — seluruh website
+ * TIPOGRAFI TERBACA — fokus hanya teks mikro
  * ===========================================================================
  *
- * Reviewer RW menyampaikan banyak teks terlalu kecil untuk dibaca, terutama
- * di HP. File ini dimuat PALING AKHIR agar ukuran teks yang terlalu mikro
- * dari komponen lama dinaikkan tanpa merombak layout/identitas visual.
- *
- * Prinsip:
- * - isi utama 14–16px;
- * - keterangan sekunder minimal sekitar 11–12px;
- * - tombol/menu tidak lagi memakai teks mikro;
- * - heading tetap proporsional, tidak dibesarkan berlebihan;
- * - logo/tagline grafis tidak dipaksa besar karena bukan isi bacaan utama.
+ * Revisi ini TIDAK membesarkan paragraf normal, judul, atau isi utama.
+ * Yang dinaikkan hanya teks-teks kecil yang sebelumnya sulit dibaca reviewer:
+ * helper text, metadata, label kecil, kicker, sublabel, small text, footer,
+ * keterangan kartu, dan teks sekunder di mobile.
  * ======================================================================== */
 
-body {
-  font-size: 16px;
-}
-
-/* Isi bacaan umum */
-main p,
-main li,
-main dd,
-main dt,
-main td,
-main th,
-main label,
-main input,
-main select,
-main textarea {
-  font-size: max(13.5px, .86rem);
-}
-
+/* Small text generik: naik sedikit, isi normal tetap mengikuti CSS asli. */
 main small {
-  font-size: max(11.5px, .72rem);
-  line-height: 1.45;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
 }
 
-/* Judul halaman/bagian tetap elegan tetapi lebih mudah dipindai. */
-.kepala-halaman p,
-.kepala-bagian p,
+/* Metadata dan teks bantuan umum. */
 .remah,
 .alis,
 .catatan,
@@ -47,100 +22,53 @@ main small {
 .kunci,
 .kosong-ket,
 .kosong-siapa {
-  font-size: 13px !important;
-  line-height: 1.55 !important;
+  font-size: 12.5px !important;
+  line-height: 1.52 !important;
 }
 
-.kepala-bagian h2 {
-  font-size: clamp(22px, 2.1vw, 28px) !important;
+/* Subteks kartu dan panel. */
+.kartu small,
+.panel-rumah small,
+.kartu .muted,
+.panel-rumah .muted {
+  font-size: 12px !important;
+  line-height: 1.48 !important;
 }
 
-/* Navigasi dan kontrol */
-.menu-butir > a,
-.menu-butir > button,
-.turunan a {
-  font-size: 14.5px !important;
-}
-
-.turunan a span,
-.cari-kotak button,
-.tombol-kecil,
-.tombol,
-button,
-input,
-select,
-textarea {
-  font-size: 13.5px;
+/* Header / dropdown / drawer: hanya bagian kecilnya. */
+.turunan a span {
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
 }
 
 .laci .kelompok {
   font-size: 11.5px !important;
 }
 
-.laci a {
-  font-size: 15px !important;
+.merek-teks small {
+  font-size: 6.5px !important;
 }
 
-/* Kartu umum */
-.kartu h3,
-.panel-rumah h3,
-.panel-rumah h4 {
-  font-size: max(15px, .94rem);
-}
-
-.kartu p,
-.kartu li,
-.kartu label,
-.panel-rumah p,
-.panel-rumah li,
-.panel-rumah label {
-  font-size: 13.5px !important;
-  line-height: 1.55 !important;
-}
-
-.kartu small,
-.panel-rumah small {
-  font-size: 11.5px !important;
-  line-height: 1.45 !important;
-}
-
-/* BERANDA — naikkan semua microcopy yang sebelumnya 7–10px. */
+/* BERANDA — hanya microcopy, bukan judul/paragraf utama. */
 body:has(.beranda-hero) .beranda-eyebrow {
   font-size: 11px !important;
 }
 
-body:has(.beranda-hero) .beranda-ringkas {
-  font-size: clamp(14px, 1.3vw, 17px) !important;
-  line-height: 1.58 !important;
-}
-
-body:has(.beranda-hero) .beranda-cta a {
-  font-size: 13px !important;
-}
-
-body:has(.beranda-hero) .beranda-meta-item b {
-  font-size: 12.5px !important;
-}
-
 body:has(.beranda-hero) .beranda-meta-item small {
   font-size: 10.5px !important;
+  line-height: 1.4 !important;
 }
 
 body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
-  font-size: 11px !important;
+  font-size: 10.5px !important;
 }
 
 body:has(.beranda-hero) .kembali-waktu {
-  font-size: 10px !important;
-}
-
-body:has(.beranda-hero) .layanan-cepat-item strong {
-  font-size: 12.5px !important;
-  line-height: 1.35 !important;
+  font-size: 9.5px !important;
 }
 
 body:has(.beranda-hero) .layanan-cepat-item small {
-  font-size: 10.5px !important;
+  font-size: 11.5px !important;
   line-height: 1.45 !important;
 }
 
@@ -148,7 +76,8 @@ body:has(.beranda-hero) .layanan-cepat-item small {
 .home-important-label,
 .home-latest-head small,
 .home-activity-copy small {
-  font-size: 9.5px !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
 }
 
 .home-section-copy,
@@ -160,64 +89,36 @@ body:has(.beranda-hero) .layanan-cepat-item small {
 .home-read,
 .home-link-all,
 .home-umkm-copy small {
-  font-size: 11.5px !important;
+  font-size: 12px !important;
   line-height: 1.5 !important;
 }
 
-.home-important-card > strong,
-.home-explore-card strong,
-.home-hub-copy strong,
-.home-umkm-copy strong {
+/* Profil / layanan / kontak / pengurus: hanya small dan keterangan sekunder. */
+.profil-modern small,
+.layanan-modern small,
+.kontak-modern small,
+.pengurus-modern small {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+/* Tabel: header kecil dinaikkan sedikit, isi td tetap ukuran asli. */
+table th {
   font-size: 12.5px !important;
   line-height: 1.4 !important;
 }
 
-/* Profil, layanan, kontak, pengurus, data, berita dan halaman fitur lain. */
-.profil-modern p,
-.profil-modern li,
-.profil-modern small,
-.layanan-modern p,
-.layanan-modern li,
-.layanan-modern small,
-.kontak-modern p,
-.kontak-modern li,
-.kontak-modern small,
-.pengurus-modern p,
-.pengurus-modern li,
-.pengurus-modern small {
-  font-size: 12.5px !important;
-  line-height: 1.55 !important;
+/* Footer: microcopy yang sebelumnya 8–10px. */
+.kaki-modern-kolom h4 {
+  font-size: 10.5px !important;
 }
 
-.profil-modern label,
-.layanan-modern label,
-.kontak-modern label,
-.pengurus-modern label {
-  font-size: 13px !important;
-}
-
-/* Tabel/data sering menjadi titik paling sulit dibaca reviewer. */
-table th {
-  font-size: 12.5px !important;
-  line-height: 1.35 !important;
-}
-
-table td {
-  font-size: 13px !important;
-  line-height: 1.48 !important;
-}
-
-/* Footer: masih ringkas, tetapi bukan teks 8px lagi. */
-.kaki-modern-brand > p,
 .kaki-modern-kolom a,
+.kaki-modern-brand > p,
 .kaki-lokasi p,
 .kaki-lokasi-isi strong {
   font-size: 11.5px !important;
   line-height: 1.5 !important;
-}
-
-.kaki-modern-kolom h4 {
-  font-size: 10.5px !important;
 }
 
 .kaki-lokasi-isi small,
@@ -226,36 +127,25 @@ table td {
 .kaki-hubungi,
 .kaki-kolaborasi-mini > span,
 .kaki-kolaborasi-label {
-  font-size: 10px !important;
+  font-size: 10.5px !important;
   line-height: 1.45 !important;
 }
 
-/* ---------------------------------------------------------------------------
- * MOBILE — prioritas utama keterbacaan.
- * ------------------------------------------------------------------------ */
+/* ===========================================================================
+ * MOBILE — microtext jangan turun ke ukuran terlalu kecil.
+ * ======================================================================== */
 @media (max-width: 680px) {
-  body {
-    font-size: 16px;
+  main small,
+  .kartu small,
+  .panel-rumah small,
+  .profil-modern small,
+  .layanan-modern small,
+  .kontak-modern small,
+  .pengurus-modern small {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
   }
 
-  main p,
-  main li,
-  main dd,
-  main dt,
-  main td,
-  main th,
-  main label {
-    font-size: 14px !important;
-    line-height: 1.58 !important;
-  }
-
-  main small {
-    font-size: 12px !important;
-    line-height: 1.48 !important;
-  }
-
-  .kepala-halaman p,
-  .kepala-bagian p,
   .remah,
   .alis,
   .catatan,
@@ -263,80 +153,19 @@ table td {
   .kunci,
   .kosong-ket,
   .kosong-siapa {
-    font-size: 13.5px !important;
-  }
-
-  .kartu p,
-  .kartu li,
-  .kartu label,
-  .panel-rumah p,
-  .panel-rumah li,
-  .panel-rumah label {
-    font-size: 13.5px !important;
-  }
-
-  .kartu small,
-  .panel-rumah small {
-    font-size: 12px !important;
-  }
-
-  input,
-  select,
-  textarea,
-  button,
-  .tombol,
-  .tombol-kecil {
-    font-size: 14px !important;
-  }
-
-  .cari-laci input {
-    font-size: 14px !important;
-  }
-
-  .cari-laci button {
     font-size: 12.5px !important;
-  }
-
-  /* Hero tetap hemat tempat, hanya teksnya lebih terbaca. */
-  body:has(.beranda-hero) .beranda-eyebrow {
-    font-size: 10.5px !important;
-    letter-spacing: .20em !important;
-  }
-
-  body:has(.beranda-hero) .beranda-ringkas {
-    max-width: 34ch !important;
-    font-size: 13.5px !important;
-    line-height: 1.55 !important;
-  }
-
-  body:has(.beranda-hero) .beranda-cta a {
-    font-size: 12.5px !important;
-  }
-
-  body:has(.beranda-hero) .beranda-meta-item b {
-    font-size: 12px !important;
   }
 
   body:has(.beranda-hero) .beranda-meta-item small {
-    font-size: 9.5px !important;
+    font-size: 10px !important;
   }
 
-  /* Pemilih waktu tetap compact; hanya labelnya dinaikkan sedikit. */
   body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
     font-size: 10px !important;
   }
 
-  body:has(.beranda-hero) .kembali-waktu {
-    font-size: 9.5px !important;
-  }
-
-  body:has(.beranda-hero) .layanan-cepat-item strong {
-    font-size: 13px !important;
-  }
-
   body:has(.beranda-hero) .layanan-cepat-item small {
     font-size: 11.5px !important;
-    line-height: 1.45 !important;
   }
 
   .home-kicker,
@@ -358,41 +187,15 @@ table td {
     font-size: 12px !important;
   }
 
-  .home-important-card > strong,
-  .home-explore-card strong,
-  .home-hub-copy strong,
-  .home-umkm-copy strong {
-    font-size: 13px !important;
+  .kaki-modern-kolom h4 {
+    font-size: 11px !important;
   }
 
-  .profil-modern p,
-  .profil-modern li,
-  .profil-modern small,
-  .layanan-modern p,
-  .layanan-modern li,
-  .layanan-modern small,
-  .kontak-modern p,
-  .kontak-modern li,
-  .kontak-modern small,
-  .pengurus-modern p,
-  .pengurus-modern li,
-  .pengurus-modern small {
-    font-size: 13px !important;
-    line-height: 1.55 !important;
-  }
-
-  table th { font-size: 12.5px !important; }
-  table td { font-size: 13px !important; }
-
-  .kaki-modern-brand > p,
   .kaki-modern-kolom a,
+  .kaki-modern-brand > p,
   .kaki-lokasi p,
   .kaki-lokasi-isi strong {
     font-size: 12px !important;
-  }
-
-  .kaki-modern-kolom h4 {
-    font-size: 11px !important;
   }
 
   .kaki-lokasi-isi small,
@@ -406,18 +209,9 @@ table td {
 }
 
 @media (max-width: 380px) {
-  /* Pada HP sangat kecil jangan turun ke ukuran mikro: biarkan teks membungkus. */
-  main p,
-  main li,
-  main label {
-    font-size: 13.5px !important;
-  }
-
-  body:has(.beranda-hero) .layanan-cepat-item small,
-  .home-section-copy,
-  .home-important-card p,
-  .home-explore-card small,
-  .home-hub-copy small {
-    font-size: 11.5px !important;
+  main small,
+  .kartu small,
+  .panel-rumah small {
+    font-size: 12px !important;
   }
 }
