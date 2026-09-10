@@ -13,13 +13,22 @@
     return String(n).replace(/[^0-9]/g, "").replace(/^0/, "62");
   }
 
+  const FOTO_HANDOKO = "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd57c52e-1c82-4ccc-8800-458a0206d3ad.png";
+
   const FOTO_PENGURUS = Object.freeze({
-    sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
+    sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png",
+    handoko: FOTO_HANDOKO
   });
 
   function fotoPengurus(o) {
     const nama = normal(o?.nama);
     return FOTO_PENGURUS[nama] || o?.foto || "";
+  }
+
+  function fotoLembaga(o) {
+    const ketua = normal(o?.ketua);
+    if (ketua.includes("handoko")) return FOTO_HANDOKO;
+    return o?.foto || "";
   }
 
   const KONTAK_RT = Object.freeze({
@@ -33,7 +42,7 @@
       id: "handoko",
       jabatan: "Pengurus RW",
       nama: "Handoko",
-      foto: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd57c52e-1c82-4ccc-8800-458a0206d3ad.png",
+      foto: FOTO_HANDOKO,
       kontak: "",
       periode: ""
     }
@@ -199,7 +208,7 @@
       <div class="kartu">
         <div class="orang">
           <span class="foto">
-            {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="" decoding="async" />{/if}
+            {#if fotoLembaga(o)}<img class="gambar-penuh" src={fotoLembaga(o)} alt="Foto {o.ketua || o.nama}" decoding="async" />{/if}
           </span>
           <div>
             <span class="jabatan">{o.nama}</span>
