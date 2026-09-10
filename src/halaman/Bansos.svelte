@@ -18,18 +18,18 @@
 
 <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Bantuan Sosial</span></nav>
 <div class="kepala-halaman">
-  <p class="alis">Warga</p>
-  <h1>Informasi bantuan sosial</h1>
-  <p>Syarat, jalur pengajuan, dan keterbukaan jumlah penerima.</p>
+  <p class="alis">Layanan Warga</p>
+  <h1>Informasi Bantuan Sosial</h1>
+  <p>Informasi penerima bansos per RT, syarat pengajuan, dan jalur usulan bantuan untuk warga RW 02.</p>
 </div>
 
 <div class="catatan">
-  <b>Jumlahnya terbuka, datanya tidak.</b> Yang dipublikasikan hanya jumlah penerima per RT.
-  Nama dan alamat penerima tidak ditampilkan di situs, dan hanya dapat diperiksa langsung kepada pengurus.
+  <b>Jumlah penerima terbuka, data pribadi tetap dilindungi.</b> Yang ditampilkan kepada publik hanya jumlah penerima per RT.
+  Nama, NIK, dan alamat penerima tidak ditampilkan di website dan hanya dapat diperiksa oleh pengurus sesuai kebutuhan pelayanan.
 </div>
 
 <section class="blok" style="margin-top:24px">
-  <div class="kepala-bagian"><h2>Program yang berjalan</h2></div>
+  <div class="kepala-bagian"><h2>Syarat & jalur pengajuan</h2></div>
   {#each program as b}
     <div class="kartu" style="margin-bottom:14px">
       <h3>{b.nama}</h3>
@@ -43,7 +43,7 @@
 </section>
 
 <section class="blok">
-  <div class="kepala-bagian"><h2>Jumlah penerima per RT</h2></div>
+  <div class="kepala-bagian"><h2>Penerima bansos per RT</h2></div>
   <div class="tabel-bungkus">
     <table class="data">
       <thead><tr><th>RT</th><th>Jumlah penerima</th><th>Periode</th></tr></thead>
@@ -59,7 +59,6 @@
     </table>
   </div>
 </section>
-
 
 {#if pengurus()}
   <section class="blok">
