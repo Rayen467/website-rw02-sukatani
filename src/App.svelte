@@ -11,7 +11,8 @@
   import { mulaiPantauan } from "./keadaan/mulai.js";
   import { pengurus, sesi } from "./keadaan/sesi.svelte.js";
   import { terapkanGaya } from "./keadaan/tampilan.js";
-  import { mulaiWaktu } from "./keadaan/waktu.svelte.js";
+  import { mulaiWaktu, waktu } from "./keadaan/waktu.svelte.js";
+  import { gambarWaktuAbsolut } from "./inti/waktu.js";
 
   import Kepala from "./komponen/Kepala.svelte";
   import Kaki from "./komponen/Kaki.svelte";
@@ -107,13 +108,19 @@
     const K = halaman[satu || ""];
     return K ? { komponen: K, kunci: null } : { komponen: TidakAda, kunci: null };
   });
+
+  /* Satu sumber gambar fase untuk seluruh website. Beranda memakainya sebagai
+     hero penuh, sedangkan halaman lain memakainya sebagai panorama lembut di
+     belakang judul. Nilainya reaktif: preview dan pergantian jam ikut berubah
+     tanpa reload. */
+  const gambarSuasanaSitus = $derived(gambarWaktuAbsolut(waktu.fase));
 </script>
 
 <a class="lompat" href="#utama">Lompat ke isi</a>
 
 <Kepala />
 
-<main id="utama">
+<main id="utama" style={"--gambar-waktu-situs:url('" + gambarSuasanaSitus + "')"}>
   <div class="wadah">
     {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
       <pilihan.komponen kunci={pilihan.kunci} />
