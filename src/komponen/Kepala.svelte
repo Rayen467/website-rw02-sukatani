@@ -30,9 +30,9 @@
         : [])
   ]);
 
-  /* Navbar ini dipakai global di seluruh halaman supaya tampilan Profil,
-     Layanan, Berita, Transparansi, UMKM, Kontak, dan halaman lain selalu
-     sama dengan navbar Beranda. */
+  /* Beranda tetap menjadi acuan visual. Halaman lain memakai markup navbar
+     yang sama; penyamaan tampilannya dilakukan lewat CSS tanpa menimpa gaya
+     khusus Beranda. */
   const menuRingkas = [
     { label: "Beranda", alamat: "/" },
     { label: "Profil", alamat: "/profil" },
@@ -69,13 +69,11 @@
     tutupSemua();
   }
 
-  /* Smart navbar:
-   * - selalu terlihat di bagian paling atas halaman;
-   * - scroll turun -> navbar masuk ke atas agar konten lebih luas;
-   * - scroll naik -> navbar langsung muncul lagi;
-   * - saat menu HP terbuka navbar tidak boleh menghilang.
-   * Ambang kecil dipakai supaya getaran jari 1-2 px tidak membuat navbar
-   * berkedip bolak-balik. */
+  /* Smart navbar hanya mengatur perilaku scroll, BUKAN gaya/posisi normal.
+   * Dengan begitu navbar Beranda tidak pernah dipaksa mengikuti halaman lain.
+   * - scroll turun -> navbar hilang;
+   * - scroll naik -> navbar muncul;
+   * - dekat bagian atas / menu terbuka -> selalu tampil. */
   function pantauGulir() {
     const sekarang = Math.max(window.scrollY || 0, 0);
     const selisih = sekarang - gulirTerakhir;
@@ -200,9 +198,10 @@
 </header>
 
 <style>
-  /* Berlaku desktop + tablet + HP karena Kepala adalah komponen global. */
+  /* Jangan memberi transform pada keadaan normal. Gaya normal (terutama
+     translateX(-50%) navbar floating Beranda) harus tetap menjadi milik CSS
+     halaman, bukan ditimpa komponen smart-scroll. */
   .navbar-pintar {
-    transform: translate3d(0, 0, 0);
     transition:
       transform 220ms cubic-bezier(.22, .61, .36, 1),
       background-color .75s ease,
@@ -213,8 +212,24 @@
   }
 
   .navbar-pintar.navbar-tersembunyi {
-    transform: translate3d(0, calc(-100% - 8px), 0);
+    transform: translate3d(0, calc(-100% - 12px), 0);
     pointer-events: none;
+  }
+
+  /* Beranda desktop memang dipusatkan dengan left:50% + translateX(-50%).
+     Saat disembunyikan koordinat X itu harus tetap dipertahankan. */
+  :global(body:has(.beranda-hero)) .navbar-pintar.navbar-tersembunyi {
+    transform: translate3d(-50%, calc(-100% - 28px), 0);
+  }
+
+  /* Di HP header Beranda dan halaman lain sama-sama full width. Rule mobile
+     lama memakai transform:none!important, jadi state sembunyi perlu menang
+     secara eksplisit agar fitur scroll tetap bekerja. */
+  @media (max-width: 680px) {
+    .navbar-pintar.navbar-tersembunyi,
+    :global(body:has(.beranda-hero)) .navbar-pintar.navbar-tersembunyi {
+      transform: translate3d(0, calc(-100% - 10px), 0) !important;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
