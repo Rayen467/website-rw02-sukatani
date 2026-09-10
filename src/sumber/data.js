@@ -269,6 +269,43 @@ export function pilihPolling(pollId, nomor) {
 }
 
 /**
+ * Forum warga memakai dua koleksi publik: topik dan komentar. Nama yang
+ * ditampilkan adalah snapshot yang dipilih halaman saat kirim, sedangkan uid
+ * tetap disimpan agar Firestore Rules bisa memastikan pemilik tulisannya.
+ */
+export function kirimTopikForum(isi) {
+  const u = penggunaSekarang();
+  if (!u) throw new Error("belum masuk");
+  return addDoc(collection(db, KOLEKSI.FORUM_TOPIK), {
+    ...bersihkan(isi),
+    uid: u.uid,
+    status: STATUS.AKTIF,
+    dibuat: serverTimestamp()
+  });
+}
+
+export function kirimKomentarForum(topikId, isi) {
+  const u = penggunaSekarang();
+  if (!u) throw new Error("belum masuk");
+  return addDoc(collection(db, KOLEKSI.FORUM_KOMENTAR), {
+    ...bersihkan(isi),
+    topikId: String(topikId || ""),
+    uid: u.uid,
+    status: STATUS.AKTIF,
+    dibuat: serverTimestamp()
+  });
+}
+
+/** Penghapusan forum bersifat soft-delete agar alur diskusi tidak rusak. */
+export function hapusTopikForum(id) {
+  return updateDoc(doc(db, KOLEKSI.FORUM_TOPIK, id), { status: "dihapus" });
+}
+
+export function hapusKomentarForum(id) {
+  return updateDoc(doc(db, KOLEKSI.FORUM_KOMENTAR, id), { status: "dihapus" });
+}
+
+/**
  * Menyetujui peminjaman sekaligus mengunci tanggalnya di kalender warga.
  *
  * Dua tulisan sekaligus supaya pengurus tidak perlu ingat mengisi kalender
