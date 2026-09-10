@@ -9,8 +9,8 @@ rules_version = '2';
 //
 //   warga    -- Siapa pun yang masuk dengan akun Google dan mendaftar.
 //               Mengirim pengaduan, mengajukan surat, meminjam fasilitas,
-//               mendaftarkan usaha, ikut polling.
-//               Hanya bisa melihat kiriman MILIKNYA SENDIRI.
+//               mendaftarkan usaha, ikut polling dan forum.
+//               Hanya bisa melihat kiriman MILIKNYA SENDIRI untuk data privat.
 //
 //   petugas  -- Ketua RT, seksi keamanan dan kebersihan, kader.
 //               AKSES PENUH atas seluruh data dan isi situs:
@@ -31,9 +31,9 @@ rules_version = '2';
 //   adalah larangan mencabut hak diri sendiri.
 //
 // Warga yang belum masuk tetap bisa MEMBACA seluruh isi terbuka -- berita,
-// kalender, laporan kas, direktori usaha, daftar pengaduan -- dan tetap bisa
-// mengirim pengaduan tanpa nama. Itu disengaja: melaporkan gangguan keamanan
-// tidak boleh mensyaratkan pendaftaran.
+// kalender, laporan kas, direktori usaha, daftar pengaduan dan forum -- dan
+// tetap bisa mengirim pengaduan tanpa nama. Itu disengaja: melaporkan gangguan
+// keamanan tidak boleh mensyaratkan pendaftaran.
 //
 // CARA MEMASANG
 //   console.firebase.google.com/project/perumahansukatanirw02/firestore/rules
@@ -315,6 +315,56 @@ service cloud.firestore {
     match /polling/{pollId} {
       allow read: if true;
       allow write: if petugas();
+    }
+
+    // ---------- forum warga ----------
+    // Semua orang boleh membaca. Menulis harus memakai akun terverifikasi.
+    // Penulis hanya boleh menandai tulisannya sebagai dihapus; isi asli tidak
+    // dapat diedit setelah dipublikasikan. Petugas punya hak moderasi yang sama.
+
+    match /forum_topik/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.judul, 160)
+                    && teksWajar(request.resource.data.isi, 3000)
+                    && teksWajar(request.resource.data.kategori, 40)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['judul', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
+    }
+
+    match /forum_komentar/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.topikId, 160)
+                    && teksWajar(request.resource.data.isi, 1500)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['topikId', 'isi', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
     }
 
 
