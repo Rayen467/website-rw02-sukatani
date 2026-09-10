@@ -8,6 +8,12 @@
     return String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
 
+  function tanpaSapaan(nama) {
+    return String(nama || "")
+      .trim()
+      .replace(/^(bapak|ibu|pak|bu)\s+/i, "");
+  }
+
   function nomorWa(n) {
     if (!n) return "";
     return String(n).replace(/[^0-9]/g, "").replace(/^0/, "62");
@@ -16,8 +22,7 @@
   const FOTO_HANDOKO = "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/fd57c52e-1c82-4ccc-8800-458a0206d3ad.png";
 
   const FOTO_PENGURUS = Object.freeze({
-    sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png",
-    handoko: FOTO_HANDOKO
+    sukarno: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/4e0a0b02-b3ab-4976-bfd8-2e510e97297d.png"
   });
 
   function fotoPengurus(o) {
@@ -36,17 +41,6 @@
     "rt 03": "+62 813-1708-1950",
     "rt 04": "+62 857-7271-1169"
   });
-
-  const PENGURUS_TAMBAHAN_LOKAL = [
-    {
-      id: "handoko",
-      jabatan: "Pengurus RW",
-      nama: "Handoko",
-      foto: FOTO_HANDOKO,
-      kontak: "",
-      periode: ""
-    }
-  ];
 
   const daftar = $derived.by(() => {
     const dariServer = isi.pengurus_tampil || [];
@@ -72,20 +66,17 @@
           };
     });
 
-    const tambahan = dariServer.filter((o) =>
-      !PENGURUS_RW_BAWAAN.some((b) => {
+    const tambahan = dariServer.filter((o) => {
+      if (normal(o.nama).includes("handoko")) return false;
+
+      return !PENGURUS_RW_BAWAAN.some((b) => {
         const a = normal(o.jabatan);
         const c = normal(b.jabatan);
         return a === c || a.includes(c) || c.includes(a);
-      })
-    );
+      });
+    });
 
-    const semua = [...resmi, ...tambahan];
-    const tambahanLokal = PENGURUS_TAMBAHAN_LOKAL.filter(
-      (lokal) => !semua.some((o) => normal(o.nama) === normal(lokal.nama))
-    );
-
-    return [...semua, ...tambahanLokal];
+    return [...resmi, ...tambahan];
   });
 
   const barisRT = $derived.by(() => {
@@ -150,14 +141,14 @@
           <div class="orang">
             <span class="foto">
               {#if fotoPengurus(o)}
-                <img class="gambar-penuh" src={fotoPengurus(o)} alt="Foto {o.nama || o.jabatan}" decoding="async" />
+                <img class="gambar-penuh" src={fotoPengurus(o)} alt="Foto {tanpaSapaan(o.nama) || o.jabatan}" decoding="async" />
               {/if}
             </span>
             <div>
               <span class="jabatan">{o.jabatan || "-"}</span>
-              <span class="nama"><Belum nilai={o.nama} /></span>
+              <span class="nama"><Belum nilai={tanpaSapaan(o.nama)} /></span>
               {#if o.kontak}
-                <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {o.nama || o.jabatan} melalui WhatsApp">
+                <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {tanpaSapaan(o.nama) || o.jabatan} melalui WhatsApp">
                   WhatsApp {o.kontak}
                 </a>
               {/if}
@@ -183,13 +174,13 @@
       <div class="kartu">
         <div class="orang">
           <span class="foto">
-            {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {o.ketua || o.rt}" decoding="async" />{/if}
+            {#if o.foto}<img class="gambar-penuh" src={o.foto} alt="Foto {tanpaSapaan(o.ketua) || o.rt}" decoding="async" />{/if}
           </span>
           <div>
             <span class="jabatan">{o.rt || "-"}</span>
-            <span class="nama"><Belum nilai={o.ketua} /></span>
+            <span class="nama"><Belum nilai={tanpaSapaan(o.ketua)} /></span>
             {#if o.kontak}
-              <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {o.ketua || o.rt} melalui WhatsApp">
+              <a class="kontak" href={"https://wa.me/" + nomorWa(o.kontak)} target="_blank" rel="noopener noreferrer" aria-label="Hubungi {tanpaSapaan(o.ketua) || o.rt} melalui WhatsApp">
                 WhatsApp {o.kontak}
               </a>
             {/if}
@@ -208,11 +199,11 @@
       <div class="kartu">
         <div class="orang">
           <span class="foto">
-            {#if fotoLembaga(o)}<img class="gambar-penuh" src={fotoLembaga(o)} alt="Foto {o.ketua || o.nama}" decoding="async" />{/if}
+            {#if fotoLembaga(o)}<img class="gambar-penuh" src={fotoLembaga(o)} alt="Foto {tanpaSapaan(o.ketua) || o.nama}" decoding="async" />{/if}
           </span>
           <div>
             <span class="jabatan">{o.nama}</span>
-            <span class="nama">{o.ketua}</span>
+            <span class="nama">{tanpaSapaan(o.ketua)}</span>
             <span class="kontak">{o.jabatan}</span>
           </div>
         </div>
