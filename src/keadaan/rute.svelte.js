@@ -29,10 +29,25 @@ export const rute = $state({
   cari: ""
 });
 
+function terapkanTemaWaktuHalaman() {
+  if (typeof document === "undefined") return;
+
+  const halaman = rute.bagian[0] || "";
+  const halamanUmkm = halaman === "umkm" || halaman === "daftar-usaha";
+
+  /*
+   * Seluruh situs mengikuti atmosfer pagi/siang/sore/malam, kecuali
+   * keluarga halaman UMKM yang mempertahankan identitas visualnya sendiri.
+   * Atribut ini dibaca oleh gaya/waktu-situs.css.
+   */
+  document.documentElement.dataset.waktuSitus = halamanUmkm ? "nonaktif" : "aktif";
+}
+
 function baca() {
   const mentah = location.hash.replace(/^#/, "") || "/";
   rute.jalur = mentah;
   rute.bagian = mentah.split("/").filter(Boolean);
+  terapkanTemaWaktuHalaman();
 }
 
 /** Dipanggil sekali dari App.svelte. */
