@@ -50,7 +50,6 @@
  */
 
 import { KUNCI_SIMPAN } from "../inti/nama.js";
-import { PETUGAS_SIAP_PAKAI } from "../inti/akses.js";
 import { simpanan } from "../inti/peramban.js";
 
 /* Isi sumber/pintu.js, terisi sekali saat pustakanya selesai diunduh.
@@ -74,11 +73,6 @@ function tandaiPernahMasuk(ada) {
 
 /**
  * Mengunduh pustaka masuk, sekali saja, lalu memasang pemantauannya.
- *
- * Dipanggil dua arah: dari pantauMasuk() waktu situs menyala kalau
- * penandanya ada, dan dari setiap tombol yang memang butuh masuk. Karena
- * janjinya disimpan di "unduhan", pemanggilan berikutnya memakai unduhan
- * yang sama -- termasuk kalau dua tombol ditekan berbarengan.
  */
 function bukaPintu() {
   if (unduhan) return unduhan;
@@ -87,8 +81,6 @@ function bukaPintu() {
     if (saatBerubah && !dilepas) {
       lepas = p.pantau((u) => {
         const identitas = JSON.stringify(u ? [u.uid, u.email, u.emailVerified] : null);
-        /* Penyegaran token rutin tidak boleh mengosongkan formulir yang
-           sedang diisi. */
         if (identitas === identitasSebelumnya) return;
         identitasSebelumnya = identitas;
         tandaiPernahMasuk(!!u);
@@ -97,34 +89,14 @@ function bukaPintu() {
     }
     return p;
   });
-  /* Unduhan yang gagal -- jaringan putus di tengah -- tidak boleh
-     mengunci pintunya selamanya. Dilupakan supaya percobaan berikutnya
-     benar-benar mencoba lagi. */
   unduhan.catch(() => { unduhan = null; });
   return unduhan;
 }
 
-/**
- * Meminta pustaka masuk disiapkan lebih dulu, tanpa menunggu hasilnya.
- *
- * Dipanggil halaman yang sudah pasti berurusan dengan akun: Masuk, Akun
- * Saya, dan Kelola. Gunanya dua: mempercepat halaman-halaman itu, dan
- * memulihkan sesi lama kalau penandanya hilang.
- *
- * Janjinya dikembalikan supaya yang perlu boleh menunggu, tetapi halaman
- * sengaja tidak menunggunya: layar harus tetap tergambar walau unduhannya
- * pelan.
- */
 export function siapkanAkun() {
   return bukaPintu();
 }
 
-/**
- * Memantau siapa yang sedang masuk.
- * Dipanggil sekali saat situs dinyalakan. Fungsi yang diberikan akan
- * dipanggil ulang setiap kali ada yang masuk atau keluar, termasuk saat
- * halaman baru dibuka dan Firebase selesai memeriksa sesi lama.
- */
 export function pantauMasuk(fn) {
   saatBerubah = fn;
   dilepas = false;
@@ -132,10 +104,6 @@ export function pantauMasuk(fn) {
   if (simpanan.baca(KUNCI_SIMPAN.PERNAH_MASUK)) {
     bukaPintu();
   } else {
-    /* Belum pernah ada yang masuk di peramban ini, jadi tidak ada sesi
-       lama yang perlu diperiksa. Jawabannya diberikan langsung, dan
-       pustakanya tidak diunduh sama sekali. Efek sampingnya bagus:
-       tulisan "Memeriksa sesi akun..." tidak sempat berkedip. */
     identitasSebelumnya = JSON.stringify(null);
     fn(null);
   }
@@ -148,13 +116,6 @@ export function pantauMasuk(fn) {
   };
 }
 
-/**
- * Siapa yang sedang masuk sekarang, atau null. Dipakai fungsi tulis.
- *
- * Selama pustakanya belum diunduh jawabannya null, dan itu memang benar:
- * pustakanya cuma tidak diunduh kalau tidak ada yang pernah masuk, atau
- * sebelum tombol masuk pertama ditekan.
- */
 export function penggunaSekarang() {
   return pintu ? pintu.auth.currentUser : null;
 }
@@ -167,39 +128,9 @@ export async function masukGoogle() {
   return (await bukaPintu()).masukGoogle();
 }
 
-/**
- * Login email biasa tetap sama. Khusus akun petugas bersama, kalau akun
- * Firebase-nya belum pernah dibuat, percobaan login pertama sekaligus
- * membuat akun menggunakan kata sandi yang DIKETIK petugas saat itu.
- *
- * Kata sandi tidak pernah disimpan di source code. Akun yang baru dibuat
- * tetap wajib memverifikasi email sebelum hak petugas aktif.
- */
+/** Login email biasa. Untuk akun Gmail asli petugas, gunakan tombol Google. */
 export async function masukEmail(email, sandi) {
-  const bersih = emailBersih(email);
-  const p = await bukaPintu();
-
-  try {
-    return await p.masukEmail(bersih, sandi);
-  } catch (errMasuk) {
-    const kode = String(errMasuk?.code || "");
-    const akunSiapPakai = bersih === PETUGAS_SIAP_PAKAI.email;
-    const mungkinBelumAda = kode.includes("user-not-found") || kode.includes("invalid-credential");
-
-    if (!akunSiapPakai || !mungkinBelumAda) throw errMasuk;
-
-    try {
-      await p.daftarAkun(bersih, sandi, PETUGAS_SIAP_PAKAI.nama);
-      const err = new Error("Akun petugas dibuat. Buka Gmail petugas dan klik tautan verifikasi, lalu masuk lagi.");
-      err.code = "auth/petugas-created-verification-sent";
-      throw err;
-    } catch (errBuat) {
-      /* Kalau alamatnya ternyata memang sudah ada, berarti masalah awalnya
-         adalah sandi yang tidak cocok. Jangan menimpa akun yang sudah ada. */
-      if (String(errBuat?.code || "").includes("email-already-in-use")) throw errMasuk;
-      throw errBuat;
-    }
-  }
+  return (await bukaPintu()).masukEmail(emailBersih(email), sandi);
 }
 
 /**
@@ -217,12 +148,10 @@ export async function lupaSandi(email) {
   return (await bukaPintu()).lupaSandi(emailBersih(email));
 }
 
-/** Mengirim ulang tautan pemastian, untuk email yang tidak sampai. */
 export async function kirimUlangVerifikasi() {
   return (await bukaPintu()).kirimUlangVerifikasi();
 }
 
-/** Muat status email dan token server terbaru tanpa harus keluar dahulu. */
 export async function periksaVerifikasi() {
   return (await bukaPintu()).periksaVerifikasi();
 }
