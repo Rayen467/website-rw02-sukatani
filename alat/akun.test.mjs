@@ -122,12 +122,18 @@ test('hasil peran sesi lama tidak boleh menghidupkan kembali akses setelah kelua
 
 test('pergantian akun mengabaikan profil warga yang terlambat', async () => {
   const tunggu = jeda();
-  const l = await lingkungan({ ambilProfilWarga: () => tunggu.janji });
+  const l = await lingkungan({
+    ambilProfilWarga: (uid) => uid === 'lama'
+      ? tunggu.janji
+      : Promise.resolve({ nama: 'Baru' })
+  });
   const proses = l.masuk(akun('lama'));
+  await Promise.resolve();
   await l.masuk(akun('baru'));
-  tunggu.selesai({ nama: 'lama' });
+  tunggu.selesai({ nama: 'Lama' });
   await proses;
-  assert.notEqual(l.sesi.profilWarga?.nama, 'lama');
+  assert.equal(l.sesi.pengguna.uid, 'baru');
+  assert.equal(l.sesi.profilWarga.nama, 'Baru');
 });
 
 test('permintaan data pengurus dan suara yang terlambat tidak mengisi sesi baru', async () => {
