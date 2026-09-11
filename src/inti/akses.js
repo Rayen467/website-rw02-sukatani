@@ -1,11 +1,12 @@
 /**
- * Akun operasional petugas yang disiapkan untuk pemakaian bersama RW 02.
+ * Akun operasional petugas yang disiapkan untuk pemakaian RW 02.
  *
- * Kata sandi TIDAK pernah disimpan di repository. Petugas tetap mengetik
- * kata sandinya di halaman Masuk dan Firebase Authentication yang memeriksa.
+ * Hanya alamat email yang disimpan di repository. Kata sandi tidak pernah
+ * ditulis ke source code. Untuk akun Gmail asli, masuk lewat Google agar
+ * autentikasi tetap ditangani langsung oleh Google/Firebase.
  */
 export const PETUGAS_SIAP_PAKAI = Object.freeze({
-  email: "petugas02@gmail.com",
+  email: "kahandakar8@gmail.com",
   nama: "Petugas RW 02",
   jabatan: "Petugas RW",
   peran: "petugas"
