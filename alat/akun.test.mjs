@@ -158,7 +158,7 @@ test('peran asing dan akun belum terverifikasi tidak membuka menu Kelola', async
 });
 
 async function sumberAkun(ganti = {}, pernahMasuk = true) {
-  const auth = { currentUser: akun('uji') };
+  const auth = { currentUser: akun('uji', false), languageCode: null };
   const unduhan = { jumlah: 0 };
   const firebase = Object.fromEntries([
     'GoogleAuthProvider', 'signInWithPopup', 'signInWithEmailAndPassword',
