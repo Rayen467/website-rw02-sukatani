@@ -2,25 +2,6 @@
  * ===========================================================================
  *  SAMBUNGAN FIREBASE -- dinyalakan sekali, dipakai seluruh situs
  * ===========================================================================
- *
- *  LAPIS 2 (sumber). Boleh mengimpor: inti/
- *
- *  Berkas ini HANYA menyalakan sambungan dan menerjemahkan pesan galat.
- *  Tidak ada perintah baca-tulis di sini -- itu ada di dua tetangganya:
- *
- *      sumber/akun.js   masuk, daftar, keluar, lupa sandi
- *      sumber/data.js   membaca dan menulis isi situs
- *
- *  Halaman TIDAK BOLEH mengimpor berkas ini langsung untuk mengambil auth
- *  atau db. Kalau sebuah halaman butuh data, panggil fungsi di data.js;
- *  kalau fungsinya belum ada, tambahkan di sana. Aturan ini yang membuat
- *  seluruh perintah ke server bisa dilihat cukup dengan membuka satu berkas.
- *
- *  TENTANG NILAI DI BAWAH
- *  Nilai konfigurasi ini memang dirancang untuk ditaruh di halaman web dan
- *  boleh dilihat siapa pun. Yang menjaga data adalah aturan keamanan
- *  Firestore, bukan kerahasiaan nilai ini. Yang TIDAK BOLEH masuk ke sini:
- *  berkas kunci service account dari konsol Firebase.
  */
 
 import { initializeApp } from "firebase/app";
@@ -35,54 +16,41 @@ export const konfigurasi = {
   appId: "1:320438118706:web:cadfa61b7afe4bf3afcf2b"
 };
 
-/**
- * Sambungan dasar. Dipakai firestore di bawah, dan dipakai sumber/akun.js
- * waktu ia memuat pustaka masuk -- yang sengaja TIDAK diimpor di sini.
- *
- * Pustaka masuk besarnya 123 KB, seperempat dari seluruh kode situs, dan
- * sebagian besar warga tidak pernah memakainya: membaca pengumuman, kas,
- * galeri, dan direktori usaha semuanya terbuka tanpa masuk. Kalau berkas
- * ini mengimpornya, ia ikut ke berkas utama dan diunduh semua orang.
- * Karena itu pemuatannya diserahkan ke akun.js, yang punya syaratnya.
- */
 export const app = initializeApp(konfigurasi);
-
 export const db = getFirestore(app);
 
-/* -------------------------------------------------------------------------
- *  Pesan galat
- *
- *  Firebase mengembalikan kode seperti "auth/invalid-credential". Warga
- *  tidak perlu membaca itu. Setiap kode diterjemahkan jadi satu kalimat
- *  yang menyebut apa yang harus dilakukan, bukan sekadar apa yang salah.
- * ------------------------------------------------------------------------- */
-
+/*
+ * Pesan autentikasi sengaja tidak membedakan "email tidak ada" dan
+ * "password salah". Itu mencegah halaman login menjadi alat untuk menebak
+ * alamat email mana yang sudah terdaftar.
+ */
 const TERJEMAHAN = [
-  ["petugas-created-verification-sent", "Akun petugas sudah dibuat. Buka Gmail petugas, klik tautan verifikasi dari Firebase, lalu masuk lagi."],
-  ["verification-send-failed", "Akun sudah dibuat, tetapi tautan pemastian belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan."],
-  ["user-disabled", "Akun ini dinonaktifkan. Hubungi pengurus untuk memeriksa akses Anda."],
-  ["popup-closed", "Jendela masuk ditutup sebelum selesai."],
-  ["cancelled-popup", "Jendela masuk ditutup sebelum selesai."],
-  ["popup-blocked", "Jendela masuk diblokir peramban. Izinkan pop-up untuk situs ini."],
-  ["unauthorized-domain", "Alamat situs ini belum didaftarkan di Firebase. Tambahkan di Authentication, bagian Settings, Authorized domains."],
-  ["permission-denied", "Ditolak aturan keamanan. Pastikan aturan Firestore sudah dipasang dan akun Anda berhak."],
-  ["api-key-not-valid", "Kunci API tidak cocok. Periksa konfigurasi Firebase."],
-  ["email-already-in-use", "Alamat email itu sudah terdaftar. Coba masuk, atau pakai Lupa sandi."],
-  ["invalid-email", "Alamat email tidak sah."],
-  ["weak-password", "Kata sandi terlalu mudah ditebak. Pakai minimal 8 huruf atau angka."],
+  ["verification-send-failed", "Akun sudah dibuat, tetapi tautan verifikasi belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan."],
+  ["password-policy", "Kata sandi belum memenuhi kebijakan keamanan akun."],
+  ["account-exists-with-different-credential", "Alamat email ini sudah terhubung dengan metode masuk lain. Gunakan metode yang sama seperti saat akun dibuat."],
+  ["credential-already-in-use", "Metode masuk ini sudah terhubung dengan akun lain."],
+  ["user-disabled", "Akun ini tidak dapat digunakan. Hubungi pengurus bila Anda merasa ini keliru."],
+  ["popup-closed", "Jendela Google ditutup sebelum proses masuk selesai."],
+  ["cancelled-popup", "Proses masuk Google dibatalkan."],
+  ["popup-blocked", "Jendela Google diblokir peramban. Izinkan pop-up untuk situs ini lalu coba lagi."],
+  ["unauthorized-domain", "Domain situs belum diizinkan pada Firebase Authentication."],
+  ["permission-denied", "Akses ditolak oleh aturan keamanan server."],
+  ["api-key-not-valid", "Konfigurasi Firebase tidak valid."],
+  ["email-already-in-use", "Pendaftaran tidak dapat diselesaikan dengan data tersebut. Coba masuk atau gunakan Lupa sandi."],
+  ["invalid-email", "Format alamat email tidak valid."],
+  ["weak-password", "Kata sandi belum memenuhi kebijakan keamanan akun."],
   ["invalid-credential", "Email atau kata sandi tidak cocok."],
   ["wrong-password", "Email atau kata sandi tidak cocok."],
   ["user-not-found", "Email atau kata sandi tidak cocok."],
-  ["too-many-requests", "Terlalu banyak percobaan. Tunggu beberapa menit, lalu coba lagi."],
-  ["operation-not-allowed", "Cara masuk ini belum dinyalakan di pengaturan Firebase."],
-  ["network", "Sambungan ke server gagal. Periksa jaringan."]
+  ["too-many-requests", "Terlalu banyak percobaan. Tunggu beberapa menit sebelum mencoba kembali."],
+  ["operation-not-allowed", "Metode masuk ini belum diaktifkan pada Firebase Authentication."],
+  ["network", "Sambungan ke layanan autentikasi gagal. Periksa jaringan lalu coba lagi."]
 ];
 
-/** Menerjemahkan galat Firebase menjadi kalimat yang bisa dimengerti warga. */
 export function pesanRamah(err) {
-  const kode = (err && err.code) || "";
+  const kode = String((err && err.code) || "");
   for (const [kunci, pesan] of TERJEMAHAN) {
     if (kode.includes(kunci)) return pesan;
   }
-  return "Gagal: " + (kode || (err && err.message) || "penyebab tidak diketahui");
+  return "Proses akun belum berhasil. Periksa data dan coba kembali.";
 }
