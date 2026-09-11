@@ -58,6 +58,7 @@ export const db = getFirestore(app);
  * ------------------------------------------------------------------------- */
 
 const TERJEMAHAN = [
+  ["petugas-created-verification-sent", "Akun petugas sudah dibuat. Buka Gmail petugas, klik tautan verifikasi dari Firebase, lalu masuk lagi."],
   ["verification-send-failed", "Akun sudah dibuat, tetapi tautan pemastian belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan."],
   ["user-disabled", "Akun ini dinonaktifkan. Hubungi pengurus untuk memeriksa akses Anda."],
   ["popup-closed", "Jendela masuk ditutup sebelum selesai."],
