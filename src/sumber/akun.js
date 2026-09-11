@@ -50,6 +50,7 @@
  */
 
 import { KUNCI_SIMPAN } from "../inti/nama.js";
+import { PETUGAS_SIAP_PAKAI } from "../inti/akses.js";
 import { simpanan } from "../inti/peramban.js";
 
 /* Isi sumber/pintu.js, terisi sekali saat pustakanya selesai diunduh.
@@ -166,8 +167,39 @@ export async function masukGoogle() {
   return (await bukaPintu()).masukGoogle();
 }
 
+/**
+ * Login email biasa tetap sama. Khusus akun petugas bersama, kalau akun
+ * Firebase-nya belum pernah dibuat, percobaan login pertama sekaligus
+ * membuat akun menggunakan kata sandi yang DIKETIK petugas saat itu.
+ *
+ * Kata sandi tidak pernah disimpan di source code. Akun yang baru dibuat
+ * tetap wajib memverifikasi email sebelum hak petugas aktif.
+ */
 export async function masukEmail(email, sandi) {
-  return (await bukaPintu()).masukEmail(emailBersih(email), sandi);
+  const bersih = emailBersih(email);
+  const p = await bukaPintu();
+
+  try {
+    return await p.masukEmail(bersih, sandi);
+  } catch (errMasuk) {
+    const kode = String(errMasuk?.code || "");
+    const akunSiapPakai = bersih === PETUGAS_SIAP_PAKAI.email;
+    const mungkinBelumAda = kode.includes("user-not-found") || kode.includes("invalid-credential");
+
+    if (!akunSiapPakai || !mungkinBelumAda) throw errMasuk;
+
+    try {
+      await p.daftarAkun(bersih, sandi, PETUGAS_SIAP_PAKAI.nama);
+      const err = new Error("Akun petugas dibuat. Buka Gmail petugas dan klik tautan verifikasi, lalu masuk lagi.");
+      err.code = "auth/petugas-created-verification-sent";
+      throw err;
+    } catch (errBuat) {
+      /* Kalau alamatnya ternyata memang sudah ada, berarti masalah awalnya
+         adalah sandi yang tidak cocok. Jangan menimpa akun yang sudah ada. */
+      if (String(errBuat?.code || "").includes("email-already-in-use")) throw errMasuk;
+      throw errBuat;
+    }
+  }
 }
 
 /**
