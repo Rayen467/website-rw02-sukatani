@@ -24,6 +24,9 @@
    */
   import { sesi, pengurus } from "../../keadaan/sesi.svelte.js";
   import { siapkanAkun } from "../../sumber/akun.js";
+  import { ambilPeran, simpanDokumen } from "../../sumber/data.js";
+  import { KOLEKSI } from "../../inti/nama.js";
+  import { PETUGAS_SIAP_PAKAI } from "../../inti/akses.js";
 
   /* Halaman ini pasti berurusan dengan akun, jadi pustaka masuk diminta
      sekarang tanpa ditunggu. Kalau penanda "pernah masuk" hilang -- data
@@ -33,6 +36,41 @@
 
   let Kelola = $state(null);
   let gagal = $state(false);
+  let akunPetugasDisiapkan = false;
+
+  /**
+   * Saat pengurus lama yang sudah sah membuka Dashboard Petugas, pastikan
+   * akun operasional bersama sudah terdaftar pada koleksi pengurus.
+   *
+   * Ini sengaja dilakukan dari sesi pengurus yang sudah berwenang. Akun baru
+   * tidak bisa mengangkat dirinya sendiri menjadi petugas, dan kata sandi
+   * tetap hanya diketahui Firebase Authentication.
+   */
+  $effect(() => {
+    if (!pengurus() || akunPetugasDisiapkan) return;
+    akunPetugasDisiapkan = true;
+
+    (async () => {
+      try {
+        const ada = await ambilPeran(PETUGAS_SIAP_PAKAI.email);
+        if (ada) return;
+
+        await simpanDokumen(
+          KOLEKSI.PENGURUS,
+          PETUGAS_SIAP_PAKAI.email,
+          {
+            nama: PETUGAS_SIAP_PAKAI.nama,
+            jabatan: PETUGAS_SIAP_PAKAI.jabatan,
+            peran: PETUGAS_SIAP_PAKAI.peran
+          },
+          false
+        );
+      } catch (err) {
+        /* Dashboard tetap boleh dibuka walau penyiapan akun tambahan gagal.
+           Membuka ulang Dashboard dari akun pengurus akan mencoba lagi. */
+      }
+    })();
+  });
 
   $effect(() => {
     if (!pengurus() || Kelola) return;
