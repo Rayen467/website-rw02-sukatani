@@ -17,32 +17,53 @@
   import TabTampilan from "./TabTampilan.svelte";
   import TabOrang from "./TabOrang.svelte";
 
-  const TAB = [
-    ["dashboard", "Dashboard Petugas", TabDashboard],
-    ["kiriman", "Kiriman warga", TabKiriman],
-    ["beranda", "Beranda", TabBeranda],
-    ["terbit", "Berita & galeri", TabTerbit],
-    ["angka", "Kas & program", TabAngka],
-    ["profil", "Profil & katalog", TabProfil],
-    ["layanan", "Layanan & fasilitas", TabLayanan],
-    ["lain", "Tautan & polling", TabLain],
-    ["berkas", "Dokumen & video", TabBerkas],
-    ["laporan", "Laporan", TabLaporan],
-    ["tampilan", "Tampilan situs", TabTampilan],
-    ["orang", "Warga & pengurus", TabOrang]
+  const GRUP = [
+    {
+      label: "Ringkasan",
+      item: [
+        ["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]
+      ]
+    },
+    {
+      label: "Operasional",
+      item: [
+        ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
+        ["orang", "Warga & pengurus", "Verifikasi & akses akun", "03", TabOrang],
+        ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan]
+      ]
+    },
+    {
+      label: "Publikasi",
+      item: [
+        ["terbit", "Berita & galeri", "Informasi publik", "05", TabTerbit],
+        ["beranda", "Beranda", "Konten halaman depan", "06", TabBeranda],
+        ["berkas", "Dokumen & video", "Arsip publik", "07", TabBerkas]
+      ]
+    },
+    {
+      label: "Data & transparansi",
+      item: [
+        ["angka", "Kas & program", "Keuangan dan program kerja", "08", TabAngka],
+        ["laporan", "Laporan", "Rekap siap cetak", "09", TabLaporan],
+        ["profil", "Profil & katalog", "Identitas dan kelembagaan", "10", TabProfil]
+      ]
+    },
+    {
+      label: "Pengaturan",
+      item: [
+        ["lain", "Tautan & polling", "Partisipasi warga", "11", TabLain],
+        ["tampilan", "Tampilan situs", "Warna & tipografi", "12", TabTampilan]
+      ]
+    }
   ];
 
-  /* Tab bisa dituju langsung lewat alamat, misalnya #/kelola/terbit.
-     Dipakai tombol pada keadaan kosong di halaman warga: pengurus yang
-     melihat "belum ada pengumuman" bisa langsung mendarat di tab yang
-     mengisinya, tanpa menebak tab mana yang benar.
-
-     Alamat yang tidak dikenali jatuh ke tab pertama, bukan layar kosong. */
+  const TAB = GRUP.flatMap((g) => g.item);
   const dariAlamat = $derived(
     TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "dashboard"
   );
   const aktif = $derived(dariAlamat);
-  const Terpilih = $derived((TAB.find((t) => t[0] === aktif) || TAB[0])[2]);
+  const dipilih = $derived(TAB.find((t) => t[0] === aktif) || TAB[0]);
+  const Terpilih = $derived(dipilih[4]);
   const galatData = $derived(Object.entries(galatMuatPengurus));
 
   async function keluarPengurus() {
@@ -52,38 +73,80 @@
   }
 </script>
 
-<nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Kelola</span></nav>
-<div class="kepala-halaman">
-  <p class="alis">Pengurus</p>
-  <h1>{sesi.peran === "petugas" ? "Dashboard Petugas" : "Dashboard Pengelola"}</h1>
-  <p>Tangani layanan warga dari satu tempat, lalu buka pengaturan situs hanya saat diperlukan.</p>
-</div>
+<nav class="remah" aria-label="Breadcrumb">
+  <a href="#/">Beranda</a><span aria-hidden="true">›</span><span>Panel Petugas</span>
+</nav>
 
-  <div class="catatan petugas-sesi" style="margin-bottom:22px">
-    <div>
-      <b>Masuk sebagai {namaPeran()}.</b> {sesi.pengguna.email}.
-      Anda punya akses penuh atas seluruh data, isi situs, dan daftar pengurus.
-    </div>
-    <button class="tombol" type="button" onclick={keluarPengurus}>Keluar</button>
-  </div>
-
-  {#if galatData.length}
-    <div class="catatan awas" style="margin-bottom:22px">
-      <b>Data Petugas belum termuat lengkap.</b>
-      Server menolak atau gagal membaca {galatData.map(([nama]) => nama).join(", ")}.
-      Jangan anggap angka 0 di dashboard berarti tidak ada kiriman.
-      Pastikan email akun sudah terverifikasi, dokumen role pengurus sesuai email login,
-      dan Firestore Rules terbaru sudah dipublish.
-      <div class="baris-tombol" style="margin-top:12px">
-        <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button>
+<div class="admin-shell">
+  <aside class="admin-sidebar" aria-label="Navigasi panel petugas">
+    <div class="admin-brand">
+      <div class="admin-brand-mark" aria-hidden="true">RW</div>
+      <div>
+        <strong>Pusat Operasional RW 02</strong>
+        <span>Permai Sukatani · Panel internal</span>
       </div>
     </div>
-  {/if}
 
-  <div class="pilihan-baris">
-    {#each TAB as t}
-      <a class="pilihan" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href="#/kelola/{t[0]}">{t[1]}</a>
+    {#each GRUP as grup}
+      <div class="admin-nav-group">
+        <span class="admin-nav-label">{grup.label}</span>
+        <div class="admin-nav-list">
+          {#each grup.item as t}
+            <a
+              class="admin-nav-item"
+              class:aktif={aktif === t[0]}
+              aria-current={aktif === t[0] ? "page" : undefined}
+              href="#/kelola/{t[0]}"
+              title={t[2]}
+            >
+              <span class="admin-nav-icon" aria-hidden="true">{t[3]}</span>
+              <span class="admin-nav-copy">
+                <strong>{t[1]}</strong>
+                <small>{t[2]}</small>
+              </span>
+            </a>
+          {/each}
+        </div>
+      </div>
     {/each}
-  </div>
 
-  <Terpilih />
+    <div class="admin-account">
+      <span class="admin-account-label">Sesi aktif</span>
+      <strong>{sesi.pengguna?.email || "-"}</strong>
+      <span>{namaPeran()}</span>
+      <button class="tombol" type="button" onclick={keluarPengurus}>Keluar</button>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar-copy">
+        <span class="admin-eyebrow">Panel Petugas · {namaPeran()}</span>
+        <h1>{dipilih[1]}</h1>
+        <p>{dipilih[2]}. Semua perubahan pada panel ini terhubung ke data situs RW 02.</p>
+      </div>
+      <div class="admin-topbar-actions">
+        <a class="tombol" href="#/" target="_self">Lihat situs warga</a>
+        <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Segarkan data</button>
+      </div>
+    </header>
+
+    {#if galatData.length}
+      <div class="admin-alert" role="alert">
+        <div aria-hidden="true">⚠</div>
+        <div class="admin-alert-body">
+          <strong>Data belum termuat lengkap.</strong>
+          Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}.
+          Angka 0 pada modul terkait jangan dianggap sebagai data kosong sampai pemuatan berhasil.
+          <div class="baris-tombol" style="margin-top:10px">
+            <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button>
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    <main class="admin-content" aria-label={dipilih[1]}>
+      <Terpilih />
+    </main>
+  </div>
+</div>
