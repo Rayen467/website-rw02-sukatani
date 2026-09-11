@@ -21,9 +21,7 @@
  */
 
 import { pantauMasuk, penggunaSekarang } from "../sumber/akun.js";
-import { ambilPeran, ambilProfilWarga, simpanDokumen } from "../sumber/data.js";
-import { KOLEKSI } from "../inti/nama.js";
-import { PETUGAS_SIAP_PAKAI } from "../inti/akses.js";
+import { ambilPeran, ambilProfilWarga } from "../sumber/data.js";
 import { sesi, namaPeran } from "./sesi.svelte.js";
 import { muatSemuaKonten, muatUmum, muatPengurus, muatMilikSaya, muatSuara, kosongkanIsiPribadi } from "./isi.svelte.js";
 import { beriTahu } from "./pesan.svelte.js";
@@ -37,35 +35,6 @@ function kosongkanSesi() {
   sesi.profilWarga = null;
   sesi.terverifikasi = true;
   sesi.siap = true;
-}
-
-/**
- * Menyiapkan satu akun operasional bersama tanpa menyimpan kata sandinya di
- * repository. Fungsi ini HANYA dijalankan setelah pengurus yang sudah sah
- * berhasil masuk, jadi Firestore Rules tetap menjadi penjaga sebenarnya.
- *
- * Kalau dokumennya sudah ada, tidak disentuh lagi. Dengan begitu nama atau
- * jabatan yang nanti diperbaiki pengurus tidak tertimpa setiap membuka situs.
- */
-async function pastikanPetugasSiapPakai() {
-  try {
-    const sudahAda = await ambilPeran(PETUGAS_SIAP_PAKAI.email);
-    if (sudahAda) return;
-
-    await simpanDokumen(
-      KOLEKSI.PENGURUS,
-      PETUGAS_SIAP_PAKAI.email,
-      {
-        nama: PETUGAS_SIAP_PAKAI.nama,
-        jabatan: PETUGAS_SIAP_PAKAI.jabatan,
-        peran: PETUGAS_SIAP_PAKAI.peran
-      },
-      false
-    );
-  } catch (err) {
-    /* Gagal menyiapkan akun tambahan tidak boleh mengganggu akun pengurus
-       yang sedang bekerja. Pada kunjungan pengurus berikutnya akan dicoba lagi. */
-  }
 }
 
 /**
@@ -126,12 +95,6 @@ export function mulaiPantauan() {
     if (peran) {
       sesi.profilWarga = null;
       sesi.siap = true;
-
-      /* Begitu salah satu pengurus lama membuka situs setelah deployment,
-         email operasional petugas otomatis didaftarkan di koleksi pengurus.
-         Tidak ada kata sandi yang pernah ditulis ke Firestore. */
-      void pastikanPetugasSiapPakai();
-
       muatPengurus();
       muatSuara();
       beriTahu("Masuk sebagai " + namaPeran(peran) + ". Menu Kelola sudah terbuka.");
