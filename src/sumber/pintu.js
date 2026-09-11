@@ -3,24 +3,13 @@
  *  PINTU -- satu-satunya berkas yang menyentuh pustaka masuk Firebase
  * ===========================================================================
  *
- *  LAPIS 2 (sumber). Boleh mengimpor: inti/, sumber/firebase.js
- *
- *  KENAPA INI BERKAS TERSENDIRI, BUKAN DIGABUNG KE akun.js
- *
- *  Berkas ini tidak pernah diimpor secara biasa. Satu-satunya yang
- *  memanggilnya adalah akun.js, lewat import() -- dan itu yang membuat
- *  pustaka masuk keluar dari berkas utama situs.
- *
- *  Pemisahannya BUKAN soal kerapian. Kalau akun.js memanggil
- *  import("firebase/auth") langsung lalu mengambil isinya satu per satu
- *  waktu jalan, penggabung kode tidak bisa tahu fungsi mana saja yang
- *  benar-benar dipakai, jadi seluruh pustaka ikut -- 191 KB. Dengan
- *  daftar impor biasa di sini, yang tidak dipakai dibuang seperti biasa,
- *  dan sisanya tinggal sekitar 120 KB. Selisih 70 KB itu ditanggung
- *  pengurus setiap kali mereka masuk.
- *
- *  Jadi aturannya: SEMUA yang berasal dari "firebase/auth" ditulis di
- *  berkas ini, dengan impor biasa. Yang butuh, memanggil fungsi di sini.
+ * Semua primitive autentikasi Firebase ditempatkan di sini supaya halaman
+ * tidak menyentuh SDK langsung. Kebijakan lokal mengikuti praktik modern:
+ * - email diverifikasi untuk akun email/password,
+ * - reset password selalu lewat tautan Firebase,
+ * - password baru minimal 15 karakter untuk akun tanpa MFA,
+ * - tidak memaksa pola huruf besar/angka/simbol buatan sendiri,
+ * - mendukung passphrase panjang dan password manager.
  */
 
 import {
@@ -35,12 +24,16 @@ import {
   signOut,
   onIdTokenChanged,
   reload,
-  getIdToken
+  getIdToken,
+  validatePassword
 } from "firebase/auth";
 import { app } from "./firebase.js";
 
 export const auth = getAuth(app);
 auth.languageCode = "id";
+
+export const PANJANG_SANDI_MIN = 15;
+export const PANJANG_SANDI_MAKS = 128;
 
 /** Memasang pemantauan. Mengembalikan fungsi untuk melepasnya lagi. */
 export function pantau(saatBerubah) {
@@ -49,8 +42,6 @@ export function pantau(saatBerubah) {
 
 export function masukGoogle() {
   const penyedia = new GoogleAuthProvider();
-  /* Selalu tanya mau pakai akun yang mana. Tanpa ini, HP yang dipakai
-     bergantian di rumah akan langsung masuk sebagai orang sebelumnya. */
   penyedia.setCustomParameters({ prompt: "select_account" });
   return signInWithPopup(auth, penyedia);
 }
@@ -60,27 +51,86 @@ export function masukEmail(email, sandi) {
 }
 
 /**
- * Membuat akun baru, lalu langsung mengirim tautan pemastian email.
+ * Memeriksa password baru sebelum akun dibuat.
  *
- * Kegagalan mengirim tautan dibedakan dari kegagalan membuat akun, karena
- * akibatnya bagi warga berbeda jauh: yang pertama berarti akunnya sudah
- * ada dan tinggal minta tautan ulang, yang kedua berarti belum ada apa-apa.
+ * Minimum lokal 15 karakter dipakai karena jalur email/password saat ini
+ * adalah single-factor. Kami tetap membaca policy Firebase bila administrator
+ * menambahkan aturan server di Console. Tidak ada syarat komposisi buatan
+ * sendiri; passphrase dan karakter spasi tetap diterima.
+ */
+export async function validasiKataSandi(sandi) {
+  const nilai = String(sandi ?? "");
+  const masalah = [];
+
+  if (nilai.length < PANJANG_SANDI_MIN) {
+    masalah.push(`Gunakan minimal ${PANJANG_SANDI_MIN} karakter.`);
+  }
+  if (nilai.length > PANJANG_SANDI_MAKS) {
+    masalah.push(`Gunakan maksimal ${PANJANG_SANDI_MAKS} karakter.`);
+  }
+
+  try {
+    const status = await validatePassword(auth, nilai);
+    if (!status.isValid) {
+      if (status.meetsMinPasswordLength === false) masalah.push("Belum memenuhi panjang minimum kebijakan Firebase.");
+      if (status.meetsMaxPasswordLength === false) masalah.push("Melebihi panjang maksimum kebijakan Firebase.");
+      if (status.containsLowercaseLetter === false) masalah.push("Kebijakan Firebase saat ini meminta huruf kecil.");
+      if (status.containsUppercaseLetter === false) masalah.push("Kebijakan Firebase saat ini meminta huruf besar.");
+      if (status.containsNumericCharacter === false) masalah.push("Kebijakan Firebase saat ini meminta angka.");
+      if (status.containsNonAlphanumericCharacter === false) masalah.push("Kebijakan Firebase saat ini meminta karakter non-alfanumerik.");
+    }
+  } catch {
+    /* Kalau policy server tidak bisa dibaca karena jaringan, validasi lokal
+       tetap berlaku. createUserWithEmailAndPassword masih menjadi penjaga akhir. */
+  }
+
+  return {
+    valid: masalah.length === 0,
+    masalah: [...new Set(masalah)]
+  };
+}
+
+/**
+ * Membuat akun email/password lalu mengirim verifikasi email.
+ * Akun yang belum terverifikasi tetap dibatasi oleh lapisan sesi + rules.
  */
 export async function daftarAkun(email, sandi, nama) {
+  const cek = await validasiKataSandi(sandi);
+  if (!cek.valid) {
+    const err = new Error(cek.masalah.join(" "));
+    err.code = "auth/password-policy";
+    throw err;
+  }
+
   const hasil = await createUserWithEmailAndPassword(auth, email, sandi);
   if (nama) await updateProfile(hasil.user, { displayName: nama });
   try {
     await sendEmailVerification(hasil.user);
   } catch (penyebab) {
-    const err = new Error("Akun sudah dibuat, tetapi tautan pemastian belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan.", { cause: penyebab });
+    const err = new Error(
+      "Akun sudah dibuat, tetapi tautan verifikasi belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan.",
+      { cause: penyebab }
+    );
     err.code = "auth/verification-send-failed";
     throw err;
   }
   return hasil.user;
 }
 
-export function lupaSandi(email) {
-  return sendPasswordResetEmail(auth, email);
+/**
+ * Reset password dengan respons anti-enumerasi.
+ * Bila proteksi email-enumeration Firebase belum dinyalakan, SDK lama masih
+ * dapat mengembalikan user-not-found. Kasus itu sengaja dianggap sukses agar
+ * layar tidak membocorkan apakah sebuah email terdaftar.
+ */
+export async function lupaSandi(email) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (err) {
+    const kode = String(err?.code || "");
+    if (kode.includes("user-not-found")) return;
+    throw err;
+  }
 }
 
 export function kirimUlangVerifikasi() {
@@ -88,13 +138,6 @@ export function kirimUlangVerifikasi() {
   return sendEmailVerification(auth.currentUser);
 }
 
-/**
- * Memuat status email dan token server terbaru tanpa harus keluar dahulu.
- *
- * Akun yang dipegang dicatat dulu, lalu dibandingkan lagi setelah setiap
- * penantian. Kalau di tengah jalan orangnya keluar atau berganti akun,
- * token yang telanjur diminta TIDAK boleh dipasang ke akun yang sekarang.
- */
 export async function periksaVerifikasi() {
   const u = auth.currentUser;
   if (!u) throw new Error("Silakan masuk terlebih dahulu.");
