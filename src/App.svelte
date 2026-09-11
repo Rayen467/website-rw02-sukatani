@@ -47,6 +47,7 @@
   import Kontak from "./halaman/Kontak.svelte";
   import Masuk from "./halaman/Masuk.svelte";
   import Akun from "./halaman/Akun.svelte";
+  import KeamananAkun from "./halaman/KeamananAkun.svelte";
   import Cari from "./halaman/Cari.svelte";
   import TidakAda from "./halaman/TidakAda.svelte";
   import PintuKelola from "./halaman/kelola/Pintu.svelte";
@@ -92,6 +93,7 @@
     kontak: Kontak,
     masuk: Masuk,
     akun: Akun,
+    "keamanan-akun": KeamananAkun,
     cari: Cari,
     kelola: PintuKelola
   };
