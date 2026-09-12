@@ -94,6 +94,11 @@ export const KOLEKSI = Object.freeze({
   RESERVASI: "reservasi",
   USAHA_BARU: "usaha_baru",
 
+  /* Administrasi UMKM -- legalitas, sertifikat, nomor referensi, dan catatan
+     pendampingan. Sengaja DIPISAH dari koleksi usaha karena katalog usaha
+     bersifat publik. Koleksi ini hanya boleh dibaca/ditulis Petugas. */
+  USAHA_ADMIN: "usaha_admin",
+
   /* Orang */
   WARGA: "warga",
   PENGURUS: "pengurus",
@@ -158,6 +163,7 @@ export const KOLEKSI_PENGURUS = Object.freeze([
   KOLEKSI.SURAT,
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU,
+  KOLEKSI.USAHA_ADMIN,
   KOLEKSI.WARGA,
   KOLEKSI.PENGURUS,
   KOLEKSI.BANSOS_PENERIMA
@@ -183,6 +189,7 @@ export const TANPA_URUTAN = Object.freeze([
   KOLEKSI.WARGA,
   KOLEKSI.BATAS_RT,
   KOLEKSI.USAHA,
+  KOLEKSI.USAHA_ADMIN,
   KOLEKSI.JADWAL,
   KOLEKSI.TAUTAN,
   KOLEKSI.JENIS_SURAT,
