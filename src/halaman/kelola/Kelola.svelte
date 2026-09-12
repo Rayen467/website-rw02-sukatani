@@ -85,6 +85,14 @@
     pergi(`/${pangkal}/${tujuan[0]}`);
   }
 
+  function bukaNotifikasi() {
+    if (galatData.length) {
+      beriTahu(`Ada ${galatData.length} sumber data yang perlu perhatian: ${galatData.map(([nama]) => nama).join(", ")}.`);
+      return;
+    }
+    beriTahu("Tidak ada peringatan data. Semua sumber yang termuat dalam kondisi normal.");
+  }
+
   async function keluarPengurus() {
     await keluar();
     beriTahu("Anda sudah keluar dari akun pengurus.");
@@ -148,7 +156,7 @@
       </form>
 
       <div class="admin-topbar-actions">
-        <button class="admin-notification" type="button" title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Tidak ada peringatan data"} aria-label="Notifikasi data">
+        <button class="admin-notification" type="button" onclick={bukaNotifikasi} title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Tidak ada peringatan data"} aria-label="Notifikasi data">
           ♧
           {#if galatData.length}<i></i>{/if}
         </button>
