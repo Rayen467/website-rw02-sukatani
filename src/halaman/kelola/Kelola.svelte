@@ -6,6 +6,7 @@
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
+  import TabUmkm from "./TabUmkm.svelte";
   import TabBeranda from "./TabBeranda.svelte";
   import TabLaporan from "./TabLaporan.svelte";
   import TabTerbit from "./TabTerbit.svelte";
@@ -22,6 +23,7 @@
     kiriman: "▤",
     orang: "♙",
     layanan: "▣",
+    umkm: "◇",
     terbit: "▧",
     beranda: "◎",
     berkas: "□",
@@ -37,21 +39,22 @@
     { label: "Operasional", item: [
       ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
       ["orang", "Warga & pengurus", "Verifikasi & akses akun", "03", TabOrang],
-      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan]
+      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan],
+      ["umkm", "UMKM & legalitas", "Legalitas, sertifikat & pendampingan", "05", TabUmkm]
     ]},
     { label: "Publikasi", item: [
-      ["terbit", "Berita & galeri", "Informasi publik", "05", TabTerbit],
-      ["beranda", "Beranda", "Konten halaman depan", "06", TabBeranda],
-      ["berkas", "Dokumen & video", "Arsip publik", "07", TabBerkas]
+      ["terbit", "Berita & galeri", "Informasi publik", "06", TabTerbit],
+      ["beranda", "Beranda", "Konten halaman depan", "07", TabBeranda],
+      ["berkas", "Dokumen & video", "Arsip publik", "08", TabBerkas]
     ]},
     { label: "Data & transparansi", item: [
-      ["angka", "Kas & program", "Keuangan dan program kerja", "08", TabAngka],
-      ["laporan", "Laporan", "Rekap siap cetak", "09", TabLaporan],
-      ["profil", "Profil & katalog", "Identitas dan kelembagaan", "10", TabProfil]
+      ["angka", "Kas & program", "Keuangan dan program kerja", "09", TabAngka],
+      ["laporan", "Laporan", "Rekap siap cetak", "10", TabLaporan],
+      ["profil", "Profil & katalog", "Identitas dan kelembagaan", "11", TabProfil]
     ]},
     { label: "Lainnya", item: [
-      ["lain", "Tautan & polling", "Partisipasi warga", "11", TabLain],
-      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "12", TabTampilan]
+      ["lain", "Tautan & polling", "Partisipasi warga", "12", TabLain],
+      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "13", TabTampilan]
     ]}
   ];
 
@@ -78,7 +81,7 @@
     if (!q) return;
     const tujuan = TAB.find((t) => `${t[1]} ${t[2]}`.toLowerCase().includes(q));
     if (!tujuan) {
-      beriTahu("Menu tidak ditemukan. Coba kata seperti layanan, warga, berita, kas, laporan, atau fasilitas.");
+      beriTahu("Menu tidak ditemukan. Coba kata seperti layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
       return;
     }
     pencarian = "";
