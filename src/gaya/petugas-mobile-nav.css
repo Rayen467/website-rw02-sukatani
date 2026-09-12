@@ -1,0 +1,332 @@
+/* ===========================================================================
+ * PORTAL PETUGAS — navigasi mobile final
+ * Floating bottom navigation + bottom sheet menu.
+ * Dimuat paling akhir agar tidak bentrok dengan versi sidebar mobile lama.
+ * ======================================================================== */
+
+.mobile-bottom-nav,
+.mobile-menu-backdrop { display: none; }
+
+@media (max-width: 840px) {
+  .petugas-app-root {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Sidebar desktop tidak dipaksa lagi menjadi navbar HP. */
+  .petugas-app-root .admin-sidebar {
+    display: none !important;
+  }
+
+  .petugas-app-root .admin-shell {
+    display: block !important;
+  }
+
+  .petugas-app-root .admin-main {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Tombol refresh benar-benar icon-only di HP. */
+  .petugas-app-root .admin-refresh-button {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+  .petugas-app-root .admin-refresh-button > span {
+    margin: 0 !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+  }
+
+  /* Floating navigation: 5 tujuan inti, tidak perlu scroll horizontal. */
+  .petugas-app-root .mobile-bottom-nav {
+    position: fixed !important;
+    z-index: 120 !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(9px + env(safe-area-inset-bottom, 0px)) !important;
+    height: 68px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 3px !important;
+    padding: 6px !important;
+    border: 1px solid rgba(9, 86, 70, .13) !important;
+    border-radius: 20px !important;
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: 0 14px 38px rgba(13, 62, 51, .18), 0 2px 8px rgba(13, 62, 51, .07) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.2) !important;
+    backdrop-filter: blur(18px) saturate(1.2) !important;
+  }
+
+  .petugas-app-root .mobile-bottom-item {
+    appearance: none !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+    display: grid !important;
+    grid-template-rows: 27px auto !important;
+    justify-items: center !important;
+    align-items: center !important;
+    gap: 1px !important;
+    padding: 4px 2px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    background: transparent !important;
+    color: #74807c !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    line-height: 1.05 !important;
+    font-weight: 650 !important;
+    cursor: pointer !important;
+    transition: background .18s ease, color .18s ease, transform .18s ease !important;
+  }
+
+  .petugas-app-root .mobile-bottom-item:active {
+    transform: scale(.96) !important;
+  }
+
+  .petugas-app-root .mobile-bottom-item.aktif,
+  .petugas-app-root .mobile-bottom-item[aria-current="page"] {
+    color: #075b4d !important;
+    background: #e9f7f1 !important;
+  }
+
+  .petugas-app-root .mobile-bottom-icon {
+    width: 28px !important;
+    height: 28px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 9px !important;
+    color: inherit !important;
+    font-size: 19px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+  }
+
+  .petugas-app-root .mobile-bottom-item.aktif .mobile-bottom-icon,
+  .petugas-app-root .mobile-bottom-item[aria-current="page"] .mobile-bottom-icon {
+    background: #0b6b59 !important;
+    color: #fff !important;
+    box-shadow: 0 7px 16px rgba(11,107,89,.18) !important;
+  }
+
+  .petugas-app-root .mobile-menu-trigger.aktif .mobile-bottom-icon {
+    background: #0b6b59 !important;
+    color: #fff !important;
+  }
+
+  /* Bottom sheet semua menu. */
+  .petugas-app-root .mobile-menu-backdrop {
+    position: fixed !important;
+    z-index: 160 !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    padding: 14px 10px calc(9px + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(4, 28, 24, .42) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    backdrop-filter: blur(4px) !important;
+  }
+
+  .petugas-app-root .mobile-menu-sheet {
+    width: 100% !important;
+    max-height: min(82dvh, 720px) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    padding: 8px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    border: 1px solid #dde7e3 !important;
+    border-radius: 24px !important;
+    background: #fff !important;
+    box-shadow: 0 28px 70px rgba(5, 39, 32, .28) !important;
+  }
+
+  .petugas-app-root .mobile-menu-handle {
+    width: 42px !important;
+    height: 4px !important;
+    margin: 2px auto 8px !important;
+    border-radius: 99px !important;
+    background: #d8e0dd !important;
+  }
+
+  .petugas-app-root .mobile-menu-head {
+    position: sticky !important;
+    z-index: 2 !important;
+    top: -8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 8px 2px 12px !important;
+    background: rgba(255,255,255,.97) !important;
+    border-bottom: 1px solid #edf1ef !important;
+  }
+
+  .petugas-app-root .mobile-menu-head small {
+    display: block !important;
+    margin-bottom: 2px !important;
+    color: #0b6b59 !important;
+    font-size: 12px !important;
+    font-weight: 750 !important;
+  }
+
+  .petugas-app-root .mobile-menu-head h2 {
+    margin: 0 !important;
+    color: #16231f !important;
+    font-size: 22px !important;
+    line-height: 1.1 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  .petugas-app-root .mobile-menu-head button {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    display: grid !important;
+    place-items: center !important;
+    padding: 0 !important;
+    border: 1px solid #dce5e1 !important;
+    border-radius: 12px !important;
+    background: #f7faf8 !important;
+    color: #3e5049 !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
+  }
+
+  .petugas-app-root .mobile-menu-groups {
+    display: grid !important;
+    gap: 16px !important;
+    padding: 13px 0 6px !important;
+  }
+
+  .petugas-app-root .mobile-menu-group h3 {
+    margin: 0 0 8px !important;
+    color: #78847f !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+    letter-spacing: .05em !important;
+    text-transform: uppercase !important;
+  }
+
+  .petugas-app-root .mobile-menu-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .petugas-app-root .mobile-menu-card {
+    min-width: 0 !important;
+    min-height: 72px !important;
+    display: grid !important;
+    grid-template-columns: 36px minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px !important;
+    border: 1px solid #e1e8e5 !important;
+    border-radius: 14px !important;
+    background: #fbfcfc !important;
+    color: #24342e !important;
+    text-decoration: none !important;
+  }
+
+  .petugas-app-root .mobile-menu-card.aktif {
+    border-color: #b9dfd1 !important;
+    background: #edf9f4 !important;
+  }
+
+  .petugas-app-root .mobile-menu-card-icon {
+    width: 36px !important;
+    height: 36px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 10px !important;
+    background: #edf4f1 !important;
+    color: #0b6b59 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+  }
+
+  .petugas-app-root .mobile-menu-card.aktif .mobile-menu-card-icon {
+    background: #0b6b59 !important;
+    color: #fff !important;
+  }
+
+  .petugas-app-root .mobile-menu-card-copy {
+    min-width: 0 !important;
+  }
+  .petugas-app-root .mobile-menu-card-copy strong,
+  .petugas-app-root .mobile-menu-card-copy small {
+    display: block !important;
+  }
+  .petugas-app-root .mobile-menu-card-copy strong {
+    color: #1f302a !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+  }
+  .petugas-app-root .mobile-menu-card-copy small {
+    margin-top: 3px !important;
+    color: #78847f !important;
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .petugas-app-root .mobile-menu-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid #edf1ef !important;
+  }
+
+  .petugas-app-root .mobile-menu-actions a,
+  .petugas-app-root .mobile-menu-actions button {
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 9px 10px !important;
+    border: 1px solid #dce5e1 !important;
+    border-radius: 12px !important;
+    background: #f8faf9 !important;
+    color: #365149 !important;
+    text-decoration: none !important;
+    font: 700 12px/1.2 inherit !important;
+  }
+
+  .petugas-app-root .mobile-menu-actions button {
+    color: #a13f47 !important;
+    background: #fff7f7 !important;
+    border-color: #efd7d9 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .petugas-app-root .mobile-bottom-nav {
+    left: 6px !important;
+    right: 6px !important;
+    gap: 1px !important;
+    padding-inline: 4px !important;
+  }
+  .petugas-app-root .mobile-bottom-item {
+    font-size: 12px !important;
+    padding-inline: 1px !important;
+  }
+  .petugas-app-root .mobile-menu-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petugas-app-root .mobile-bottom-item { transition: none !important; }
+}
