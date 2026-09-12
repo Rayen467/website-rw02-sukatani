@@ -1,0 +1,8 @@
+/* Bersihkan copy deskriptif di panel login agar tidak terasa seperti petunjuk penggunaan. */
+.auth-app-root .login-heading p {
+  display: none !important;
+}
+
+.auth-app-root .login-heading {
+  margin-bottom: 18px !important;
+}
