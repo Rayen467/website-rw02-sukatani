@@ -3,7 +3,7 @@ import { KONTAK_KETUA_RW } from "./kontak-resmi.js";
 const KUNCI_FAVORIT = "rw02-umkm-favorit";
 const MEDIA_HP = "(max-width: 680px)";
 const BATAS_TEKS_WEB = 14;
-const BATAS_TEKS_HP = 13;
+const BATAS_TEKS_HP = 12;
 const TAG_FORM_TEKS = new Set(["INPUT", "TEXTAREA", "SELECT", "OPTION", "BUTTON"]);
 let sudahAktif = false;
 let rafTipografi = 0;
