@@ -34,7 +34,8 @@ jobs:
           grep -q 'allow read, create, update, delete: if petugas();' firestore.rules
           grep -q 'match /login_petugas/{username}' firestore.rules
           grep -q 'allow list: if false;' firestore.rules
-          echo "Aturan privat bansos dan alias login Petugas ditemukan."
+          grep -q 'match /usaha_bukti/{id}' firestore.rules
+          echo "Aturan privat bansos, alias login Petugas, dan bukti UMKM ditemukan."
 
       - name: Deploy aturan Firestore
         shell: bash
