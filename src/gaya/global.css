@@ -5,21 +5,7 @@
  *  Berkas ini TIDAK BERISI ATURAN APA PUN. Isinya cuma daftar berkas lain,
  *  dan URUTANNYA PENTING: aturan yang datang belakangan menimpa yang
  *  datang lebih dulu.
- *
- *  MAU MENGUBAH APA?
- *      warna situs .................. token.css
- *      ukuran dan jenis huruf ....... dasar.css
- *      menu atas .................... kepala.css
- *      lebar halaman, jarak ......... kerangka.css
- *      kartu, tombol, borang ........ kartu.css
- *      kalender, galeri, polling .... bagian.css
- *      kaki halaman ................. kaki.css
- *      tampilan HP .................. layar-kecil.css
- *
- *  Jangan menambah aturan langsung ke berkas ini. Kalau bingung tempatnya
- *  di mana, taruh di kartu.css kalau dipakai banyak halaman, atau
- *  bagian.css kalau hanya satu halaman.
- */
+ * ======================================================================== */
 
 @import "./token.css";
 @import "./dasar.css";
@@ -38,3 +24,4 @@
 @import "./mobile-waktu-compact.css";
 @import "./tipografi-terbaca.css";
 @import "./kelola-profesional.css";
+@import "./petugas-app.css";
