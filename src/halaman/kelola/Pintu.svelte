@@ -72,7 +72,13 @@
   });
 
   $effect(() => {
-    if (!pengurus() || Kelola || sedangMuat) return;
+    /* Jangan membaca `sedangMuat` di syarat effect ini. Pada Svelte 5,
+       state yang dibaca menjadi dependency effect. Versi sebelumnya membaca
+       sedangMuat lalu langsung mengubahnya menjadi true; effect dijadwalkan
+       ulang, cleanup menandai import sebagai batal, dan hasil import akhirnya
+       selalu diabaikan. Gejalanya persis spinner "Membuka Dashboard Petugas"
+       yang berputar tanpa selesai. */
+    if (!pengurus() || Kelola) return;
 
     let batal = false;
     gagal = false;
