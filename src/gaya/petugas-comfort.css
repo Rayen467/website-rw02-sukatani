@@ -1,0 +1,470 @@
+/* ===========================================================================
+ * PORTAL PETUGAS — COMFORT / READABILITY LAYER
+ * ---------------------------------------------------------------------------
+ * Override terakhir untuk meningkatkan keterbacaan, kenyamanan kerja lama,
+ * dan ketajaman stage sinematik tanpa mengubah fungsi modul.
+ * ======================================================================== */
+
+.petugas-app-root {
+  font-size: 13px !important;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* SHELL & SIDEBAR — tetap ringkas, tapi tidak terlalu kecil. */
+.petugas-app-root .admin-shell {
+  grid-template-columns: 228px minmax(0,1fr) !important;
+}
+.petugas-app-root .admin-sidebar {
+  width: 228px !important;
+  padding: 16px 11px 12px !important;
+}
+.petugas-app-root .admin-brand {
+  grid-template-columns: 40px minmax(0,1fr) !important;
+  gap: 10px !important;
+  padding: 4px 8px 15px !important;
+  margin-bottom: 10px !important;
+}
+.petugas-app-root .admin-brand-logo-wrap {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 10px !important;
+}
+.petugas-app-root .admin-brand-logo {
+  width: 35px !important;
+  height: 35px !important;
+}
+.petugas-app-root .admin-brand-copy strong {
+  font-size: 10.5px !important;
+  line-height: 1.2 !important;
+}
+.petugas-app-root .admin-brand-copy b {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+.petugas-app-root .admin-brand-copy small {
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+}
+.petugas-app-root .admin-nav-group + .admin-nav-group { margin-top: 15px !important; }
+.petugas-app-root .admin-nav-label {
+  padding: 0 10px 6px !important;
+  font-size: 10.5px !important;
+  letter-spacing: .08em !important;
+}
+.petugas-app-root .admin-nav-list { gap: 3px !important; }
+.petugas-app-root .admin-nav-item {
+  min-height: 42px !important;
+  grid-template-columns: 28px minmax(0,1fr) 10px !important;
+  gap: 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 9px !important;
+}
+.petugas-app-root .admin-nav-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 7px !important;
+  font-size: 11px !important;
+}
+.petugas-app-root .admin-nav-copy strong {
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  font-weight: 650 !important;
+}
+.petugas-app-root .admin-nav-arrow { font-size: 15px !important; }
+.petugas-app-root .admin-account {
+  grid-template-columns: 34px minmax(0,1fr) auto !important;
+  gap: 8px !important;
+  padding: 10px !important;
+  border-radius: 10px !important;
+}
+.petugas-app-root .admin-account-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 12px !important;
+}
+.petugas-app-root .admin-account-copy strong,
+.petugas-app-root .admin-account-copy span,
+.petugas-app-root .admin-account-exit {
+  font-size: 11.5px !important;
+}
+
+/* TOPBAR — judul jelas, kontrol tetap compact. */
+.petugas-app-root .admin-main { padding: 0 26px 58px !important; }
+.petugas-app-root .admin-topbar {
+  min-height: 68px !important;
+  margin: 0 -26px 18px !important;
+  padding: 11px 26px !important;
+}
+.petugas-app-root .admin-topbar h1 {
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+}
+.petugas-app-root .admin-internal-pill {
+  min-height: 22px !important;
+  padding: 3px 8px !important;
+  font-size: 10px !important;
+}
+.petugas-app-root .admin-topbar p {
+  margin-top: 4px !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+.petugas-app-root .admin-topbar-actions .tombol {
+  min-height: 38px !important;
+  padding-inline: 12px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+}
+
+/* SYSTEM ALERT */
+.petugas-app-root .admin-alert {
+  padding: 12px 14px !important;
+  gap: 10px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+.petugas-app-root .admin-alert-icon {
+  width: 26px !important;
+  height: 26px !important;
+  font-size: 12px !important;
+}
+.petugas-app-root .admin-alert .tombol {
+  min-height: 32px !important;
+  padding: 5px 10px !important;
+  font-size: 12.5px !important;
+}
+
+/* CINEMATIC STAGE — lebih tajam, lebih nyaman dibaca, tidak over-zoom. */
+.petugas-app-root .admin-command-grid {
+  min-height: 420px !important;
+  margin-bottom: 14px !important;
+}
+.petugas-app-root .admin-command-card {
+  min-height: 420px !important;
+  border-radius: 20px !important;
+  box-shadow: 0 34px 78px -50px rgba(16,30,24,.92) !important;
+}
+.petugas-app-root .admin-command-card::before {
+  inset: -1.5% !important;
+  background-image:
+    linear-gradient(90deg, rgba(7,14,12,.86) 0%, rgba(7,14,12,.62) 40%, rgba(20,18,22,.26) 69%, rgba(20,15,20,.42) 100%),
+    linear-gradient(0deg, rgba(7,13,11,.58), transparent 52%),
+    url("https://raw.githubusercontent.com/Rayen467/website-rw02-sukatani/main/public/visual/waktu/hero-sore.webp") !important;
+  background-position: center 48% !important;
+  background-size: cover !important;
+  filter: saturate(1.02) contrast(1.08) brightness(.82) !important;
+  transform: scale(1.015);
+  animation: petugas-scene-drift 28s ease-in-out infinite alternate !important;
+}
+.petugas-app-root .admin-command-card::after {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255,189,118,.22), transparent 25%),
+    radial-gradient(circle at 20% 72%, rgba(62,132,101,.15), transparent 33%),
+    linear-gradient(112deg, transparent 18%, rgba(255,255,255,.05) 44%, transparent 67%) !important;
+}
+.petugas-app-root .admin-command-content {
+  width: min(60%, 720px) !important;
+  min-height: 420px !important;
+  padding: 42px 40px !important;
+}
+.petugas-app-root .admin-command-kicker {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+.petugas-app-root .admin-command-card h2 {
+  max-width: 12ch !important;
+  margin: 10px 0 12px !important;
+  font-size: clamp(34px, 3.7vw, 54px) !important;
+  line-height: 1 !important;
+}
+.petugas-app-root .admin-command-card p {
+  max-width: 58ch !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: rgba(255,255,255,.80) !important;
+}
+.petugas-app-root .admin-welcome-actions {
+  margin-top: 20px !important;
+  gap: 9px !important;
+}
+.petugas-app-root .admin-welcome-actions .tombol {
+  min-height: 40px !important;
+  padding: 8px 14px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+.petugas-app-root .admin-command-meta {
+  width: min(100%, 500px) !important;
+  gap: 10px !important;
+  margin-top: 25px !important;
+}
+.petugas-app-root .admin-command-meta span {
+  padding: 13px 14px !important;
+  border-radius: 12px !important;
+  background: rgba(14,22,19,.42) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+.petugas-app-root .admin-command-meta b { font-size: 23px !important; }
+.petugas-app-root .admin-command-meta small {
+  margin-top: 5px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+.petugas-app-root .admin-health-card {
+  right: 24px !important;
+  top: 24px !important;
+  width: min(31%, 340px) !important;
+  min-height: 150px !important;
+  padding: 18px !important;
+  border-radius: 16px !important;
+  background: rgba(31,26,33,.72) !important;
+  border-color: rgba(255,255,255,.16) !important;
+  box-shadow: 0 30px 65px -34px rgba(0,0,0,.86) !important;
+}
+.petugas-app-root .admin-health-ring {
+  width: 76px !important;
+  height: 76px !important;
+}
+.petugas-app-root .admin-health-ring > div strong { font-size: 19px !important; }
+.petugas-app-root .admin-health-ring > div span { font-size: 11px !important; }
+.petugas-app-root .admin-health-label { font-size: 11.5px !important; }
+.petugas-app-root .admin-health-copy h3 {
+  margin: 4px 0 !important;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+.petugas-app-root .admin-health-copy p {
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
+}
+.petugas-app-root .admin-health-copy small { font-size: 11.5px !important; }
+
+/* KPI — angka cepat dibaca, keterangan tidak mikro. */
+.petugas-app-root .admin-kpi-grid {
+  margin-top: -29px !important;
+  padding: 0 16px !important;
+  gap: 10px !important;
+}
+.petugas-app-root .admin-kpi {
+  min-height: 116px !important;
+  padding: 14px 15px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 22px 46px -34px rgba(18,39,31,.48) !important;
+}
+.petugas-app-root .admin-kpi-icon {
+  width: 25px !important;
+  height: 25px !important;
+  border-radius: 7px !important;
+  font-size: 11px !important;
+}
+.petugas-app-root .admin-kpi-trend { font-size: 11.5px !important; }
+.petugas-app-root .admin-kpi-value {
+  margin-top: 6px !important;
+  font-size: 28px !important;
+  line-height: 1 !important;
+}
+.petugas-app-root .admin-kpi-label {
+  margin-top: 4px !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+.petugas-app-root .admin-kpi small {
+  margin-top: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+/* PANEL / TASK / STATUS */
+.petugas-app-root .admin-dashboard-grid {
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+.petugas-app-root .admin-panel {
+  padding: 16px !important;
+  border-radius: 12px !important;
+}
+.petugas-app-root .admin-panel-head {
+  margin-bottom: 12px !important;
+  gap: 10px !important;
+}
+.petugas-app-root .admin-panel-kicker {
+  font-size: 11px !important;
+  letter-spacing: .06em !important;
+}
+.petugas-app-root .admin-panel-head h2 {
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+}
+.petugas-app-root .admin-panel-head p,
+.petugas-app-root .admin-panel-head a {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+.petugas-app-root .admin-task {
+  min-height: 54px !important;
+  grid-template-columns: 70px minmax(0,1fr) auto !important;
+  gap: 10px !important;
+  padding: 10px 11px !important;
+  border-radius: 9px !important;
+}
+.petugas-app-root .admin-task-type { font-size: 11px !important; }
+.petugas-app-root .admin-task h3 {
+  font-size: 13.5px !important;
+  line-height: 1.3 !important;
+}
+.petugas-app-root .admin-task p {
+  margin-top: 2px !important;
+  font-size: 12.5px !important;
+  line-height: 1.35 !important;
+}
+.petugas-app-root .admin-status-total strong { font-size: 30px !important; }
+.petugas-app-root .admin-status-total span { font-size: 12px !important; }
+.petugas-app-root .admin-status-row {
+  grid-template-columns: 76px minmax(0,1fr) 28px !important;
+  gap: 9px !important;
+}
+.petugas-app-root .admin-status-row label,
+.petugas-app-root .admin-status-row strong { font-size: 12.5px !important; }
+.petugas-app-root .admin-status-track { height: 7px !important; }
+
+/* DATA COVERAGE & QUICK ACTIONS */
+.petugas-app-root .admin-data-grid { gap: 8px !important; }
+.petugas-app-root .admin-data-card {
+  padding: 11px !important;
+  border-radius: 9px !important;
+}
+.petugas-app-root .admin-data-card strong { font-size: 12.5px !important; }
+.petugas-app-root .admin-data-card .count {
+  margin-top: 6px !important;
+  font-size: 23px !important;
+}
+.petugas-app-root .admin-data-card small {
+  margin-top: 3px !important;
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+}
+.petugas-app-root .admin-data-legend { font-size: 12px !important; }
+.petugas-app-root .admin-quick-grid { gap: 8px !important; }
+.petugas-app-root .admin-quick {
+  min-height: 88px !important;
+  padding: 12px !important;
+  border-radius: 9px !important;
+}
+.petugas-app-root .admin-quick strong { font-size: 13.5px !important; }
+.petugas-app-root .admin-quick span { font-size: 12px !important; line-height: 1.4 !important; }
+.petugas-app-root .admin-quick b { font-size: 13px !important; }
+.petugas-app-root .admin-quick-index { font-size: 11px !important; }
+
+/* TABLES — back-office dipakai kerja, jadi jangan mikro. */
+.petugas-app-root .admin-content .tabel-bungkus {
+  border-radius: 10px !important;
+}
+.petugas-app-root table.data {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+.petugas-app-root table.data th,
+.petugas-app-root table.data td {
+  padding: 10px 11px !important;
+}
+.petugas-app-root table.data thead th,
+.petugas-app-root table.data tbody th {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+/* FORMS / EDITORS */
+.petugas-app-root .isian-borang { gap: 13px !important; }
+.petugas-app-root .isian label { font-size: 13px !important; }
+.petugas-app-root .isian .petunjuk { font-size: 12px !important; line-height: 1.4 !important; }
+.petugas-app-root .isian input,
+.petugas-app-root .isian select,
+.petugas-app-root .isian textarea,
+.petugas-app-root input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.petugas-app-root select,
+.petugas-app-root textarea {
+  min-height: 40px !important;
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  font-size: 13px !important;
+}
+.petugas-app-root textarea { min-height: 110px !important; }
+.petugas-app-root .tombol,
+.petugas-app-root button,
+.petugas-app-root a.tombol {
+  min-height: 38px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+}
+
+/* GENERIC CONTENT */
+.petugas-app-root .admin-content .kepala-bagian h2 { font-size: 19px !important; }
+.petugas-app-root .admin-content .alis { font-size: 11px !important; }
+.petugas-app-root .admin-content .catatan { font-size: 13px !important; line-height: 1.45 !important; }
+.petugas-app-root .admin-content .kartu,
+.petugas-app-root .admin-content .petak,
+.petugas-app-root .admin-content .kartu-ringkas {
+  border-radius: 10px !important;
+}
+
+/* Motion lebih tenang supaya nyaman dipakai lama dan image tetap tajam. */
+@keyframes petugas-scene-drift {
+  0% { transform: scale(1.015) translate3d(-.25%, 0, 0); }
+  50% { transform: scale(1.028) translate3d(.35%, -.15%, 0); }
+  100% { transform: scale(1.04) translate3d(.65%, -.30%, 0); }
+}
+
+@media (max-width: 1180px) {
+  .petugas-app-root .admin-shell { grid-template-columns: 205px minmax(0,1fr) !important; }
+  .petugas-app-root .admin-sidebar { width: 205px !important; }
+  .petugas-app-root .admin-command-content { width: 66% !important; }
+  .petugas-app-root .admin-health-card { width: 32% !important; }
+  .petugas-app-root .admin-data-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+}
+
+@media (max-width: 820px) {
+  .petugas-app-root .admin-shell { display: block !important; }
+  .petugas-app-root .admin-sidebar { width: 100% !important; padding: 9px 10px !important; }
+  .petugas-app-root .admin-main { padding: 0 12px 44px !important; }
+  .petugas-app-root .admin-topbar { margin: 0 -12px 12px !important; padding: 9px 12px !important; }
+  .petugas-app-root .admin-topbar h1 { font-size: 19px !important; }
+  .petugas-app-root .admin-command-card { min-height: 430px !important; }
+  .petugas-app-root .admin-command-content {
+    width: 100% !important;
+    min-height: 430px !important;
+    padding: 30px 24px 155px !important;
+  }
+  .petugas-app-root .admin-command-card h2 { font-size: 36px !important; }
+  .petugas-app-root .admin-health-card {
+    right: 14px !important;
+    bottom: 14px !important;
+    width: calc(100% - 28px) !important;
+    min-height: 118px !important;
+  }
+  .petugas-app-root .admin-kpi-grid { margin-top: 10px !important; padding: 0 !important; }
+  .petugas-app-root .admin-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  .petugas-app-root .admin-dashboard-grid { grid-template-columns: 1fr !important; }
+  .petugas-app-root .admin-quick-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 520px) {
+  .petugas-app-root { font-size: 13px !important; }
+  .petugas-app-root .admin-topbar-actions .tombol { font-size: 12px !important; }
+  .petugas-app-root .admin-command-card { min-height: 470px !important; border-radius: 15px !important; }
+  .petugas-app-root .admin-command-content { min-height: 470px !important; padding: 26px 19px 170px !important; }
+  .petugas-app-root .admin-command-card h2 { font-size: 31px !important; }
+  .petugas-app-root .admin-command-card p { font-size: 13.5px !important; }
+  .petugas-app-root .admin-command-meta { grid-template-columns: repeat(3,1fr) !important; gap: 6px !important; }
+  .petugas-app-root .admin-command-meta span { padding: 9px !important; }
+  .petugas-app-root .admin-command-meta b { font-size: 18px !important; }
+  .petugas-app-root .admin-command-meta small { font-size: 10.5px !important; }
+  .petugas-app-root .admin-health-card { grid-template-columns: 62px minmax(0,1fr) !important; padding: 13px !important; }
+  .petugas-app-root .admin-kpi-grid,
+  .petugas-app-root .admin-data-grid,
+  .petugas-app-root .admin-quick-grid { grid-template-columns: 1fr !important; }
+}
