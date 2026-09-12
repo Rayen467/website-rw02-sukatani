@@ -26,11 +26,13 @@ function terapkanTemaWaktuHalaman() {
   if (typeof document === "undefined") return;
 
   const halaman = rute.bagian[0] || "beranda";
-  const halamanStabil = ["umkm", "daftar-usaha", "petugas", "kelola"].includes(halaman);
+  const halamanUmkm = halaman === "umkm" || halaman === "daftar-usaha";
+  const halamanPetugas = halaman === "petugas" || halaman === "kelola";
+  const halamanStabil = halamanUmkm || halamanPetugas;
 
-  /* Tema waktu hanya dipakai di pengalaman warga. Panel Petugas adalah
-     back-office kerja sehingga warnanya harus stabil sepanjang hari agar
-     status, formulir, tabel, dan peringatan selalu konsisten. */
+  /* Tema waktu hanya dipakai di pengalaman warga. UMKM mempertahankan
+     identitas visualnya sendiri, sedangkan Portal Petugas adalah back-office
+     kerja sehingga warna status, formulir, tabel, dan peringatan harus stabil. */
   document.documentElement.dataset.waktuSitus = halamanStabil ? "nonaktif" : "aktif";
   document.documentElement.dataset.halaman = halaman;
 }
