@@ -4,6 +4,7 @@
   import { rute, pergi } from "../../keadaan/rute.svelte.js";
   import { keluar } from "../../sumber/akun.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import UmkmProHub from "../../komponen/kelola/UmkmProHub.svelte";
   import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
   import TabUmkm from "./TabUmkm.svelte";
@@ -208,6 +209,9 @@
 
     <div class="admin-content" role="region" aria-label={dipilih[1]}>
       <Terpilih />
+      {#if aktif === "umkm"}
+        <UmkmProHub />
+      {/if}
     </div>
   </div>
 
