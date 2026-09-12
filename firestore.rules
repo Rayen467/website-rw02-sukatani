@@ -154,11 +154,32 @@ service cloud.firestore {
         && teksWajar(request.resource.data.nama, 120)
         && teksWajar(request.resource.data.jabatan, 120)
         && request.resource.data.peran in ['master', 'petugas']
-        && request.resource.data.keys().hasOnly(['nama', 'jabatan', 'peran']);
+        && (!('username' in request.resource.data)
+            || (request.resource.data.username is string
+                && request.resource.data.username.size() <= 32))
+        && request.resource.data.keys().hasOnly(['nama', 'jabatan', 'peran', 'username']);
 
       // Satu-satunya pengaman: tidak ada yang bisa mencabut haknya sendiri,
       // supaya tidak ada yang mengunci dirinya sendiri di luar.
       allow delete: if petugas() && email != request.auth.token.email;
+    }
+
+    // ---------- alias login Petugas ----------
+    // Firebase email/password tidak punya username native. Koleksi ini hanya
+    // memetakan username -> email Firebase. GET satu username dibolehkan agar
+    // halaman login dapat menyelesaikan alias sebelum memanggil Firebase Auth,
+    // tetapi LIST seluruh alias dilarang untuk mengurangi enumerasi massal.
+    // Penulisan/penghapusan hanya dapat dilakukan oleh pengurus terverifikasi.
+
+    match /login_petugas/{username} {
+      allow get: if true;
+      allow list: if false;
+
+      allow create, update: if petugas()
+        && teksWajar(request.resource.data.email, 160)
+        && request.resource.data.keys().hasOnly(['email']);
+
+      allow delete: if petugas();
     }
 
     // ---------- pengaduan: bagian terbuka ----------
