@@ -59,52 +59,73 @@
 
 <div class="admin-shell">
   <aside class="admin-sidebar" aria-label="Navigasi Portal Petugas">
-    <div class="admin-brand">
-      <div class="admin-brand-mark" aria-hidden="true">RW</div>
-      <div><strong>Portal Petugas RW 02</strong><span>Permai Sukatani · Back-office internal</span></div>
+    <a class="admin-brand" href="#/" aria-label="Buka situs warga RW 02 Sukatani">
+      <span class="admin-brand-logo-wrap" aria-hidden="true">
+        <img class="admin-brand-logo" src="./visual/brand/logo-icon.webp" alt="" />
+      </span>
+      <span class="admin-brand-copy">
+        <strong>Portal Petugas</strong>
+        <b>RW 02 Sukatani</b>
+        <small>Back-office internal</small>
+      </span>
+    </a>
+
+    <div class="admin-nav-scroll">
+      {#each GRUP as grup}
+        <div class="admin-nav-group">
+          <span class="admin-nav-label">{grup.label}</span>
+          <div class="admin-nav-list">
+            {#each grup.item as t}
+              <a class="admin-nav-item" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href={"#/" + pangkal + "/" + t[0]} title={t[2]}>
+                <span class="admin-nav-icon" aria-hidden="true">{t[3]}</span>
+                <span class="admin-nav-copy"><strong>{t[1]}</strong><small>{t[2]}</small></span>
+                <span class="admin-nav-arrow" aria-hidden="true">›</span>
+              </a>
+            {/each}
+          </div>
+        </div>
+      {/each}
     </div>
 
-    {#each GRUP as grup}
-      <div class="admin-nav-group">
-        <span class="admin-nav-label">{grup.label}</span>
-        <div class="admin-nav-list">
-          {#each grup.item as t}
-            <a class="admin-nav-item" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href={"#/" + pangkal + "/" + t[0]} title={t[2]}>
-              <span class="admin-nav-icon" aria-hidden="true">{t[3]}</span>
-              <span class="admin-nav-copy"><strong>{t[1]}</strong><small>{t[2]}</small></span>
-            </a>
-          {/each}
-        </div>
-      </div>
-    {/each}
-
     <div class="admin-account">
-      <span class="admin-account-label">Sesi aktif</span>
-      <strong>{sesi.pengguna?.email || "-"}</strong>
-      <span>{namaPeran()}</span>
-      <button class="tombol" type="button" onclick={keluarPengurus}>Keluar</button>
+      <span class="admin-account-avatar" aria-hidden="true">{(namaPeran() || "P").slice(0, 1).toUpperCase()}</span>
+      <span class="admin-account-copy">
+        <small>Sesi aktif</small>
+        <strong>{sesi.pengguna?.email || "-"}</strong>
+        <span>{namaPeran()}</span>
+      </span>
+      <button class="admin-account-exit" type="button" onclick={keluarPengurus} title="Keluar dari akun">Keluar</button>
     </div>
   </aside>
 
   <div class="admin-main">
     <header class="admin-topbar">
       <div class="admin-topbar-copy">
-        <span class="admin-eyebrow">Portal Petugas · {namaPeran()}</span>
-        <h1>{dipilih[1]}</h1>
-        <p>{dipilih[2]}. Area ini khusus operasional internal dan terpisah dari tampilan situs warga.</p>
+        <span class="admin-eyebrow"><span class="admin-live-dot"></span> Portal Petugas <i>/</i> {namaPeran()}</span>
+        <div class="admin-title-row">
+          <h1>{dipilih[1]}</h1>
+          <span class="admin-internal-pill">Internal</span>
+        </div>
+        <p>{dipilih[2]}. Workspace operasional ini terpisah dari tampilan publik warga.</p>
       </div>
       <div class="admin-topbar-actions">
-        <a class="tombol" href="#/">Buka situs warga</a>
-        <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Segarkan data</button>
+        <a class="tombol admin-ghost-button" href="#/">
+          <span aria-hidden="true">↗</span>
+          Buka situs warga
+        </a>
+        <button class="tombol utama admin-refresh-button" type="button" onclick={() => muatPengurus()}>
+          <span aria-hidden="true">↻</span>
+          Segarkan data
+        </button>
       </div>
     </header>
 
     {#if galatData.length}
       <div class="admin-alert" role="alert">
-        <div aria-hidden="true">⚠</div>
+        <div class="admin-alert-icon" aria-hidden="true">!</div>
         <div class="admin-alert-body">
-          <strong>Data Petugas belum termuat lengkap.</strong>
-          Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}. Angka 0 pada modul terkait jangan dianggap sebagai data kosong sampai pemuatan berhasil.
+          <strong>Beberapa data belum termuat lengkap.</strong>
+          <span>Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}. Angka 0 pada modul terkait belum dapat dianggap sebagai data kosong.</span>
           <div class="baris-tombol" style="margin-top:10px"><button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button></div>
         </div>
       </div>
