@@ -1,85 +1,38 @@
 /* ===========================================================================
- * TIPOGRAFI TERBACA — fokus hanya teks mikro
+ * TIPOGRAFI TERBACA — batas minimum ukuran huruf seluruh situs
  * ===========================================================================
+ * Desktop/web: teks terkecil 14px.
+ * HP (<= 680px): teks terkecil 13px.
  *
- * Revisi ini TIDAK membesarkan paragraf normal, judul, atau isi utama.
- * Yang dinaikkan hanya teks-teks kecil yang sebelumnya sulit dibaca reviewer:
- * helper text, metadata, label kecil, kicker, sublabel, small text, footer,
- * keterangan kartu, dan teks sekunder di mobile.
+ * Berkas ini dimuat PALING AKHIR. Aturan di sini menjaga microcopy yang memang
+ * sengaja kecil. Penjaga runtime di interaksi-ui.js melengkapi aturan ini untuk
+ * komponen dinamis atau selector khusus yang belum tercakup di daftar berikut.
  * ======================================================================== */
 
-/* Small text generik: naik sedikit, isi normal tetap mengikuti CSS asli. */
-main small {
-  font-size: 12px !important;
-  line-height: 1.5 !important;
-}
-
-/* Metadata dan teks bantuan umum. */
+main small,
 .remah,
 .alis,
 .catatan,
 .catatan-borang,
 .kunci,
 .kosong-ket,
-.kosong-siapa {
-  font-size: 12.5px !important;
-  line-height: 1.52 !important;
-}
-
-/* Subteks kartu dan panel. */
+.kosong-siapa,
 .kartu small,
 .panel-rumah small,
 .kartu .muted,
-.panel-rumah .muted {
-  font-size: 12px !important;
-  line-height: 1.48 !important;
-}
-
-/* Header / dropdown / drawer: hanya bagian kecilnya. */
-.turunan a span {
-  font-size: 12.5px !important;
-  line-height: 1.45 !important;
-}
-
-.laci .kelompok {
-  font-size: 11.5px !important;
-}
-
-.merek-teks small {
-  font-size: 6.5px !important;
-}
-
-/* BERANDA — hanya microcopy, bukan judul/paragraf utama. */
-body:has(.beranda-hero) .beranda-eyebrow {
-  font-size: 11px !important;
-}
-
-body:has(.beranda-hero) .beranda-meta-item small {
-  font-size: 10.5px !important;
-  line-height: 1.4 !important;
-}
-
-body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
-  font-size: 10.5px !important;
-}
-
-body:has(.beranda-hero) .kembali-waktu {
-  font-size: 9.5px !important;
-}
-
-body:has(.beranda-hero) .layanan-cepat-item small {
-  font-size: 11.5px !important;
-  line-height: 1.45 !important;
-}
-
+.panel-rumah .muted,
+.turunan a span,
+.laci .kelompok,
+.merek-teks small,
+body:has(.beranda-hero) .beranda-eyebrow,
+body:has(.beranda-hero) .beranda-meta-item small,
+body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu),
+body:has(.beranda-hero) .kembali-waktu,
+body:has(.beranda-hero) .layanan-cepat-item small,
 .home-kicker,
 .home-important-label,
 .home-latest-head small,
-.home-activity-copy small {
-  font-size: 10px !important;
-  line-height: 1.4 !important;
-}
-
+.home-activity-copy small,
 .home-section-copy,
 .home-important-card p,
 .home-explore-card small,
@@ -88,93 +41,100 @@ body:has(.beranda-hero) .layanan-cepat-item small {
 .home-latest-list strong,
 .home-read,
 .home-link-all,
-.home-umkm-copy small {
-  font-size: 12px !important;
-  line-height: 1.5 !important;
-}
-
-/* Profil / layanan / kontak / pengurus: hanya small dan keterangan sekunder. */
+.home-umkm-copy small,
 .profil-modern small,
 .layanan-modern small,
 .kontak-modern small,
-.pengurus-modern small {
-  font-size: 12px !important;
-  line-height: 1.5 !important;
-}
-
-/* Tabel: header kecil dinaikkan sedikit, isi td tetap ukuran asli. */
-table th {
-  font-size: 12.5px !important;
-  line-height: 1.4 !important;
-}
-
-/* Footer: microcopy yang sebelumnya 8–10px. */
-.kaki-modern-kolom h4 {
-  font-size: 10.5px !important;
-}
-
+.pengurus-modern small,
+table th,
+.kaki-modern-kolom h4,
 .kaki-modern-kolom a,
 .kaki-modern-brand > p,
 .kaki-lokasi p,
-.kaki-lokasi-isi strong {
-  font-size: 11.5px !important;
-  line-height: 1.5 !important;
-}
-
+.kaki-lokasi-isi strong,
 .kaki-lokasi-isi small,
 .kaki-alamat-ringkas,
 .kaki-modern-bawah,
 .kaki-hubungi,
 .kaki-kolaborasi-mini > span,
 .kaki-kolaborasi-label {
-  font-size: 10.5px !important;
+  font-size: 14px !important;
+}
+
+main small,
+.remah,
+.alis,
+.catatan,
+.catatan-borang,
+.kunci,
+.kosong-ket,
+.kosong-siapa,
+.kartu small,
+.panel-rumah small,
+.kartu .muted,
+.panel-rumah .muted,
+.profil-modern small,
+.layanan-modern small,
+.kontak-modern small,
+.pengurus-modern small,
+.home-section-copy,
+.home-important-card p,
+.home-explore-card small,
+.home-hub-copy small,
+.home-latest-main p,
+.home-latest-list strong,
+.home-read,
+.home-link-all,
+.home-umkm-copy small,
+.kaki-modern-kolom a,
+.kaki-modern-brand > p,
+.kaki-lokasi p,
+.kaki-lokasi-isi strong {
+  line-height: 1.5 !important;
+}
+
+.turunan a span,
+body:has(.beranda-hero) .beranda-meta-item small,
+body:has(.beranda-hero) .layanan-cepat-item small,
+.home-kicker,
+.home-important-label,
+.home-latest-head small,
+.home-activity-copy small,
+table th,
+.kaki-lokasi-isi small,
+.kaki-alamat-ringkas,
+.kaki-modern-bawah,
+.kaki-hubungi,
+.kaki-kolaborasi-mini > span,
+.kaki-kolaborasi-label {
   line-height: 1.45 !important;
 }
 
-/* ===========================================================================
- * MOBILE — microtext jangan turun ke ukuran terlalu kecil.
- * ======================================================================== */
 @media (max-width: 680px) {
   main small,
-  .kartu small,
-  .panel-rumah small,
-  .profil-modern small,
-  .layanan-modern small,
-  .kontak-modern small,
-  .pengurus-modern small {
-    font-size: 12.5px !important;
-    line-height: 1.5 !important;
-  }
-
   .remah,
   .alis,
   .catatan,
   .catatan-borang,
   .kunci,
   .kosong-ket,
-  .kosong-siapa {
-    font-size: 12.5px !important;
-  }
-
-  body:has(.beranda-hero) .beranda-meta-item small {
-    font-size: 10px !important;
-  }
-
-  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu) {
-    font-size: 10px !important;
-  }
-
-  body:has(.beranda-hero) .layanan-cepat-item small {
-    font-size: 11.5px !important;
-  }
-
+  .kosong-siapa,
+  .kartu small,
+  .panel-rumah small,
+  .kartu .muted,
+  .panel-rumah .muted,
+  .turunan a span,
+  .laci .kelompok,
+  .merek-teks small,
+  body:has(.beranda-hero) .beranda-eyebrow,
+  body:has(.beranda-hero) .beranda-meta-item small,
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu),
+  body:has(.beranda-hero) .kembali-waktu,
+  body:has(.beranda-hero) .layanan-cepat-item small,
   .home-kicker,
   .home-important-label,
   .home-latest-head small,
-  .home-activity-copy small {
-    font-size: 10px !important;
-  }
-
+  .home-activity-copy small,
   .home-section-copy,
   .home-important-card p,
   .home-explore-card small,
@@ -183,35 +143,23 @@ table th {
   .home-latest-list strong,
   .home-read,
   .home-link-all,
-  .home-umkm-copy small {
-    font-size: 12px !important;
-  }
-
-  .kaki-modern-kolom h4 {
-    font-size: 11px !important;
-  }
-
+  .home-umkm-copy small,
+  .profil-modern small,
+  .layanan-modern small,
+  .kontak-modern small,
+  .pengurus-modern small,
+  table th,
+  .kaki-modern-kolom h4,
   .kaki-modern-kolom a,
   .kaki-modern-brand > p,
   .kaki-lokasi p,
-  .kaki-lokasi-isi strong {
-    font-size: 12px !important;
-  }
-
+  .kaki-lokasi-isi strong,
   .kaki-lokasi-isi small,
   .kaki-alamat-ringkas,
   .kaki-modern-bawah,
   .kaki-hubungi,
   .kaki-kolaborasi-mini > span,
   .kaki-kolaborasi-label {
-    font-size: 10.5px !important;
-  }
-}
-
-@media (max-width: 380px) {
-  main small,
-  .kartu small,
-  .panel-rumah small {
-    font-size: 12px !important;
+    font-size: 13px !important;
   }
 }

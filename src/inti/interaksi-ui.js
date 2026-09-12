@@ -1,7 +1,13 @@
 import { KONTAK_KETUA_RW } from "./kontak-resmi.js";
 
 const KUNCI_FAVORIT = "rw02-umkm-favorit";
+const MEDIA_HP = "(max-width: 680px)";
+const BATAS_TEKS_WEB = 14;
+const BATAS_TEKS_HP = 13;
+const TAG_FORM_TEKS = new Set(["INPUT", "TEXTAREA", "SELECT", "OPTION", "BUTTON"]);
 let sudahAktif = false;
+let rafTipografi = 0;
+let pengamatTipografi = null;
 
 function nomorWa(nomor) {
   return String(nomor || "").replace(/[^0-9]/g, "").replace(/^0/, "62");
@@ -41,6 +47,63 @@ function sinkronFavorit() {
     tombol.setAttribute("aria-pressed", aktif ? "true" : "false");
     tombol.setAttribute("title", aktif ? "Hapus dari usaha tersimpan" : "Simpan usaha");
   });
+}
+
+function punyaTeksLangsung(elemen) {
+  if (TAG_FORM_TEKS.has(elemen.tagName)) return true;
+  return [...elemen.childNodes].some((node) =>
+    node.nodeType === Node.TEXT_NODE && Boolean(node.textContent?.trim())
+  );
+}
+
+function pulihkanBatasTipografi() {
+  document.querySelectorAll("[data-rw-tipografi-min]").forEach((elemen) => {
+    const ukuranAsli = elemen.getAttribute("data-rw-tipografi-asli") || "";
+    if (ukuranAsli) elemen.style.fontSize = ukuranAsli;
+    else elemen.style.removeProperty("font-size");
+    elemen.removeAttribute("data-rw-tipografi-min");
+    elemen.removeAttribute("data-rw-tipografi-asli");
+  });
+}
+
+function terapkanBatasTipografi() {
+  if (typeof window === "undefined" || !document.body) return;
+
+  pulihkanBatasTipografi();
+  const batas = window.matchMedia(MEDIA_HP).matches ? BATAS_TEKS_HP : BATAS_TEKS_WEB;
+
+  document.querySelectorAll("body *").forEach((elemen) => {
+    if (!punyaTeksLangsung(elemen)) return;
+    const ukuran = Number.parseFloat(window.getComputedStyle(elemen).fontSize);
+    if (!Number.isFinite(ukuran) || ukuran >= batas) return;
+
+    elemen.setAttribute("data-rw-tipografi-asli", elemen.style.fontSize || "");
+    elemen.setAttribute("data-rw-tipografi-min", String(batas));
+    elemen.style.setProperty("font-size", `${batas}px`, "important");
+  });
+}
+
+function jadwalkanBatasTipografi() {
+  if (rafTipografi || typeof requestAnimationFrame === "undefined") return;
+  rafTipografi = requestAnimationFrame(() => {
+    rafTipografi = 0;
+    terapkanBatasTipografi();
+  });
+}
+
+function aktifkanBatasTipografi() {
+  jadwalkanBatasTipografi();
+  window.addEventListener("resize", jadwalkanBatasTipografi, { passive: true });
+  window.addEventListener("hashchange", jadwalkanBatasTipografi);
+
+  if (typeof MutationObserver !== "undefined" && document.body) {
+    pengamatTipografi = new MutationObserver(jadwalkanBatasTipografi);
+    pengamatTipografi.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  }
 }
 
 function bukaWaKetuaRw() {
@@ -93,5 +156,6 @@ export function aktifkanInteraksiUi() {
   sudahAktif = true;
   document.addEventListener("click", tanganiKlik);
   requestAnimationFrame(sinkronFavorit);
+  aktifkanBatasTipografi();
   window.addEventListener("hashchange", () => requestAnimationFrame(sinkronFavorit));
 }

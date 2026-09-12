@@ -22,7 +22,6 @@
 @import "./waktu-situs.css";
 @import "./kontak-hotfix.css";
 @import "./mobile-waktu-compact.css";
-@import "./tipografi-terbaca.css";
 @import "./kelola-profesional.css";
 @import "./petugas-app.css";
 @import "./petugas-observability.css";
@@ -31,3 +30,4 @@
 @import "./petugas-polish.css";
 @import "./petugas-vizora.css";
 @import "./umkm-rinci.css";
+@import "./tipografi-terbaca.css";
