@@ -28,12 +28,14 @@ function terapkanTemaWaktuHalaman() {
   const halaman = rute.bagian[0] || "beranda";
   const halamanUmkm = halaman === "umkm" || halaman === "daftar-usaha";
   const halamanPetugas = halaman === "petugas" || halaman === "kelola";
-  const halamanStabil = halamanUmkm || halamanPetugas;
 
-  /* Tema waktu hanya dipakai di pengalaman warga. UMKM mempertahankan
-     identitas visualnya sendiri, sedangkan Portal Petugas adalah back-office
-     kerja sehingga warna status, formulir, tabel, dan peringatan harus stabil. */
-  document.documentElement.dataset.waktuSitus = halamanStabil ? "nonaktif" : "aktif";
+  /* Pertahankan kontrak lama: UMKM selalu nonaktif. */
+  document.documentElement.dataset.waktuSitus = halamanUmkm ? "nonaktif" : "aktif";
+
+  /* Portal Petugas juga harus stabil sepanjang hari, tetapi dipisahkan dari
+     logika UMKM supaya aturan lama tetap mudah diuji dan dibaca. */
+  if (halamanPetugas) document.documentElement.dataset.waktuSitus = "nonaktif";
+
   document.documentElement.dataset.halaman = halaman;
 }
 
