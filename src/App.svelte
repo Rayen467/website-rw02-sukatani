@@ -2,9 +2,10 @@
   /**
    * Rangka situs.
    *
-   * Situs warga dan panel Petugas sengaja memakai shell yang berbeda.
-   * Panel Petugas adalah back-office internal: tidak memakai navbar publik,
-   * footer publik, atau lebar konten halaman warga.
+   * Situs warga, halaman masuk, dan panel Petugas sengaja memakai shell
+   * yang berbeda. Halaman masuk dibuat layar penuh agar pengalaman login
+   * tidak terganggu navbar/footer publik, sementara panel Petugas tetap
+   * menjadi back-office internal terpisah.
    */
   import { onMount } from "svelte";
   import { mulaiRute, rute } from "./keadaan/rute.svelte.js";
@@ -99,6 +100,7 @@
   };
 
   const modePetugas = $derived(rute.bagian[0] === "petugas" || rute.bagian[0] === "kelola");
+  const modeMasuk = $derived(rute.bagian[0] === "masuk");
 
   const pilihan = $derived.by(() => {
     const [satu, dua, tiga] = rute.bagian;
@@ -117,6 +119,12 @@
 
 {#if modePetugas}
   <main id="utama" class="petugas-app-root">
+    {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
+      <pilihan.komponen kunci={pilihan.kunci} />
+    {/key}
+  </main>
+{:else if modeMasuk}
+  <main id="utama" class="auth-app-root">
     {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
       <pilihan.komponen kunci={pilihan.kunci} />
     {/key}
