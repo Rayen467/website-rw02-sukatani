@@ -2,14 +2,14 @@
   /**
    * Rangka situs.
    *
-   * Berkas ini hanya memilih halaman mana yang ditampilkan. Isi tiap
-   * halaman ada di src/halaman/. Kalau ingin mengubah satu halaman,
-   * buka berkasnya langsung -- tidak perlu menyentuh berkas ini.
+   * Situs warga dan panel Petugas sengaja memakai shell yang berbeda.
+   * Panel Petugas adalah back-office internal: tidak memakai navbar publik,
+   * footer publik, atau lebar konten halaman warga.
    */
   import { onMount } from "svelte";
   import { mulaiRute, rute } from "./keadaan/rute.svelte.js";
   import { mulaiPantauan } from "./keadaan/mulai.js";
-  import { pengurus, sesi } from "./keadaan/sesi.svelte.js";
+  import { sesi } from "./keadaan/sesi.svelte.js";
   import { terapkanGaya } from "./keadaan/tampilan.js";
   import { mulaiWaktu } from "./keadaan/waktu.svelte.js";
 
@@ -65,7 +65,6 @@
     };
   });
 
-  /** Halaman satu bagian, misalnya /berita. */
   const halaman = {
     "": Beranda,
     profil: Profil,
@@ -95,8 +94,11 @@
     akun: Akun,
     "keamanan-akun": KeamananAkun,
     cari: Cari,
+    petugas: PintuKelola,
     kelola: PintuKelola
   };
+
+  const modePetugas = $derived(rute.bagian[0] === "petugas" || rute.bagian[0] === "kelola");
 
   const pilihan = $derived.by(() => {
     const [satu, dua, tiga] = rute.bagian;
@@ -113,15 +115,24 @@
 
 <a class="lompat" href="#utama">Lompat ke isi</a>
 
-<Kepala />
-
-<main id="utama">
-  <div class="wadah">
+{#if modePetugas}
+  <main id="utama" class="petugas-app-root">
     {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
       <pilihan.komponen kunci={pilihan.kunci} />
     {/key}
-  </div>
-</main>
+  </main>
+{:else}
+  <Kepala />
 
-<Kaki />
+  <main id="utama">
+    <div class="wadah">
+      {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
+        <pilihan.komponen kunci={pilihan.kunci} />
+      {/key}
+    </div>
+  </main>
+
+  <Kaki />
+{/if}
+
 <PesanSingkat />
