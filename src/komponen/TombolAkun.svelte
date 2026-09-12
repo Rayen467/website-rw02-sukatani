@@ -15,7 +15,7 @@
       pergi("/masuk");
       return;
     }
-    pergi(pengurus() ? "/kelola" : "/akun");
+    pergi(pengurus() ? "/petugas" : "/akun");
   }
 </script>
 
@@ -24,7 +24,7 @@
   class:aktif={!!sesi.pengguna}
   type="button"
   onclick={tekan}
-  title={sesi.pengguna ? (pengurus() ? "Buka Dashboard Petugas/Pengelola" : "Buka Dashboard Warga") : "Masuk atau daftar akun warga"}
+  title={sesi.pengguna ? (pengurus() ? "Buka Portal Petugas RW 02" : "Buka Dashboard Warga") : "Masuk atau daftar akun warga"}
 >
   {#if sesi.pengguna}
     <svg viewBox="0 0 24 24" aria-hidden="true">
