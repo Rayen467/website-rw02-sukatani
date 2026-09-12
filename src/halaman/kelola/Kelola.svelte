@@ -61,6 +61,12 @@
   ];
 
   const TAB = GRUP.flatMap((g) => g.item);
+  const NAV_HP = [
+    ["dashboard", "Ikhtisar"],
+    ["kiriman", "Layanan"],
+    ["umkm", "UMKM"],
+    ["orang", "Warga"]
+  ];
   const pangkal = $derived(rute.bagian[0] === "petugas" ? "petugas" : "kelola");
   const dariAlamat = $derived(TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "dashboard");
   const aktif = $derived(dariAlamat);
@@ -71,6 +77,7 @@
   const sisaPengurus = $derived(Math.max(0, (Array.isArray(isi.pengurus) ? isi.pengurus.length : 0) - pengurusTop.length));
 
   let pencarian = $state("");
+  let menuHpTerbuka = $state(false);
 
   function inisial(o) {
     const nama = String(o?.nama || o?.id || o?.email || "P").trim();
@@ -87,6 +94,7 @@
       return;
     }
     pencarian = "";
+    menuHpTerbuka = false;
     pergi(`/${pangkal}/${tujuan[0]}`);
   }
 
@@ -99,6 +107,7 @@
   }
 
   async function keluarPengurus() {
+    menuHpTerbuka = false;
     await keluar();
     beriTahu("Anda sudah keluar dari akun pengurus.");
     pergi("/");
@@ -201,4 +210,53 @@
       <Terpilih />
     </div>
   </div>
+
+  <nav class="mobile-bottom-nav" aria-label="Navigasi utama Petugas">
+    {#each NAV_HP as n}
+      <a class="mobile-bottom-item" class:aktif={aktif === n[0]} aria-current={aktif === n[0] ? "page" : undefined} href={"#/" + pangkal + "/" + n[0]} onclick={() => (menuHpTerbuka = false)}>
+        <span class="mobile-bottom-icon" aria-hidden="true">{IKON[n[0]]}</span>
+        <span>{n[1]}</span>
+      </a>
+    {/each}
+    <button class="mobile-bottom-item mobile-menu-trigger" class:aktif={menuHpTerbuka} type="button" aria-expanded={menuHpTerbuka} aria-label="Buka semua menu" onclick={() => (menuHpTerbuka = !menuHpTerbuka)}>
+      <span class="mobile-bottom-icon" aria-hidden="true">☰</span>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  {#if menuHpTerbuka}
+    <div class="mobile-menu-backdrop" role="presentation" onclick={(e) => { if (e.target === e.currentTarget) menuHpTerbuka = false; }}>
+      <section class="mobile-menu-sheet" role="dialog" aria-modal="true" aria-label="Semua menu Portal Petugas">
+        <div class="mobile-menu-handle" aria-hidden="true"></div>
+        <header class="mobile-menu-head">
+          <div>
+            <small>Portal Petugas</small>
+            <h2>Semua menu</h2>
+          </div>
+          <button type="button" aria-label="Tutup menu" onclick={() => (menuHpTerbuka = false)}>×</button>
+        </header>
+
+        <div class="mobile-menu-groups">
+          {#each GRUP as grup}
+            <section class="mobile-menu-group">
+              <h3>{grup.label}</h3>
+              <div class="mobile-menu-grid">
+                {#each grup.item as t}
+                  <a class="mobile-menu-card" class:aktif={aktif === t[0]} href={"#/" + pangkal + "/" + t[0]} onclick={() => (menuHpTerbuka = false)}>
+                    <span class="mobile-menu-card-icon" aria-hidden="true">{IKON[t[0]] || t[3]}</span>
+                    <span class="mobile-menu-card-copy"><strong>{t[1]}</strong><small>{t[2]}</small></span>
+                  </a>
+                {/each}
+              </div>
+            </section>
+          {/each}
+        </div>
+
+        <div class="mobile-menu-actions">
+          <a href="#/" onclick={() => (menuHpTerbuka = false)}>↗ Buka situs warga</a>
+          <button type="button" onclick={keluarPengurus}>↪ Keluar akun</button>
+        </div>
+      </section>
+    </div>
+  {/if}
 </div>
