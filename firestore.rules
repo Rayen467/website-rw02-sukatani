@@ -1,53 +1,7 @@
 rules_version = '2';
 
-// ============================================================================
-// Aturan keamanan Firestore -- Situs Warga RW 02 Perum Permai Sukatani
-//
-// Prinsip: semua terkunci, lalu dibuka satu per satu seperlunya.
-//
-// TIGA AKTOR
-//
-//   warga    -- Siapa pun yang masuk dengan akun Google dan mendaftar.
-//               Mengirim pengaduan, mengajukan surat, meminjam fasilitas,
-//               mendaftarkan usaha, ikut polling dan forum.
-//               Hanya bisa melihat kiriman MILIKNYA SENDIRI untuk data privat.
-//
-//   petugas  -- Ketua RT, seksi keamanan dan kebersihan, kader.
-//               AKSES PENUH atas seluruh data dan isi situs:
-//               pengumuman, agenda, galeri, laporan kas, rencana program,
-//               katalog usaha, keterangan profil RW, pengaduan, reservasi,
-//               pendaftaran usaha, verifikasi warga, dan pengajuan surat.
-//
-//   master   -- "Master Admin". Ketua RW dan Sekretaris.
-//               KEWENANGANNYA SAMA PERSIS dengan petugas, termasuk mengatur
-//               siapa saja yang menjadi pengurus.
-//
-// CATATAN PENTING BAGI YANG MEMBACA ATURAN INI KEMUDIAN
-//   Field "peran" sekarang hanya penanda jabatan yang tampil di layar.
-//   Aturan di bawah TIDAK membedakan master dan petugas sama sekali.
-//   Konsekuensinya: siapa pun yang diberi peran petugas dapat mencabut hak
-//   pengurus lain, termasuk Ketua RW. Ini pilihan yang diambil sadar oleh
-//   pemilik situs, bukan kelalaian. Satu-satunya pengaman yang tersisa
-//   adalah larangan mencabut hak diri sendiri.
-//
-// Warga yang belum masuk tetap bisa MEMBACA seluruh isi terbuka -- berita,
-// kalender, laporan kas, direktori usaha, daftar pengaduan dan forum -- dan
-// tetap bisa mengirim pengaduan tanpa nama. Itu disengaja: melaporkan gangguan
-// keamanan tidak boleh mensyaratkan pendaftaran.
-//
-// CARA MEMASANG
-//   console.firebase.google.com/project/perumahansukatanirw02/firestore/rules
-//   Hapus isi yang ada, tempel seluruh berkas ini, klik Publish.
-//
-// CATATAN BOOTSTRAP
-//   Dokumen pengurus yang belum punya field "peran" dianggap master, supaya
-//   orang pertama yang didaftarkan lewat konsol tidak mengunci dirinya sendiri.
-// ============================================================================
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // ---------- pembantu ----------
 
     function masuk() {
       return request.auth != null && request.auth.token.email_verified == true;
@@ -65,8 +19,6 @@ service cloud.firestore {
       return masuk() && exists(jalurSaya());
     }
 
-    // Pemilik kiriman: dipakai supaya warga bisa melacak kirimannya sendiri
-    // tanpa bisa mengintip milik tetangga.
     function pemilik() {
       return masuk()
         && 'uid' in resource.data
@@ -81,16 +33,11 @@ service cloud.firestore {
       return nilai == null || (nilai is string && nilai.size() <= maks);
     }
 
-    // uid boleh kosong (kiriman tanpa akun), tetapi kalau diisi harus uid
-    // pengirimnya sendiri. Mencegah orang mengaku sebagai warga lain.
     function uidJujur() {
       return request.resource.data.uid == '' ||
              (masuk() && request.resource.data.uid == request.auth.uid);
     }
 
-    // Khusus pengaduan, akun tidak perlu melewati pemeriksaan email_verified
-    // hanya untuk menyimpan laporan. Google/Firebase Auth sudah memberi UID
-    // yang dapat diverifikasi server; warga anonim juga tetap boleh melapor.
     function uidPengaduanJujur() {
       return request.resource.data.uid == '' ||
              (request.auth != null && request.resource.data.uid == request.auth.uid);
@@ -100,20 +47,11 @@ service cloud.firestore {
       return request.resource.data.dibuat == request.time;
     }
 
-    // Nilai status yang boleh dipasang pengurus pada kiriman warga.
-    // 'ditolak' ada di sini supaya permohonan yang tidak bisa dipenuhi
-    // punya jalan keluar yang jujur. Tanpa itu satu-satunya cara menutup
-    // permohonan adalah menandainya 'selesai', yang berarti berbohong
-    // kepada warga yang memantau statusnya.
     function statusSah(nilai) {
       return nilai in ['baru', 'proses', 'selesai', 'ditolak'];
     }
 
     // ---------- pendaftaran warga ----------
-    // Warga membuat sendiri catatannya saat pertama masuk. Status awal 'baru',
-    // menunggu pengurus mencocokkan dengan daftar kepala keluarga.
-    // Warga TIDAK bisa mengubah statusnya sendiri menjadi terverifikasi.
-
     match /warga/{uid} {
       allow read: if akuSendiri(uid) || petugas();
 
@@ -128,7 +66,6 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(
              ['nama', 'blok', 'rt', 'wa', 'email', 'status', 'dibuat']);
 
-      // Warga boleh memperbaiki keterangan dirinya, tetapi tidak statusnya.
       allow update: if (akuSendiri(uid)
                         && request.resource.data.diff(resource.data)
                              .affectedKeys().hasOnly(['nama', 'blok', 'rt', 'wa'])
@@ -142,11 +79,7 @@ service cloud.firestore {
     }
 
     // ---------- daftar pengurus ----------
-
     match /pengurus/{email} {
-      // Warga terverifikasi hanya boleh membaca dokumen role milik emailnya
-      // sendiri, karena itu yang dipakai untuk mendeteksi apakah ia pengurus.
-      // Daftar seluruh email/nama/jabatan pengurus hanya boleh dilist pengurus.
       allow get: if masuk() && (email == request.auth.token.email || petugas());
       allow list: if petugas();
 
@@ -159,18 +92,10 @@ service cloud.firestore {
                 && request.resource.data.username.size() <= 32))
         && request.resource.data.keys().hasOnly(['nama', 'jabatan', 'peran', 'username']);
 
-      // Satu-satunya pengaman: tidak ada yang bisa mencabut haknya sendiri,
-      // supaya tidak ada yang mengunci dirinya sendiri di luar.
       allow delete: if petugas() && email != request.auth.token.email;
     }
 
     // ---------- alias login Petugas ----------
-    // Firebase email/password tidak punya username native. Koleksi ini hanya
-    // memetakan username -> email Firebase. GET satu username dibolehkan agar
-    // halaman login dapat menyelesaikan alias sebelum memanggil Firebase Auth,
-    // tetapi LIST seluruh alias dilarang untuk mengurangi enumerasi massal.
-    // Penulisan/penghapusan hanya dapat dilakukan oleh pengurus terverifikasi.
-
     match /login_petugas/{username} {
       allow get: if true;
       allow list: if false;
@@ -182,10 +107,7 @@ service cloud.firestore {
       allow delete: if petugas();
     }
 
-    // ---------- pengaduan: bagian terbuka ----------
-    // Tanpa nama dan nomor pelapor. Terbuka supaya warga tahu laporan apa
-    // yang masuk dan sudah ditangani atau belum.
-
+    // ---------- pengaduan ----------
     match /pengaduan/{id} {
       allow read: if true;
 
@@ -200,7 +122,6 @@ service cloud.firestore {
                          ['kategori', 'lokasi', 'isi', 'status', 'catatan',
                           'tiket', 'uid', 'dibuat']);
 
-      // Isi laporan asli tidak bisa diubah siapa pun, termasuk master admin.
       allow update: if petugas()
                     && request.resource.data.diff(resource.data)
                          .affectedKeys().hasOnly(['status', 'catatan'])
@@ -208,8 +129,6 @@ service cloud.firestore {
 
       allow delete: if false;
     }
-
-    // ---------- pengaduan: kontak pelapor ----------
 
     match /pengaduan_kontak/{id} {
       allow read: if petugas();
@@ -225,9 +144,6 @@ service cloud.firestore {
     }
 
     // ---------- pengajuan surat ----------
-    // Memuat NIK dan alamat lengkap.
-    // Dibaca seluruh pengurus, atau warga yang mengajukannya sendiri.
-
     match /surat/{id} {
       allow read: if petugas() || pemilik();
 
@@ -256,7 +172,6 @@ service cloud.firestore {
     }
 
     // ---------- reservasi fasilitas ----------
-
     match /reservasi/{id} {
       allow read: if petugas() || pemilik();
 
@@ -282,15 +197,12 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // ---------- jadwal pemakaian fasilitas ----------
-
     match /jadwal/{tanggal} {
       allow read: if true;
       allow write: if petugas();
     }
 
     // ---------- pendaftaran usaha warga ----------
-
     match /usaha_baru/{id} {
       allow read: if petugas() || pemilik();
 
@@ -316,11 +228,14 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // ---------- polling warga ----------
-    // Satu akun satu suara, dijamin oleh ID dokumen = uid pemilih.
-    // Suara boleh diubah selama polling berjalan, tidak boleh dihapus.
-    // Isinya hanya nomor pilihan, tidak memuat nama.
+    // ---------- administrasi UMKM: PRIVAT ----------
+    // Legalitas, nomor referensi sertifikat, perpajakan, dan catatan
+    // pendampingan tidak disimpan di katalog publik usaha.
+    match /usaha_admin/{slug} {
+      allow read, create, update, delete: if petugas();
+    }
 
+    // ---------- polling warga ----------
     match /polling/{pollId}/suara/{uid} {
       allow read: if masuk();
 
@@ -339,10 +254,6 @@ service cloud.firestore {
     }
 
     // ---------- forum warga ----------
-    // Semua orang boleh membaca. Menulis harus memakai akun terverifikasi.
-    // Penulis hanya boleh menandai tulisannya sebagai dihapus; isi asli tidak
-    // dapat diedit setelah dipublikasikan. Petugas punya hak moderasi yang sama.
-
     match /forum_topik/{id} {
       allow read: if true;
 
@@ -378,7 +289,7 @@ service cloud.firestore {
                     && request.resource.data.status == 'aktif'
                     && waktuJujur()
                     && request.resource.data.keys().hasOnly(
-                         ['topikId', 'isi', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+                         ['topikId', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
 
       allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
                     && request.resource.data.diff(resource.data)
@@ -388,17 +299,12 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-
-    // ---------- ISI SITUS YANG DIKELOLA PETUGAS ----------
-    // Semua di bawah ini: dibaca siapa pun tanpa perlu masuk, ditulis petugas.
-    // Inilah yang membuat situs bisa diperbarui tanpa mengubah kode.
-
+    // ---------- isi situs yang dikelola Petugas ----------
     function isiSah(maksJudul, maksIsi) {
       return teksWajar(request.resource.data.judul, maksJudul)
         && teksBoleh(request.resource.data.isi, maksIsi);
     }
 
-    // Pengumuman dan agenda. Field tipe membedakan keduanya.
     match /pengumuman/{id} {
       allow read: if true;
       allow create, update: if petugas()
@@ -409,147 +315,94 @@ service cloud.firestore {
       allow delete: if petugas();
     }
 
-    // Dokumentasi kegiatan.
     match /galeri/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Laporan kas bulanan. Satu dokumen per periode, misalnya "2026-08".
     match /kas/{periode} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Rencana dan realisasi program.
     match /program/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Katalog usaha yang sudah ditinjau dan ditampilkan.
-    // Isinya keterangan dan sampul kecil saja; foto ukuran penuhnya ada di
-    // usaha_foto di bawah.
     match /usaha/{slug} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Foto usaha ukuran penuh, id-nya sama dengan dokumen di koleksi usaha.
-    // Dipisah bukan demi kerahasiaan -- fotonya memang diterbitkan untuk
-    // warga -- tapi supaya tidak ikut terunduh setiap situs dibuka. Koleksi
-    // usaha ikut dimuat di awal karena beranda memajang tiga usaha teratas
-    // dan halaman Cari mencari di dalamnya. Penjelasannya di catatan
-    // USAHA_FOTO, src/inti/nama.js.
     match /usaha_foto/{slug} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Keterangan tetap: profil RW, struktur pengurus yang ditampilkan,
-    // rekapitulasi kependudukan, kontak, jam layanan, nomor darurat.
-    // Satu dokumen per bagian, misalnya konten/profil dan konten/kontak.
     match /konten/{bagian} {
       allow read: if true;
       allow write: if petugas();
     }
 
-
-    // Struktur pengurus yang DITAMPILKAN di halaman publik.
-    // Sengaja dipisah dari koleksi "pengurus" yang mengatur hak akses:
-    // yang ini boleh memuat nama dan foto siapa pun, termasuk pengurus yang
-    // tidak punya akun. Menambah baris di sini TIDAK memberi hak apa pun.
     match /pengurus_tampil/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Keterangan batas tiap RT. Google Maps tidak bisa menggambar batas RT,
-    // jadi batasnya ditulis sebagai keterangan.
     match /batas_rt/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-
-    // ---------- ISI HALAMAN YANG DULU KERAS DI KODE ----------
-    // Semua ini dibaca siapa pun tanpa masuk, ditulis petugas.
-    // Tujuannya satu: pengurus RW tidak pernah perlu menyentuh kode
-    // untuk mengubah apa pun yang tampil di situs.
-
-    // Tautan penting: kantor kelurahan, kecamatan, Dukcapil, dan lainnya.
     match /tautan/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Dokumen dan video: notulen, SK, formulir, laporan, rekaman kegiatan.
-    // Dua bentuk isi bercampur di koleksi ini. Yang "unggah" menyimpan
-    // berkasnya sebagai teks di kolom data; yang "tautan" cuma menyimpan
-    // alamat ke Google Drive atau YouTube. Keduanya boleh dibaca siapa pun
-    // karena memang diterbitkan untuk warga.
     match /berkas/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Isi berkas, dipisah dari keterangannya. Id-nya sama dengan dokumen di
-    // koleksi berkas. Dipisah bukan demi kerahasiaan -- isinya memang boleh
-    // dibaca siapa pun -- tapi supaya tidak ikut terunduh setiap situs
-    // dibuka. Penjelasannya di catatan BERKAS_ISI, src/inti/nama.js.
     match /berkas_isi/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Foto galeri ukuran penuh, satu dokumen satu foto. Koleksi "galeri" di
-    // atas cuma menyimpan keterangan album dan sampul kecilnya. Dipisah
-    // supaya album berisi dua puluh foto tidak ikut terunduh setiap
-    // pengunjung membuka situs.
     match /galeri_foto/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Jenis surat yang dilayani beserta syarat berkasnya.
     match /jenis_surat/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Fasilitas yang bisa dipinjam warga.
     match /fasilitas/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Fasilitas umum yang ada di kawasan.
     match /fasum/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Kegiatan rutin: ronda, posyandu, pengajian, kerja bakti.
     match /rutin/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // Program bantuan sosial beserta syarat dan jalur pengajuannya.
     match /bansos/{id} {
       allow read: if true;
       allow write: if petugas();
     }
 
-    // ---------- penerima bantuan sosial: PRIVAT ----------
-    // Nama penerima tidak pernah dibuka untuk publik. Hanya pengurus yang
-    // boleh membaca dan mengubah daftar rinci; halaman warga hanya
-    // menampilkan jumlah agregat per RT dari konten/bansos.
     match /bansos_penerima/{id} {
       allow read, create, update, delete: if petugas();
     }
-
-    // ---------- penutup ----------
 
     match /{document=**} {
       allow read, write: if false;
