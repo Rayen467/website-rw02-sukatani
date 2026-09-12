@@ -57,7 +57,7 @@ const KOLEKSI = [
   "pengumuman", "galeri", "program", "kas", "usaha", "pengurus_tampil",
   "batas_rt", "jadwal", "tautan", "jenis_surat", "fasilitas", "fasum",
   "rutin", "bansos", "pengaduan", "pengaduan_kontak", "surat", "reservasi",
-  "usaha_baru", "warga", "pengurus", "konten", "polling"
+  "usaha_baru", "usaha_admin", "usaha_bukti", "warga", "pengurus", "konten", "polling"
 ];
 
 /* Bagian dokumen tetap di dalam koleksi "konten". */
