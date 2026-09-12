@@ -69,16 +69,17 @@ export function penggunaSekarang() {
   return pintu ? pintu.auth.currentUser : null;
 }
 
-function emailBersih(email) {
-  return String(email || "").trim().toLowerCase();
+function identitasBersih(nilai) {
+  return String(nilai || "").trim().toLowerCase();
 }
 
 export async function masukGoogle() {
   return (await bukaPintu()).masukGoogle();
 }
 
-export async function masukEmail(email, sandi) {
-  return (await bukaPintu()).masukEmail(emailBersih(email), sandi);
+/** Menerima email/Gmail atau username petugas. */
+export async function masukEmail(identitas, sandi) {
+  return (await bukaPintu()).masukEmail(identitasBersih(identitas), sandi);
 }
 
 export async function validasiKataSandi(sandi) {
@@ -86,11 +87,25 @@ export async function validasiKataSandi(sandi) {
 }
 
 export async function daftarAkun(email, sandi, nama) {
-  return (await bukaPintu()).daftarAkun(emailBersih(email), sandi, String(nama || "").trim());
+  return (await bukaPintu()).daftarAkun(identitasBersih(email), sandi, String(nama || "").trim());
 }
 
-export async function lupaSandi(email) {
-  return (await bukaPintu()).lupaSandi(emailBersih(email));
+/** Membuat akun Auth Petugas pada app sekunder agar sesi admin tidak terganti. */
+export async function daftarPetugas(email, sandi, nama) {
+  return (await bukaPintu()).daftarPetugas(identitasBersih(email), sandi, String(nama || "").trim());
+}
+
+export async function batalkanPetugasBaru() {
+  return (await bukaPintu()).batalkanPetugasBaru();
+}
+
+export async function selesaikanPetugasBaru() {
+  return (await bukaPintu()).selesaikanPetugasBaru();
+}
+
+/** Menerima email/Gmail atau username petugas. */
+export async function lupaSandi(identitas) {
+  return (await bukaPintu()).lupaSandi(identitasBersih(identitas));
 }
 
 export async function kirimUlangVerifikasi() {
