@@ -41,6 +41,7 @@
   ];
 
   const TAB = GRUP.flatMap((g) => g.item);
+  const pangkal = $derived(rute.bagian[0] === "petugas" ? "petugas" : "kelola");
   const dariAlamat = $derived(TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "dashboard");
   const aktif = $derived(dariAlamat);
   const dipilih = $derived(TAB.find((t) => t[0] === aktif) || TAB[0]);
@@ -54,13 +55,13 @@
   }
 </script>
 
-<nav class="remah" aria-label="Breadcrumb"><a href="#/">Beranda</a><span aria-hidden="true">›</span><span>Panel Petugas</span></nav>
+<nav class="remah" aria-label="Breadcrumb"><a href="#/">Beranda</a><span aria-hidden="true">›</span><span>Portal Petugas</span></nav>
 
 <div class="admin-shell">
-  <aside class="admin-sidebar" aria-label="Navigasi panel petugas">
+  <aside class="admin-sidebar" aria-label="Navigasi Portal Petugas">
     <div class="admin-brand">
       <div class="admin-brand-mark" aria-hidden="true">RW</div>
-      <div><strong>Pusat Operasional RW 02</strong><span>Permai Sukatani · Panel internal</span></div>
+      <div><strong>Portal Petugas RW 02</strong><span>Permai Sukatani · Back-office internal</span></div>
     </div>
 
     {#each GRUP as grup}
@@ -68,7 +69,7 @@
         <span class="admin-nav-label">{grup.label}</span>
         <div class="admin-nav-list">
           {#each grup.item as t}
-            <a class="admin-nav-item" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href="#/kelola/{t[0]}" title={t[2]}>
+            <a class="admin-nav-item" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href={"#/" + pangkal + "/" + t[0]} title={t[2]}>
               <span class="admin-nav-icon" aria-hidden="true">{t[3]}</span>
               <span class="admin-nav-copy"><strong>{t[1]}</strong><small>{t[2]}</small></span>
             </a>
@@ -88,12 +89,12 @@
   <div class="admin-main">
     <header class="admin-topbar">
       <div class="admin-topbar-copy">
-        <span class="admin-eyebrow">Panel Petugas · {namaPeran()}</span>
+        <span class="admin-eyebrow">Portal Petugas · {namaPeran()}</span>
         <h1>{dipilih[1]}</h1>
-        <p>{dipilih[2]}. Semua perubahan pada panel ini terhubung ke data situs RW 02.</p>
+        <p>{dipilih[2]}. Area ini khusus operasional internal dan terpisah dari tampilan situs warga.</p>
       </div>
       <div class="admin-topbar-actions">
-        <a class="tombol" href="#/">Lihat situs warga</a>
+        <a class="tombol" href="#/">Buka situs warga</a>
         <button class="tombol utama" type="button" onclick={() => muatPengurus()}>Segarkan data</button>
       </div>
     </header>
