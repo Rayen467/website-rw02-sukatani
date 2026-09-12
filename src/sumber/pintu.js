@@ -9,9 +9,12 @@
  * - reset password selalu lewat tautan Firebase,
  * - password baru minimal 15 karakter untuk akun tanpa MFA,
  * - tidak memaksa pola huruf besar/angka/simbol buatan sendiri,
- * - mendukung passphrase panjang dan password manager.
+ * - mendukung passphrase panjang dan password manager,
+ * - username petugas hanya alias login; password tetap tidak pernah disimpan
+ *   di Firestore atau kode situs.
  */
 
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -25,15 +28,23 @@ import {
   onIdTokenChanged,
   reload,
   getIdToken,
-  validatePassword
+  validatePassword,
+  deleteUser,
+  setPersistence,
+  inMemoryPersistence
 } from "firebase/auth";
-import { app } from "./firebase.js";
+import { doc, getDoc } from "firebase/firestore/lite";
+import { app, konfigurasi, db } from "./firebase.js";
+import { KOLEKSI_LOGIN_PETUGAS, periksaUsername } from "../inti/identitas-login.js";
 
 export const auth = getAuth(app);
 auth.languageCode = "id";
 
 export const PANJANG_SANDI_MIN = 15;
 export const PANJANG_SANDI_MAKS = 128;
+
+let authPembuatPetugas = null;
+let janjiAuthPembuat = null;
 
 /** Memasang pemantauan. Mengembalikan fungsi untuk melepasnya lagi. */
 export function pantau(saatBerubah) {
@@ -46,7 +57,36 @@ export function masukGoogle() {
   return signInWithPopup(auth, penyedia);
 }
 
-export function masukEmail(email, sandi) {
+function buatGalat(kode, pesan) {
+  const err = new Error(pesan || kode);
+  err.code = kode;
+  return err;
+}
+
+async function emailDariPengenal(pengenal) {
+  const nilai = String(pengenal || "").trim().toLowerCase();
+  if (!nilai) return null;
+
+  if (nilai.includes("@")) return nilai;
+
+  const cek = periksaUsername(nilai);
+  if (!cek.valid) return null;
+
+  const acuan = await getDoc(doc(db, KOLEKSI_LOGIN_PETUGAS, cek.username));
+  if (!acuan.exists()) return null;
+
+  const email = String(acuan.data()?.email || "").trim().toLowerCase();
+  return email.includes("@") ? email : null;
+}
+
+/**
+ * Masuk memakai email ATAU username petugas.
+ * Respons untuk alias yang tidak ditemukan tetap dibuat sama dengan kredensial
+ * salah supaya halaman login tidak memberi pesan "username ada/tidak ada".
+ */
+export async function masukEmail(pengenal, sandi) {
+  const email = await emailDariPengenal(pengenal);
+  if (!email) throw buatGalat("auth/invalid-credential", "Kredensial tidak cocok.");
   return signInWithEmailAndPassword(auth, email, sandi);
 }
 
@@ -117,13 +157,73 @@ export async function daftarAkun(email, sandi, nama) {
   return hasil.user;
 }
 
+async function ambilAuthPembuatPetugas() {
+  if (authPembuatPetugas) return authPembuatPetugas;
+  if (janjiAuthPembuat) return janjiAuthPembuat;
+
+  janjiAuthPembuat = (async () => {
+    const appPembuat = initializeApp(konfigurasi, "rw02-pembuat-petugas");
+    const authKedua = getAuth(appPembuat);
+    authKedua.languageCode = "id";
+    // Akun sementara tidak boleh menetap di storage browser milik admin.
+    await setPersistence(authKedua, inMemoryPersistence);
+    authPembuatPetugas = authKedua;
+    return authKedua;
+  })();
+
+  try {
+    return await janjiAuthPembuat;
+  } finally {
+    janjiAuthPembuat = null;
+  }
+}
+
 /**
- * Reset password dengan respons anti-enumerasi.
- * Bila proteksi email-enumeration Firebase belum dinyalakan, SDK lama masih
- * dapat mengembalikan user-not-found. Kasus itu sengaja dianggap sukses agar
- * layar tidak membocorkan apakah sebuah email terdaftar.
+ * Membuat akun Petugas tanpa mengganti sesi admin yang sedang membuka portal.
+ * Password hanya dikirim langsung ke Firebase Auth pada app sekunder dengan
+ * persistence in-memory; tidak pernah ditulis ke Firestore/localStorage.
  */
-export async function lupaSandi(email) {
+export async function daftarPetugas(email, sandi, nama) {
+  const cek = await validasiKataSandi(sandi);
+  if (!cek.valid) throw buatGalat("auth/password-policy", cek.masalah.join(" "));
+
+  const pembuat = await ambilAuthPembuatPetugas();
+  let penggunaBaru = null;
+
+  try {
+    const hasil = await createUserWithEmailAndPassword(pembuat, String(email || "").trim().toLowerCase(), sandi);
+    penggunaBaru = hasil.user;
+    if (nama) await updateProfile(penggunaBaru, { displayName: String(nama).trim() });
+    await sendEmailVerification(penggunaBaru);
+    return penggunaBaru;
+  } catch (err) {
+    if (penggunaBaru) {
+      try { await deleteUser(penggunaBaru); } catch { /* best effort rollback */ }
+    }
+    throw err;
+  }
+}
+
+export async function batalkanPetugasBaru() {
+  const pembuat = await ambilAuthPembuatPetugas();
+  const u = pembuat.currentUser;
+  if (!u) return;
+  await deleteUser(u);
+}
+
+export async function selesaikanPetugasBaru() {
+  const pembuat = await ambilAuthPembuatPetugas();
+  if (pembuat.currentUser) await signOut(pembuat);
+}
+
+/**
+ * Reset password menerima Gmail/email atau username petugas. Respons ke layar
+ * tetap anti-enumerasi; alias yang tidak ada dianggap selesai tanpa membocorkan
+ * apakah username tersebut terdaftar.
+ */
+export async function lupaSandi(pengenal) {
+  const email = await emailDariPengenal(pengenal);
+  if (!email) return;
   try {
     await sendPasswordResetEmail(auth, email);
   } catch (err) {
