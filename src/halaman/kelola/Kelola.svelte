@@ -124,7 +124,7 @@
       <div class="admin-alert" role="alert">
         <div class="admin-alert-icon" aria-hidden="true">!</div>
         <div class="admin-alert-body">
-          <strong>Beberapa data belum termuat lengkap.</strong>
+          <strong>Data Petugas belum termuat lengkap.</strong>
           <span>Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}. Angka 0 pada modul terkait belum dapat dianggap sebagai data kosong.</span>
           <div class="baris-tombol" style="margin-top:10px"><button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button></div>
         </div>
