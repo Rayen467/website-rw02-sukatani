@@ -1,0 +1,396 @@
+/* ===========================================================================
+ * PORTAL PETUGAS — FINAL POLISH / UX COMFORT
+ * ---------------------------------------------------------------------------
+ * Lapisan final untuk menyatukan observability + cinematic mode agar terasa
+ * seperti software kerja yang rapi, tajam, nyaman dipakai lama, dan tetap
+ * responsif. Tidak mengubah fungsi modul.
+ * ======================================================================== */
+
+.petugas-app-root {
+  --polish-surface: rgba(255,255,255,.94);
+  --polish-line: #dde5e1;
+  --polish-line-strong: #cad6d0;
+  --polish-ink: #17231f;
+  --polish-muted: #66736d;
+  --polish-green: #0d6654;
+  --polish-green-soft: #eaf5f1;
+  --polish-focus: rgba(13,102,84,.24);
+  --polish-shadow: 0 18px 48px -40px rgba(13,35,27,.55);
+  background:
+    radial-gradient(circle at 88% -5%, rgba(28,115,91,.08), transparent 30rem),
+    linear-gradient(180deg, #f8faf8 0%, #f4f7f5 42%, #f6f8f7 100%) !important;
+  color: var(--polish-ink);
+}
+
+/* ------------------------------------------------------------------------
+ * ACCESSIBILITY / FOCUS / INTERACTION
+ * --------------------------------------------------------------------- */
+.petugas-app-root :where(a,button,input,select,textarea,[tabindex]):focus-visible {
+  outline: 0 !important;
+  box-shadow: 0 0 0 3px var(--polish-focus) !important;
+  border-color: var(--polish-green) !important;
+}
+.petugas-app-root :where(button,a,.tombol) {
+  -webkit-tap-highlight-color: transparent;
+}
+.petugas-app-root :where(button,.tombol,a.tombol):disabled,
+.petugas-app-root :where(button,.tombol,a.tombol)[aria-disabled="true"] {
+  opacity: .48 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+.petugas-app-root ::selection {
+  background: rgba(13,102,84,.18);
+  color: #0a3e34;
+}
+
+/* ------------------------------------------------------------------------
+ * SHELL / SIDEBAR
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-main {
+  min-width: 0;
+}
+.petugas-app-root .admin-sidebar {
+  border-right-color: #e2e8e5 !important;
+  box-shadow: 8px 0 26px -28px rgba(23,47,38,.42) !important;
+}
+.petugas-app-root .admin-brand {
+  border-bottom-color: #edf1ef !important;
+}
+.petugas-app-root .admin-brand-logo-wrap {
+  background: #fff !important;
+  border: 1px solid #e8eeeb !important;
+  box-shadow: 0 10px 24px -22px rgba(15,48,37,.48) !important;
+}
+.petugas-app-root .admin-nav-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd6d1 transparent;
+}
+.petugas-app-root .admin-nav-scroll::-webkit-scrollbar { width: 6px; }
+.petugas-app-root .admin-nav-scroll::-webkit-scrollbar-thumb {
+  background: #cbd6d1;
+  border-radius: 999px;
+}
+.petugas-app-root .admin-nav-item {
+  position: relative;
+  transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease !important;
+}
+.petugas-app-root .admin-nav-item:hover {
+  transform: translateX(2px) !important;
+}
+.petugas-app-root .admin-nav-item.aktif,
+.petugas-app-root .admin-nav-item[aria-current="page"] {
+  box-shadow: inset 3px 0 0 var(--polish-green) !important;
+}
+.petugas-app-root .admin-account {
+  box-shadow: 0 10px 28px -28px rgba(14,41,31,.50) !important;
+}
+
+/* ------------------------------------------------------------------------
+ * TOPBAR — sticky tapi tetap ringan dan tidak menutupi konten
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  background: rgba(248,250,248,.92) !important;
+  border-bottom-color: rgba(205,216,211,.84) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.08) !important;
+  backdrop-filter: blur(14px) saturate(1.08) !important;
+  box-shadow: 0 8px 24px -26px rgba(16,42,32,.38) !important;
+}
+.petugas-app-root .admin-topbar-copy { min-width: 0; }
+.petugas-app-root .admin-topbar h1 {
+  color: #12201b !important;
+  letter-spacing: -.035em !important;
+}
+.petugas-app-root .admin-topbar p {
+  max-width: 76ch !important;
+  color: #69766f !important;
+}
+.petugas-app-root .admin-topbar-actions .tombol {
+  min-height: 40px !important;
+  font-weight: 650 !important;
+}
+.petugas-app-root .admin-ghost-button {
+  background: rgba(255,255,255,.9) !important;
+  border-color: #dce5e0 !important;
+}
+.petugas-app-root .admin-refresh-button {
+  box-shadow: 0 10px 24px -20px rgba(13,102,84,.56) !important;
+}
+
+/* ------------------------------------------------------------------------
+ * CINEMATIC HERO — clarity-first, tidak over-zoom dan tidak terlalu blur
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-command-card {
+  overflow: hidden !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 28px 70px -48px rgba(10,28,21,.92) !important;
+}
+.petugas-app-root .admin-command-card::before {
+  inset: -.6% !important;
+  filter: saturate(1.04) contrast(1.055) brightness(.84) !important;
+  transform: scale(1.008) translate3d(0,0,0) !important;
+  will-change: transform;
+  animation: petugas-polish-scene 30s ease-in-out infinite alternate !important;
+}
+.petugas-app-root .admin-command-card::after {
+  background:
+    linear-gradient(90deg, rgba(5,13,10,.18), transparent 38%, rgba(8,12,11,.08)),
+    radial-gradient(circle at 74% 17%, rgba(255,199,135,.18), transparent 24%),
+    linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.18)) !important;
+  opacity: .95 !important;
+}
+.petugas-app-root .admin-command-glow {
+  filter: blur(42px) !important;
+  opacity: .50 !important;
+}
+.petugas-app-root .admin-health-card,
+.petugas-app-root .admin-command-meta span {
+  -webkit-backdrop-filter: blur(10px) saturate(1.08) !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+}
+.petugas-app-root .admin-health-card {
+  animation: none !important;
+}
+.petugas-app-root .admin-command-meta span {
+  animation: none !important;
+}
+.petugas-app-root .admin-command-card h2 {
+  text-wrap: balance;
+}
+.petugas-app-root .admin-command-card p {
+  text-wrap: pretty;
+}
+
+@keyframes petugas-polish-scene {
+  0% { transform: scale(1.008) translate3d(-.15%, 0, 0); }
+  50% { transform: scale(1.018) translate3d(.25%, -.10%, 0); }
+  100% { transform: scale(1.026) translate3d(.45%, -.18%, 0); }
+}
+
+/* ------------------------------------------------------------------------
+ * CARDS / PANELS — depth halus, hierarchy jelas
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-kpi,
+.petugas-app-root .admin-panel,
+.petugas-app-root .admin-content > .blok,
+.petugas-app-root .admin-content section.blok,
+.petugas-app-root .admin-data-card,
+.petugas-app-root .admin-quick {
+  border-color: var(--polish-line) !important;
+  box-shadow: var(--polish-shadow) !important;
+}
+.petugas-app-root .admin-kpi,
+.petugas-app-root .admin-panel,
+.petugas-app-root .admin-data-card,
+.petugas-app-root .admin-quick {
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+}
+.petugas-app-root :is(.admin-kpi,.admin-data-card,.admin-quick):hover {
+  border-color: var(--polish-line-strong) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 22px 46px -36px rgba(18,47,36,.40) !important;
+}
+.petugas-app-root .admin-panel:hover {
+  border-color: #d5dfda !important;
+}
+.petugas-app-root .admin-panel-head h2,
+.petugas-app-root .admin-kpi-label,
+.petugas-app-root .admin-task h3,
+.petugas-app-root .admin-quick strong {
+  color: #18241f !important;
+}
+.petugas-app-root .admin-panel-head p,
+.petugas-app-root .admin-task p,
+.petugas-app-root .admin-kpi small,
+.petugas-app-root .admin-data-card small,
+.petugas-app-root .admin-quick span {
+  color: #6b7771 !important;
+}
+
+/* ------------------------------------------------------------------------
+ * TASK / INBOX UX
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-task {
+  border: 1px solid #e7ece9 !important;
+  background: #fcfdfc !important;
+}
+.petugas-app-root .admin-task:hover {
+  background: #f7faf8 !important;
+  border-color: #d3dfd9 !important;
+}
+.petugas-app-root .admin-task-type {
+  font-weight: 750 !important;
+  color: #466158 !important;
+}
+
+/* ------------------------------------------------------------------------
+ * TABLES — sticky header, scan cepat, nyaman untuk data panjang
+ * --------------------------------------------------------------------- */
+.petugas-app-root .tabel-bungkus,
+.petugas-app-root .admin-content .tabel-bungkus {
+  overflow: auto !important;
+  border-color: var(--polish-line) !important;
+  background: #fff !important;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd6d1 #f4f6f5;
+}
+.petugas-app-root .tabel-bungkus::-webkit-scrollbar { height: 8px; width: 8px; }
+.petugas-app-root .tabel-bungkus::-webkit-scrollbar-thumb {
+  background: #cbd6d1;
+  border-radius: 999px;
+}
+.petugas-app-root table.data {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-variant-numeric: tabular-nums;
+}
+.petugas-app-root table.data thead th {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 4 !important;
+  background: #f7f9f8 !important;
+  color: #69766f !important;
+  box-shadow: inset 0 -1px 0 #dfe6e2 !important;
+}
+.petugas-app-root table.data tbody tr:nth-child(even) td {
+  background: rgba(248,250,249,.58);
+}
+.petugas-app-root table.data tbody tr:hover td {
+  background: #f0f7f4 !important;
+}
+.petugas-app-root table.data th,
+.petugas-app-root table.data td {
+  vertical-align: middle !important;
+}
+
+/* ------------------------------------------------------------------------
+ * FORMS — target kerja nyaman, state fokus jelas
+ * --------------------------------------------------------------------- */
+.petugas-app-root .isian label,
+.petugas-app-root label {
+  color: #33453e !important;
+  font-weight: 650 !important;
+}
+.petugas-app-root .isian input,
+.petugas-app-root .isian select,
+.petugas-app-root .isian textarea,
+.petugas-app-root input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.petugas-app-root select,
+.petugas-app-root textarea {
+  border-color: #d7e0db !important;
+  background: #fff !important;
+  color: #18251f !important;
+  box-shadow: 0 1px 0 rgba(18,42,33,.02) !important;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease !important;
+}
+.petugas-app-root :is(input,select,textarea):hover {
+  border-color: #c3d2ca !important;
+}
+.petugas-app-root :is(input,select,textarea)::placeholder {
+  color: #9aa49f !important;
+}
+.petugas-app-root textarea {
+  resize: vertical;
+}
+
+/* ------------------------------------------------------------------------
+ * BUTTONS — tactile tapi tetap kalem
+ * --------------------------------------------------------------------- */
+.petugas-app-root .tombol,
+.petugas-app-root button,
+.petugas-app-root a.tombol {
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease !important;
+}
+.petugas-app-root :is(.tombol,button,a.tombol):hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.petugas-app-root :is(.tombol,button,a.tombol):active:not(:disabled) {
+  transform: translateY(0) scale(.992);
+}
+
+/* ------------------------------------------------------------------------
+ * PERFORMANCE / LONG PAGES
+ * --------------------------------------------------------------------- */
+.petugas-app-root .admin-content > section:not(.admin-command-grid),
+.petugas-app-root .admin-content > .blok {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
+}
+
+/* ------------------------------------------------------------------------
+ * RESPONSIVE
+ * --------------------------------------------------------------------- */
+@media (max-width: 1180px) {
+  .petugas-app-root .admin-main { padding-inline: 20px !important; }
+  .petugas-app-root .admin-topbar {
+    margin-inline: -20px !important;
+    padding-inline: 20px !important;
+  }
+  .petugas-app-root .admin-command-content {
+    width: 64% !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .petugas-app-root .admin-topbar {
+    align-items: flex-start !important;
+  }
+  .petugas-app-root .admin-topbar-actions {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 820px) {
+  .petugas-app-root .admin-main { padding-inline: 12px !important; }
+  .petugas-app-root .admin-topbar {
+    margin-inline: -12px !important;
+    padding-inline: 12px !important;
+  }
+  .petugas-app-root .admin-command-card::before {
+    transform: scale(1.005) !important;
+    animation: none !important;
+  }
+  .petugas-app-root .admin-kpi,
+  .petugas-app-root .admin-panel,
+  .petugas-app-root .admin-data-card,
+  .petugas-app-root .admin-quick {
+    box-shadow: 0 14px 30px -28px rgba(18,47,36,.34) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .petugas-app-root { font-size: 13px !important; }
+  .petugas-app-root .admin-topbar-actions {
+    width: 100%;
+    max-width: none;
+    justify-content: stretch !important;
+  }
+  .petugas-app-root .admin-topbar-actions .tombol {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .petugas-app-root .admin-command-card {
+    border-radius: 14px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petugas-app-root *,
+  .petugas-app-root *::before,
+  .petugas-app-root *::after {
+    scroll-behavior: auto !important;
+  }
+  .petugas-app-root .admin-command-card::before,
+  .petugas-app-root .admin-command-card::after,
+  .petugas-app-root .admin-command-glow,
+  .petugas-app-root .admin-kpi,
+  .petugas-app-root .admin-panel,
+  .petugas-app-root .admin-data-card,
+  .petugas-app-root .admin-quick {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}
