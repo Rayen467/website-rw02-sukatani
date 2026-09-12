@@ -1,0 +1,462 @@
+/* ===========================================================================
+ * DETAIL UMKM — halaman promosi usaha warga
+ * ======================================================================== */
+
+.umkm-rinci-modern {
+  --ur-hijau: #0d6a59;
+  --ur-hijau-gelap: #083f38;
+  --ur-hijau-lunak: #e8f5ef;
+  --ur-kertas: #fbfcfa;
+  --ur-garis: #dce9e3;
+  --ur-tinta: #16352f;
+  --ur-muted: #667d76;
+  max-width: 1180px;
+  margin: 0 auto 72px;
+  color: var(--ur-tinta);
+}
+
+.umkm-rinci-remah {
+  margin-bottom: 18px;
+}
+
+.umkm-rinci-hero {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--ur-garis);
+  border-radius: 26px;
+  background: var(--ur-kertas);
+  box-shadow: 0 22px 55px -42px rgba(13, 70, 60, .45);
+}
+
+.umkm-rinci-media {
+  position: relative;
+  min-height: 430px;
+  background: #e5eee9;
+}
+
+.umkm-rinci-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  object-fit: cover;
+  display: block;
+}
+
+.umkm-rinci-foto-kosong {
+  height: 100%;
+  min-height: 430px;
+  display: grid;
+  place-items: center;
+  font: 800 42px/1 "Archivo", sans-serif;
+  letter-spacing: -.04em;
+  color: rgba(13, 106, 89, .5);
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255,255,255,.75), transparent 32%),
+    linear-gradient(145deg, #dcebe4, #c7ddd3);
+}
+
+.umkm-rinci-kategori {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 99px;
+  background: rgba(255,255,255,.92);
+  color: var(--ur-hijau-gelap);
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 8px 24px -16px rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+}
+
+.umkm-rinci-copy {
+  padding: clamp(28px, 4vw, 52px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.umkm-rinci-kicker,
+.umkm-rinci-label {
+  color: var(--ur-hijau);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.umkm-rinci-copy h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: .98;
+  letter-spacing: -.055em;
+  color: var(--ur-hijau-gelap);
+}
+
+.umkm-rinci-lead {
+  max-width: 62ch;
+  color: #2e5149;
+  font-size: clamp(16px, 1.8vw, 19px);
+  line-height: 1.65;
+}
+
+.umkm-rinci-sorotan {
+  margin-top: 14px;
+  padding-left: 14px;
+  border-left: 3px solid var(--ur-hijau);
+  color: var(--ur-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.umkm-rinci-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.umkm-rinci-meta span,
+.umkm-rinci-cocok span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid var(--ur-garis);
+  border-radius: 999px;
+  background: #f5faf7;
+  color: #315d53;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.umkm-rinci-aksi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.umkm-rinci-btn {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.umkm-rinci-btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.umkm-rinci-btn.utama {
+  color: #fff;
+  background: linear-gradient(135deg, #0b8068, #075b4d);
+  box-shadow: 0 14px 28px -20px rgba(6, 91, 77, .8);
+}
+
+.umkm-rinci-btn.sekunder {
+  color: var(--ur-hijau-gelap);
+  border: 1px solid var(--ur-garis);
+  background: #fff;
+}
+
+.umkm-rinci-btn.nonaktif {
+  color: var(--ur-muted);
+  border: 1px dashed #c8d8d1;
+  background: #f4f7f5;
+  cursor: default;
+}
+
+.umkm-rinci-btn.penuh { width: 100%; }
+
+.umkm-rinci-promo {
+  margin: 20px 0;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(220px, .6fr) minmax(0, 1.4fr);
+  gap: 24px;
+  align-items: center;
+  border: 1px solid #cfe4da;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eef9f4, #fbfdfc);
+}
+
+.umkm-rinci-promo h2,
+.umkm-rinci-panel h2 {
+  margin-top: 5px;
+  color: var(--ur-hijau-gelap);
+  font-size: clamp(21px, 2.2vw, 28px);
+  letter-spacing: -.025em;
+}
+
+.umkm-rinci-promo > p {
+  color: var(--ur-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.umkm-rinci-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 20px;
+  align-items: start;
+}
+
+.umkm-rinci-utama,
+.umkm-rinci-sisi {
+  display: grid;
+  gap: 20px;
+}
+
+.umkm-rinci-sisi {
+  position: sticky;
+  top: 92px;
+}
+
+.umkm-rinci-panel {
+  padding: 24px;
+  border: 1px solid var(--ur-garis);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 38px -34px rgba(8, 63, 56, .48);
+}
+
+.umkm-rinci-paragraf,
+.umkm-rinci-panel > p {
+  margin-top: 12px;
+  color: #4d6962;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.umkm-rinci-produk {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.umkm-rinci-produk > div {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 13px 14px;
+  border: 1px solid #e3eee9;
+  border-radius: 13px;
+  background: #f9fcfa;
+}
+
+.umkm-rinci-produk span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--ur-hijau-lunak);
+  color: var(--ur-hijau);
+  font: 800 11px/1 "Archivo", sans-serif;
+}
+
+.umkm-rinci-produk p {
+  margin: 5px 0 0;
+  color: #3d5c55;
+  line-height: 1.55;
+  font-size: 13.5px;
+}
+
+.umkm-rinci-unggul-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.umkm-rinci-unggul-grid article {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e0ece6;
+  border-radius: 14px;
+  background: #fbfdfc;
+}
+
+.umkm-rinci-unggul-grid .ikon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--ur-hijau);
+  background: var(--ur-hijau-lunak);
+  font-size: 18px;
+}
+
+.umkm-rinci-unggul-grid h3 {
+  margin: 1px 0 4px;
+  color: var(--ur-hijau-gelap);
+  font-size: 14px;
+}
+
+.umkm-rinci-unggul-grid p {
+  color: var(--ur-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.umkm-rinci-cocok {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.umkm-rinci-promosi-usaha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 18px;
+  align-items: center;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(96, 239, 198, .16), transparent 30%),
+    linear-gradient(135deg, #073f37, #07574a);
+  border-color: transparent;
+  color: #fff;
+}
+
+.umkm-rinci-promosi-usaha .umkm-rinci-label,
+.umkm-rinci-promosi-usaha h2 { color: #fff; }
+.umkm-rinci-promosi-usaha p { color: #d6eee6; }
+
+.umkm-rinci-promo-badge {
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ur-hijau-gelap);
+}
+
+.umkm-rinci-promo-badge small {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ur-hijau);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+.umkm-rinci-promo-badge strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.umkm-rinci-promo-badge.tenang {
+  background: rgba(255,255,255,.92);
+}
+
+.umkm-rinci-info dl {
+  margin: 18px 0 0;
+}
+
+.umkm-rinci-info dl > div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf2ef;
+}
+
+.umkm-rinci-info dl > div:last-child { border-bottom: 0; }
+.umkm-rinci-info dt {
+  color: var(--ur-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.umkm-rinci-info dd {
+  margin: 0;
+  color: var(--ur-hijau-gelap);
+  font-size: 13.5px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.umkm-rinci-cta {
+  background: linear-gradient(145deg, #f2faf6, #fff);
+}
+
+.umkm-rinci-catatan {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f1f5f3;
+  color: var(--ur-muted) !important;
+  font-size: 12px !important;
+}
+
+.umkm-rinci-dukungan {
+  background: #faf8ef;
+  border-color: #ece5c8;
+}
+
+.umkm-rinci-disclaimer {
+  margin: 18px 2px 0;
+  color: var(--ur-muted);
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .umkm-rinci-hero {
+    grid-template-columns: 1fr;
+  }
+  .umkm-rinci-media,
+  .umkm-rinci-media img,
+  .umkm-rinci-foto-kosong {
+    min-height: 320px;
+    height: 320px;
+  }
+  .umkm-rinci-layout {
+    grid-template-columns: 1fr;
+  }
+  .umkm-rinci-sisi {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .umkm-rinci-sisi .umkm-rinci-dukungan { grid-column: 1 / -1; }
+}
+
+@media (max-width: 680px) {
+  .umkm-rinci-modern { margin-bottom: 48px; }
+  .umkm-rinci-hero { border-radius: 18px; }
+  .umkm-rinci-copy { padding: 24px 20px 26px; }
+  .umkm-rinci-copy h1 { font-size: clamp(32px, 10vw, 44px); }
+  .umkm-rinci-media,
+  .umkm-rinci-media img,
+  .umkm-rinci-foto-kosong { min-height: 250px; height: 250px; }
+  .umkm-rinci-promo {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 18px;
+  }
+  .umkm-rinci-panel { padding: 19px; border-radius: 15px; }
+  .umkm-rinci-unggul-grid { grid-template-columns: 1fr; }
+  .umkm-rinci-promosi-usaha { grid-template-columns: 1fr; }
+  .umkm-rinci-sisi { grid-template-columns: 1fr; }
+  .umkm-rinci-sisi .umkm-rinci-dukungan { grid-column: auto; }
+  .umkm-rinci-aksi { display: grid; }
+  .umkm-rinci-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .umkm-rinci-btn { transition: none; }
+}
