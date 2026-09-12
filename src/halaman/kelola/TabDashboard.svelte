@@ -1,7 +1,7 @@
 <script>
   import { STATUS } from "../../inti/nama.js";
   import { isi, galatMuatPengurus } from "../../keadaan/isi.svelte.js";
-  import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
+  import { namaPeran } from "../../keadaan/sesi.svelte.js";
   import { rute } from "../../keadaan/rute.svelte.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
@@ -16,6 +16,9 @@
   const reservasi = $derived(daftar(isi.reservasi));
   const usahaBaru = $derived(daftar(isi.usaha_baru));
   const warga = $derived(daftar(isi.warga));
+  const fasilitas = $derived(daftar(isi.fasilitas));
+  const jadwal = $derived(daftar(isi.jadwal));
+  const rutin = $derived(daftar(isi.rutin));
 
   const nPengaduan = $derived(hitungStatus(pengaduan, STATUS.BARU));
   const nSurat = $derived(hitungStatus(surat, STATUS.BARU));
@@ -25,64 +28,39 @@
   const totalTugas = $derived(nPengaduan + nSurat + nReservasi + nUsaha + nWarga);
 
   const operasional = $derived([...pengaduan, ...surat, ...reservasi, ...usahaBaru]);
-  const baruTotal = $derived(hitungStatus(operasional, STATUS.BARU));
   const prosesTotal = $derived(hitungStatus(operasional, STATUS.PROSES));
   const selesaiTotal = $derived(hitungStatus(operasional, STATUS.SELESAI));
-  const ditolakTotal = $derived(hitungStatus(operasional, "ditolak"));
-  const totalStatus = $derived(Math.max(1, baruTotal + prosesTotal + selesaiTotal + ditolakTotal));
+  const wargaAktif = $derived(warga.filter((x) => x.status === STATUS.AKTIF || x.status === "aktif").length);
+  const publikasiTotal = $derived(
+    daftar(isi.pengumuman).length + daftar(isi.galeri).length + daftar(isi.berkas).length + daftar(isi.usaha).length
+  );
 
-  const statusRingkas = $derived([
-    { label: "Baru", nilai: baruTotal, kelas: "baru" },
-    { label: "Diproses", nilai: prosesTotal, kelas: "proses" },
-    { label: "Selesai", nilai: selesaiTotal, kelas: "selesai" },
-    { label: "Ditolak", nilai: ditolakTotal, kelas: "ditolak" }
-  ]);
-
-  const antrean = $derived([
-    ...pengaduan.filter((x) => status(x) === STATUS.BARU).map((x) => ({
-      jenis: "Aduan", judul: x.kategori || "Pengaduan warga", rincian: x.tiket || x.lokasi || "Laporan baru", status: status(x), tab: "kiriman"
-    })),
-    ...surat.filter((x) => status(x) === STATUS.BARU).map((x) => ({
-      jenis: "Surat", judul: x.jenis || "Pengajuan surat", rincian: (x.nama || "Warga") + (x.antrean ? " · " + x.antrean : ""), status: status(x), tab: "kiriman"
-    })),
-    ...reservasi.filter((x) => status(x) === STATUS.BARU).map((x) => ({
-      jenis: "Fasilitas", judul: x.fasilitas || "Reservasi fasilitas", rincian: (x.tanggal || "-") + (x.nama ? " · " + x.nama : ""), status: status(x), tab: "kiriman"
-    })),
-    ...usahaBaru.filter((x) => status(x) === STATUS.BARU).map((x) => ({
-      jenis: "UMKM", judul: x.nama || "Pendaftaran usaha", rincian: x.jenis || "Usaha warga", status: status(x), tab: "kiriman"
-    })),
-    ...warga.filter((x) => x.status === STATUS.BARU).map((x) => ({
-      jenis: "Warga", judul: x.nama || "Warga baru", rincian: (x.rt || "RT belum diisi") + (x.blok ? " · " + x.blok : ""), status: STATUS.BARU, tab: "orang"
-    }))
-  ].slice(0, 10));
-
-  /* [label, key koleksi, data, tab tujuan]. */
   const sumberData = $derived([
-    ["Pengaduan", "pengaduan", isi.pengaduan, "kiriman"],
-    ["Kontak aduan", "pengaduan_kontak", isi.pengaduan_kontak, "kiriman"],
-    ["Pengajuan surat", "surat", isi.surat, "kiriman"],
-    ["Reservasi", "reservasi", isi.reservasi, "kiriman"],
-    ["Pendaftaran UMKM", "usaha_baru", isi.usaha_baru, "kiriman"],
-    ["Warga", "warga", isi.warga, "orang"],
-    ["Akun pengurus", "pengurus", isi.pengurus, "orang"],
-    ["Penerima bansos", "bansos_penerima", isi.bansos_penerima, "angka"],
-    ["Berita / agenda", "pengumuman", isi.pengumuman, "terbit"],
-    ["Galeri", "galeri", isi.galeri, "terbit"],
-    ["Program kerja", "program", isi.program, "angka"],
-    ["Kas RW", "kas", isi.kas, "angka"],
-    ["Direktori UMKM", "usaha", isi.usaha, "profil"],
-    ["Dokumen", "berkas", isi.berkas, "berkas"],
-    ["Jenis surat", "jenis_surat", isi.jenis_surat, "layanan"],
-    ["Fasilitas", "fasilitas", isi.fasilitas, "layanan"],
-    ["Fasilitas umum", "fasum", isi.fasum, "layanan"],
-    ["Agenda rutin", "rutin", isi.rutin, "layanan"],
-    ["Bansos", "bansos", isi.bansos, "angka"],
-    ["Tautan penting", "tautan", isi.tautan, "lain"],
-    ["Forum topik", "forum_topik", isi.forum_topik, "lain"],
-    ["Komentar forum", "forum_komentar", isi.forum_komentar, "lain"],
-    ["Jadwal fasilitas", "jadwal", isi.jadwal, "layanan"],
-    ["Struktur publik", "pengurus_tampil", isi.pengurus_tampil, "profil"],
-    ["Batas RT", "batas_rt", isi.batas_rt, "profil"]
+    ["Pengaduan", "pengaduan", isi.pengaduan],
+    ["Kontak aduan", "pengaduan_kontak", isi.pengaduan_kontak],
+    ["Pengajuan surat", "surat", isi.surat],
+    ["Reservasi", "reservasi", isi.reservasi],
+    ["Pendaftaran UMKM", "usaha_baru", isi.usaha_baru],
+    ["Warga", "warga", isi.warga],
+    ["Akun pengurus", "pengurus", isi.pengurus],
+    ["Penerima bansos", "bansos_penerima", isi.bansos_penerima],
+    ["Berita / agenda", "pengumuman", isi.pengumuman],
+    ["Galeri", "galeri", isi.galeri],
+    ["Program kerja", "program", isi.program],
+    ["Kas RW", "kas", isi.kas],
+    ["Direktori UMKM", "usaha", isi.usaha],
+    ["Dokumen", "berkas", isi.berkas],
+    ["Jenis surat", "jenis_surat", isi.jenis_surat],
+    ["Fasilitas", "fasilitas", isi.fasilitas],
+    ["Fasilitas umum", "fasum", isi.fasum],
+    ["Agenda rutin", "rutin", isi.rutin],
+    ["Bansos", "bansos", isi.bansos],
+    ["Tautan penting", "tautan", isi.tautan],
+    ["Forum topik", "forum_topik", isi.forum_topik],
+    ["Komentar forum", "forum_komentar", isi.forum_komentar],
+    ["Jadwal fasilitas", "jadwal", isi.jadwal],
+    ["Struktur publik", "pengurus_tampil", isi.pengurus_tampil],
+    ["Batas RT", "batas_rt", isi.batas_rt]
   ]);
 
   const modulTermuat = $derived(sumberData.filter(([, , data]) => data !== null).length);
@@ -91,159 +69,276 @@
   const modulKosong = $derived(sumberData.filter(([, , data]) => Array.isArray(data) && data.length === 0).length);
   const galatJumlah = $derived(Object.keys(galatMuatPengurus).length);
 
-  const publikasiTotal = $derived(
-    daftar(isi.pengumuman).length + daftar(isi.galeri).length + daftar(isi.berkas).length + daftar(isi.usaha).length
-  );
-  const wargaAktif = $derived(warga.filter((x) => x.status === STATUS.AKTIF || x.status === "aktif").length);
+  function tanggalDari(nilai) {
+    if (!nilai) return null;
+    if (typeof nilai?.toDate === "function") return nilai.toDate();
+    if (typeof nilai?.seconds === "number") return new Date(nilai.seconds * 1000);
+    if (typeof nilai === "number") return new Date(nilai);
+    const hasil = new Date(nilai);
+    return Number.isNaN(hasil.getTime()) ? null : hasil;
+  }
 
-  const cepat = [
-    ["Layanan masuk", "Tindak lanjuti aduan, surat, reservasi dan UMKM.", "kiriman", "01"],
-    ["Warga & pengurus", "Verifikasi warga dan kelola hak akses petugas.", "orang", "02"],
-    ["Berita & galeri", "Terbitkan informasi dan dokumentasi terbaru.", "terbit", "03"],
-    ["Kas & program", "Perbarui transparansi keuangan dan program kerja.", "angka", "04"],
-    ["Layanan & fasilitas", "Atur jenis surat, fasilitas dan jadwal rutin.", "layanan", "05"],
-    ["Laporan", "Susun rekap operasional untuk rapat atau arsip.", "laporan", "06"]
-  ];
+  function waktuItem(x) {
+    const kandidat = [
+      x?.dibuat, x?.dibuat_pada, x?.createdAt, x?.created_at, x?.waktu,
+      x?.tanggal_dibuat, x?.tanggal, x?.updatedAt, x?.diperbarui
+    ];
+    for (const nilai of kandidat) {
+      const hasil = tanggalDari(nilai);
+      if (hasil) return hasil;
+    }
+    return null;
+  }
+
+  function kunciTanggal(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function fmtTanggal(date) {
+    if (!date) return "-";
+    return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short" }).format(date);
+  }
+
+  function fmtWaktu(date) {
+    if (!date) return "baru saja";
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"
+    }).format(date);
+  }
+
+  function judulItem(x, jenis) {
+    if (jenis === "Surat") return x.jenis || "Permohonan surat";
+    if (jenis === "Pengaduan") return x.kategori || x.judul || "Pengaduan warga";
+    if (jenis === "Reservasi") return x.fasilitas || x.acara || "Reservasi fasilitas";
+    if (jenis === "UMKM") return x.nama || "Pendaftaran UMKM";
+    if (jenis === "Warga") return x.nama || "Pendaftaran warga";
+    return "Aktivitas layanan";
+  }
+
+  function rincianItem(x, jenis) {
+    const nama = x.nama || x.email || x.pemohon || "Warga";
+    const d = waktuItem(x);
+    if (jenis === "Warga") return `${x.rt || "RT -"}${x.blok ? " · " + x.blok : ""}`;
+    return `${nama} · ${fmtWaktu(d)}`;
+  }
+
+  const semuaAktivitas = $derived.by(() => {
+    const gabung = [
+      ...surat.map((x) => ({ ...x, _jenis: "Surat" })),
+      ...pengaduan.map((x) => ({ ...x, _jenis: "Pengaduan" })),
+      ...reservasi.map((x) => ({ ...x, _jenis: "Reservasi" })),
+      ...usahaBaru.map((x) => ({ ...x, _jenis: "UMKM" })),
+      ...warga.map((x) => ({ ...x, _jenis: "Warga" }))
+    ];
+    return gabung.sort((a, b) => (waktuItem(b)?.getTime() || 0) - (waktuItem(a)?.getTime() || 0));
+  });
+
+  const antrean = $derived(
+    semuaAktivitas
+      .filter((x) => status(x) === STATUS.BARU || status(x) === STATUS.PROSES)
+      .slice(0, 5)
+  );
+
+  const aktivitasTerbaru = $derived(semuaAktivitas.slice(0, 4));
+
+  const rentangTrend = $derived.by(() => {
+    const hasil = [];
+    const kini = new Date();
+    kini.setHours(0, 0, 0, 0);
+    for (let i = 29; i >= 0; i -= 1) {
+      const d = new Date(kini);
+      d.setDate(kini.getDate() - i);
+      hasil.push({ date: d, key: kunciTanggal(d), surat: 0, pengaduan: 0, reservasi: 0 });
+    }
+    const indeks = new Map(hasil.map((x, i) => [x.key, i]));
+    const isiSeri = (data, nama) => {
+      for (const x of data) {
+        const d = waktuItem(x);
+        if (!d) continue;
+        const i = indeks.get(kunciTanggal(d));
+        if (i !== undefined) hasil[i][nama] += 1;
+      }
+    };
+    isiSeri(surat, "surat");
+    isiSeri(pengaduan, "pengaduan");
+    isiSeri(reservasi, "reservasi");
+    return hasil;
+  });
+
+  const maxTrend = $derived(Math.max(1, ...rentangTrend.flatMap((x) => [x.surat, x.pengaduan, x.reservasi])));
+
+  function titikTrend(nama) {
+    const width = 1000;
+    const height = 220;
+    const bawah = 210;
+    return rentangTrend.map((x, i) => {
+      const px = (i / Math.max(1, rentangTrend.length - 1)) * width;
+      const py = bawah - (x[nama] / maxTrend) * (height - 32);
+      return `${px.toFixed(1)},${py.toFixed(1)}`;
+    }).join(" ");
+  }
+
+  function areaTrend(nama) {
+    const titik = titikTrend(nama);
+    const daftarTitik = titik.split(" ");
+    if (!daftarTitik.length) return "";
+    return `M 0 210 L ${daftarTitik.join(" L ")} L 1000 210 Z`;
+  }
+
+  const labelTrend = $derived([0, 7, 14, 21, 29].map((i) => ({ i, label: fmtTanggal(rentangTrend[i]?.date) })));
+
+  const jadwalHariIni = $derived.by(() => {
+    const hariIni = kunciTanggal(new Date());
+    const sumber = [...jadwal, ...rutin];
+    const cocok = sumber.filter((x) => {
+      const d = waktuItem(x);
+      return d ? kunciTanggal(d) === hariIni : false;
+    });
+    return (cocok.length ? cocok : sumber).slice(0, 4);
+  });
+
+  const fasilitasRingkas = $derived.by(() => {
+    const hariIni = kunciTanggal(new Date());
+    return fasilitas.slice(0, 4).map((f) => {
+      const nama = f.nama || f.judul || f.fasilitas || "Fasilitas RW";
+      const dipakai = reservasi.some((r) => {
+        const tgl = tanggalDari(r.tanggal);
+        const samaNama = (r.fasilitas || "").toLowerCase() === String(nama).toLowerCase();
+        const aktif = status(r) !== "ditolak" && status(r) !== "batal";
+        return samaNama && tgl && kunciTanggal(tgl) === hariIni && aktif;
+      });
+      return { ...f, _nama: nama, _tersedia: !dipakai };
+    });
+  });
 </script>
 
-<section class="admin-command-grid" aria-labelledby="dash-title">
-  <div class="admin-command-card">
-    <div class="admin-command-glow" aria-hidden="true"></div>
-    <div class="admin-command-content">
-      <span class="admin-command-kicker">Pusat kendali operasional · RW 02</span>
-      <h2 id="dash-title">Selamat bertugas, {namaPeran()}.</h2>
-      <p>Prioritas hari ini, layanan warga, dan kesehatan data dirangkum dalam satu workspace supaya pekerjaan lebih cepat dibaca dan ditindaklanjuti.</p>
-      <div class="admin-welcome-actions">
-        <a class="tombol admin-command-primary" href={link("kiriman")}>Tangani {totalTugas} tugas <span aria-hidden="true">→</span></a>
-        <a class="tombol admin-command-secondary" href={link("laporan")}>Susun laporan</a>
-      </div>
-      <div class="admin-command-meta" aria-label="Ringkasan cepat">
-        <span><b>{totalTugas}</b><small>butuh tindakan</small></span>
-        <span><b>{prosesTotal}</b><small>sedang diproses</small></span>
-        <span><b>{selesaiTotal}</b><small>sudah selesai</small></span>
-      </div>
+<section class="rw-dashboard-hero" aria-labelledby="dash-title">
+  <div class="rw-dashboard-hero-copy">
+    <span class="rw-dashboard-kicker">☀ Pusat kendali operasional RW 02 Sukatani</span>
+    <h2 id="dash-title">Selamat bertugas, {namaPeran()}.</h2>
+    <p>Dashboard ini merangkum pekerjaan yang membutuhkan tindakan, kesehatan data, publikasi, dan akses cepat ke seluruh modul pengelolaan RW 02.</p>
+    <div class="rw-dashboard-actions">
+      <a class="rw-btn rw-btn-primary" href={link("kiriman")}>⌁ <span>Tangani {totalTugas} tugas</span></a>
+      <a class="rw-btn rw-btn-secondary" href={link("laporan")}>▤ <span>Susun laporan</span></a>
     </div>
   </div>
-
-  <aside class="admin-health-card" aria-label="Kesehatan data dashboard">
-    <div class="admin-health-ring" style={`--admin-health:${persenTermuat}%`}>
-      <div><strong>{persenTermuat}%</strong><span>siap</span></div>
-    </div>
-    <div class="admin-health-copy">
-      <span class="admin-health-label">Kesiapan data</span>
-      <h3>{galatJumlah ? "Perlu perhatian" : "Dashboard tersinkron"}</h3>
-      <p>{modulTermuat} dari {modulTotal} modul berhasil dimuat. {modulKosong} modul belum memiliki data.{#if galatJumlah} {galatJumlah} modul mengalami galat baca.{/if}</p>
-      <small>{sesi.pengguna?.email || "-"}</small>
-    </div>
-  </aside>
+  <div class="rw-dashboard-gate" aria-hidden="true">
+    <div class="rw-dashboard-cloud cloud-a"></div>
+    <div class="rw-dashboard-cloud cloud-b"></div>
+    <div class="rw-dashboard-tree tree-a"></div>
+    <div class="rw-dashboard-tree tree-b"></div>
+    <div class="rw-dashboard-monument"><span>RW 02</span><b>SUKATANI</b></div>
+    <div class="rw-dashboard-fence"></div>
+  </div>
 </section>
 
-<section class="admin-kpi-grid" aria-label="Indikator utama">
-  <a class="admin-kpi" data-tone="warning" href={link("kiriman")}>
-    <div class="admin-kpi-top"><span class="admin-kpi-icon" aria-hidden="true">↗</span><span class="admin-kpi-trend">Prioritas</span></div>
-    <span class="admin-kpi-value">{totalTugas}</span>
-    <span class="admin-kpi-label">Tugas baru</span>
-    <small>Kiriman yang belum disentuh</small>
+<aside class="rw-health-card" aria-label="Kesiapan data dashboard">
+  <div class="rw-health-title"><h3>Kesiapan data dashboard</h3><span title="Persentase modul yang sudah berhasil dimuat">ⓘ</span></div>
+  <div class="rw-health-main">
+    <div class="rw-health-ring" style={`--rw-health:${persenTermuat}%`}><strong>{persenTermuat}%</strong></div>
+    <p>{modulTermuat} dari {modulTotal} modul data sudah berhasil dimuat. {modulKosong} modul termuat tetapi belum memiliki data.{#if galatJumlah} {galatJumlah} modul privat mengalami galat baca.{/if}</p>
+  </div>
+  <div class:warning={galatJumlah > 0} class="rw-health-state">
+    <span>{galatJumlah ? "!" : "✓"}</span>
+    <div><b>{galatJumlah ? "Perlu perhatian." : "Sistem berjalan dengan baik."}</b><small>{galatJumlah ? "Periksa modul yang gagal dimuat." : "Data operasional sudah tersinkron."}</small></div>
+  </div>
+</aside>
+
+<section class="rw-kpi-row" aria-label="Ringkasan indikator utama">
+  <a class="rw-kpi-card blue" href={link("kiriman")}>
+    <span class="rw-kpi-icon">✉</span><div><small>Surat masuk</small><strong>{nSurat}</strong><span>Pengajuan baru</span></div>
   </a>
-  <a class="admin-kpi" data-tone="process" href={link("kiriman")}>
-    <div class="admin-kpi-top"><span class="admin-kpi-icon" aria-hidden="true">◴</span><span class="admin-kpi-trend">Berjalan</span></div>
-    <span class="admin-kpi-value">{prosesTotal}</span>
-    <span class="admin-kpi-label">Sedang diproses</span>
-    <small>Layanan aktif saat ini</small>
+  <a class="rw-kpi-card red" href={link("kiriman")}>
+    <span class="rw-kpi-icon">⌁</span><div><small>Pengaduan baru</small><strong>{nPengaduan}</strong><span>Perlu tindak lanjut</span></div>
   </a>
-  <a class="admin-kpi" data-tone="people" href={link("orang")}>
-    <div class="admin-kpi-top"><span class="admin-kpi-icon" aria-hidden="true">◎</span><span class="admin-kpi-trend">Warga</span></div>
-    <span class="admin-kpi-value">{wargaAktif}</span>
-    <span class="admin-kpi-label">Warga aktif</span>
-    <small>{nWarga} menunggu verifikasi</small>
+  <a class="rw-kpi-card green" href={link("kiriman")}>
+    <span class="rw-kpi-icon">▣</span><div><small>Reservasi</small><strong>{nReservasi}</strong><span>Permohonan baru</span></div>
   </a>
-  <a class="admin-kpi" data-tone="content" href={link("terbit")}>
-    <div class="admin-kpi-top"><span class="admin-kpi-icon" aria-hidden="true">▦</span><span class="admin-kpi-trend">Publik</span></div>
-    <span class="admin-kpi-value">{publikasiTotal}</span>
-    <span class="admin-kpi-label">Konten publik</span>
-    <small>Berita, galeri, dokumen & UMKM</small>
+  <a class="rw-kpi-card green" href={link("orang")}>
+    <span class="rw-kpi-icon">♙</span><div><small>Warga aktif</small><strong>{wargaAktif}</strong><span>{nWarga} menunggu verifikasi</span></div>
   </a>
-  <a class="admin-kpi" data-tone="done" href={link("laporan")}>
-    <div class="admin-kpi-top"><span class="admin-kpi-icon" aria-hidden="true">✓</span><span class="admin-kpi-trend">Tuntas</span></div>
-    <span class="admin-kpi-value">{selesaiTotal}</span>
-    <span class="admin-kpi-label">Selesai ditangani</span>
-    <small>Riwayat layanan berstatus selesai</small>
+  <a class="rw-kpi-card blue" href={link("terbit")}>
+    <span class="rw-kpi-icon">▧</span><div><small>Konten publik</small><strong>{publikasiTotal}</strong><span>Berita, galeri & arsip</span></div>
+  </a>
+  <a class="rw-kpi-card green" href={link("laporan")}>
+    <span class="rw-kpi-icon">✓</span><div><small>Selesai ditangani</small><strong>{selesaiTotal}</strong><span>Riwayat layanan tuntas</span></div>
   </a>
 </section>
 
-<section class="admin-dashboard-grid">
-  <div class="admin-panel admin-priority-panel">
-    <div class="admin-panel-head">
-      <div><span class="admin-panel-kicker">Perlu tindakan</span><h2>Prioritas terbaru</h2><p>Maksimal 10 item baru dari seluruh kanal layanan.</p></div>
-      <a href={link("kiriman")}>Lihat semua <span aria-hidden="true">→</span></a>
+<section class="rw-dashboard-main-grid">
+  <div class="rw-panel rw-trend-panel">
+    <div class="rw-panel-head">
+      <div><h3>Tren volume layanan</h3><p>Perbandingan jumlah layanan masuk dalam 30 hari terakhir</p></div>
+      <div class="rw-panel-filter"><span>Semua layanan⌄</span><span>▣ 30 hari terakhir⌄</span></div>
     </div>
-    {#if antrean.length}
-      <div class="admin-task-list">
+    <div class="rw-chart-wrap">
+      <div class="rw-chart-y"><span>{maxTrend}</span><span>{Math.round(maxTrend * .66)}</span><span>{Math.round(maxTrend * .33)}</span><span>0</span></div>
+      <svg class="rw-chart" viewBox="0 0 1000 230" preserveAspectRatio="none" role="img" aria-label="Grafik tren surat, pengaduan, dan reservasi 30 hari terakhir">
+        <defs>
+          <linearGradient id="rw-area-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#17a567" stop-opacity=".23"/><stop offset="100%" stop-color="#17a567" stop-opacity="0"/></linearGradient>
+        </defs>
+        <g class="rw-chart-grid"><line x1="0" y1="28" x2="1000" y2="28"/><line x1="0" y1="88" x2="1000" y2="88"/><line x1="0" y1="148" x2="1000" y2="148"/><line x1="0" y1="210" x2="1000" y2="210"/></g>
+        <path class="rw-chart-area" d={areaTrend("surat")} />
+        <polyline class="rw-line surat" points={titikTrend("surat")} />
+        <polyline class="rw-line pengaduan" points={titikTrend("pengaduan")} />
+        <polyline class="rw-line reservasi" points={titikTrend("reservasi")} />
+      </svg>
+      <div class="rw-chart-x">{#each labelTrend as x}<span style={`left:${(x.i / 29) * 100}%`}>{x.label}</span>{/each}</div>
+    </div>
+    <div class="rw-chart-legend"><span><i class="surat"></i>Surat masuk</span><span><i class="pengaduan"></i>Pengaduan</span><span><i class="reservasi"></i>Reservasi</span></div>
+  </div>
+
+  <div class="rw-panel rw-queue-panel">
+    <div class="rw-panel-head compact"><h3>Antrian layanan masuk</h3><a href={link("kiriman")}>Lihat semua →</a></div>
+    <div class="rw-queue-tabs"><b>Semua ({totalTugas + prosesTotal})</b><span>Surat ({nSurat})</span><span>Pengaduan ({nPengaduan})</span><span>Reservasi ({nReservasi})</span></div>
+    <div class="rw-queue-list">
+      {#if antrean.length}
         {#each antrean as x}
-          <a class="admin-task" href={link(x.tab)}>
-            <span class="admin-task-type">{x.jenis}</span>
-            <div><h3>{x.judul}</h3><p>{x.rincian}</p></div>
-            <Lencana status={x.status} />
+          <a class="rw-queue-item" href={link(x._jenis === "Warga" ? "orang" : "kiriman")}>
+            <span class="rw-queue-kind" data-kind={x._jenis}>{x._jenis === "Surat" ? "▤" : x._jenis === "Pengaduan" ? "⌁" : x._jenis === "Reservasi" ? "▣" : x._jenis === "Warga" ? "♙" : "◇"}</span>
+            <div><b>{judulItem(x, x._jenis)}</b><small>{rincianItem(x, x._jenis)}</small></div>
+            <Lencana status={status(x)} />
+            <span class="rw-queue-arrow">›</span>
           </a>
         {/each}
-      </div>
-    {:else}
-      <div class="admin-empty admin-empty-success"><span aria-hidden="true">✓</span><div><b>Tidak ada tugas baru.</b><p>Semua kiriman sudah diproses atau belum ada kiriman masuk.</p></div></div>
-    {/if}
-  </div>
-
-  <div class="admin-panel admin-status-panel">
-    <div class="admin-panel-head"><div><span class="admin-panel-kicker">Ringkasan layanan</span><h2>Status operasional</h2><p>Pengaduan, surat, reservasi dan UMKM.</p></div></div>
-    <div class="admin-status-total"><strong>{baruTotal + prosesTotal + selesaiTotal + ditolakTotal}</strong><span>total layanan tercatat</span></div>
-    <div class="admin-status-list">
-      {#each statusRingkas as s}
-        <div class="admin-status-row {s.kelas}">
-          <div class="admin-status-label"><span></span><label>{s.label}</label></div>
-          <strong>{s.nilai}</strong>
-          <div class="admin-status-track" aria-hidden="true"><span style={`width:${Math.round((s.nilai / totalStatus) * 100)}%`}></span></div>
-        </div>
-      {/each}
+      {:else}
+        <div class="rw-queue-empty"><span>✓</span><div><b>Tidak ada antrian aktif.</b><small>Semua layanan sudah ditangani.</small></div></div>
+      {/if}
     </div>
   </div>
 </section>
 
-<section class="admin-panel admin-coverage-panel">
-  <div class="admin-panel-head">
-    <div><span class="admin-panel-kicker">Kesehatan sistem</span><h2>Cakupan data situs</h2><p>Status seluruh sumber data dalam satu tampilan ringkas.</p></div>
-    <a href={link("laporan")}>Buka laporan <span aria-hidden="true">→</span></a>
+<section class="rw-bottom-grid">
+  <div class="rw-panel rw-mini-panel">
+    <div class="rw-panel-head compact"><h3>Aktivitas terbaru</h3><a href={link("laporan")}>Lihat semua →</a></div>
+    <div class="rw-mini-list">
+      {#each aktivitasTerbaru as x}
+        <div class="rw-mini-item"><span class="rw-mini-icon">{x._jenis === "Surat" ? "▤" : x._jenis === "Pengaduan" ? "⌁" : x._jenis === "Reservasi" ? "▣" : x._jenis === "Warga" ? "♙" : "◇"}</span><div><b>{judulItem(x, x._jenis)}</b><small>{rincianItem(x, x._jenis)}</small></div><time>{fmtTanggal(waktuItem(x))}</time></div>
+      {/each}
+      {#if !aktivitasTerbaru.length}<div class="rw-mini-empty">Belum ada aktivitas terbaru.</div>{/if}
+    </div>
   </div>
-  <div class="admin-data-legend" aria-label="Legenda status data">
-    <span><i class="ok"></i> Tersedia</span>
-    <span><i class="kosong"></i> Kosong</span>
-    <span><i class="belum"></i> Belum dimuat</span>
-    <span><i class="gagal"></i> Gagal</span>
-  </div>
-  <div class="admin-data-grid">
-    {#each sumberData as d}
-      <a class="admin-data-card" href={link(d[3])}>
-        <div class="admin-data-card-head">
-          <strong>{d[0]}</strong>
-          {#if galatMuatPengurus[d[1]]}<span class="admin-data-state gagal" title="Gagal dimuat"></span>
-          {:else if d[2] === null}<span class="admin-data-state belum" title="Belum dimuat"></span>
-          {:else if Array.isArray(d[2]) && d[2].length === 0}<span class="admin-data-state kosong" title="Sudah dimuat, belum ada data"></span>
-          {:else}<span class="admin-data-state" title="Data tersedia"></span>{/if}
-        </div>
-        <span class="count">{d[2] === null ? "—" : daftar(d[2]).length}</span>
-        <small>{galatMuatPengurus[d[1]] ? "Gagal dimuat" : d[2] === null ? "Belum dimuat" : daftar(d[2]).length ? "Data tersedia" : "Belum ada data"}</small>
-      </a>
-    {/each}
-  </div>
-</section>
 
-<section class="admin-panel admin-quick-panel">
-  <div class="admin-panel-head"><div><span class="admin-panel-kicker">Jalan pintas</span><h2>Akses cepat pekerjaan rutin</h2><p>Pilih pekerjaan yang ingin dilakukan tanpa mencari menu satu per satu.</p></div></div>
-  <div class="admin-quick-grid">
-    {#each cepat as x}
-      <a class="admin-quick" href={link(x[2])}>
-        <span class="admin-quick-index">{x[3]}</span>
-        <div><strong>{x[0]}</strong><span>{x[1]}</span></div>
-        <b aria-hidden="true">↗</b>
-      </a>
-    {/each}
+  <div class="rw-panel rw-mini-panel">
+    <div class="rw-panel-head compact"><h3>Jadwal layanan hari ini</h3><a href={link("layanan")}>Lihat semua →</a></div>
+    <div class="rw-mini-list">
+      {#each jadwalHariIni as x}
+        <div class="rw-mini-item"><span class="rw-mini-icon green">▣</span><div><b>{x.judul || x.nama || x.kegiatan || x.fasilitas || "Jadwal layanan"}</b><small>{x.waktu || x.jam || x.keterangan || x.hari || "Jadwal operasional"}</small></div><span class="rw-pill">Terjadwal</span></div>
+      {/each}
+      {#if !jadwalHariIni.length}<div class="rw-mini-empty">Belum ada jadwal yang dicatat.</div>{/if}
+    </div>
+  </div>
+
+  <div class="rw-panel rw-mini-panel">
+    <div class="rw-panel-head compact"><h3>Fasilitas & ruang</h3><a href={link("layanan")}>Lihat semua →</a></div>
+    <div class="rw-mini-list">
+      {#each fasilitasRingkas as x}
+        <div class="rw-mini-item"><span class="rw-mini-icon green">⌂</span><div><b>{x._nama}</b><small>{x.kapasitas ? `Kapasitas ${x.kapasitas}` : x.keterangan || "Fasilitas RW 02"}</small></div><span class:busy={!x._tersedia} class="rw-pill">{x._tersedia ? "Tersedia" : "Terpakai"}</span></div>
+      {/each}
+      {#if !fasilitasRingkas.length}<div class="rw-mini-empty">Belum ada fasilitas terdaftar.</div>{/if}
+    </div>
   </div>
 </section>
