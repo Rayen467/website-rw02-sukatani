@@ -28,6 +28,9 @@
  *      2. KOLEKSI_UMUM atau KOLEKSI_PENGURUS   siapa yang boleh membacanya
  *      3. TANPA_URUTAN     kalau koleksinya tidak punya kolom "dibuat"
  *      4. src/keadaan/isi.svelte.js   tambahkan barisnya di daftar isi
+ *
+ *  Pengecualian: koleksi bukti besar/on-demand seperti USAHA_BUKTI tidak
+ *  dimasukkan ke daftar muat global. Ia dibaca hanya saat satu UMKM dibuka.
  */
 
 /* -------------------------------------------------------------------------
@@ -98,6 +101,10 @@ export const KOLEKSI = Object.freeze({
      pendampingan. Sengaja DIPISAH dari koleksi usaha karena katalog usaha
      bersifat publik. Koleksi ini hanya boleh dibaca/ditulis Petugas. */
   USAHA_ADMIN: "usaha_admin",
+
+  /* Bukti legalitas/sertifikat UMKM dibaca ON-DEMAND per usaha karena isi
+     file dapat besar. Satu file satu dokumen, tidak pernah dimuat saat login. */
+  USAHA_BUKTI: "usaha_bukti",
 
   /* Orang */
   WARGA: "warga",
