@@ -1,8 +1,9 @@
-/* Bersihkan copy deskriptif di panel login agar tidak terasa seperti petunjuk penggunaan. */
-.auth-app-root .login-heading p {
+/* Panel login dibuat ringkas: hilangkan copy instruksional dan eyebrow yang tidak perlu. */
+.auth-app-root .login-heading > span,
+.auth-app-root .login-heading > p {
   display: none !important;
 }
 
 .auth-app-root .login-heading {
-  margin-bottom: 18px !important;
+  margin-bottom: 12px !important;
 }
