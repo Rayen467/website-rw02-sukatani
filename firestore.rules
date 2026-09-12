@@ -235,6 +235,12 @@ service cloud.firestore {
       allow read, create, update, delete: if petugas();
     }
 
+    // Bukti file sertifikat/legalitas dan metadata verifikasi juga privat.
+    // Berkas tidak pernah boleh dibaca dari katalog publik UMKM.
+    match /usaha_bukti/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
     // ---------- polling warga ----------
     match /polling/{pollId}/suara/{uid} {
       allow read: if masuk();
