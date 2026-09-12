@@ -17,6 +17,7 @@
   import Kepala from "./komponen/Kepala.svelte";
   import Kaki from "./komponen/Kaki.svelte";
   import PesanSingkat from "./komponen/Pesan.svelte";
+  import PengalihanAkun from "./komponen/PengalihanAkun.svelte";
 
   import Beranda from "./halaman/Beranda.svelte";
   import Profil from "./halaman/Profil.svelte";
@@ -125,9 +126,13 @@
   </main>
 {:else if modeMasuk}
   <main id="utama" class="auth-app-root">
-    {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
-      <pilihan.komponen kunci={pilihan.kunci} />
-    {/key}
+    {#if sesi.siap && sesi.pengguna && sesi.terverifikasi}
+      <PengalihanAkun />
+    {:else}
+      {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
+        <pilihan.komponen kunci={pilihan.kunci} />
+      {/key}
+    {/if}
   </main>
 {:else}
   <Kepala />
