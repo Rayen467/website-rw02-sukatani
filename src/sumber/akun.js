@@ -4,8 +4,9 @@
  * ===========================================================================
  *
  * Halaman hanya memanggil fungsi di sini. SDK Firebase tetap dimuat secara
- * dinamis melalui pintu.js supaya pengunjung yang tidak login tidak perlu
- * mengunduh pustaka autentikasi.
+ * dinamis supaya pengunjung yang tidak login tidak perlu mengunduh pustaka
+ * autentikasi. Resolver username dan pembuat akun Petugas juga dimuat hanya
+ * saat fitur tersebut benar-benar dipakai.
  */
 
 import { KUNCI_SIMPAN } from "../inti/nama.js";
@@ -73,13 +74,30 @@ function identitasBersih(nilai) {
   return String(nilai || "").trim().toLowerCase();
 }
 
+function galatKredensial() {
+  const err = new Error("Kredensial tidak cocok.");
+  err.code = "auth/invalid-credential";
+  return err;
+}
+
+async function emailUntukMasuk(identitas) {
+  const nilai = identitasBersih(identitas);
+  if (!nilai) return null;
+  if (nilai.includes("@")) return nilai;
+
+  const { emailDariUsername } = await import("./alias-login.js");
+  return emailDariUsername(nilai);
+}
+
 export async function masukGoogle() {
   return (await bukaPintu()).masukGoogle();
 }
 
-/** Menerima email/Gmail atau username petugas. */
+/** Menerima Gmail/email langsung atau username Petugas. */
 export async function masukEmail(identitas, sandi) {
-  return (await bukaPintu()).masukEmail(identitasBersih(identitas), sandi);
+  const email = await emailUntukMasuk(identitas);
+  if (!email) throw galatKredensial();
+  return (await bukaPintu()).masukEmail(email, sandi);
 }
 
 export async function validasiKataSandi(sandi) {
@@ -90,22 +108,36 @@ export async function daftarAkun(email, sandi, nama) {
   return (await bukaPintu()).daftarAkun(identitasBersih(email), sandi, String(nama || "").trim());
 }
 
-/** Membuat akun Auth Petugas pada app sekunder agar sesi admin tidak terganti. */
+/**
+ * Pembuatan akun Petugas berjalan di Firebase Auth app sekunder dengan
+ * persistence in-memory. Ini menjaga sesi admin utama tetap aktif.
+ */
 export async function daftarPetugas(email, sandi, nama) {
-  return (await bukaPintu()).daftarPetugas(identitasBersih(email), sandi, String(nama || "").trim());
+  const cek = await validasiKataSandi(sandi);
+  if (!cek.valid) {
+    const err = new Error(cek.masalah.join(" "));
+    err.code = "auth/password-policy";
+    throw err;
+  }
+  const modul = await import("./pembuat-petugas.js");
+  return modul.daftarPetugas(identitasBersih(email), sandi, String(nama || "").trim());
 }
 
 export async function batalkanPetugasBaru() {
-  return (await bukaPintu()).batalkanPetugasBaru();
+  const modul = await import("./pembuat-petugas.js");
+  return modul.batalkanPetugasBaru();
 }
 
 export async function selesaikanPetugasBaru() {
-  return (await bukaPintu()).selesaikanPetugasBaru();
+  const modul = await import("./pembuat-petugas.js");
+  return modul.selesaikanPetugasBaru();
 }
 
-/** Menerima email/Gmail atau username petugas. */
+/** Menerima Gmail/email atau username Petugas tanpa membocorkan keberadaan akun. */
 export async function lupaSandi(identitas) {
-  return (await bukaPintu()).lupaSandi(identitasBersih(identitas));
+  const email = await emailUntukMasuk(identitas);
+  if (!email) return;
+  return (await bukaPintu()).lupaSandi(email);
 }
 
 export async function kirimUlangVerifikasi() {
