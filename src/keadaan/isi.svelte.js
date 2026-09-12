@@ -14,11 +14,12 @@
  *  Bedanya penting: halaman menampilkan "belum ada isi" hanya untuk []
  *  supaya warga tidak melihat tulisan itu berkedip saat situs baru dibuka.
  *
- *  KENAPA GALAT DIABAIKAN DIAM-DIAM
- *  Sebagian koleksi memang hanya boleh dibaca pengurus. Warga yang membuka
- *  situs pasti ditolak saat mencobanya, dan itu WAJAR -- bukan kerusakan
- *  yang perlu ditampilkan. Karena itu penangkap galat di berkas ini
- *  sengaja dibiarkan kosong.
+ *  GALAT JARINGAN VS GALAT AKSES
+ *  Galat jaringan sementara dicoba ulang otomatis. Galat akses/permission
+ *  tidak diulang berkali-kali karena itu biasanya berarti aturan Firestore
+ *  belum sinkron dengan kode. Untuk koleksi privat pengurus, galat terakhir
+ *  dicatat agar Portal Petugas tidak salah menganggap angka 0 sebagai data
+ *  kosong yang sah.
  */
 
 import {
@@ -78,6 +79,48 @@ export const isi = $state({
 
 let generasiSesi = 0;
 
+const GALAT_SEMENTARA = new Set([
+  "aborted",
+  "cancelled",
+  "deadline-exceeded",
+  "internal",
+  "resource-exhausted",
+  "unavailable",
+  "unknown"
+]);
+
+const tunggu = (ms) => new Promise((selesai) => setTimeout(selesai, ms));
+
+function kodeGalat(err) {
+  return String((err && err.code) || "").replace(/^firestore\//, "");
+}
+
+function teksGalat(err) {
+  const kode = kodeGalat(err);
+  const pesan = String((err && err.message) || "").trim();
+  return kode || pesan || "gagal memuat";
+}
+
+/**
+ * Operasi baca Firestore kadang gagal sesaat karena jaringan/peralihan tab.
+ * Untuk jenis galat sementara kita coba ulang dua kali dengan jeda kecil.
+ * permission-denied dan galat konfigurasi lain langsung dilempar kembali.
+ */
+async function denganRetry(aksi, maksimumUlang = 2) {
+  let terakhir;
+  for (let percobaan = 0; percobaan <= maksimumUlang; percobaan += 1) {
+    try {
+      return await aksi();
+    } catch (err) {
+      terakhir = err;
+      const sementara = GALAT_SEMENTARA.has(kodeGalat(err));
+      if (!sementara || percobaan === maksimumUlang) throw err;
+      await tunggu(300 * (2 ** percobaan));
+    }
+  }
+  throw terakhir;
+}
+
 /** Buang data pribadi dan batalkan hasil permintaan dari sesi sebelumnya. */
 export function kosongkanIsiPribadi() {
   generasiSesi += 1;
@@ -135,7 +178,7 @@ export function kontenNilai(bagian, kolom, bawaan = "") {
 export async function muatKoleksi(nama) {
   const generasi = generasiSesi;
   try {
-    const hasil = await ambilKoleksi(nama);
+    const hasil = await denganRetry(() => ambilKoleksi(nama));
     if (KOLEKSI_PENGURUS.includes(nama) && generasi !== generasiSesi) return;
     isi[nama] = hasil;
     if (KOLEKSI_PENGURUS.includes(nama)) delete galatMuatPengurus[nama];
@@ -144,7 +187,7 @@ export async function muatKoleksi(nama) {
        Jadi kalau yang gagal adalah koleksi pengurus, itu BUKAN penolakan
        normal warga dan perlu terlihat di Dashboard Petugas. */
     if (KOLEKSI_PENGURUS.includes(nama) && generasi === generasiSesi) {
-      galatMuatPengurus[nama] = String((err && (err.code || err.message)) || "gagal memuat");
+      galatMuatPengurus[nama] = teksGalat(err);
     }
   }
 }
@@ -152,7 +195,7 @@ export async function muatKoleksi(nama) {
 /** Mengambil ulang satu dokumen tetap. */
 export async function muatKonten(bagian) {
   try {
-    const d = await ambilKonten(bagian);
+    const d = await denganRetry(() => ambilKonten(bagian), 1);
     if (!d) return;
     isi.konten = { ...isi.konten, [bagian]: d };
     /* Pengaturan tampilan langsung dipasang begitu sampai, supaya warna
@@ -179,7 +222,7 @@ export async function muatMilikSaya(uid) {
   for (const nama of KOLEKSI_KIRIMAN) {
     if (generasi !== generasiSesi) return;
     try {
-      const hasil = await ambilMilikSaya(nama, uid);
+      const hasil = await denganRetry(() => ambilMilikSaya(nama, uid), 1);
       if (generasi !== generasiSesi) return;
       isi[nama] = hasil;
     } catch (err) {}
@@ -190,7 +233,7 @@ export async function muatSuara() {
   const generasi = generasiSesi;
   const pollId = kontenNilai(KONTEN.POLLING, "id", POLLING_BAWAAN.id);
   try {
-    const hasil = await ambilSuara(pollId);
+    const hasil = await denganRetry(() => ambilSuara(pollId), 1);
     if (generasi === generasiSesi) isi.suara = hasil;
   } catch (err) {}
 }
