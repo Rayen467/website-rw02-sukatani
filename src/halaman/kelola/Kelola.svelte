@@ -1,6 +1,6 @@
 <script>
   import { sesi, namaPeran } from "../../keadaan/sesi.svelte.js";
-  import { galatMuatPengurus, muatPengurus } from "../../keadaan/isi.svelte.js";
+  import { isi, galatMuatPengurus, muatPengurus } from "../../keadaan/isi.svelte.js";
   import { rute, pergi } from "../../keadaan/rute.svelte.js";
   import { keluar } from "../../sumber/akun.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
@@ -17,8 +17,23 @@
   import TabTampilan from "./TabTampilan.svelte";
   import TabOrang from "./TabOrang.svelte";
 
+  const IKON = {
+    dashboard: "⌂",
+    kiriman: "▤",
+    orang: "♙",
+    layanan: "▣",
+    terbit: "▧",
+    beranda: "◎",
+    berkas: "□",
+    angka: "◇",
+    laporan: "▥",
+    profil: "◉",
+    lain: "◌",
+    tampilan: "⚙"
+  };
+
   const GRUP = [
-    { label: "Ringkasan", item: [["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]] },
+    { label: "Menu utama", item: [["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]] },
     { label: "Operasional", item: [
       ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
       ["orang", "Warga & pengurus", "Verifikasi & akses akun", "03", TabOrang],
@@ -34,9 +49,9 @@
       ["laporan", "Laporan", "Rekap siap cetak", "09", TabLaporan],
       ["profil", "Profil & katalog", "Identitas dan kelembagaan", "10", TabProfil]
     ]},
-    { label: "Pengaturan", item: [
+    { label: "Lainnya", item: [
       ["lain", "Tautan & polling", "Partisipasi warga", "11", TabLain],
-      ["tampilan", "Tampilan situs", "Warna & tipografi", "12", TabTampilan]
+      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "12", TabTampilan]
     ]}
   ];
 
@@ -47,6 +62,28 @@
   const dipilih = $derived(TAB.find((t) => t[0] === aktif) || TAB[0]);
   const Terpilih = $derived(dipilih[4]);
   const galatData = $derived(Object.entries(galatMuatPengurus));
+  const pengurusTop = $derived((Array.isArray(isi.pengurus) ? isi.pengurus : []).slice(0, 3));
+  const sisaPengurus = $derived(Math.max(0, (Array.isArray(isi.pengurus) ? isi.pengurus.length : 0) - pengurusTop.length));
+
+  let pencarian = $state("");
+
+  function inisial(o) {
+    const nama = String(o?.nama || o?.id || o?.email || "P").trim();
+    return nama ? nama.slice(0, 1).toUpperCase() : "P";
+  }
+
+  function cariPortal(e) {
+    e.preventDefault();
+    const q = pencarian.trim().toLowerCase();
+    if (!q) return;
+    const tujuan = TAB.find((t) => `${t[1]} ${t[2]}`.toLowerCase().includes(q));
+    if (!tujuan) {
+      beriTahu("Menu tidak ditemukan. Coba kata seperti layanan, warga, berita, kas, laporan, atau fasilitas.");
+      return;
+    }
+    pencarian = "";
+    pergi(`/${pangkal}/${tujuan[0]}`);
+  }
 
   async function keluarPengurus() {
     await keluar();
@@ -77,8 +114,8 @@
           <div class="admin-nav-list">
             {#each grup.item as t}
               <a class="admin-nav-item" class:aktif={aktif === t[0]} aria-current={aktif === t[0] ? "page" : undefined} href={"#/" + pangkal + "/" + t[0]} title={t[2]}>
-                <span class="admin-nav-icon" aria-hidden="true">{t[3]}</span>
-                <span class="admin-nav-copy"><strong>{t[1]}</strong><small>{t[2]}</small></span>
+                <span class="admin-nav-icon" aria-hidden="true">{IKON[t[0]] || t[3]}</span>
+                <span class="admin-nav-copy"><strong>{t[1]}</strong></span>
                 <span class="admin-nav-arrow" aria-hidden="true">›</span>
               </a>
             {/each}
@@ -88,34 +125,50 @@
     </div>
 
     <div class="admin-account">
-      <span class="admin-account-avatar" aria-hidden="true">{(namaPeran() || "P").slice(0, 1).toUpperCase()}</span>
+      <span class="admin-account-avatar" aria-hidden="true">{(sesi.pengguna?.email || namaPeran() || "P").slice(0, 1).toUpperCase()}</span>
       <span class="admin-account-copy">
-        <small>Sesi aktif</small>
-        <strong>{sesi.pengguna?.email || "-"}</strong>
-        <span>{namaPeran()}</span>
+        <strong>{sesi.pengguna?.email || "Petugas"}</strong>
+        <span>{namaPeran()} RW 02</span>
       </span>
-      <button class="admin-account-exit" type="button" onclick={keluarPengurus} title="Keluar dari akun">Keluar</button>
+      <button class="admin-account-exit" type="button" onclick={keluarPengurus} title="Keluar dari akun" aria-label="Keluar dari akun">↪</button>
     </div>
   </aside>
 
   <div class="admin-main">
     <header class="admin-topbar">
       <div class="admin-topbar-copy">
-        <span class="admin-eyebrow"><span class="admin-live-dot"></span> Portal Petugas <i>/</i> {namaPeran()}</span>
-        <div class="admin-title-row">
-          <h1>{dipilih[1]}</h1>
-          <span class="admin-internal-pill">Internal</span>
-        </div>
-        <p>{dipilih[2]}. Workspace operasional ini terpisah dari tampilan publik warga.</p>
+        <div class="admin-title-row"><h1>{dipilih[1]}</h1></div>
+        <p>{dipilih[2]} RW 02 Sukatani secara real-time</p>
       </div>
+
+      <form class="admin-top-search" onsubmit={cariPortal} role="search">
+        <span aria-hidden="true">⌕</span>
+        <input bind:value={pencarian} aria-label="Cari menu Portal Petugas" placeholder="Cari data, warga, atau layanan..." />
+        <kbd>⌘ K</kbd>
+      </form>
+
       <div class="admin-topbar-actions">
+        <button class="admin-notification" type="button" title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Tidak ada peringatan data"} aria-label="Notifikasi data">
+          ♧
+          {#if galatData.length}<i></i>{/if}
+        </button>
+
+        <div class="admin-team" aria-label="Petugas aktif">
+          {#if pengurusTop.length}
+            {#each pengurusTop as o}
+              <span class="admin-team-avatar" title={o.nama || o.id || "Petugas"}>{inisial(o)}</span>
+            {/each}
+            {#if sisaPengurus}<span class="admin-team-more">+{sisaPengurus}</span>{/if}
+          {:else}
+            <span class="admin-team-avatar">{(namaPeran() || "P").slice(0, 1).toUpperCase()}</span>
+          {/if}
+        </div>
+
         <a class="tombol admin-ghost-button" href="#/">
-          <span aria-hidden="true">↗</span>
-          Buka situs warga
+          Buka situs warga <span aria-hidden="true">↗</span>
         </a>
         <button class="tombol utama admin-refresh-button" type="button" onclick={() => muatPengurus()}>
-          <span aria-hidden="true">↻</span>
-          Segarkan data
+          <span aria-hidden="true">↻</span> Segarkan data
         </button>
       </div>
     </header>
@@ -125,8 +178,8 @@
         <div class="admin-alert-icon" aria-hidden="true">!</div>
         <div class="admin-alert-body">
           <strong>Data Petugas belum termuat lengkap.</strong>
-          <span>Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}. Angka 0 pada modul terkait belum dapat dianggap sebagai data kosong.</span>
-          <div class="baris-tombol" style="margin-top:10px"><button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button></div>
+          <span>Server gagal membaca {galatData.map(([nama]) => nama).join(", ")}. Angka pada modul terkait belum dapat dianggap sebagai data kosong.</span>
+          <div class="baris-tombol"><button class="tombol utama" type="button" onclick={() => muatPengurus()}>Coba muat ulang</button></div>
         </div>
       </div>
     {/if}
