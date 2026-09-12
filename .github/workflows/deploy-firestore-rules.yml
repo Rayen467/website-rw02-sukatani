@@ -1,0 +1,59 @@
+name: Sinkronkan aturan Firestore
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "firestore.rules"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/deploy-firestore-rules.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  aturan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Periksa sumber aturan
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'match /bansos_penerima/{id}' firestore.rules
+          grep -q 'allow read, create, update, delete: if petugas();' firestore.rules
+          echo "Aturan bansos_penerima ditemukan dan terlindungi untuk pengurus."
+
+      - name: Deploy aturan Firestore
+        shell: bash
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          set -euo pipefail
+          PROJECT="perumahansukatanirw02"
+
+          if [[ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]]; then
+            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --non-interactive
+          elif [[ -n "${GCP_SA_KEY:-}" ]]; then
+            printf '%s' "$GCP_SA_KEY" > "$RUNNER_TEMP/firebase-service-account.json"
+            export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --non-interactive
+          elif [[ -n "${FIREBASE_TOKEN:-}" ]]; then
+            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --token "$FIREBASE_TOKEN" --non-interactive
+          else
+            echo "::warning::Aturan Firestore belum dapat dipublikasikan karena belum ada FIREBASE_SERVICE_ACCOUNT, GCP_SA_KEY, atau FIREBASE_TOKEN di GitHub Secrets."
+            echo "Kode website tetap aman dibangun; tambahkan salah satu kredensial tersebut sekali saja agar perubahan firestore.rules otomatis tersinkron setelah ini."
+          fi
