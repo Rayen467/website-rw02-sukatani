@@ -66,6 +66,7 @@ export const isi = $state({
   surat: null,
   reservasi: null,
   usaha_baru: null,
+  usaha_admin: null,
   warga: null,
   pengurus: null,
   bansos_penerima: null,
