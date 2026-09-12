@@ -1,0 +1,203 @@
+/* Login desktop compact — menjaga layout referensi tanpa memenuhi seluruh layar. */
+@media (min-width: 981px) {
+  :global(.auth-app-root) .login-stage,
+  .auth-app-root .login-stage {
+    padding: 18px 28px !important;
+  }
+
+  .auth-app-root .login-shell {
+    width: min(1040px, calc(100vw - 56px)) !important;
+    min-height: 0 !important;
+    height: min(640px, calc(100dvh - 36px)) !important;
+    grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr) !important;
+    border-radius: 28px !important;
+  }
+
+  .auth-app-root .login-brand {
+    top: 26px !important;
+    left: 30px !important;
+    gap: 10px !important;
+  }
+
+  .auth-app-root .login-brand img {
+    width: 54px !important;
+    height: 54px !important;
+  }
+
+  .auth-app-root .login-brand strong {
+    font-size: 26px !important;
+  }
+
+  .auth-app-root .login-landscape {
+    top: 20% !important;
+    height: 54% !important;
+  }
+
+  .auth-app-root .login-landscape-shade {
+    top: 12% !important;
+    height: 18% !important;
+    left: -6% !important;
+    right: -8% !important;
+  }
+
+  .auth-app-root .login-story {
+    right: -4% !important;
+    bottom: -3% !important;
+    min-height: 34% !important;
+    padding: 36px 34px 24px !important;
+  }
+
+  .auth-app-root .login-story h2 {
+    font-size: 34px !important;
+    line-height: 1 !important;
+  }
+
+  .auth-app-root .login-story i {
+    width: 48px !important;
+    height: 4px !important;
+    margin: 12px 0 !important;
+  }
+
+  .auth-app-root .login-story > p {
+    max-width: 440px !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  .auth-app-root .login-benefit {
+    gap: 10px 18px !important;
+    margin-top: 12px !important;
+  }
+
+  .auth-app-root .login-showcase-meta {
+    left: 22px !important;
+    right: 22px !important;
+    bottom: 10px !important;
+  }
+
+  .auth-app-root .login-panel {
+    padding: 24px 30px !important;
+  }
+
+  .auth-app-root .login-panel-top {
+    min-height: 42px !important;
+  }
+
+  .auth-app-root .login-form-area,
+  .auth-app-root .login-time-block,
+  .auth-app-root .login-panel-foot {
+    width: min(100%, 340px) !important;
+  }
+
+  .auth-app-root .login-form-area {
+    padding: 4px 0 0 !important;
+  }
+
+  .auth-app-root .login-heading {
+    margin-bottom: 14px !important;
+  }
+
+  .auth-app-root .login-heading h1 {
+    margin: 3px 0 6px !important;
+    font-size: 42px !important;
+  }
+
+  .auth-app-root .login-heading p {
+    line-height: 1.42 !important;
+  }
+
+  .auth-app-root .login-form {
+    gap: 10px !important;
+  }
+
+  .auth-app-root .login-field {
+    gap: 5px !important;
+  }
+
+  .auth-app-root .login-input-wrap {
+    min-height: 46px !important;
+    border-radius: 12px !important;
+  }
+
+  .auth-app-root .login-input-wrap input {
+    height: 44px !important;
+  }
+
+  .auth-app-root .login-primary,
+  .auth-app-root .login-secondary {
+    min-height: 46px !important;
+    border-radius: 12px !important;
+  }
+
+  .auth-app-root .login-google {
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+
+  .auth-app-root .login-switch {
+    margin-top: 10px !important;
+  }
+
+  .auth-app-root .login-or {
+    margin: 11px 0 9px !important;
+  }
+
+  .auth-app-root .login-time-block {
+    margin-top: 10px !important;
+    padding-top: 10px !important;
+  }
+
+  .auth-app-root .login-time-head {
+    margin-bottom: 5px !important;
+  }
+
+  .auth-app-root .login-time-tabs {
+    padding: 4px !important;
+    gap: 3px !important;
+    border-radius: 11px !important;
+  }
+
+  .auth-app-root .login-time-tabs button {
+    min-height: 34px !important;
+    border-radius: 8px !important;
+  }
+
+  .auth-app-root .login-panel-foot {
+    margin-top: 10px !important;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 720px) {
+  .auth-app-root .login-shell {
+    height: calc(100dvh - 24px) !important;
+  }
+
+  .auth-app-root .login-stage {
+    padding-block: 12px !important;
+  }
+
+  .auth-app-root .login-panel {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .auth-app-root .login-panel-top {
+    min-height: 34px !important;
+  }
+
+  .auth-app-root .login-heading {
+    margin-bottom: 10px !important;
+  }
+
+  .auth-app-root .login-heading h1 {
+    font-size: 36px !important;
+  }
+
+  .auth-app-root .login-time-block {
+    margin-top: 7px !important;
+  }
+
+  .auth-app-root .login-panel-foot {
+    margin-top: 7px !important;
+  }
+}
