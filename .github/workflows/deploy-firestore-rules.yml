@@ -7,6 +7,7 @@ on:
       - "firestore.rules"
       - "firebase.json"
       - ".firebaserc"
+      - "alat/deploy-firestore-rules.mjs"
       - ".github/workflows/deploy-firestore-rules.yml"
   workflow_dispatch:
 
@@ -31,7 +32,9 @@ jobs:
           set -euo pipefail
           grep -q 'match /bansos_penerima/{id}' firestore.rules
           grep -q 'allow read, create, update, delete: if petugas();' firestore.rules
-          echo "Aturan bansos_penerima ditemukan dan terlindungi untuk pengurus."
+          grep -q 'match /login_petugas/{username}' firestore.rules
+          grep -q 'allow list: if false;' firestore.rules
+          echo "Aturan privat bansos dan alias login Petugas ditemukan."
 
       - name: Deploy aturan Firestore
         shell: bash
@@ -43,17 +46,20 @@ jobs:
           set -euo pipefail
           PROJECT="perumahansukatanirw02"
 
+          # Untuk service account, gunakan Firebase Rules Management API resmi
+          # langsung. Ini membutuhkan firebaserules.* saja dan tidak memerlukan
+          # Service Usage Viewer yang sebelumnya membuat Firebase CLI gagal 403.
           if [[ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]]; then
             printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
             export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --non-interactive
+            node alat/deploy-firestore-rules.mjs "$PROJECT"
           elif [[ -n "${GCP_SA_KEY:-}" ]]; then
             printf '%s' "$GCP_SA_KEY" > "$RUNNER_TEMP/firebase-service-account.json"
             export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --non-interactive
+            node alat/deploy-firestore-rules.mjs "$PROJECT"
           elif [[ -n "${FIREBASE_TOKEN:-}" ]]; then
             npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --token "$FIREBASE_TOKEN" --non-interactive
           else
-            echo "::warning::Aturan Firestore belum dapat dipublikasikan karena belum ada FIREBASE_SERVICE_ACCOUNT, GCP_SA_KEY, atau FIREBASE_TOKEN di GitHub Secrets."
-            echo "Kode website tetap aman dibangun; tambahkan salah satu kredensial tersebut sekali saja agar perubahan firestore.rules otomatis tersinkron setelah ini."
+            echo "::error::Belum ada FIREBASE_SERVICE_ACCOUNT, GCP_SA_KEY, atau FIREBASE_TOKEN di GitHub Secrets."
+            exit 1
           fi
