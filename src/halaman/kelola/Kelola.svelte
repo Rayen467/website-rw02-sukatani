@@ -23,7 +23,7 @@
     kiriman: "▤",
     orang: "♙",
     layanan: "▣",
-    umkm: "◇",
+    umkm: "▦",
     terbit: "▧",
     beranda: "◎",
     berkas: "□",
@@ -36,11 +36,13 @@
 
   const GRUP = [
     { label: "Menu utama", item: [["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]] },
+    { label: "UMKM", item: [
+      ["umkm", "Pusat UMKM", "UMKM & legalitas, sertifikat, katalog & pendampingan", "05", TabUmkm]
+    ]},
     { label: "Operasional", item: [
       ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
       ["orang", "Warga & pengurus", "Verifikasi & akses akun", "03", TabOrang],
-      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan],
-      ["umkm", "UMKM & legalitas", "Legalitas, sertifikat & pendampingan", "05", TabUmkm]
+      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan]
     ]},
     { label: "Publikasi", item: [
       ["terbit", "Berita & galeri", "Informasi publik", "06", TabTerbit],
