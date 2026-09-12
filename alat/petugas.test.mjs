@@ -119,7 +119,7 @@ test("pusat UMKM punya menu khusus, legalitas, sertifikat, dan action berikutnya
   assert.match(kelola, /UMKM & legalitas/);
   assert.match(kelola, /TabUmkm/);
   assert.match(umkm, /KOLEKSI\.USAHA_ADMIN/);
-  assert.match(umkm, />NIB</);
+  assert.match(umkm, /label:\s*"NIB"/);
   assert.match(umkm, /Sertifikat Halal/);
   assert.match(umkm, /SPP-IRT/);
   assert.match(umkm, /BPOM MD\/ML/);
