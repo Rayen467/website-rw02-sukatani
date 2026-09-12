@@ -2,25 +2,12 @@
   /**
    * Pintu masuk halaman Kelola.
    *
-   * KENAPA ADA BERKAS PERANTARA DI SINI
-   *
-   * Halaman Kelola beserta sebelas tabnya adalah bagian terbesar dari kode
-   * situs ini, dan HANYA PENGURUS yang pernah membukanya. Sebelum ini
-   * semuanya ikut dalam satu berkas dengan halaman warga, jadi setiap orang
-   * yang cuma ingin membaca pengumuman tetap mengunduh seluruh panel
-   * pengelolaan: borang kas, penyusun laporan, tabel warga, semuanya.
-   *
-   * Itu bukan soal kerapian. Sebagian besar warga membuka situs ini dari HP
-   * dengan kuota terbatas dan jaringan yang tidak selalu baik. Kilobyte yang
-   * tidak pernah mereka pakai tetap mereka bayar.
-   *
-   * Berkas ini memisahkannya. Yang bukan pengurus berhenti di sini dan
-   * TIDAK PERNAH mengunduh kode Kelola sama sekali. Yang pengurus mengunduh
-   * begitu halamannya dibuka, sekali, lalu tersimpan di singgahan peramban.
-   *
-   * Penjagaan sebenarnya tetap di server. Orang yang memaksa mengunduh
-   * berkas ini pun tetap ditolak aturan Firestore pada setiap tulisan --
-   * pemisahan di sini soal kuota warga, bukan soal keamanan.
+   * Dashboard Petugas tetap dipisahkan sebagai chunk terpisah supaya warga
+   * biasa tidak ikut mengunduh seluruh back-office. Karena GitHub Pages bisa
+   * berganti versi saat tab lama masih terbuka, chunk lama kadang sudah tidak
+   * tersedia setelah deploy baru. Di bawah ini ada pemulihan satu kali:
+   * reload otomatis mengambil index + nama chunk terbaru tanpa meminta user
+   * melakukan refresh manual berulang kali.
    */
   import { sesi, pengurus } from "../../keadaan/sesi.svelte.js";
   import { siapkanAkun } from "../../sumber/akun.js";
@@ -28,24 +15,37 @@
   import { KOLEKSI } from "../../inti/nama.js";
   import { PETUGAS_SIAP_PAKAI } from "../../inti/akses.js";
 
-  /* Halaman ini pasti berurusan dengan akun, jadi pustaka masuk diminta
-     sekarang tanpa ditunggu. Kalau penanda "pernah masuk" hilang -- data
-     peramban dibersihkan, misalnya -- inilah yang memulihkan sesi lama.
-     Lihat catatan di kepala src/sumber/akun.js. */
   siapkanAkun();
+
+  const KUNCI_PULIH_CHUNK = "rw02-pulih-chunk-kelola";
 
   let Kelola = $state(null);
   let gagal = $state(false);
+  let sedangMuat = $state(false);
   let akunPetugasDisiapkan = false;
 
-  /**
-   * Saat pengurus lama yang sudah sah membuka Dashboard Petugas, pastikan
-   * akun operasional bersama sudah terdaftar pada koleksi pengurus.
-   *
-   * Ini sengaja dilakukan dari sesi pengurus yang sudah berwenang. Akun baru
-   * tidak bisa mengangkat dirinya sendiri menjadi petugas, dan kata sandi
-   * tetap hanya diketahui Firebase Authentication.
-   */
+  function hapusPenandaPulih() {
+    if (typeof sessionStorage === "undefined") return;
+    try { sessionStorage.removeItem(KUNCI_PULIH_CHUNK); } catch {}
+  }
+
+  function pulihkanSekali() {
+    if (typeof window === "undefined" || typeof sessionStorage === "undefined") return false;
+    try {
+      if (sessionStorage.getItem(KUNCI_PULIH_CHUNK) === "1") return false;
+      sessionStorage.setItem(KUNCI_PULIH_CHUNK, "1");
+      window.location.reload();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function muatUlangHalaman() {
+    hapusPenandaPulih();
+    window.location.reload();
+  }
+
   $effect(() => {
     if (!pengurus() || akunPetugasDisiapkan) return;
     akunPetugasDisiapkan = true;
@@ -65,29 +65,46 @@
           },
           false
         );
-      } catch (err) {
-        /* Dashboard tetap boleh dibuka walau penyiapan akun tambahan gagal.
-           Membuka ulang Dashboard dari akun pengurus akan mencoba lagi. */
+      } catch {
+        /* Dashboard tetap dibuka walau penyiapan akun tambahan gagal. */
       }
     })();
   });
 
   $effect(() => {
-    if (!pengurus() || Kelola) return;
+    if (!pengurus() || Kelola || sedangMuat) return;
+
     let batal = false;
+    gagal = false;
+    sedangMuat = true;
+
     import("./Kelola.svelte")
       .then((m) => {
-        if (!batal) Kelola = m.default;
+        if (batal) return;
+        Kelola = m.default;
+        sedangMuat = false;
+        hapusPenandaPulih();
       })
       .catch(() => {
-        if (!batal) gagal = true;
+        if (batal) return;
+        sedangMuat = false;
+
+        /* Kasus paling umum setelah deploy: tab lama masih memegang nama
+           chunk versi sebelumnya. Satu reload mengambil build terbaru. */
+        if (pulihkanSekali()) return;
+        gagal = true;
       });
-    return () => (batal = true);
+
+    return () => { batal = true; };
   });
 </script>
 
 {#if !sesi.siap}
-  <p class="catatan" role="status">Memeriksa sesi akun...</p>
+  <section class="kelola-loading" role="status" aria-busy="true">
+    <span class="kelola-spinner" aria-hidden="true"></span>
+    <strong>Memeriksa akun Petugas</strong>
+    <small>Menyiapkan sesi yang aman...</small>
+  </section>
 {:else if !pengurus()}
   <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Kelola</span></nav>
   <div class="kepala-halaman">
@@ -110,13 +127,85 @@
     </div>
   </div>
 {:else if gagal}
-  <nav class="remah"><a href="#/">Beranda</a><span>&rsaquo;</span><span>Kelola</span></nav>
-  <div class="kunci">
-    <h3>Halaman Kelola gagal dimuat</h3>
-    <p>Periksa sambungan jaringan, lalu muat ulang halaman ini.</p>
-  </div>
+  <section class="kelola-loading kelola-gagal" role="alert">
+    <span class="kelola-ikon">!</span>
+    <strong>Dashboard belum berhasil dimuat</strong>
+    <small>Koneksi atau berkas versi terbaru belum terbaca.</small>
+    <button type="button" onclick={muatUlangHalaman}>Coba lagi</button>
+  </section>
 {:else if Kelola}
   <Kelola />
 {:else}
-  <p class="catatan" role="status">Membuka halaman Kelola...</p>
+  <section class="kelola-loading" role="status" aria-busy="true">
+    <span class="kelola-spinner" aria-hidden="true"></span>
+    <strong>Membuka Dashboard Petugas</strong>
+    <small>Memuat modul operasional RW 02...</small>
+  </section>
 {/if}
+
+<style>
+  .kelola-loading {
+    min-height: 100dvh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 10px;
+    padding: 28px;
+    color: #174c40;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(57,181,139,.10), transparent 28%),
+      #f6faf8;
+  }
+
+  .kelola-loading strong {
+    margin-top: 4px;
+    font-size: 20px;
+    letter-spacing: -.02em;
+  }
+
+  .kelola-loading small {
+    color: #6b7d76;
+    font-size: 13px;
+  }
+
+  .kelola-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #d8ebe4;
+    border-top-color: #0a735c;
+    border-radius: 50%;
+    animation: putar .8s linear infinite;
+  }
+
+  .kelola-ikon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #8d421f;
+    background: #fff1e9;
+    font-weight: 900;
+    font-size: 22px;
+  }
+
+  .kelola-gagal button {
+    min-height: 42px;
+    margin-top: 8px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 11px;
+    color: #fff;
+    background: #0b6b57;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  @keyframes putar { to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kelola-spinner { animation: none; }
+  }
+</style>
