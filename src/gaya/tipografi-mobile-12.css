@@ -1,0 +1,81 @@
+/* ===========================================================================
+ * TIPOGRAFI MOBILE 12PX — lapisan final
+ * HP <= 680px: microcopy boleh turun sampai 12px. Teks isi/form tetap 13px+.
+ * Desktop tidak berubah dan tetap memakai minimum 14px.
+ * ======================================================================== */
+
+@media (max-width: 680px) {
+  main small,
+  .remah,
+  .alis,
+  .catatan,
+  .catatan-borang,
+  .kunci,
+  .kosong-ket,
+  .kosong-siapa,
+  .kartu small,
+  .panel-rumah small,
+  .kartu .muted,
+  .panel-rumah .muted,
+  .turunan a span,
+  .laci .kelompok,
+  .merek-teks small,
+  body:has(.beranda-hero) .beranda-eyebrow,
+  body:has(.beranda-hero) .beranda-meta-item small,
+  body:has(.beranda-hero) .pemilih-waktu > button:not(.kembali-waktu),
+  body:has(.beranda-hero) .kembali-waktu,
+  body:has(.beranda-hero) .layanan-cepat-item small,
+  .home-kicker,
+  .home-important-label,
+  .home-latest-head small,
+  .home-activity-copy small,
+  .home-explore-card small,
+  .home-hub-copy small,
+  .home-umkm-copy small,
+  .profil-modern small,
+  .layanan-modern small,
+  .kontak-modern small,
+  .pengurus-modern small,
+  .kaki-modern-kolom h4,
+  .kaki-modern-kolom a,
+  .kaki-modern-brand > p,
+  .kaki-lokasi p,
+  .kaki-lokasi-isi strong,
+  .kaki-lokasi-isi small,
+  .kaki-alamat-ringkas,
+  .kaki-modern-bawah,
+  .kaki-hubungi,
+  .kaki-kolaborasi-mini > span,
+  .kaki-kolaborasi-label {
+    font-size: 12px !important;
+  }
+
+  .petugas-app-root .admin-nav-copy strong,
+  .petugas-app-root .admin-alert-body strong,
+  .petugas-app-root .admin-alert-body > span,
+  .petugas-app-root .rw-dashboard-kicker,
+  .petugas-app-root .rw-dashboard-hero p,
+  .petugas-app-root .rw-btn,
+  .petugas-app-root .rw-health-main p,
+  .petugas-app-root .rw-kpi-card small,
+  .petugas-app-root .rw-kpi-card div > span,
+  .petugas-app-root .rw-panel-head p,
+  .petugas-app-root .rw-panel-head a,
+  .petugas-app-root .rw-chart-y span,
+  .petugas-app-root .rw-chart-x span,
+  .petugas-app-root .rw-chart-legend span,
+  .petugas-app-root .rw-queue-item small,
+  .petugas-app-root .rw-queue-item .status,
+  .petugas-app-root .rw-mini-item small,
+  .petugas-app-root .rw-mini-item time,
+  .petugas-app-root .rw-mini-item .rw-pill,
+  .petugas-app-root .umkm-kicker,
+  .petugas-app-root .umkm-section-head p,
+  .petugas-app-root .umkm-doc-card p,
+  .petugas-app-root .umkm-doc-card label > span,
+  .petugas-app-root .umkm-score small,
+  .petugas-app-root .umkm-main small,
+  .petugas-app-root .umkm-legal-mini span {
+    font-size: 12px !important;
+  }
+}
