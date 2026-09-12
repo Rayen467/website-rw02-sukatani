@@ -12,9 +12,11 @@ const kiriman = baca("src/halaman/kelola/TabKiriman.svelte");
 const angka = baca("src/halaman/kelola/TabAngka.svelte");
 const layanan = baca("src/halaman/kelola/TabLayanan.svelte");
 const profil = baca("src/halaman/kelola/TabProfil.svelte");
+const umkm = baca("src/halaman/kelola/TabUmkm.svelte");
 const lain = baca("src/halaman/kelola/TabLain.svelte");
 const kelola = baca("src/halaman/kelola/Kelola.svelte");
 const isi = baca("src/keadaan/isi.svelte.js");
+const nama = baca("src/inti/nama.js");
 const reservasi = baca("src/halaman/Reservasi.svelte");
 const gor = baca("src/halaman/GorNurani.svelte");
 
@@ -31,14 +33,14 @@ test("daftar role pengurus tidak bisa dilist oleh warga biasa", () => {
 test("semua koleksi yang dikelola Petugas mempunyai aturan eksplisit", () => {
   const koleksi = [
     "pengumuman", "galeri", "galeri_foto", "kas", "program",
-    "usaha", "usaha_foto", "konten", "pengurus_tampil", "batas_rt",
+    "usaha", "usaha_foto", "usaha_admin", "konten", "pengurus_tampil", "batas_rt",
     "tautan", "berkas", "berkas_isi", "jenis_surat", "fasilitas",
     "fasum", "rutin", "bansos", "bansos_penerima", "jadwal"
   ];
-  for (const nama of koleksi) {
+  for (const namaKoleksi of koleksi) {
     assert.ok(
-      rules.includes("match /" + nama + "/{"),
-      "Firestore Rules belum punya blok untuk koleksi " + nama
+      rules.includes("match /" + namaKoleksi + "/{"),
+      "Firestore Rules belum punya blok untuk koleksi " + namaKoleksi
     );
   }
 });
@@ -103,13 +105,33 @@ test("edit kas mempertahankan format tanggal lama", () => {
 });
 
 test("tab Petugas utama tetap menggunakan konstanta koleksi", () => {
-  for (const [nama, sumber] of [
+  for (const [namaTab, sumber] of [
     ["layanan", layanan],
     ["profil", profil],
+    ["umkm", umkm],
     ["tautan-polling", lain]
   ]) {
-    assert.match(sumber, /KOLEKSI|KONTEN/, nama + " harus memakai konstanta data");
+    assert.match(sumber, /KOLEKSI|KONTEN/, namaTab + " harus memakai konstanta data");
   }
+});
+
+test("pusat UMKM punya menu khusus, legalitas, sertifikat, dan action berikutnya", () => {
+  assert.match(kelola, /UMKM & legalitas/);
+  assert.match(kelola, /TabUmkm/);
+  assert.match(umkm, /KOLEKSI\.USAHA_ADMIN/);
+  assert.match(umkm, />NIB</);
+  assert.match(umkm, /Sertifikat Halal/);
+  assert.match(umkm, /SPP-IRT/);
+  assert.match(umkm, /BPOM MD\/ML/);
+  assert.match(umkm, /Action berikutnya/);
+  assert.match(umkm, /Isi saran action otomatis/);
+});
+
+test("data legalitas UMKM dipisah dari katalog publik dan hanya untuk Petugas", () => {
+  assert.match(nama, /USAHA_ADMIN:\s*"usaha_admin"/);
+  assert.match(nama, /KOLEKSI_PENGURUS[\s\S]*KOLEKSI\.USAHA_ADMIN/);
+  assert.match(isi, /usaha_admin:\s*null/);
+  assert.match(rules, /match \/usaha_admin\/\{slug\}[\s\S]*allow read, create, update, delete: if petugas\(\)/);
 });
 
 test("tab GOR tidak menghasilkan warning role tablist pada elemen nav", () => {
