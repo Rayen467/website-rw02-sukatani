@@ -2,14 +2,25 @@
   import { KOLEKSI } from "../../inti/nama.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { tambahIsi, simpanAlbum, hapusAlbum } from "../../sumber/data.js";
+  import { tambahIsi, simpanAlbum, hapusAlbum, ubahDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { tanggalHariIni } from "../../inti/format.js";
-  import { kecilkanFoto, SISI_SAMPUL, SISI_FOTO_LAYAR } from "../../inti/peramban.js";
+  import { kecilkanFoto, SISI_SAMPUL, SISI_FOTO_LAYAR, SISI_FOTO_PENUH } from "../../inti/peramban.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
 
-  let k = $state({ tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
+  let k = $state({
+    tipe: "pengumuman",
+    penting: false,
+    utama: false,
+    fotoUtama: "",
+    judul: "",
+    tglText: "",
+    tanggal: "",
+    ringkas: "",
+    isi: ""
+  });
   let g = $state({ judul: "", fn: "", jml: "" });
+  let berkasUtama = $state(null);
   /* Banyak foto sekaligus. Satu kegiatan kerja bakti biasanya belasan
      sampai dua puluhan foto; memaksa pengurus mengunggah satu-satu berarti
      tidak akan pernah diunggah sama sekali. */
@@ -17,13 +28,65 @@
   let kemajuan = $state("");
   let sibuk = $state("");
 
+  function aktif(nilai) {
+    return nilai === true || String(nilai || "").toLowerCase() === "true";
+  }
+
+  async function turunkanUtamaLama(kecualiId = "") {
+    const lama = (isi.pengumuman || []).filter((o) => o.id !== kecualiId && aktif(o.utama));
+    await Promise.all(lama.map((o) => ubahDokumen(KOLEKSI.PENGUMUMAN, o.id, { utama: "false" })));
+  }
+
+  async function ubahPengumuman(id, perubahan) {
+    if (aktif(perubahan.utama)) {
+      perubahan.penting = "true";
+      await turunkanUtamaLama(id);
+    }
+    await ubahDokumen(KOLEKSI.PENGUMUMAN, id, perubahan);
+  }
+
   async function terbitkan(e) {
     e.preventDefault();
     sibuk = "konten";
     try {
-      await tambahIsi(KOLEKSI.PENGUMUMAN, { ...k, tgl: k.tanggal || tanggalHariIni() });
-      beriTahu("Terbit. Sudah muncul di halaman Berita.");
-      k = { tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" };
+      if (k.utama && !berkasUtama) {
+        beriTahu("Pilih foto headline untuk pengumuman Utama.");
+        sibuk = "";
+        return;
+      }
+
+      let fotoUtama = "";
+      if (k.utama && berkasUtama) {
+        fotoUtama = await kecilkanFoto(berkasUtama, SISI_FOTO_PENUH);
+      }
+
+      const baru = await tambahIsi(KOLEKSI.PENGUMUMAN, {
+        ...k,
+        penting: k.utama ? true : k.penting,
+        utama: k.utama,
+        fotoUtama,
+        tgl: k.tanggal || tanggalHariIni()
+      });
+
+      if (k.utama) await turunkanUtamaLama(baru.id);
+
+      beriTahu(
+        k.utama
+          ? "Terbit sebagai Utama. Headline Beranda langsung diganti, pengumuman utama sebelumnya tetap tersimpan sebagai berita biasa."
+          : "Terbit. Sudah muncul di halaman Berita."
+      );
+      k = {
+        tipe: "pengumuman",
+        penting: false,
+        utama: false,
+        fotoUtama: "",
+        judul: "",
+        tglText: "",
+        tanggal: "",
+        ringkas: "",
+        isi: ""
+      };
+      berkasUtama = null;
       muatKoleksi(KOLEKSI.PENGUMUMAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
@@ -86,9 +149,44 @@
       <select id="k-tipe" bind:value={k.tipe}><option value="pengumuman">Pengumuman</option><option value="agenda">Agenda kegiatan</option></select>
     </div>
     <label class="centang">
-      <input type="checkbox" bind:checked={k.penting} />
-      <span><b>Tandai sebagai pengumuman penting</b><span class="petunjuk">Akan disorot khusus di Beranda dan diberi label Penting.</span></span>
+      <input
+        type="checkbox"
+        bind:checked={k.penting}
+        onchange={() => {
+          if (!k.penting) {
+            k.utama = false;
+            berkasUtama = null;
+          }
+        }}
+      />
+      <span><b>Tandai sebagai pengumuman penting</b><span class="petunjuk">Diberi label Penting dan tetap diprioritaskan sebagai informasi yang perlu diperhatikan warga.</span></span>
     </label>
+
+    {#if k.penting}
+      <label class="centang">
+        <input type="checkbox" bind:checked={k.utama} />
+        <span>
+          <b>Jadikan pengumuman Utama</b>
+          <span class="petunjuk">Hanya satu pengumuman Utama. Saat diterbitkan, ini langsung menjadi headline Beranda dan Utama sebelumnya turun menjadi berita biasa.</span>
+        </span>
+      </label>
+    {/if}
+
+    {#if k.utama}
+      <div class="isian">
+        <label for="k-foto-utama">Foto headline Utama</label>
+        <input
+          id="k-foto-utama"
+          type="file"
+          accept="image/*"
+          required
+          onchange={(e) => (berkasUtama = e.currentTarget.files?.[0] || null)}
+        />
+        <span class="petunjuk">Foto ini menggantikan gambar lama di kartu headline Beranda. Gunakan foto mendatar agar hasilnya rapi.</span>
+        {#if berkasUtama}<span class="petunjuk"><b>{berkasUtama.name}</b> dipilih.</span>{/if}
+      </div>
+    {/if}
+
     <div class="isian"><label for="k-judul">Judul</label><input id="k-judul" bind:value={k.judul} required placeholder="Kerja bakti bulanan blok C dan D" /></div>
     <div class="isian"><label for="k-tglText">Tanggal dan waktu (tulisan)</label><input id="k-tglText" bind:value={k.tglText} placeholder="14 September 2026 pukul 08.00" /></div>
     <div class="isian">
@@ -108,16 +206,24 @@
         koleksi={KOLEKSI.PENGUMUMAN}
         id={o.id}
         judul={o.judul}
-        baris={[o.ringkas || o.isi || "", (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " \u00B7 " + (o.tglText || o.tgl || "-")]}
+        baris={[
+          o.ringkas || o.isi || "",
+          (aktif(o.utama) ? "Utama · " : aktif(o.penting) ? "Penting · " : "") +
+            (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " · " + (o.tglText || o.tgl || "-")
+        ]}
         nilai={o}
         kolom={[
           { nama: "judul", label: "Judul" },
           { nama: "tipe", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "pengumuman", label: "Pengumuman" }, { nilai: "agenda", label: "Agenda" }] },
           { nama: "penting", label: "Sorotan penting", jenis: "pilih", pilihan: [{ nilai: "false", label: "Biasa" }, { nilai: "true", label: "Penting" }] },
+          { nama: "utama", label: "Headline Beranda", jenis: "pilih", pilihan: [{ nilai: "false", label: "Bukan Utama" }, { nilai: "true", label: "Utama" }] },
+          { nama: "fotoUtama", label: "Foto headline", jenis: "foto", petunjuk: "Dipakai saat pengumuman berstatus Utama." },
           { nama: "tglText", label: "Tanggal tampil" },
           { nama: "ringkas", label: "Ringkasan", jenis: "panjang" },
           { nama: "isi", label: "Isi lengkap", jenis: "panjang" }
         ]}
+        saatUbah={ubahPengumuman}
+        olahFoto={(file) => kecilkanFoto(file, SISI_FOTO_PENUH)}
       />
     {/each}
   {/if}
