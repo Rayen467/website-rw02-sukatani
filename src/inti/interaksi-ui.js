@@ -5,6 +5,14 @@ const MEDIA_HP = "(max-width: 680px)";
 const BATAS_TEKS_WEB = 14;
 const BATAS_TEKS_HP = 12;
 const TAG_FORM_TEKS = new Set(["INPUT", "TEXTAREA", "SELECT", "OPTION", "BUTTON"]);
+const FOTO_BERANDA = [
+  [/posyandu|balita|imunisasi|kesehatan/i, "./foto/kegiatan-posyandu.jpg"],
+  [/kerja bakti|gotong royong|kebersihan/i, "./foto/kegiatan-kerja-bakti.jpg"],
+  [/saluran|drainase|genangan|air/i, "./foto/kegiatan-saluran-air.jpg"],
+  [/cat|pengecatan|gapura/i, "./foto/kegiatan-pengecatan.jpg"],
+  [/kemerdekaan|17 agustus|lomba/i, "./foto/kegiatan-kemerdekaan.jpg"],
+  [/rapat|sosialisasi|peluncuran|portal|musyawarah/i, "./foto/kegiatan-rapat-warga.jpg"]
+];
 let sudahAktif = false;
 let rafTipografi = 0;
 let pengamatTipografi = null;
@@ -49,6 +57,38 @@ function sinkronFavorit() {
   });
 }
 
+function fotoBerandaUntuk(judul) {
+  const teks = String(judul || "");
+  return FOTO_BERANDA.find(([pola]) => pola.test(teks))?.[1] || "./foto/kegiatan-rapat-warga.jpg";
+}
+
+function sinkronFotoBeranda() {
+  const kartu = document.querySelector(".home-latest-main");
+  if (!kartu) return;
+
+  const judul = kartu.querySelector("h4")?.textContent?.trim() || "Pengumuman RW 02";
+  const sumber = fotoBerandaUntuk(judul);
+  let bingkai = kartu.querySelector(".home-latest-photo");
+
+  if (!bingkai) {
+    bingkai = document.createElement("figure");
+    bingkai.className = "home-latest-photo";
+    const gambar = document.createElement("img");
+    gambar.loading = "lazy";
+    gambar.decoding = "async";
+    bingkai.appendChild(gambar);
+
+    const baca = kartu.querySelector(".home-read");
+    if (baca) kartu.insertBefore(bingkai, baca);
+    else kartu.appendChild(bingkai);
+  }
+
+  const gambar = bingkai.querySelector("img");
+  if (!gambar) return;
+  if (gambar.getAttribute("src") !== sumber) gambar.setAttribute("src", sumber);
+  gambar.setAttribute("alt", `Dokumentasi ${judul}`);
+}
+
 function punyaTeksLangsung(elemen) {
   if (TAG_FORM_TEKS.has(elemen.tagName)) return true;
   return [...elemen.childNodes].some((node) =>
@@ -87,6 +127,7 @@ function jadwalkanBatasTipografi() {
   if (rafTipografi || typeof requestAnimationFrame === "undefined") return;
   rafTipografi = requestAnimationFrame(() => {
     rafTipografi = 0;
+    sinkronFotoBeranda();
     terapkanBatasTipografi();
   });
 }
@@ -155,7 +196,13 @@ export function aktifkanInteraksiUi() {
   if (sudahAktif || typeof document === "undefined") return;
   sudahAktif = true;
   document.addEventListener("click", tanganiKlik);
-  requestAnimationFrame(sinkronFavorit);
+  requestAnimationFrame(() => {
+    sinkronFavorit();
+    sinkronFotoBeranda();
+  });
   aktifkanBatasTipografi();
-  window.addEventListener("hashchange", () => requestAnimationFrame(sinkronFavorit));
+  window.addEventListener("hashchange", () => requestAnimationFrame(() => {
+    sinkronFavorit();
+    sinkronFotoBeranda();
+  }));
 }
