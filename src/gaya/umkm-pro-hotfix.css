@@ -1,0 +1,124 @@
+/* ===========================================================================
+ * UMKM PRO TOOLKIT — layout hotfix
+ * ===========================================================================
+ * Portal Petugas memakai sidebar tetap, jadi lebar konten nyata lebih kecil
+ * daripada lebar viewport. Layout awal UmkmBukti memakai kolom `auto` untuk
+ * kartu metrik; pada laptop 1366px kolom tersebut mengambil max-content dan
+ * menekan judul menjadi sangat sempit. Aturan ini mengunci sizing grid agar
+ * seluruh teks tetap terbaca dan tidak membuat overflow horizontal.
+ * ======================================================================== */
+
+.petugas-app-root .umkm-x,
+.petugas-app-root .pro-selector {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.petugas-app-root .umkm-x {
+  overflow: hidden !important;
+}
+
+.petugas-app-root .umkm-x-head {
+  width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(300px, 1fr) minmax(420px, 540px) !important;
+  align-items: start !important;
+}
+
+.petugas-app-root .umkm-x-head > div:first-child,
+.petugas-app-root .umkm-x-title > div,
+.petugas-app-root .vault-main,
+.petugas-app-root .qr-view > div {
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+.petugas-app-root .umkm-x-head h4,
+.petugas-app-root .umkm-x-head p,
+.petugas-app-root .umkm-x-title h5,
+.petugas-app-root .umkm-x-title p {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+.petugas-app-root .umkm-x-health {
+  width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.petugas-app-root .umkm-x-health article {
+  min-width: 0 !important;
+}
+
+.petugas-app-root .umkm-x-health small {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+}
+
+.petugas-app-root .umkm-x-grid,
+.petugas-app-root .umkm-x-form,
+.petugas-app-root .public-grid,
+.petugas-app-root .vault-item,
+.petugas-app-root .qr-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.petugas-app-root .umkm-x input,
+.petugas-app-root .umkm-x select,
+.petugas-app-root .umkm-x textarea,
+.petugas-app-root .pro-selector select {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Laptop 13–15 inci: sidebar mengurangi ruang kerja sekitar 230px. Susun
+   ringkasan di baris tersendiri sebelum teks mulai terjepit. */
+@media (max-width: 1500px) {
+  .petugas-app-root .umkm-x-head {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+
+  .petugas-app-root .umkm-x-health {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .petugas-app-root .umkm-x-head > div:first-child {
+    max-width: 820px !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  .petugas-app-root .umkm-x-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .petugas-app-root .qr-card {
+    display: block !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .petugas-app-root .umkm-x-health {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .petugas-app-root .umkm-x-form,
+  .petugas-app-root .public-grid,
+  .petugas-app-root .pro-selector {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .petugas-app-root .umkm-x-health {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
