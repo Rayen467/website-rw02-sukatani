@@ -4,1686 +4,223 @@
 
   let cari = $state("");
   let saring = $state("all");
+  let urut = $state("nama");
 
   const fallback = [
-    {
-      id: "",
-      nama: "Katering Harian Warga",
-      kat: "siapsaji",
-      katLabel: "Makanan siap saji",
-      ringkas: "Menu rumahan untuk kebutuhan keluarga, rapat, dan acara lingkungan.",
-      alamat: "RW 02 Sukatani",
-      jam: "06.00 – 20.00",
-      wa: "",
-      sampul: "./foto/usaha-katering-harian.jpg",
-      contoh: true
-    },
-    {
-      id: "",
-      nama: "Warung Sembako Warga",
-      kat: "retail",
-      katLabel: "Retail",
-      ringkas: "Kebutuhan harian warga dengan pilihan produk rumah tangga.",
-      alamat: "RW 02 Sukatani",
-      jam: "06.00 – 21.00",
-      wa: "",
-      sampul: "./foto/usaha-warung-sembako.jpg",
-      contoh: true
-    },
-    {
-      id: "",
-      nama: "Laundry Kiloan Warga",
-      kat: "jasa",
-      katLabel: "Jasa",
-      ringkas: "Cuci kiloan dan layanan setrika praktis untuk keluarga sekitar.",
-      alamat: "RW 02 Sukatani",
-      jam: "08.00 – 20.00",
-      wa: "",
-      sampul: "./foto/usaha-laundry-kiloan.jpg",
-      contoh: true
-    },
-    {
-      id: "",
-      nama: "Jahit & Permak Warga",
-      kat: "jasa",
-      katLabel: "Jasa",
-      ringkas: "Jasa jahit, permak pakaian, dan penyesuaian ukuran.",
-      alamat: "RW 02 Sukatani",
-      jam: "08.00 – 18.00",
-      wa: "",
-      sampul: "./foto/usaha-jahit-permak.jpg",
-      contoh: true
-    },
-    {
-      id: "",
-      nama: "Kue Basah Warga",
-      kat: "siapsaji",
-      katLabel: "Makanan siap saji",
-      ringkas: "Aneka kue basah rumahan untuk konsumsi keluarga dan acara.",
-      alamat: "RW 02 Sukatani",
-      jam: "06.00 – 17.00",
-      wa: "",
-      sampul: "./foto/usaha-kue-basah.jpg",
-      contoh: true
-    }
+    { id: "demo-katering", nama: "Katering Harian Warga", kat: "siapsaji", katLabel: "Makanan siap saji", ringkas: "Menu rumahan untuk keluarga, rapat, dan acara lingkungan.", panjang: "Nasi box\nKatering harian\nPesanan acara", alamat: "RW 02 Sukatani", jam: "06.00 – 20.00", wa: "", sampul: "./foto/usaha-katering-harian.jpg", contoh: true },
+    { id: "demo-sembako", nama: "Warung Sembako Warga", kat: "retail", katLabel: "Retail", ringkas: "Kebutuhan harian warga dengan pilihan produk rumah tangga.", panjang: "Sembako\nKebutuhan rumah tangga\nBelanja harian", alamat: "RW 02 Sukatani", jam: "06.00 – 21.00", wa: "", sampul: "./foto/usaha-warung-sembako.jpg", contoh: true },
+    { id: "demo-laundry", nama: "Laundry Kiloan Warga", kat: "jasa", katLabel: "Jasa", ringkas: "Cuci kiloan dan layanan setrika praktis untuk keluarga sekitar.", panjang: "Cuci kiloan\nSetrika\nLayanan harian", alamat: "RW 02 Sukatani", jam: "08.00 – 20.00", wa: "", sampul: "./foto/usaha-laundry-kiloan.jpg", contoh: true },
+    { id: "demo-jahit", nama: "Jahit & Permak Warga", kat: "jasa", katLabel: "Jasa", ringkas: "Jasa jahit, permak pakaian, dan penyesuaian ukuran.", panjang: "Permak pakaian\nJahit sederhana\nPenyesuaian ukuran", alamat: "RW 02 Sukatani", jam: "08.00 – 18.00", wa: "", sampul: "./foto/usaha-jahit-permak.jpg", contoh: true },
+    { id: "demo-kue", nama: "Kue Basah Warga", kat: "siapsaji", katLabel: "Makanan siap saji", ringkas: "Aneka kue basah rumahan untuk keluarga dan acara.", panjang: "Kue basah\nSnack box\nPesanan acara", alamat: "RW 02 Sukatani", jam: "06.00 – 17.00", wa: "", sampul: "./foto/usaha-kue-basah.jpg", contoh: true },
+    { id: "demo-keripik", nama: "Keripik & Sambal Rumahan", kat: "kemasan", katLabel: "Makanan kemasan", ringkas: "Camilan dan sambal rumahan dalam kemasan praktis.", panjang: "Keripik\nSambal botol\nPaket camilan", alamat: "RW 02 Sukatani", jam: "08.00 – 19.00", wa: "", sampul: "./foto/usaha-keripik-sambal.jpg", contoh: true }
   ];
 
-  const dataAsli = $derived(isi.usaha || []);
+  const dataAsli = $derived(Array.isArray(isi.usaha) ? isi.usaha : []);
   const semua = $derived(dataAsli.length ? dataAsli : fallback);
+  const kategori = $derived([{ nilai: "all", label: "Semua usaha" }, ...JENIS_USAHA]);
 
-  const kategori = $derived([
-    { nilai: "all", label: "Semua" },
-    ...JENIS_USAHA
-  ]);
-
-  const daftar = $derived(
-    semua.filter((u) => {
+  const daftar = $derived.by(() => {
+    const q = cari.trim().toLowerCase();
+    const hasil = semua.filter((u) => {
       const cocokKat = saring === "all" || u.kat === saring;
-      const q = cari.trim().toLowerCase();
-      const cocokCari =
-        !q ||
-        [u.nama, u.katLabel, u.ringkas, u.alamat]
-          .filter(Boolean)
-          .some((x) => String(x).toLowerCase().includes(q));
+      const cocokCari = !q || [u.nama, u.katLabel, u.ringkas, u.panjang, u.alamat]
+        .filter(Boolean)
+        .some((x) => String(x).toLowerCase().includes(q));
       return cocokKat && cocokCari;
-    })
-  );
+    });
+    return [...hasil].sort((a, b) => {
+      if (urut === "kategori") return String(a.katLabel || a.kat || "").localeCompare(String(b.katLabel || b.kat || ""), "id");
+      if (urut === "terbaru") return String(b.diperbarui || b.dibuat || b.id || "").localeCompare(String(a.diperbarui || a.dibuat || a.id || ""));
+      return String(a.nama || "").localeCompare(String(b.nama || ""), "id");
+    });
+  });
 
-  const jumlahKategori = $derived(
-    new Set(semua.map((u) => u.kat || u.katLabel).filter(Boolean)).size
-  );
+  const jumlahKategori = $derived(new Set(semua.map((u) => u.kat || u.katLabel).filter(Boolean)).size);
+  const unggulan = $derived(semua.slice(0, 3));
 
   function foto(u, i = 0) {
-    const cadangan = [
-      "./foto/usaha-katering-harian.jpg",
-      "./foto/usaha-warung-sembako.jpg",
-      "./foto/usaha-laundry-kiloan.jpg",
-      "./foto/usaha-jahit-permak.jpg",
-      "./foto/usaha-kue-basah.jpg",
-      "./foto/usaha-keripik-sambal.jpg"
-    ];
+    const cadangan = ["./foto/usaha-katering-harian.jpg", "./foto/usaha-warung-sembako.jpg", "./foto/usaha-laundry-kiloan.jpg", "./foto/usaha-jahit-permak.jpg", "./foto/usaha-kue-basah.jpg", "./foto/usaha-keripik-sambal.jpg"];
     return u?.sampul || u?.foto || cadangan[i % cadangan.length];
   }
 
   function hrefUsaha(u) {
-    return u?.id ? "#/umkm/" + u.id : "#/daftar-usaha";
+    return u?.contoh || !u?.id ? "#/daftar-usaha" : "#/umkm/" + u.id;
   }
 
   function hrefWa(u) {
     if (!u?.wa) return "";
     const n = String(u.wa).replace(/[^0-9]/g, "").replace(/^0/, "62");
-    return "https://wa.me/" + n;
+    return n ? "https://wa.me/" + n : "";
+  }
+
+  function produk(u) {
+    return String(u?.panjang || u?.produk || "").split(/\n|,|•/).map((x) => x.trim()).filter(Boolean).slice(0, 3);
+  }
+
+  function ikonKategori(nilai) {
+    if (nilai === "siapsaji") return "🍜";
+    if (nilai === "kemasan") return "🥡";
+    if (nilai === "jasa") return "🧰";
+    if (nilai === "retail") return "🛍";
+    return "⌂";
+  }
+
+  function jumlahDalamKategori(nilai) {
+    if (nilai === "all") return semua.length;
+    return semua.filter((u) => u.kat === nilai).length;
+  }
+
+  function pilihKategori(nilai) {
+    saring = nilai;
+    document.getElementById("direktori-umkm")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 </script>
 
-<div class="umkm-modern">
-  <section class="umkm-hero">
-    <div class="umkm-hero-lapis"></div>
-    <div class="umkm-wadah umkm-hero-grid">
-      <div class="umkm-hero-copy">
-        <p class="umkm-kicker"><span>❧</span> UMKM RW 02 SUKATANI</p>
-        <h1>Pusat UMKM Warga RW 02</h1>
-        <h2>Temukan, dukung, dan tumbuh bersama usaha lokal di lingkungan kita.</h2>
-        <p>
-          Belanja lebih dekat, dukung warga sendiri, temukan produk berkualitas,
-          dan bersama kita wujudkan lingkungan RW 02 yang lebih sejahtera.
-        </p>
+<div class="marketplace-umkm">
+  <section class="market-hero">
+    <div class="market-shell market-hero-grid">
+      <div class="market-hero-copy">
+        <span class="market-overline">DIREKTORI UMKM RW 02 SUKATANI</span>
+        <h1>Belanja dekat rumah.<br /><em>Dukung usaha tetangga.</em></h1>
+        <p>Temukan makanan, kebutuhan harian, dan jasa warga RW 02 dalam satu direktori yang cepat, rapi, dan mudah dihubungi.</p>
 
-        <div class="umkm-hero-aksi">
-          <a href="#direktori-umkm" class="umkm-btn utama">⌕ &nbsp; Cari Usaha Sekarang</a>
-          <a href="#/daftar-usaha" class="umkm-btn outline">Daftarkan UMKM Anda <span>→</span></a>
+        <label class="market-search-hero">
+          <span aria-hidden="true">⌕</span>
+          <input bind:value={cari} placeholder="Cari katering, laundry, sembako, jasa..." aria-label="Cari UMKM warga" />
+          <a href="#direktori-umkm">Cari</a>
+        </label>
+
+        <div class="market-hero-actions">
+          <a class="market-primary" href="#direktori-umkm">Jelajahi UMKM</a>
+          <a class="market-secondary" href="#/daftar-usaha">+ Daftarkan usaha</a>
         </div>
 
-        <div class="umkm-keunggulan">
-          <span><b>◉</b><small>Produk berkualitas<br />dari warga terpercaya</small></span>
-          <span><b>▣</b><small>Belanja lokal<br />untuk ekonomi kuat</small></span>
-          <span><b>✓</b><small>Layanan dekat rumah<br />lebih cepat & mudah</small></span>
-          <span><b>♣</b><small>Bersama membangun<br />RW 02 yang lebih maju</small></span>
+        <div class="market-trust">
+          <span><b>{dataAsli.length || semua.length}</b><small>{dataAsli.length ? "UMKM warga aktif" : "contoh usaha"}</small></span>
+          <span><b>{jumlahKategori}</b><small>kategori usaha</small></span>
+          <span><b>RW 02</b><small>fokus usaha lokal</small></span>
         </div>
       </div>
 
-      <div class="umkm-hero-visual" aria-hidden="true">
-        <div class="umkm-hero-orbit"></div>
-        <img src="./foto/usaha-warung-sembako.jpg" alt="" decoding="async" />
-        <blockquote>
-          <strong>“Dari warga,<br />untuk warga.”</strong>
-          <small>Belanja lokal · dukung usaha sekitar</small>
-        </blockquote>
+      <div class="market-hero-media" aria-label="Contoh usaha warga">
+        {#each unggulan as u, i}
+          <a class:utama={i === 0} class="market-hero-card" href={hrefUsaha(u)}>
+            <img src={foto(u, i)} alt={u.nama || "Usaha warga"} decoding="async" />
+            <span></span>
+            <div><small>{u.katLabel || "Usaha warga"}</small><strong>{u.nama}</strong></div>
+          </a>
+        {/each}
       </div>
     </div>
   </section>
 
-  <main class="umkm-wadah umkm-isi">
-    <section class="umkm-statistik">
-      <article><span class="stat-ikon">▰</span><div><strong>{dataAsli.length || 32}</strong><small>UMKM Terdaftar</small><em>{dataAsli.length ? "Data aktif warga" : "Contoh tampilan direktori"}</em></div></article>
-      <article><span class="stat-ikon">▦</span><div><strong>{jumlahKategori || 7}</strong><small>Kategori Usaha</small><em>Kuliner, jasa, retail, dll</em></div></article>
-      <article><span class="stat-ikon">♟</span><div><strong>5</strong><small>Usaha Baru</small><em>Bergabung bulan ini</em></div></article>
-      <article><span class="stat-ikon">★</span><div><strong>4.8/5</strong><small>Rating Kepuasan</small><em>Dari warga sekitar</em></div></article>
-      <article><span class="stat-ikon">◆</span><div><strong>12</strong><small>Promo Aktif</small><em>Penawaran menarik</em></div></article>
-      <article class="stat-quote"><span>“</span><div><strong>UMKM maju,<br />RW 02 semakin sejahtera.</strong><em>— Warga RW 02</em></div></article>
-    </section>
+  <main class="market-shell market-main">
+    {#if !dataAsli.length}
+      <div class="market-demo-note"><span>i</span><p><strong>Mode contoh.</strong> Kartu usaha di halaman ini adalah simulasi tampilan direktori dan akan otomatis diganti oleh data UMKM warga yang sudah disetujui Petugas.</p></div>
+    {/if}
 
-    <section class="umkm-filter" id="direktori-umkm">
-      <label class="umkm-cari">
-        <span>⌕</span>
-        <input bind:value={cari} placeholder="Cari nama usaha, produk, atau kategori..." />
-        <button type="button">Cari</button>
-      </label>
+    <section class="market-category-section" aria-labelledby="judul-kategori-umkm">
+      <div class="market-section-heading compact">
+        <div><span>Pilih kebutuhan</span><h2 id="judul-kategori-umkm">Mau cari apa hari ini?</h2></div>
+        <a href="#/daftar-usaha">Punya usaha? Daftar →</a>
+      </div>
 
-      <div class="umkm-kategori">
+      <div class="market-category-rail">
         {#each kategori as k}
-          <button
-            type="button"
-            class:aktif={saring === k.nilai}
-            onclick={() => (saring = k.nilai)}
-          >
-            {k.label}
+          <button type="button" class:aktif={saring === k.nilai} onclick={() => pilihKategori(k.nilai)}>
+            <span class="market-category-icon">{ikonKategori(k.nilai)}</span>
+            <span class="market-category-copy"><strong>{k.label}</strong><small>{jumlahDalamKategori(k.nilai)} usaha</small></span>
+            <span class="market-category-arrow">›</span>
           </button>
         {/each}
       </div>
     </section>
 
-    <section class="umkm-pilihan">
-      <div class="umkm-judul-row">
-        <div>
-          <span class="judul-bintang">★</span>
-          <div><h2>UMKM Pilihan Warga</h2><p>Rekomendasi usaha lokal di RW 02.</p></div>
+    <section class="market-directory" id="direktori-umkm">
+      <div class="market-directory-toolbar">
+        <div class="market-section-heading">
+          <span>Direktori warga</span>
+          <h2>{saring === "all" ? "Semua UMKM" : kategori.find((k) => k.nilai === saring)?.label || "UMKM"}</h2>
+          <p>{daftar.length} usaha ditemukan{cari ? ` untuk “${cari}”` : ""}.</p>
         </div>
-        <a href="#/umkm">Lihat Semua UMKM <span>→</span></a>
+
+        <div class="market-tools">
+          <label class="market-search-inline"><span>⌕</span><input bind:value={cari} placeholder="Cari usaha atau produk" aria-label="Cari usaha atau produk" /></label>
+          <label class="market-sort"><span>Urutkan</span><select bind:value={urut}><option value="nama">Nama A–Z</option><option value="kategori">Kategori</option><option value="terbaru">Terbaru</option></select></label>
+        </div>
+      </div>
+
+      <div class="market-filter-pills" aria-label="Filter kategori UMKM">
+        {#each kategori as k}<button type="button" class:aktif={saring === k.nilai} onclick={() => (saring = k.nilai)}>{k.label}</button>{/each}
       </div>
 
       {#if daftar.length}
-        <div class="umkm-card-grid">
-          {#each daftar.slice(0, 5) as u, i}
-            <article class="umkm-card">
-              <a class="umkm-card-foto" href={hrefUsaha(u)}>
-                <img src={foto(u, i)} alt="" decoding="async" />
-                <span class="umkm-chip">{u.katLabel || "Usaha Warga"}</span>
-                <button type="button" aria-label="Simpan usaha">♡</button>
+        <div class="market-grid">
+          {#each daftar as u, i}
+            <article class="market-card">
+              <a class="umkm-card-foto market-card-media" href={hrefUsaha(u)}>
+                <img src={foto(u, i)} alt={u.nama || "Usaha warga RW 02"} loading={i > 3 ? "lazy" : "eager"} decoding="async" />
+                <div class="market-card-topline"><span class="market-chip">{u.katLabel || "Usaha warga"}</span>{#if u.contoh}<span class="market-chip demo">Contoh</span>{/if}</div>
+                <button type="button" aria-label="Simpan usaha" title="Simpan usaha">♡</button>
               </a>
-              <div class="umkm-card-body">
-                <h3><a href={hrefUsaha(u)}>{u.nama}</a></h3>
-                <p>{u.ringkas || "Usaha warga RW 02 Sukatani."}</p>
-                <div class="umkm-card-info">
-                  <span>● {u.alamat || "RW 02 Sukatani"}</span>
-                  <span class="rating">★ {(4.6 + (i % 4) * .1).toFixed(1)}</span>
-                </div>
-                <div class="umkm-card-info">
-                  <span class="buka">● Buka · {u.jam || "08.00 – 20.00"}</span>
-                </div>
-                <div class="umkm-card-aksi">
-                  <a href={hrefUsaha(u)}>Lihat Detail</a>
-                  {#if hrefWa(u)}
-                    <a class="wa" href={hrefWa(u)} target="_blank" rel="noopener noreferrer">◉ Hubungi WA</a>
-                  {:else}
-                    <a class="wa" href="#/daftar-usaha">◉ Info Kontak</a>
-                  {/if}
+
+              <div class="market-card-body">
+                <div class="market-card-title"><div><h3><a href={hrefUsaha(u)}>{u.nama || "UMKM Warga"}</a></h3><p>{u.ringkas || "Usaha warga RW 02 Sukatani."}</p></div></div>
+                {#if produk(u).length}<div class="market-product-tags">{#each produk(u) as p}<span>{p}</span>{/each}</div>{/if}
+                <div class="market-meta"><span><i>⌖</i>{u.alamat || "RW 02 Sukatani"}</span><span><i>◷</i>{u.jam || "Jam layanan belum dicantumkan"}</span></div>
+                <div class="market-card-actions">
+                  <a class="detail" href={hrefUsaha(u)}>Lihat profil</a>
+                  {#if hrefWa(u)}<a class="chat" href={hrefWa(u)} target="_blank" rel="noopener noreferrer">Chat WhatsApp</a>{:else if !u.contoh}<a class="chat muted" href={hrefUsaha(u)}>Lihat kontak</a>{:else}<a class="chat muted" href="#/daftar-usaha">Contoh tampilan</a>{/if}
                 </div>
               </div>
             </article>
           {/each}
         </div>
       {:else}
-        <div class="umkm-kosong">
-          <strong>Belum ada usaha yang cocok.</strong>
-          <p>Coba kata kunci atau kategori lain.</p>
-        </div>
-      {/if}
-
-      {#if !dataAsli.length}
-        <p class="umkm-catatan-demo">Tampilan usaha di atas adalah contoh visual. Data usaha warga asli akan otomatis menggantikannya setelah disetujui pengurus.</p>
+        <div class="market-empty"><span>⌕</span><h3>Belum menemukan usaha yang cocok</h3><p>Coba ganti kata kunci atau pilih kategori lain.</p><button type="button" onclick={() => { cari = ""; saring = "all"; }}>Reset pencarian</button></div>
       {/if}
     </section>
 
-    <section class="umkm-highlight-grid">
-      <article class="umkm-mini-panel terlaris">
-        <div class="mini-head"><span>🏆</span><div><h3>Usaha Terlaris</h3><p>Paling banyak dicari warga bulan ini</p></div><a href="#/umkm">Lihat Semua →</a></div>
-        <div class="mini-usaha-row">
-          {#each semua.slice(0, 3) as u, i}
-            <a href={hrefUsaha(u)}>
-              <img src={foto(u, i)} alt="" decoding="async" />
-              <strong>{u.nama}</strong>
-              <small>● {124 - i * 22} pesanan</small>
-            </a>
-          {/each}
-        </div>
-      </article>
-
-      <article class="umkm-mini-panel promo">
-        <div class="mini-head"><span>◆</span><div><h3>Promo Warga</h3><p>Dapatkan penawaran menarik dari UMKM RW 02</p></div></div>
-        <div class="promo-box">
-          <img src="./foto/usaha-kue-basah.jpg" alt="" decoding="async" />
-          <div><span>PROMO</span><h3>Diskon 20%</h3><p>Promo pilihan UMKM warga sampai akhir bulan.</p></div>
-        </div>
-      </article>
-
-      <article class="umkm-mini-panel baru">
-        <div class="mini-head"><span>♟</span><div><h3>Baru Bergabung</h3><p>Selamat datang UMKM baru di RW 02</p></div><a href="#/umkm">Lihat Semua →</a></div>
-        <div class="mini-usaha-row compact">
-          {#each semua.slice(-3) as u, i}
-            <a href={hrefUsaha(u)}>
-              <img src={foto(u, i + 2)} alt="" decoding="async" />
-              <strong>{u.nama}</strong>
-              <small>{u.katLabel || "Usaha warga"}</small>
-            </a>
-          {/each}
-        </div>
-      </article>
-
-      <article class="umkm-mini-panel dekat">
-        <div class="mini-head"><span>⌂</span><div><h3>Rekomendasi Dekat Anda</h3><p>Usaha terdekat dari lokasi Anda</p></div><a href="#peta-umkm">Lihat Semua →</a></div>
-        <div class="mini-usaha-row compact">
-          {#each semua.slice(0, 3) as u, i}
-            <a href={hrefUsaha(u)}>
-              <img src={foto(u, i + 3)} alt="" decoding="async" />
-              <strong>{u.nama}</strong>
-              <small>● {500 + i * 250} m</small>
-            </a>
-          {/each}
-        </div>
-      </article>
-    </section>
-
-    <section class="umkm-panduan-daftar">
-      <article class="umkm-panduan">
-        <div class="umkm-judul-row sederhana">
-          <div><span class="judul-gear">✿</span><div><h2>Cara Menggunakan Direktori UMKM</h2><p>Mudah, cepat, dan praktis!</p></div></div>
-        </div>
-        <div class="panduan-grid">
-          <div><b>1</b><span>⌕</span><h3>Cari Usaha</h3><p>Gunakan pencarian atau pilih kategori yang dibutuhkan.</p></div>
-          <div><b>2</b><span>▣</span><h3>Lihat Detail</h3><p>Baca informasi produk, lokasi, jam buka, dan layanan.</p></div>
-          <div><b>3</b><span>◉</span><h3>Hubungi Penjual</h3><p>Hubungi langsung melalui WhatsApp untuk bertanya atau memesan.</p></div>
-          <div><b>4</b><span>♥</span><h3>Dukung Bersama</h3><p>Belanja dari UMKM warga berarti ikut membangun RW 02.</p></div>
-        </div>
-      </article>
-
-      <article class="umkm-daftar-cta">
-        <img src="./foto/usaha-warung-sembako.jpg" alt="" decoding="async" />
-        <div class="cta-lapis"></div>
-        <div class="cta-copy">
-          <p>Punya usaha di RW 02?</p>
-          <h2>Daftarkan UMKM Anda Sekarang!</h2>
-          <ul>
-            <li>✓ Gratis tanpa biaya</li>
-            <li>✓ Mudah dan cepat</li>
-            <li>✓ Promosi di website RW 02</li>
-            <li>✓ Menjangkau lebih banyak warga</li>
-          </ul>
-          <a href="#/daftar-usaha">Daftar UMKM Gratis →</a>
-        </div>
-        <blockquote>“Usaha kecil,<br />langkah besar<br />untuk RW 02.”</blockquote>
-      </article>
-    </section>
-
-    <section class="umkm-info-grid">
-      <article class="info-panel artikel">
-        <div class="info-head"><span>▤</span><div><h3>Artikel & Tips UMKM</h3><p>Informasi, inspirasi, dan tips untuk pelaku usaha.</p></div><a href="#/berita">Lihat Semua →</a></div>
-        <div class="artikel-grid">
-          <a href="#/berita"><img src="./foto/usaha-jahit-permak.jpg" alt="" /><small>5 September 2026</small><strong>Strategi Digital Marketing untuk UMKM Lokal</strong></a>
-          <a href="#/berita"><img src="./foto/usaha-katering-harian.jpg" alt="" /><small>28 Agustus 2026</small><strong>Tips Mengembangkan Usaha Rumahan</strong></a>
-          <a href="#/berita"><img src="./foto/usaha-laundry-kiloan.jpg" alt="" /><small>15 Agustus 2026</small><strong>Kisah Sukses UMKM Warga RW 02</strong></a>
-        </div>
-      </article>
-
-      <article class="info-panel agenda">
-        <div class="info-head"><span>▦</span><div><h3>Agenda & Event UMKM</h3><p>Ikuti event menarik kegiatan UMKM warga.</p></div><a href="#/berita">Lihat Semua →</a></div>
-        <div class="agenda-event">
-          <div><time><b>14</b><small>SEP<br />2026</small></time><span><strong>Bazar UMKM RW 02</strong><p>◉ 08.00 – 16.00 WIB<br />● Lapangan RW 02</p></span></div>
-          <div><time><b>12</b><small>OKT<br />2026</small></time><span><strong>Pelatihan Digital Marketing untuk UMKM</strong><p>◉ 09.00 – 12.00 WIB<br />● Aula RW 02</p></span></div>
-        </div>
-      </article>
-
-      <article class="info-panel testimoni">
-        <div class="info-head"><span>♟</span><div><h3>Testimoni Warga</h3><p>Apa kata mereka tentang UMKM RW 02?</p></div></div>
-        <div class="testi-list">
-          <div><span class="avatar">SR</span><p><strong>Siti Rahmawati</strong><b>★★★★★</b><small>“UMKM-nya enak, harga terjangkau, penjualnya ramah.”</small></p></div>
-          <div><span class="avatar">BS</span><p><strong>Budi Santoso</strong><b>★★★★★</b><small>“Pelayanan cepat dan kualitas produknya bagus.”</small></p></div>
-          <div><span class="avatar">AL</span><p><strong>Ani Lestari</strong><b>★★★★★</b><small>“Produk kerajinannya bagus dan unik.”</small></p></div>
-        </div>
-      </article>
-
-      <aside class="info-panel top-kategori">
-        <div class="info-head"><span>◉</span><div><h3>Top Kategori</h3><p>Kategori usaha paling dicari</p></div></div>
-        <ol>
-          <li><span>◉</span>Makanan siap saji <b>12</b></li>
-          <li><span>◉</span>Jasa <b>7</b></li>
-          <li><span>◉</span>Retail <b>5</b></li>
-          <li><span>◉</span>Kerajinan <b>4</b></li>
-          <li><span>◉</span>Tanaman <b>3</b></li>
-          <li><span>◉</span>Rumahan <b>3</b></li>
-        </ol>
-      </aside>
-    </section>
-
-    <section class="umkm-peta" id="peta-umkm">
-      <div class="peta-info">
-        <div class="info-head"><span>●</span><div><h3>Lokasi & Peta UMKM</h3><p>Temukan usaha warga di sekitar Anda.</p></div></div>
-        <ul>
-          <li>⌖ Lihat lokasi semua UMKM di peta</li>
-          <li>⌕ Klik pin untuk melihat detail usaha</li>
-          <li>♟ Temukan usaha terdekat dari lokasi Anda</li>
-          <li>➜ Rencanakan kunjungan dengan mudah</li>
-        </ul>
-        <a href="https://www.google.com/maps/search/?api=1&query=Permai+Sukatani+Rajeg" target="_blank" rel="noopener noreferrer">Buka di Google Maps →</a>
+    <section class="market-benefits">
+      <div class="market-benefit-main"><span class="market-overline dark">KENAPA BELANJA LOKAL?</span><h2>Satu transaksi kecil bisa berputar kembali ke lingkungan sendiri.</h2><p>Direktori ini dibuat untuk mempertemukan kebutuhan warga dengan usaha yang memang berada di sekitar RW 02—tanpa biaya komisi dari website RW.</p><a href="#/daftar-usaha">Daftarkan UMKM Anda →</a></div>
+      <div class="market-benefit-list">
+        <article><span>01</span><div><strong>Lebih dekat</strong><p>Mudah menemukan usaha sekitar dan menghubungi pemiliknya langsung.</p></div></article>
+        <article><span>02</span><div><strong>Lebih transparan</strong><p>Profil usaha, produk, jam layanan, dan kontak disajikan ringkas dalam satu tempat.</p></div></article>
+        <article><span>03</span><div><strong>Lebih berdampak</strong><p>Belanja dari tetangga ikut membantu perputaran ekonomi warga.</p></div></article>
       </div>
+    </section>
 
-      <div class="peta-visual" aria-hidden="true">
-        <div class="map-grid"></div>
-        <span class="pin p1">●</span><span class="pin p2">●</span><span class="pin p3">●</span><span class="pin p4">●</span><span class="pin p5">●</span>
-        <div class="map-card"><strong>UMKM Warga RW 02</strong><small>Permai Sukatani · Rajeg</small></div>
-      </div>
-
-      <blockquote class="peta-quote">“Satu peta,<br />banyak cerita<br />UMKM kita.”</blockquote>
+    <section class="market-bottom-grid">
+      <article class="market-register-card"><div><span>UNTUK PELAKU USAHA</span><h2>Punya usaha di RW 02?</h2><p>Daftarkan profil usaha agar warga lebih mudah menemukan produk atau layanan Anda.</p><a href="#/daftar-usaha">Daftarkan UMKM gratis</a></div><img src="./foto/usaha-warung-sembako.jpg" alt="Warung usaha warga" decoding="async" /></article>
+      <article class="market-map-card"><div class="market-map-grid" aria-hidden="true"></div><div><span>LOKASI USAHA</span><h2>Cari UMKM di sekitar Sukatani</h2><p>Buka peta untuk melihat kawasan RW 02 dan titik layanan yang dicantumkan pemilik usaha.</p><a href="https://www.google.com/maps/search/?api=1&query=Permai+Sukatani+Rajeg" target="_blank" rel="noopener noreferrer">Buka Google Maps ↗</a></div></article>
     </section>
   </main>
 </div>
 
 <style>
-  .umkm-modern {
-    --u-bg: #043c34;
-    --u-panel: #075047;
-    --u-panel-2: #0a5d52;
-    --u-line: rgba(131,231,195,.22);
-    --u-text: #eefcf7;
-    --u-muted: #b7d8ce;
-    --u-green: #18d7a2;
-    --u-green-2: #60efc6;
-    --u-paper: #f7faf7;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-top: -32px;
-    margin-bottom: -64px;
-    overflow: hidden;
-    color: var(--u-text);
-    background:
-      radial-gradient(circle at 8% 14%, rgba(34,211,160,.09), transparent 22%),
-      radial-gradient(circle at 92% 45%, rgba(34,211,160,.07), transparent 24%),
-      #033a32;
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-  }
-
-  .umkm-wadah {
-    width: min(1180px, calc(100% - 40px));
-    margin-inline: auto;
-  }
-
-  .umkm-hero {
-    position: relative;
-    min-height: 365px;
-    background:
-      radial-gradient(circle at 73% 36%, rgba(40,220,166,.12), transparent 22%),
-      linear-gradient(135deg, #06483d, #073c35);
-  }
-
-  .umkm-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: .18;
-    background:
-      radial-gradient(circle at 18% 22%, #1b8e71 0 2px, transparent 3px) 0 0 / 28px 28px,
-      radial-gradient(circle at 80% 72%, #0d765e 0 1px, transparent 2px) 0 0 / 22px 22px;
-  }
-
-  .umkm-hero-lapis {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(3,51,43,.98) 0%, rgba(4,61,51,.90) 48%, rgba(5,56,48,.46) 72%, rgba(2,46,39,.72));
-  }
-
-  .umkm-hero-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1.02fr) minmax(360px, .98fr);
-    gap: 28px;
-    align-items: center;
-    min-height: 365px;
-    padding: 42px 0 32px;
-  }
-
-  .umkm-kicker {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 9px;
-    color: #74f1cc;
-    font-size: 8.5px;
-    font-weight: 800;
-    letter-spacing: .06em;
-  }
-
-  .umkm-kicker span {
-    font-size: 25px;
-  }
-
-  .umkm-hero h1 {
-    max-width: 15ch;
-    margin: 0;
-    color: #fff;
-    font-family: Georgia, serif;
-    font-size: clamp(39px, 4.5vw, 58px);
-    line-height: .95;
-    letter-spacing: -.045em;
-  }
-
-  .umkm-hero h2 {
-    max-width: 42ch;
-    margin: 6px 0 0;
-    color: #7ff0cf;
-    font-size: 15px;
-    line-height: 1.22;
-  }
-
-  .umkm-hero-copy > p:last-of-type {
-    max-width: 60ch;
-    margin: 8px 0 0;
-    color: rgba(239,253,247,.88);
-    font-size: 10.5px;
-    line-height: 1.5;
-  }
-
-  .umkm-hero-aksi {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
-
-  .umkm-btn {
-    min-height: 39px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    padding: 8px 15px;
-    border-radius: 9px;
-    font-size: 9px;
-    font-weight: 800;
-    text-decoration: none;
-  }
-
-  .umkm-btn.utama {
-    color: #063d31;
-    background: linear-gradient(180deg, #63f4c8, #23d6a2);
-    box-shadow: 0 12px 24px -17px rgba(58,240,187,.65);
-  }
-
-  .umkm-btn.outline {
-    color: #fff;
-    border: 1px solid rgba(116,241,204,.65);
-    background: rgba(2,46,39,.42);
-  }
-
-  .umkm-keunggulan {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 15px;
-  }
-
-  .umkm-keunggulan > span {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: 30px minmax(0, 1fr);
-    gap: 7px;
-    align-items: center;
-  }
-
-  .umkm-keunggulan b {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: #064739;
-    background: #4ee4b9;
-    font-size: 12px;
-  }
-
-  .umkm-keunggulan small {
-    color: rgba(239,253,247,.86);
-    font-size: 6.3px;
-    line-height: 1.35;
-  }
-
-  .umkm-hero-visual {
-    position: relative;
-    min-height: 285px;
-    align-self: stretch;
-    overflow: hidden;
-    border-radius: 0 0 0 70px;
-  }
-
-  .umkm-hero-visual > img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(.93) contrast(1.02);
-  }
-
-  .umkm-hero-visual::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(3,57,47,.55), transparent 38%, rgba(3,41,34,.18));
-  }
-
-  .umkm-hero-orbit {
-    position: absolute;
-    z-index: 2;
-    left: -36px;
-    top: 50%;
-    width: 105px;
-    height: 105px;
-    border: 1px solid rgba(104,242,204,.34);
-    border-radius: 50%;
-    transform: translateY(-50%);
-  }
-
-  .umkm-hero-visual blockquote {
-    position: absolute;
-    z-index: 3;
-    right: 15px;
-    bottom: 14px;
-    margin: 0;
-    max-width: 170px;
-    padding: 10px 12px;
-    border: 1px solid rgba(102,240,201,.32);
-    border-radius: 9px;
-    background: rgba(3,48,40,.58);
-    backdrop-filter: blur(7px);
-  }
-
-  .umkm-hero-visual blockquote strong,
-  .umkm-hero-visual blockquote small { display: block; }
-
-  .umkm-hero-visual blockquote strong {
-    color: #fff;
-    font-family: Georgia, serif;
-    font-size: 15px;
-    font-style: italic;
-    line-height: 1.08;
-  }
-
-  .umkm-hero-visual blockquote small {
-    margin-top: 5px;
-    color: #bfe4d9;
-    font-size: 6.3px;
-  }
-
-  .umkm-isi {
-    padding: 10px 0 48px;
-  }
-
-  .umkm-statistik {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 8px;
-    padding: 10px;
-    border: 1px solid var(--u-line);
-    border-radius: 10px;
-    background: rgba(2,53,45,.62);
-  }
-
-  .umkm-statistik article {
-    min-width: 0;
-    min-height: 61px;
-    display: grid;
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 8px;
-    align-items: center;
-    padding: 7px 8px;
-    border: 1px solid var(--u-line);
-    border-radius: 8px;
-    background: linear-gradient(180deg, rgba(13,101,85,.86), rgba(7,77,67,.72));
-  }
-
-  .stat-ikon {
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    color: #073e34;
-    background: #66ebc4;
-    font-size: 16px;
-    font-weight: 900;
-  }
-
-  .umkm-statistik strong,
-  .umkm-statistik small,
-  .umkm-statistik em { display: block; }
-
-  .umkm-statistik strong {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1;
-  }
-
-  .umkm-statistik small {
-    margin-top: 2px;
-    color: #f3fffb;
-    font-size: 7px;
-    font-weight: 700;
-  }
-
-  .umkm-statistik em {
-    margin-top: 2px;
-    color: #a8d7ca;
-    font-size: 5.4px;
-    font-style: normal;
-  }
-
-  .umkm-statistik .stat-quote {
-    grid-template-columns: 30px 1fr;
-    background: linear-gradient(180deg, rgba(6,77,66,.78), rgba(4,63,54,.66));
-  }
-
-  .stat-quote > span {
-    color: #77e7c8;
-    font-family: Georgia, serif;
-    font-size: 28px;
-    line-height: .8;
-  }
-
-  .stat-quote strong {
-    font-family: Georgia, serif;
-    font-size: 9px;
-    font-style: italic;
-    line-height: 1.2;
-  }
-
-  .umkm-filter {
-    display: grid;
-    grid-template-columns: 320px minmax(0, 1fr);
-    gap: 8px;
-    align-items: center;
-    margin-top: 9px;
-  }
-
-  .umkm-cari {
-    height: 38px;
-    display: grid;
-    grid-template-columns: 26px minmax(0, 1fr) 52px;
-    align-items: center;
-    padding: 3px 4px 3px 8px;
-    border-radius: 8px;
-    background: #fff;
-  }
-
-  .umkm-cari > span {
-    color: #245348;
-    font-size: 16px;
-  }
-
-  .umkm-cari input {
-    min-width: 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: #26443d;
-    font: inherit;
-    font-size: 8px;
-  }
-
-  .umkm-cari button {
-    height: 30px;
-    border: 0;
-    border-radius: 7px;
-    color: #064839;
-    background: #4ce5b7;
-    font-size: 7.5px;
-    font-weight: 800;
-  }
-
-  .umkm-kategori {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .umkm-kategori::-webkit-scrollbar { display: none; }
-
-  .umkm-kategori button {
-    min-height: 34px;
-    flex: 0 0 auto;
-    padding: 6px 11px;
-    border: 1px solid var(--u-line);
-    border-radius: 7px;
-    color: #d7eee7;
-    background: rgba(5,68,59,.72);
-    font-size: 6.7px;
-    cursor: pointer;
-  }
-
-  .umkm-kategori button.aktif {
-    color: #073e32;
-    border-color: #52e9bc;
-    background: #5decc2;
-    font-weight: 800;
-  }
-
-  .umkm-pilihan {
-    margin-top: 11px;
-  }
-
-  .umkm-judul-row,
-  .mini-head,
-  .info-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .umkm-judul-row > div,
-  .mini-head > div,
-  .info-head > div {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .umkm-judul-row h2,
-  .mini-head h3,
-  .info-head h3 {
-    margin: 0;
-    color: #fff;
-  }
-
-  .umkm-judul-row h2 {
-    font-family: Georgia, serif;
-    font-size: 18px;
-  }
-
-  .umkm-judul-row p,
-  .mini-head p,
-  .info-head p {
-    margin: 2px 0 0;
-    color: #afd5ca;
-    font-size: 6.2px;
-  }
-
-  .umkm-judul-row > a,
-  .mini-head > a,
-  .info-head > a {
-    color: #68e8c2;
-    font-size: 6.5px;
-    font-weight: 700;
-    white-space: nowrap;
-    text-decoration: none;
-  }
-
-  .judul-bintang,
-  .judul-gear {
-    font-size: 23px;
-  }
-
-  .judul-bintang { color: #ffc94a; }
-  .judul-gear { color: #31d3a5; }
-
-  .umkm-card-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 7px;
-    margin-top: 7px;
-  }
-
-  .umkm-card {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid rgba(93,235,193,.30);
-    border-radius: 8px;
-    background: linear-gradient(180deg, #07564b, #06493f);
-    box-shadow: 0 13px 25px -22px rgba(0,0,0,.5);
-  }
-
-  .umkm-card-foto {
-    position: relative;
-    height: 112px;
-    display: block;
-    overflow: hidden;
-  }
-
-  .umkm-card-foto img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .umkm-chip {
-    position: absolute;
-    left: 7px;
-    bottom: 7px;
-    padding: 3px 6px;
-    border-radius: 999px;
-    color: #0a4a3a;
-    background: rgba(255,255,255,.88);
-    font-size: 5.5px;
-    font-weight: 800;
-  }
-
-  .umkm-card-foto button {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 25px;
-    height: 25px;
-    border: 1px solid rgba(255,255,255,.65);
-    border-radius: 7px;
-    color: #fff;
-    background: rgba(4,48,40,.62);
-    font-size: 13px;
-  }
-
-  .umkm-card-body {
-    padding: 8px;
-  }
-
-  .umkm-card h3 {
-    margin: 0;
-    color: #fff;
-    font-size: 10px;
-  }
-
-  .umkm-card h3 a { color: inherit; text-decoration: none; }
-
-  .umkm-card-body > p {
-    min-height: 32px;
-    margin: 4px 0 6px;
-    color: #bcded5;
-    font-size: 6.3px;
-    line-height: 1.4;
-  }
-
-  .umkm-card-info {
-    display: flex;
-    justify-content: space-between;
-    gap: 5px;
-    margin-top: 4px;
-    color: #c4e3da;
-    font-size: 5.6px;
-  }
-
-  .umkm-card-info .rating { color: #ffd25d; }
-  .umkm-card-info .buka { color: #74e3c2; }
-
-  .umkm-card-aksi {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
-    margin-top: 7px;
-  }
-
-  .umkm-card-aksi a {
-    min-height: 29px;
-    display: grid;
-    place-items: center;
-    padding: 5px;
-    border: 1px solid rgba(104,232,194,.36);
-    border-radius: 6px;
-    color: #fff;
-    background: rgba(3,61,52,.68);
-    font-size: 6px;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .umkm-card-aksi a.wa {
-    color: #073f32;
-    border: 0;
-    background: #5aebc0;
-  }
-
-  .umkm-catatan-demo {
-    margin: 7px 0 0;
-    color: #8ebfb1;
-    font-size: 6.5px;
-    text-align: right;
-  }
-
-  .umkm-kosong {
-    margin-top: 8px;
-    padding: 20px;
-    border: 1px solid var(--u-line);
-    border-radius: 8px;
-    color: #cde7e0;
-    background: rgba(5,67,58,.48);
-  }
-
-  .umkm-kosong p { margin: 4px 0 0; font-size: 8px; }
-
-  .umkm-highlight-grid {
-    display: grid;
-    grid-template-columns: 1.15fr 1.1fr 1fr 1.05fr;
-    gap: 7px;
-    margin-top: 9px;
-  }
-
-  .umkm-mini-panel {
-    min-width: 0;
-    padding: 7px;
-    border: 1px solid var(--u-line);
-    border-radius: 8px;
-    background: rgba(5,73,63,.76);
-  }
-
-  .mini-head {
-    min-height: 26px;
-  }
-
-  .mini-head > span {
-    font-size: 16px;
-  }
-
-  .mini-head h3 {
-    font-size: 8px;
-  }
-
-  .mini-head > div {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .mini-usaha-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    margin-top: 6px;
-  }
-
-  .mini-usaha-row a {
-    min-width: 0;
-    color: #fff;
-    text-decoration: none;
-  }
-
-  .mini-usaha-row img {
-    width: 100%;
-    height: 48px;
-    border-radius: 5px;
-    object-fit: cover;
-  }
-
-  .mini-usaha-row strong,
-  .mini-usaha-row small { display: block; }
-
-  .mini-usaha-row strong {
-    margin-top: 3px;
-    overflow: hidden;
-    color: #fff;
-    font-size: 5.7px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .mini-usaha-row small {
-    margin-top: 2px;
-    color: #89d7c1;
-    font-size: 4.8px;
-  }
-
-  .promo-box {
-    display: grid;
-    grid-template-columns: 42% 1fr;
-    gap: 8px;
-    align-items: center;
-    margin-top: 6px;
-    padding: 5px;
-    border-radius: 6px;
-    background: rgba(16,104,88,.64);
-  }
-
-  .promo-box img {
-    width: 100%;
-    height: 69px;
-    border-radius: 5px;
-    object-fit: cover;
-  }
-
-  .promo-box span {
-    display: inline-flex;
-    padding: 3px 6px;
-    border-radius: 999px;
-    color: #fff;
-    background: #ff476a;
-    font-size: 5px;
-    font-weight: 800;
-    transform: rotate(-7deg);
-  }
-
-  .promo-box h3 {
-    margin: 5px 0 2px;
-    color: #fff;
-    font-size: 10px;
-  }
-
-  .promo-box p {
-    margin: 0;
-    color: #b5d9cf;
-    font-size: 5.4px;
-  }
-
-  .umkm-panduan-daftar {
-    display: grid;
-    grid-template-columns: 1.08fr .92fr;
-    gap: 7px;
-    margin-top: 9px;
-  }
-
-  .umkm-panduan,
-  .umkm-daftar-cta {
-    min-width: 0;
-    overflow: hidden;
-    border-radius: 9px;
-  }
-
-  .umkm-panduan {
-    padding: 10px;
-    color: #163e35;
-    background: #f6faf7;
-  }
-
-  .umkm-judul-row.sederhana h2 { color: #173d35; }
-  .umkm-judul-row.sederhana p { color: #5b766e; }
-
-  .panduan-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .panduan-grid > div {
-    position: relative;
-    min-width: 0;
-    padding-top: 6px;
-  }
-
-  .panduan-grid b {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 25px;
-    height: 25px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: #fff;
-    background: #11956b;
-    font-size: 8px;
-  }
-
-  .panduan-grid > div > span {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    margin: 0 auto 5px;
-    border-radius: 50%;
-    color: #08755a;
-    background: #e5f4ee;
-    font-size: 16px;
-  }
-
-  .panduan-grid h3 {
-    margin: 0;
-    color: #173e35;
-    font-size: 7.3px;
-    text-align: center;
-  }
-
-  .panduan-grid p {
-    margin: 4px 0 0;
-    color: #688078;
-    font-size: 5.4px;
-    line-height: 1.4;
-    text-align: center;
-  }
-
-  .umkm-daftar-cta {
-    position: relative;
-    min-height: 160px;
-  }
-
-  .umkm-daftar-cta > img,
-  .cta-lapis {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .umkm-daftar-cta > img { object-fit: cover; }
-
-  .cta-lapis {
-    background: linear-gradient(90deg, rgba(3,61,50,.34), rgba(3,70,58,.93) 48%, rgba(3,65,55,.97));
-  }
-
-  .cta-copy {
-    position: relative;
-    z-index: 1;
-    width: 58%;
-    margin-left: auto;
-    padding: 17px 15px 12px;
-  }
-
-  .cta-copy > p {
-    margin: 0;
-    color: #d7f6ed;
-    font-size: 7px;
-  }
-
-  .cta-copy h2 {
-    margin: 2px 0 7px;
-    color: #6af0c8;
-    font-size: 13px;
-  }
-
-  .cta-copy ul {
-    display: grid;
-    gap: 3px;
-    margin: 0 0 8px;
-    padding: 0;
-    list-style: none;
-    color: #e8faf5;
-    font-size: 5.8px;
-  }
-
-  .cta-copy a {
-    display: inline-flex;
-    padding: 6px 9px;
-    border-radius: 6px;
-    color: #074333;
-    background: #62ecc2;
-    font-size: 6px;
-    font-weight: 800;
-    text-decoration: none;
-  }
-
-  .umkm-daftar-cta blockquote {
-    position: absolute;
-    z-index: 1;
-    right: 12px;
-    bottom: 11px;
-    margin: 0;
-    color: #fff;
-    font-family: Georgia, serif;
-    font-size: 10px;
-    font-style: italic;
-    line-height: 1.1;
-    text-align: right;
-  }
-
-  .umkm-info-grid {
-    display: grid;
-    grid-template-columns: 1.15fr 1fr .85fr .62fr;
-    gap: 7px;
-    margin-top: 9px;
-  }
-
-  .info-panel {
-    min-width: 0;
-    padding: 8px;
-    border-radius: 8px;
-    color: #173d35;
-    background: #f6faf7;
-  }
-
-  .info-head {
-    min-height: 27px;
-  }
-
-  .info-head > span {
-    width: 26px;
-    height: 26px;
-    display: grid;
-    place-items: center;
-    flex: 0 0 26px;
-    border-radius: 7px;
-    color: #08775b;
-    background: #dff2eb;
-    font-size: 12px;
-  }
-
-  .info-head h3 { color: #173d35; font-size: 8px; }
-  .info-head p { color: #70847e; }
-  .info-head > a { color: #08775b; }
-
-  .artikel-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 6px;
-  }
-
-  .artikel-grid a {
-    min-width: 0;
-    color: #173d35;
-    text-decoration: none;
-  }
-
-  .artikel-grid img {
-    width: 100%;
-    height: 60px;
-    border-radius: 5px;
-    object-fit: cover;
-  }
-
-  .artikel-grid small,
-  .artikel-grid strong { display: block; }
-
-  .artikel-grid small {
-    margin-top: 4px;
-    color: #778982;
-    font-size: 4.8px;
-  }
-
-  .artikel-grid strong {
-    margin-top: 2px;
-    font-size: 6px;
-    line-height: 1.3;
-  }
-
-  .agenda-event {
-    display: grid;
-    gap: 6px;
-    margin-top: 7px;
-  }
-
-  .agenda-event > div {
-    display: grid;
-    grid-template-columns: 46px 1fr;
-    gap: 7px;
-    padding: 5px;
-    border-radius: 6px;
-    background: #edf6f2;
-  }
-
-  .agenda-event time {
-    min-height: 45px;
-    display: grid;
-    align-content: center;
-    justify-items: center;
-    border-radius: 6px;
-    color: #0c6c54;
-    background: #ccefe3;
-  }
-
-  .agenda-event time b { font-size: 13px; line-height: 1; }
-  .agenda-event time small { margin-top: 2px; font-size: 5px; text-align: center; }
-  .agenda-event strong { color: #163f35; font-size: 6.5px; }
-  .agenda-event p { margin: 3px 0 0; color: #657c75; font-size: 5.2px; line-height: 1.4; }
-
-  .testi-list {
-    display: grid;
-    gap: 7px;
-    margin-top: 7px;
-  }
-
-  .testi-list > div {
-    display: grid;
-    grid-template-columns: 30px 1fr;
-    gap: 6px;
-    align-items: start;
-  }
-
-  .avatar {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: #fff;
-    background: #128061;
-    font-size: 6px;
-    font-weight: 800;
-  }
-
-  .testi-list p { margin: 0; }
-  .testi-list strong,
-  .testi-list b,
-  .testi-list small { display: block; }
-  .testi-list strong { color: #173d35; font-size: 6px; }
-  .testi-list b { color: #f0a500; font-size: 6px; letter-spacing: 1px; }
-  .testi-list small { margin-top: 2px; color: #6a7f78; font-size: 5px; line-height: 1.35; }
-
-  .top-kategori ol {
-    display: grid;
-    gap: 5px;
-    margin: 7px 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .top-kategori li {
-    display: grid;
-    grid-template-columns: 15px 1fr auto;
-    gap: 4px;
-    color: #55736a;
-    font-size: 5.4px;
-  }
-
-  .top-kategori li > span { color: #118265; }
-  .top-kategori li > b { color: #173d35; }
-
-  .umkm-peta {
-    position: relative;
-    min-height: 175px;
-    display: grid;
-    grid-template-columns: 210px minmax(0, 1fr) 185px;
-    gap: 0;
-    overflow: hidden;
-    margin-top: 9px;
-    border: 1px solid var(--u-line);
-    border-radius: 9px;
-    background: #075448;
-  }
-
-  .peta-info {
-    position: relative;
-    z-index: 2;
-    padding: 12px;
-    background: rgba(5,77,66,.94);
-  }
-
-  .peta-info .info-head h3 { color: #fff; }
-  .peta-info .info-head p { color: #b5d9cf; }
-
-  .peta-info ul {
-    display: grid;
-    gap: 5px;
-    margin: 10px 0;
-    padding: 0;
-    list-style: none;
-    color: #d5eee7;
-    font-size: 5.6px;
-  }
-
-  .peta-info > a {
-    display: inline-flex;
-    padding: 6px 9px;
-    border: 1px solid rgba(101,232,195,.40);
-    border-radius: 6px;
-    color: #fff;
-    font-size: 5.7px;
-    text-decoration: none;
-  }
-
-  .peta-visual {
-    position: relative;
-    overflow: hidden;
-    background:
-      linear-gradient(35deg, transparent 45%, rgba(255,255,255,.12) 46% 48%, transparent 49%),
-      linear-gradient(-25deg, transparent 44%, rgba(255,255,255,.10) 45% 47%, transparent 48%),
-      #244d50;
-    background-size: 110px 70px, 140px 90px, auto;
-  }
-
-  .map-grid {
-    position: absolute;
-    inset: 0;
-    opacity: .26;
-    background:
-      linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px) 0 0 / 34px 34px,
-      linear-gradient(90deg, rgba(255,255,255,.13) 1px, transparent 1px) 0 0 / 34px 34px;
-  }
-
-  .pin {
-    position: absolute;
-    color: #39e2ad;
-    font-size: 22px;
-    text-shadow: 0 2px 6px rgba(0,0,0,.42);
-  }
-
-  .pin::after {
-    content: "";
-    position: absolute;
-    left: 7px;
-    top: 7px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #fff;
-  }
-
-  .p1 { left: 13%; top: 24%; }
-  .p2 { left: 28%; top: 58%; color: #ff5269; }
-  .p3 { left: 55%; top: 28%; color: #ffb02e; }
-  .p4 { left: 72%; top: 61%; color: #26b7f0; }
-  .p5 { left: 83%; top: 18%; }
-
-  .map-card {
-    position: absolute;
-    left: 45%;
-    top: 50%;
-    min-width: 130px;
-    padding: 8px 10px;
-    border-radius: 7px;
-    color: #183d36;
-    background: rgba(255,255,255,.93);
-    transform: translate(-50%, -50%);
-  }
-
-  .map-card strong,
-  .map-card small { display: block; }
-
-  .map-card strong { font-size: 7px; }
-  .map-card small { margin-top: 2px; color: #698079; font-size: 5px; }
-
-  .peta-quote {
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    display: grid;
-    place-items: center;
-    padding: 15px;
-    color: #fff;
-    background:
-      linear-gradient(rgba(5,71,60,.58), rgba(5,71,60,.72)),
-      url("./foto/usaha-katering-harian.jpg") center/cover;
-    font-family: Georgia, serif;
-    font-size: 18px;
-    font-style: italic;
-    line-height: 1.15;
-    text-align: center;
-  }
-
-  @media (max-width: 980px) {
-    .umkm-hero-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-hero-visual {
-      min-height: 240px;
-      border-radius: 24px;
-    }
-
-    .umkm-statistik {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .umkm-card-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .umkm-highlight-grid,
-    .umkm-info-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .umkm-panduan-daftar {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-peta {
-      grid-template-columns: 190px 1fr;
-    }
-
-    .peta-quote {
-      display: none;
-    }
-  }
-
-  @media (max-width: 680px) {
-    .umkm-modern {
-      margin-top: -18px;
-      margin-bottom: -44px;
-    }
-
-    .umkm-wadah {
-      width: 100%;
-      max-width: 100%;
-      padding-left: 14px;
-      padding-right: 14px;
-    }
-
-    .umkm-hero {
-      min-height: 0;
-    }
-
-    .umkm-hero-grid {
-      min-height: 0;
-      gap: 17px;
-      padding: 31px 0 22px;
-    }
-
-    .umkm-hero h1 {
-      max-width: 12ch;
-      font-size: 36px;
-    }
-
-    .umkm-hero h2 {
-      font-size: 13px;
-    }
-
-    .umkm-hero-copy > p:last-of-type {
-      font-size: 9.5px;
-    }
-
-    .umkm-keunggulan {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .umkm-hero-visual {
-      min-height: 210px;
-    }
-
-    .umkm-statistik {
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      padding: 6px;
-    }
-
-    .umkm-statistik article {
-      min-height: 55px;
-    }
-
-    .umkm-filter {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-cari {
-      width: 100%;
-    }
-
-    .umkm-card-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .umkm-card-foto {
-      height: 105px;
-    }
-
-    .umkm-highlight-grid,
-    .umkm-info-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-panduan {
-      padding: 10px 8px;
-    }
-
-    .panduan-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .umkm-daftar-cta {
-      min-height: 190px;
-    }
-
-    .cta-copy {
-      width: 65%;
-    }
-
-    .umkm-peta {
-      grid-template-columns: 1fr;
-    }
-
-    .peta-info {
-      min-height: 150px;
-    }
-
-    .peta-visual {
-      min-height: 180px;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .umkm-hero h1 {
-      font-size: 32px;
-    }
-
-    .umkm-hero-aksi {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-btn {
-      width: 100%;
-    }
-
-    .umkm-statistik {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-card-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-card-foto {
-      height: 150px;
-    }
-
-    .umkm-highlight-grid {
-      gap: 9px;
-    }
-
-    .panduan-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .umkm-daftar-cta {
-      min-height: 230px;
-    }
-
-    .cta-copy {
-      width: 72%;
-    }
-
-    .artikel-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .artikel-grid a:last-child {
-      display: none;
-    }
-  }
+  .marketplace-umkm{--mk-green:#0b6b57;--mk-green-2:#13866d;--mk-green-soft:#eaf6f1;--mk-ink:#17231f;--mk-muted:#6d7975;--mk-line:#e2e8e5;--mk-bg:#f7f8f7;--mk-card:#fff;width:100vw;margin-left:calc(50% - 50vw);margin-top:-32px;margin-bottom:-64px;background:var(--mk-bg);color:var(--mk-ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;overflow:hidden}
+  .market-shell{width:min(1220px,calc(100% - 40px));margin-inline:auto}
+  .market-hero{position:relative;padding:54px 0 42px;background:linear-gradient(135deg,#f2f9f5 0%,#fbfcfb 55%,#edf7f2 100%);border-bottom:1px solid #e4ebe7;overflow:hidden}.market-hero::before{content:"";position:absolute;width:460px;height:460px;border-radius:50%;right:-120px;top:-220px;background:radial-gradient(circle,#d8eee5 0 42%,rgba(216,238,229,0) 72%)}.market-hero::after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;left:-170px;bottom:-240px;background:#e7f4ee}
+  .market-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);gap:54px;align-items:center}.market-overline{display:inline-flex;align-items:center;gap:8px;color:var(--mk-green);font-size:11px;font-weight:900;letter-spacing:.12em}.market-overline::before{content:"";width:24px;height:2px;background:var(--mk-green);border-radius:99px}.market-overline.dark{color:#8bd3bb}.market-overline.dark::before{background:#8bd3bb}
+  .market-hero h1{max-width:760px;margin:12px 0 14px;font-size:clamp(42px,5vw,66px);line-height:.98;letter-spacing:-.055em;color:#12211c;font-weight:850}.market-hero h1 em{font-style:normal;color:var(--mk-green)}.market-hero-copy>p{max-width:650px;margin:0;color:#65736e;font-size:15px;line-height:1.7}
+  .market-search-hero{max-width:660px;min-height:58px;display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:8px;margin-top:24px;padding:7px 8px 7px 14px;border:1px solid #d4e1dc;border-radius:16px;background:#fff;box-shadow:0 18px 40px -32px rgba(28,69,55,.55)}.market-search-hero>span{color:#71827b;font-size:22px}.market-search-hero input{min-width:0;width:100%;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;font:inherit;font-size:14px;color:#1a2924}.market-search-hero a{min-height:44px;display:inline-flex;align-items:center;padding:0 20px;border-radius:11px;background:var(--mk-green);color:#fff;font-size:13px;font-weight:800;text-decoration:none}
+  .market-hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.market-primary,.market-secondary{min-height:42px;display:inline-flex;align-items:center;padding:0 15px;border-radius:10px;font-size:12px;font-weight:800;text-decoration:none}.market-primary{background:#173e34;color:#fff}.market-secondary{border:1px solid #d3dfda;background:#fff;color:#315148}
+  .market-trust{display:flex;flex-wrap:wrap;gap:0;margin-top:24px}.market-trust span{min-width:135px;padding:0 20px;border-left:1px solid #dce6e1}.market-trust span:first-child{padding-left:0;border-left:0}.market-trust b,.market-trust small{display:block}.market-trust b{font-size:19px;letter-spacing:-.03em}.market-trust small{margin-top:2px;color:#74817c;font-size:11px}
+  .market-hero-media{position:relative;height:390px;display:grid;grid-template-columns:1.1fr .9fr;grid-template-rows:1fr 1fr;gap:12px}.market-hero-card{position:relative;min-width:0;overflow:hidden;border-radius:22px;background:#dfe9e5;box-shadow:0 22px 60px -42px rgba(19,54,43,.72);color:#fff;text-decoration:none}.market-hero-card.utama{grid-row:1/-1}.market-hero-card img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}.market-hero-card:hover img{transform:scale(1.035)}.market-hero-card>span{position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(10,28,23,.78))}.market-hero-card div{position:absolute;left:16px;right:16px;bottom:15px}.market-hero-card small,.market-hero-card strong{display:block}.market-hero-card small{margin-bottom:3px;color:#d4eee4;font-size:10px;font-weight:750}.market-hero-card strong{font-size:15px;line-height:1.2}
+  .market-main{padding:28px 0 72px}.market-demo-note{display:flex;gap:10px;align-items:flex-start;margin-bottom:24px;padding:12px 14px;border:1px solid #d9e6e1;border-radius:12px;background:#fff;color:#5d6f68}.market-demo-note>span{width:24px;height:24px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#e6f4ee;color:var(--mk-green);font-size:12px;font-weight:900}.market-demo-note p{margin:1px 0 0;font-size:12.5px;line-height:1.55}.market-demo-note strong{color:#24342e}
+  .market-category-section{padding:6px 0 31px}.market-section-heading{min-width:0}.market-section-heading.compact{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:15px}.market-section-heading>span,.market-section-heading>div>span{display:block;color:#718079;font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}.market-section-heading h2{margin:4px 0 0;font-size:28px;line-height:1.12;letter-spacing:-.04em}.market-section-heading p{margin:5px 0 0;color:#71807a;font-size:12.5px}.market-section-heading.compact>a{color:var(--mk-green);font-size:12px;font-weight:800;text-decoration:none;white-space:nowrap}
+  .market-category-rail{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.market-category-rail button{min-width:0;min-height:86px;display:grid;grid-template-columns:46px minmax(0,1fr) 18px;gap:10px;align-items:center;padding:13px;border:1px solid var(--mk-line);border-radius:15px;background:#fff;color:#273630;text-align:left;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.market-category-rail button:hover{transform:translateY(-2px);border-color:#bdd6cd;box-shadow:0 14px 30px -28px rgba(14,77,60,.65)}.market-category-rail button.aktif{border-color:#a9d3c4;background:#f2faf6}.market-category-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;background:#eff6f3;font-size:21px}.market-category-copy{min-width:0}.market-category-copy strong,.market-category-copy small{display:block}.market-category-copy strong{font-size:12.5px;line-height:1.25}.market-category-copy small{margin-top:3px;color:#85918c;font-size:10.5px}.market-category-arrow{color:#9ba5a1;font-size:22px}
+  .market-directory{scroll-margin-top:92px;padding-top:24px;border-top:1px solid #e1e7e4}.market-directory-toolbar{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:14px}.market-tools{display:flex;gap:9px;align-items:end}.market-search-inline{width:min(320px,32vw);min-height:44px;display:grid;grid-template-columns:25px 1fr;align-items:center;padding:0 11px;border:1px solid #d8e1dd;border-radius:11px;background:#fff}.market-search-inline span{color:#75847e}.market-search-inline input{min-width:0;width:100%;border:0!important;background:transparent!important;outline:0!important;box-shadow:none!important;font:inherit;font-size:12.5px}.market-sort{display:grid;gap:4px}.market-sort>span{font-size:9.5px;color:#7d8984}.market-sort select{min-height:44px;padding:0 34px 0 11px;border:1px solid #d8e1dd;border-radius:11px;background:#fff;color:#27362f;font-size:12px}
+  .market-filter-pills{display:flex;gap:7px;overflow:auto;padding:2px 0 13px;scrollbar-width:none}.market-filter-pills::-webkit-scrollbar{display:none}.market-filter-pills button{flex:0 0 auto;min-height:34px;padding:0 12px;border:1px solid #dce4e0;border-radius:99px;background:#fff;color:#64736d;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.market-filter-pills button.aktif{border-color:var(--mk-green);background:var(--mk-green);color:#fff}
+  .market-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.market-card{min-width:0;overflow:hidden;border:1px solid #e0e6e3;border-radius:17px;background:#fff;box-shadow:0 8px 28px -26px rgba(18,58,45,.5);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.market-card:hover{transform:translateY(-3px);border-color:#c8dad3;box-shadow:0 20px 42px -32px rgba(17,67,51,.52)}
+  .market-card-media{position:relative;height:188px;display:block;overflow:hidden;background:#edf2f0}.market-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}.market-card:hover .market-card-media img{transform:scale(1.035)}.market-card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,26,21,0) 55%,rgba(8,26,21,.22))}.market-card-topline{position:absolute;z-index:2;left:10px;top:10px;display:flex;gap:5px;flex-wrap:wrap}.market-chip{display:inline-flex;align-items:center;min-height:25px;padding:0 8px;border-radius:99px;background:rgba(255,255,255,.94);color:#29463c;font-size:9.5px;font-weight:800;box-shadow:0 6px 16px -12px rgba(0,0,0,.4)}.market-chip.demo{background:#fff5df;color:#8a5b12}.market-card-media>button{position:absolute;z-index:3;right:10px;top:10px;width:34px;height:34px;min-height:0!important;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.95);color:#31564a;font:inherit;font-size:17px;cursor:pointer;box-shadow:0 8px 18px -12px rgba(0,0,0,.5)}
+  .market-card-body{padding:14px 14px 13px}.market-card-title h3{margin:0}.market-card-title h3 a{color:#1a2924;font-size:15px;line-height:1.3;letter-spacing:-.015em;text-decoration:none}.market-card-title p{display:-webkit-box;margin:5px 0 0;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;color:#72807b;font-size:11.5px;line-height:1.5}.market-product-tags{display:flex;gap:5px;overflow:hidden;margin-top:10px}.market-product-tags span{flex:0 0 auto;max-width:130px;padding:4px 7px;border-radius:7px;background:#f1f5f3;color:#64736d;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.market-meta{display:grid;gap:5px;margin-top:11px;padding-top:10px;border-top:1px solid #edf0ee}.market-meta span{display:flex;gap:7px;align-items:flex-start;min-width:0;color:#697771;font-size:10.5px;line-height:1.35}.market-meta i{width:16px;flex:0 0 auto;color:var(--mk-green);font-style:normal}.market-card-actions{display:grid;grid-template-columns:1fr 1.12fr;gap:7px;margin-top:12px}.market-card-actions a{min-height:37px;display:inline-flex;align-items:center;justify-content:center;padding:0 8px;border-radius:9px;font-size:10.5px;font-weight:800;text-decoration:none}.market-card-actions .detail{border:1px solid #d9e2de;color:#35554a;background:#fff}.market-card-actions .chat{background:var(--mk-green);color:#fff}.market-card-actions .chat.muted{background:#e9efec;color:#5c6b66}
+  .market-empty{display:grid;justify-items:center;padding:54px 18px;border:1px dashed #cfdbd6;border-radius:17px;background:#fff;text-align:center}.market-empty>span{width:56px;height:56px;display:grid;place-items:center;border-radius:50%;background:#eef6f2;color:var(--mk-green);font-size:26px}.market-empty h3{margin:13px 0 4px;font-size:19px}.market-empty p{margin:0;color:#75817d;font-size:12px}.market-empty button{min-height:40px;margin-top:14px;padding:0 14px;border:0;border-radius:9px;background:#193f35;color:#fff;font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+  .market-benefits{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:36px;margin-top:52px;padding:34px;border-radius:22px;background:linear-gradient(135deg,#0d483c,#0a5f4e);color:#fff;box-shadow:0 24px 60px -48px rgba(3,55,43,.75)}.market-benefit-main h2{max-width:650px;margin:10px 0 10px;font-size:30px;line-height:1.08;letter-spacing:-.04em}.market-benefit-main p{max-width:640px;margin:0;color:#c7e0d7;font-size:12.5px;line-height:1.65}.market-benefit-main a{display:inline-flex;margin-top:18px;color:#a8ead1;font-size:12px;font-weight:800;text-decoration:none}.market-benefit-list{display:grid}.market-benefit-list article{display:grid;grid-template-columns:38px 1fr;gap:12px;padding:13px 0;border-top:1px solid rgba(255,255,255,.12)}.market-benefit-list article:first-child{border-top:0}.market-benefit-list article>span{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.1);color:#a6e7cf;font-size:10px;font-weight:900}.market-benefit-list strong{font-size:13px}.market-benefit-list p{margin:3px 0 0;color:#bfd7ce;font-size:11px;line-height:1.5}
+  .market-bottom-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:16px}.market-register-card,.market-map-card{position:relative;min-height:260px;overflow:hidden;border:1px solid #e0e7e4;border-radius:19px;background:#fff}.market-register-card{display:grid;grid-template-columns:1fr 42%;align-items:stretch}.market-register-card>div{padding:27px}.market-register-card span,.market-map-card span{color:#718079;font-size:9.5px;font-weight:900;letter-spacing:.1em}.market-register-card h2,.market-map-card h2{margin:7px 0 7px;font-size:24px;line-height:1.1;letter-spacing:-.035em}.market-register-card p,.market-map-card p{margin:0;color:#74817c;font-size:11.5px;line-height:1.55}.market-register-card a,.market-map-card a{display:inline-flex;margin-top:17px;color:var(--mk-green);font-size:11.5px;font-weight:850;text-decoration:none}.market-register-card img{width:100%;height:100%;object-fit:cover}.market-map-card{display:flex;align-items:flex-end;padding:27px;background:#eef5f2}.market-map-card>div:last-child{position:relative;z-index:2;max-width:370px}.market-map-grid{position:absolute!important;inset:0!important;max-width:none!important;opacity:.55;background-image:linear-gradient(rgba(34,102,81,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(34,102,81,.12) 1px,transparent 1px);background-size:34px 34px;transform:rotate(-8deg) scale(1.15)}.market-map-card::after{content:"";position:absolute;width:220px;height:220px;right:35px;top:20px;border-radius:50%;border:42px solid rgba(11,107,87,.08);box-shadow:0 0 0 36px rgba(11,107,87,.045)}
+  @media(max-width:1080px){.market-hero-grid{grid-template-columns:1fr minmax(330px,.75fr);gap:32px}.market-category-rail{grid-template-columns:repeat(3,minmax(0,1fr))}.market-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.market-benefits{grid-template-columns:1fr}.market-bottom-grid{grid-template-columns:1fr}.market-register-card{min-height:230px}}
+  @media(max-width:820px){.marketplace-umkm{margin-top:-24px}.market-shell{width:min(100% - 28px,1220px)}.market-hero{padding:36px 0 28px}.market-hero-grid{grid-template-columns:1fr}.market-hero h1{font-size:clamp(38px,9vw,56px)}.market-hero-media{height:280px;grid-template-columns:1.2fr .8fr}.market-trust span{min-width:120px}.market-directory-toolbar{align-items:stretch;flex-direction:column}.market-tools{width:100%}.market-search-inline{width:100%;flex:1}.market-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.market-category-rail{grid-template-columns:repeat(2,minmax(0,1fr))}.market-benefits{padding:26px}.market-register-card{grid-template-columns:1fr 35%}}
+  @media(max-width:560px){.market-shell{width:calc(100% - 22px)}.market-hero{padding-top:27px}.market-hero h1{font-size:38px}.market-hero-copy>p{font-size:13px}.market-search-hero{min-height:54px;margin-top:19px;grid-template-columns:28px 1fr auto;padding-left:10px}.market-search-hero input{font-size:12px}.market-search-hero a{min-height:40px;padding:0 13px;font-size:11px}.market-hero-actions{display:none}.market-trust{margin-top:18px}.market-trust span{min-width:33%;padding:0 10px}.market-trust b{font-size:16px}.market-trust small{font-size:9px}.market-hero-media{height:220px;gap:8px}.market-hero-card{border-radius:15px}.market-hero-card div{left:11px;right:11px;bottom:10px}.market-hero-card strong{font-size:12px}.market-main{padding-top:18px}.market-demo-note{font-size:11px}.market-section-heading.compact{align-items:flex-start}.market-section-heading.compact>a{display:none}.market-section-heading h2{font-size:23px}.market-category-rail{display:flex;gap:9px;overflow-x:auto;margin-inline:-11px;padding:0 11px 8px;scrollbar-width:none}.market-category-rail::-webkit-scrollbar{display:none}.market-category-rail button{flex:0 0 180px;min-height:72px;grid-template-columns:40px 1fr 14px;padding:10px;border-radius:13px}.market-category-icon{width:40px;height:40px;font-size:18px}.market-tools{display:grid;grid-template-columns:1fr}.market-sort{display:none}.market-filter-pills{margin-inline:-11px;padding-inline:11px}.market-grid{grid-template-columns:1fr 1fr;gap:10px}.market-card{border-radius:13px}.market-card-media{height:130px}.market-card-body{padding:11px}.market-card-title h3 a{font-size:13px}.market-card-title p{font-size:10px}.market-product-tags{display:none}.market-meta{gap:4px;margin-top:9px;padding-top:8px}.market-meta span{font-size:9px}.market-meta span:nth-child(2){display:none}.market-card-actions{grid-template-columns:1fr;margin-top:9px}.market-card-actions .detail{display:none}.market-card-actions a{min-height:34px;font-size:9.5px}.market-benefits{margin-top:34px;padding:22px;border-radius:17px}.market-benefit-main h2{font-size:24px}.market-bottom-grid{margin-top:11px;gap:11px}.market-register-card{grid-template-columns:1fr;min-height:0}.market-register-card>div{padding:22px}.market-register-card img{height:150px}.market-map-card{min-height:230px;padding:22px}.market-register-card h2,.market-map-card h2{font-size:21px}}
+  @media(max-width:390px){.market-grid{grid-template-columns:1fr}.market-card-media{height:180px}.market-card-title h3 a{font-size:14px}.market-card-title p{font-size:11px}.market-meta span{font-size:10px}.market-card-actions .detail{display:inline-flex}.market-card-actions{grid-template-columns:1fr 1.1fr}}
+  @media(prefers-reduced-motion:reduce){.market-card,.market-category-rail button,.market-card-media img,.market-hero-card img{transition:none}}
 </style>
