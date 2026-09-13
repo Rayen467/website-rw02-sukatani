@@ -39,7 +39,7 @@ function simpanFavorit(data) {
 }
 
 function idUsaha(tombol) {
-  const kartu = tombol.closest(".umkm-card");
+  const kartu = tombol.closest(".umkm-card, .market-card");
   if (!kartu) return "";
   const tautan = kartu.querySelector("h3 a")?.getAttribute("href") || "";
   const nama = kartu.querySelector("h3")?.textContent?.trim() || "";
