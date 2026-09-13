@@ -1,0 +1,200 @@
+/* ===========================================================================
+ * UMKM — compact tech-lane map
+ * Menjaga peta tetap hadir tanpa mengambil banyak ruang seperti versi lama.
+ * ======================================================================== */
+
+.marketplace-umkm .market-bottom-grid {
+  grid-template-columns: minmax(0, 1.34fr) minmax(330px, .66fr) !important;
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+.marketplace-umkm .market-map-card {
+  min-height: 198px !important;
+  display: grid !important;
+  grid-template-columns: 43% minmax(0, 57%) !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid #dfe7e3 !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 34px -30px rgba(18, 67, 52, .42) !important;
+}
+
+.marketplace-umkm .market-map-card::after {
+  display: none !important;
+}
+
+.marketplace-umkm .market-map-grid {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 198px !important;
+  max-width: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  overflow: hidden !important;
+  border-right: 1px solid #dce8e3 !important;
+  background-color: #eaf3ef !important;
+  background-image:
+    radial-gradient(circle at 24% 30%, #0b6b57 0 4px, #ffffff 4px 7px, transparent 7px),
+    radial-gradient(circle at 66% 24%, #11866c 0 4px, #ffffff 4px 7px, transparent 7px),
+    radial-gradient(circle at 73% 69%, #0b6b57 0 4px, #ffffff 4px 7px, transparent 7px),
+    radial-gradient(circle at 35% 76%, #d08c28 0 4px, #ffffff 4px 7px, transparent 7px),
+    linear-gradient(27deg, transparent 0 44%, rgba(255,255,255,.92) 44% 48%, transparent 48% 100%),
+    linear-gradient(112deg, transparent 0 38%, rgba(255,255,255,.86) 38% 43%, transparent 43% 100%),
+    linear-gradient(rgba(34,102,81,.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,102,81,.075) 1px, transparent 1px) !important;
+  background-size: auto, auto, auto, auto, auto, auto, 26px 26px, 26px 26px !important;
+}
+
+.marketplace-umkm .market-map-grid::before {
+  content: "RW 02 · MINI MAP" !important;
+  position: absolute !important;
+  z-index: 3 !important;
+  left: 12px !important;
+  top: 12px !important;
+  min-height: 25px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 9px !important;
+  border: 1px solid rgba(11,107,87,.12) !important;
+  border-radius: 99px !important;
+  background: rgba(255,255,255,.92) !important;
+  color: #315a4d !important;
+  box-shadow: 0 8px 22px -18px rgba(12,54,42,.5) !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  letter-spacing: .08em !important;
+}
+
+.marketplace-umkm .market-map-grid::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  width: 78px !important;
+  height: 78px !important;
+  left: 48% !important;
+  top: 48% !important;
+  transform: translate(-50%, -50%) !important;
+  border: 13px solid rgba(11,107,87,.07) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 13px rgba(11,107,87,.035) !important;
+}
+
+.marketplace-umkm .market-map-card > div:last-child {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 19px 20px !important;
+}
+
+.marketplace-umkm .market-map-card > div:last-child > span {
+  color: #74817c !important;
+  font-size: 9px !important;
+  letter-spacing: .11em !important;
+}
+
+.marketplace-umkm .market-map-card h2 {
+  margin: 6px 0 6px !important;
+  font-size: 19px !important;
+  line-height: 1.12 !important;
+}
+
+.marketplace-umkm .market-map-card p {
+  display: -webkit-box !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  color: #74817c !important;
+  font-size: 10.5px !important;
+  line-height: 1.5 !important;
+}
+
+.marketplace-umkm .market-map-card a {
+  width: fit-content !important;
+  min-height: 34px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-top: 12px !important;
+  padding: 0 11px !important;
+  border: 1px solid #cfe0d9 !important;
+  border-radius: 9px !important;
+  background: #f5faf7 !important;
+  color: #0b6b57 !important;
+  font-size: 10.5px !important;
+  font-weight: 850 !important;
+  text-decoration: none !important;
+}
+
+.marketplace-umkm .market-map-card a:hover {
+  background: #eaf6f1 !important;
+  border-color: #b7d6ca !important;
+}
+
+@media (max-width: 1080px) {
+  .marketplace-umkm .market-bottom-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(310px, .8fr) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .marketplace-umkm .market-bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .marketplace-umkm .market-map-card {
+    min-height: 170px !important;
+    grid-template-columns: 38% minmax(0, 62%) !important;
+  }
+
+  .marketplace-umkm .market-map-grid {
+    min-height: 170px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .marketplace-umkm .market-map-card {
+    min-height: 154px !important;
+    grid-template-columns: 42% minmax(0, 58%) !important;
+    border-radius: 15px !important;
+  }
+
+  .marketplace-umkm .market-map-grid {
+    min-height: 154px !important;
+    background-size: auto, auto, auto, auto, auto, auto, 22px 22px, 22px 22px !important;
+  }
+
+  .marketplace-umkm .market-map-grid::before {
+    left: 8px !important;
+    top: 8px !important;
+    padding: 0 7px !important;
+    font-size: 8px !important;
+  }
+
+  .marketplace-umkm .market-map-card > div:last-child {
+    padding: 14px !important;
+  }
+
+  .marketplace-umkm .market-map-card h2 {
+    font-size: 16px !important;
+  }
+
+  .marketplace-umkm .market-map-card p {
+    -webkit-line-clamp: 2 !important;
+    font-size: 9.5px !important;
+  }
+
+  .marketplace-umkm .market-map-card a {
+    min-height: 30px !important;
+    margin-top: 9px !important;
+    padding: 0 9px !important;
+    font-size: 9px !important;
+  }
+}
