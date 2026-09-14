@@ -11,18 +11,31 @@
   const u = $derived(uAsli ? terapkanDemoUmkm(kunci, uAsli) : null);
 
   let penuh = $state("");
+  let galeriServer = $state([]);
   let mediaAktif = $state(0);
   let disimpan = $state(false);
+
+  function bacaJson(nilai, fallback = []) {
+    if (Array.isArray(nilai)) return nilai;
+    if (!nilai) return fallback;
+    try {
+      const hasil = JSON.parse(String(nilai));
+      return Array.isArray(hasil) ? hasil : fallback;
+    } catch { return fallback; }
+  }
 
   $effect(() => {
     const id = kunci;
     penuh = "";
+    galeriServer = [];
     mediaAktif = 0;
     if (!id || !uAsli) return;
     let batal = false;
     ambilDokumen(KOLEKSI.USAHA_FOTO, id)
       .then((d) => {
-        if (!batal && d && d.foto) penuh = d.foto;
+        if (batal || !d) return;
+        penuh = d.foto || "";
+        galeriServer = bacaJson(d.galeriJson, []).filter(Boolean);
       })
       .catch(() => {});
     return () => (batal = true);
@@ -39,7 +52,7 @@
   const galeri = $derived.by(() => {
     if (!u) return [];
     const tambahan = Array.isArray(u.galeri) ? u.galeri.map(urlGambar) : [];
-    const kandidat = [penuh, u.sampul, u.foto, ...tambahan]
+    const kandidat = [penuh, ...galeriServer, u.sampul, u.foto, ...tambahan]
       .map(urlGambar)
       .filter(Boolean);
     return [...new Set(kandidat)];
@@ -149,12 +162,13 @@
         const hMin = angkaHarga(item.hargaMulai || item.harga || item.hargaMin);
         const hMax = angkaHarga(item.hargaMax || item.hargaMaks);
         const rentang = [hMin, hMax].filter(Boolean);
+        const indeksFoto = item.fotoIndex === "" || item.fotoIndex === undefined ? -1 : Number(item.fotoIndex);
         return {
           nama: item.nama || item.judul || `${kategori.benda} ${i + 1}`,
           deskripsi: item.deskripsi || item.keterangan || "",
           harga: item.hargaLabel || teksHarga(rentang),
           nomor: i + 1,
-          foto: urlGambar(item.foto || item.gambar),
+          foto: urlGambar(item.foto || item.gambar) || (Number.isInteger(indeksFoto) && indeksFoto >= 0 ? (galeriServer[indeksFoto] || "") : ""),
           label: item.label || ""
         };
       });
@@ -181,6 +195,16 @@
 
   function keunggulanFaktual(usaha) {
     if (!usaha) return [];
+    if (Array.isArray(usaha.keunggulan) && usaha.keunggulan.length) {
+      return usaha.keunggulan.slice(0, 6).map((item, i) => {
+        if (typeof item === "string") return { ikon: "✓", judul: item, teks: "Informasi keunggulan yang dicantumkan pengelola usaha." };
+        return {
+          ikon: item.ikon || "✓",
+          judul: item.judul || item.nama || `Keunggulan ${i + 1}`,
+          teks: item.teks || item.deskripsi || ""
+        };
+      });
+    }
     if (Array.isArray(usaha.keunggulanDemo) && usaha.keunggulanDemo.length) {
       const deskripsi = [
         "Sepatu tampak lebih terawat setelah proses pencucian.",
@@ -204,11 +228,17 @@
   }
 
   const unggulan = $derived(keunggulanFaktual(u));
-  const highlight = $derived(Array.isArray(u?.highlightDemo) && u.highlightDemo.length ? u.highlightDemo.slice(0, 6) : unggulan.map((x) => x.judul));
+  const highlight = $derived(
+    Array.isArray(u?.highlight) && u.highlight.length
+      ? u.highlight.slice(0, 6)
+      : Array.isArray(u?.highlightDemo) && u.highlightDemo.length
+        ? u.highlightDemo.slice(0, 6)
+        : unggulan.map((x) => x.judul)
+  );
   const testimoni = $derived(u?.testimoni || u?.testimoniDemo || null);
   const sosial = $derived(Array.isArray(u?.sosialMedia) && u.sosialMedia.length ? u.sosialMedia : (Array.isArray(u?.sosialMediaDemo) ? u.sosialMediaDemo : []));
   const wa = $derived(tautanWa(u));
-  const peta = $derived(u?.alamat ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.alamat)}` : "");
+  const peta = $derived(u?.maps || (u?.alamat ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.alamat)}` : ""));
 
   const terkait = $derived.by(() => {
     if (!u) return [];
@@ -395,7 +425,7 @@
       <article>
         <h2>Keunggulan Kami</h2>
         <ul>
-          {#each unggulan as item}<li><b>✓</b><div><strong>{item.judul}</strong><small>{item.teks}</small></div></li>{/each}
+          {#each unggulan as item}<li><b>{item.ikon || "✓"}</b><div><strong>{item.judul}</strong><small>{item.teks}</small></div></li>{/each}
         </ul>
       </article>
 
