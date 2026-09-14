@@ -2,19 +2,23 @@
   import { KOLEKSI } from "../inti/nama.js";
   import { isi } from "../keadaan/isi.svelte.js";
   import { ambilDokumen } from "../sumber/data.js";
+  import { DEMO_TERKAIT, terapkanDemoUmkm } from "../data/umkm-demo.js";
   import TidakAda from "./TidakAda.svelte";
 
   let { kunci } = $props();
-  const u = $derived((isi.usaha || []).find((x) => x.id === kunci));
+
+  const uAsli = $derived((isi.usaha || []).find((x) => x.id === kunci));
+  const u = $derived(uAsli ? terapkanDemoUmkm(kunci, uAsli) : null);
 
   let penuh = $state("");
   let mediaAktif = $state(0);
+  let disimpan = $state(false);
 
   $effect(() => {
     const id = kunci;
     penuh = "";
     mediaAktif = 0;
-    if (!id || !u) return;
+    if (!id || !uAsli) return;
     let batal = false;
     ambilDokumen(KOLEKSI.USAHA_FOTO, id)
       .then((d) => {
@@ -88,8 +92,6 @@
     return hargaDariTeks(`${usaha.ringkas || ""} ${usaha.panjang || ""}`);
   }
 
-  const harga = $derived(rentangHarga(u));
-
   function formatRupiah(angka) {
     return `Rp${new Intl.NumberFormat("id-ID").format(angka)}`;
   }
@@ -100,25 +102,25 @@
     return `${formatRupiah(Math.min(...nilai))} – ${formatRupiah(Math.max(...nilai))}`;
   }
 
+  const harga = $derived(rentangHarga(u));
+
   function profilKategori(usaha) {
     const kat = String(usaha?.kat || "").toLowerCase();
-    if (kat === "siapsaji") return { penawaran: "Menu & Harga", benda: "menu", kata: "kuliner" };
-    if (kat === "kemasan") return { penawaran: "Produk & Varian", benda: "produk", kata: "produk rumahan" };
-    if (kat === "retail") return { penawaran: "Produk & Ketersediaan", benda: "produk", kata: "retail" };
-    if (kat === "jasa") return { penawaran: "Layanan & Harga", benda: "layanan", kata: "jasa" };
-    return { penawaran: "Produk & Layanan", benda: "penawaran", kata: "usaha lokal" };
+    if (kat === "siapsaji") return { penawaran: "Menu & Harga", benda: "menu" };
+    if (kat === "kemasan") return { penawaran: "Produk & Varian", benda: "produk" };
+    if (kat === "retail") return { penawaran: "Produk & Ketersediaan", benda: "produk" };
+    if (kat === "jasa") return { penawaran: "Layanan & Harga", benda: "layanan" };
+    return { penawaran: "Produk & Layanan", benda: "penawaran" };
   }
 
   const kategori = $derived(profilKategori(u));
 
   function ringkasanHero(usaha) {
     if (!usaha) return "";
+    if (usaha.ringkas) return teksBersih(usaha.ringkas);
     const lokasi = usaha.alamat ? ` di ${teksBersih(usaha.alamat)}` : "";
     const hargaTeks = teksHarga(rentangHarga(usaha));
-    const hargaKalimat = hargaTeks ? ` Kisaran harga yang tercantum ${hargaTeks}, dengan detail akhir dikonfirmasi langsung kepada pemilik.` : "";
-    if (String(usaha.kat || "").toLowerCase() === "jasa") {
-      return `${usaha.nama} merupakan layanan usaha warga RW 02 Sukatani${lokasi}.${hargaKalimat}`;
-    }
+    const hargaKalimat = hargaTeks ? ` Kisaran harga yang tercantum ${hargaTeks}.` : "";
     return `${usaha.nama} merupakan ${usaha.katLabel ? usaha.katLabel.toLowerCase() : "usaha lokal"} warga RW 02 Sukatani${lokasi}.${hargaKalimat}`;
   }
 
@@ -138,15 +140,16 @@
 
     if (sumberTerstruktur.length) {
       return sumberTerstruktur.slice(0, 8).map((item, i) => {
-        if (typeof item === "string") return { nama: item, deskripsi: "", harga: "", nomor: i + 1 };
+        if (typeof item === "string") return { nama: item, deskripsi: "", harga: "", nomor: i + 1, foto: "" };
         const hMin = angkaHarga(item.hargaMulai || item.harga || item.hargaMin);
         const hMax = angkaHarga(item.hargaMax || item.hargaMaks);
         const rentang = [hMin, hMax].filter(Boolean);
         return {
           nama: item.nama || item.judul || `${kategori.benda} ${i + 1}`,
           deskripsi: item.deskripsi || item.keterangan || "",
-          harga: teksHarga(rentang),
-          nomor: i + 1
+          harga: item.hargaLabel || teksHarga(rentang),
+          nomor: i + 1,
+          foto: urlGambar(item.foto || item.gambar)
         };
       });
     }
@@ -162,7 +165,8 @@
       nama: item.length === 1 ? (usaha.katLabel || "Penawaran utama") : `${usaha.katLabel || "Penawaran"} ${i + 1}`,
       deskripsi: teks,
       harga: i === 0 ? teksHarga(rentangHarga(usaha)) : "",
-      nomor: i + 1
+      nomor: i + 1,
+      foto: ""
     }));
   }
 
@@ -170,9 +174,21 @@
 
   function keunggulanFaktual(usaha) {
     if (!usaha) return [];
-    const hasil = [
-      { ikon: "RW", judul: "Usaha warga RW 02", teks: "Tercantum di Direktori UMKM RW 02 Sukatani." }
-    ];
+    if (Array.isArray(usaha.keunggulanDemo) && usaha.keunggulanDemo.length) {
+      return usaha.keunggulanDemo.slice(0, 4).map((teks, i) => ({
+        ikon: ["Rp", "WA", "✓", "RW"][i] || "✓",
+        judul: teks,
+        teks: i === 0
+          ? "Detail akhir tetap dikonfirmasi langsung dengan pemilik usaha."
+          : i === 1
+            ? "Warga dapat bertanya lebih dulu sebelum melakukan transaksi."
+            : i === 2
+              ? "Profil dibuat agar kebutuhan dan pilihan layanan lebih mudah dipahami."
+              : "Berbelanja lokal membantu perputaran ekonomi lingkungan."
+      }));
+    }
+
+    const hasil = [{ ikon: "RW", judul: "Usaha warga RW 02", teks: "Tercantum di Direktori UMKM RW 02 Sukatani." }];
     if (usaha.wa) hasil.push({ ikon: "WA", judul: "Kontak langsung", teks: "Pertanyaan dan pemesanan dapat dikonfirmasi langsung melalui WhatsApp." });
     if (usaha.alamat) hasil.push({ ikon: "⌖", judul: "Lokasi tercantum", teks: "Informasi lokasi usaha tersedia untuk membantu warga menemukan layanan." });
     if (usaha.jam) hasil.push({ ikon: "◷", judul: "Jam layanan tersedia", teks: `Jam operasional yang dicantumkan: ${usaha.jam}.` });
@@ -189,7 +205,10 @@
     const semua = isi.usaha || [];
     const serupa = semua.filter((x) => x.id !== u.id && (x.kat === u.kat || x.katLabel === u.katLabel));
     const lain = semua.filter((x) => x.id !== u.id && !serupa.includes(x));
-    return [...serupa, ...lain].slice(0, 4);
+    const real = [...serupa, ...lain].slice(0, 4);
+    if (real.length >= 4 || !u.__demoAktif) return real;
+    const filler = DEMO_TERKAIT.filter((x) => !real.some((r) => r.nama === x.nama)).slice(0, 4 - real.length);
+    return [...real, ...filler];
   });
 
   function fotoUsaha(usaha) {
@@ -214,12 +233,17 @@
 {:else}
   <div class="umkm-profile">
     <nav class="remah umkm-profile-breadcrumb" aria-label="Breadcrumb">
-      <a href="#/">Beranda</a><span>›</span><a href="#/umkm">Direktori UMKM</a><span>›</span><span>{u.katLabel || "UMKM"}</span><span>›</span><strong>{u.nama}</strong>
+      <a href="#/">Beranda</a><span>›</span><a href="#/umkm">UMKM</a><span>›</span><span>{u.katLabel || "UMKM"}</span><span>›</span><strong>{u.nama}</strong>
     </nav>
 
     <div class="umkm-profile-toolbar">
-      <div></div>
-      <button type="button" onclick={bagikan}>↗ Bagikan</button>
+      <div>
+        {#if u.__demoAktif}<span class="umkm-profile-demo">MODE CONTOH · data kosong diisi dummy</span>{/if}
+      </div>
+      <div class="umkm-profile-toolbar-actions">
+        <button type="button" class:aktif={disimpan} onclick={() => (disimpan = !disimpan)}>{disimpan ? "✓ Disimpan" : "♡ Simpan"}</button>
+        <button type="button" onclick={bagikan}>↗ Bagikan</button>
+      </div>
     </div>
 
     <section class="umkm-profile-hero">
@@ -234,9 +258,7 @@
               <small>Foto akan tampil setelah ditambahkan pengelola.</small>
             </div>
           {/if}
-          {#if galeri.length > 1}
-            <span class="umkm-profile-count">{mediaAktif + 1} / {galeri.length}</span>
-          {/if}
+          {#if galeri.length > 1}<span class="umkm-profile-count">◉ {mediaAktif + 1} / {galeri.length}</span>{/if}
         </div>
 
         {#if galeri.length > 1}
@@ -253,11 +275,12 @@
       <div class="umkm-profile-summary">
         <div class="umkm-profile-badges">
           <span class="kategori">{u.katLabel || "Usaha warga"}</span>
-          <span>UMKM RW 02</span>
+          <span>UMKM WARGA · RW 02 SUKATANI</span>
           {#if u.terverifikasi === true || u.verifikasi === "aktif"}<span class="verified">✓ Terverifikasi</span>{/if}
         </div>
 
         <h1>{u.nama}</h1>
+        {#if u.tagline}<h2 class="umkm-profile-headline">{u.tagline}</h2>{/if}
         <p class="umkm-profile-tagline">{ringkasanHero(u)}</p>
 
         <div class="umkm-profile-proof">
@@ -267,139 +290,136 @@
         </div>
 
         <div class="umkm-profile-price">
-          <small>{harga.length ? "Kisaran harga" : "Informasi harga"}</small>
+          <small>{harga.length ? "Mulai dari / kisaran" : "Informasi harga"}</small>
           <strong>{harga.length ? teksHarga(harga) : "Belum dicantumkan"}</strong>
-          <span>{harga.length ? "Konfirmasi harga akhir langsung kepada pemilik usaha." : "Hubungi pemilik untuk informasi harga terbaru."}</span>
+          <span>{harga.length ? "Menyesuaikan jenis, kondisi, atau pilihan layanan. Konfirmasi harga akhir kepada pemilik." : "Hubungi pemilik untuk informasi harga terbaru."}</span>
         </div>
 
         <div class="umkm-profile-actions">
-          {#if wa}
-            <a class="primary" href={wa} target="_blank" rel="noopener noreferrer">WhatsApp pemilik <span>→</span></a>
-          {/if}
-          <a class="secondary" href="#penawaran">Lihat {kategori.penawaran.toLowerCase()}</a>
+          {#if wa}<a class="primary" href={wa} target="_blank" rel="noopener noreferrer">◉ Chat via WhatsApp <span>→</span></a>{/if}
+          <a class="secondary" href="#penawaran">☷ Lihat {kategori.penawaran.toLowerCase()}</a>
         </div>
       </div>
 
       <aside class="umkm-profile-utility" aria-label="Informasi usaha">
         <div class="umkm-profile-local-note">
           <span>✦</span>
-          <div><strong>Dukung UMKM lokal</strong><p>Setiap transaksi membantu perputaran ekonomi warga RW 02.</p></div>
+          <div><strong>Dukung UMKM Lokal</strong><p>Setiap transaksi membantu ekonomi warga RW 02 semakin berdaya.</p></div>
         </div>
 
         <div class="umkm-profile-facts">
-          {#if u.jam}
-            <div><span class="fact-icon">◷</span><div><small>Jam operasional</small><strong>{u.jam}</strong></div></div>
-          {/if}
-          {#if u.alamat}
-            <div><span class="fact-icon">⌖</span><div><small>Lokasi</small><strong>{u.alamat}</strong>{#if peta}<a href={peta} target="_blank" rel="noopener noreferrer">Lihat di Google Maps ↗</a>{/if}</div></div>
-          {/if}
-          {#if u.wa}
-            <div><span class="fact-icon">✆</span><div><small>WhatsApp</small><strong>{u.wa}</strong></div></div>
-          {/if}
+          {#if u.jam}<div class="open-note"><span class="fact-icon">●</span><div><small>Jam operasional</small><strong>{u.jam}</strong></div></div>{/if}
+          {#if u.alamat}<div><span class="fact-icon">⌖</span><div><small>Lokasi</small><strong>{u.alamat}</strong>{#if peta}<a href={peta} target="_blank" rel="noopener noreferrer">Lihat di Google Maps →</a>{/if}</div></div>{/if}
+          {#if u.wa}<div><span class="fact-icon">✆</span><div><small>Kontak</small><strong>{u.wa}</strong></div></div>{/if}
           <div><span class="fact-icon">◎</span><div><small>Jenis usaha</small><strong>{u.katLabel || "Usaha warga"}</strong></div></div>
+          {#if Array.isArray(u.metodePembayaran) && u.metodePembayaran.length}
+            <div class="payment-fact"><span class="fact-icon">▣</span><div><small>Metode pembayaran</small><p>{u.metodePembayaran.join(" · ")}</p></div></div>
+          {/if}
         </div>
       </aside>
     </section>
 
     <nav class="umkm-profile-section-nav" aria-label="Navigasi isi profil">
       <a href="#penawaran">{kategori.penawaran}</a>
-      <a href="#tentang">Tentang usaha</a>
+      <a href="#tentang">Tentang Usaha</a>
       {#if galeri.length > 1}<a href="#galeri">Galeri</a>{/if}
       {#if u.promo}<a href="#promo">Promo</a>{/if}
-      <a href="#informasi">Informasi</a>
+      {#if Array.isArray(u.faq) && u.faq.length}<a href="#faq">FAQ</a>{/if}
     </nav>
 
     <section class="umkm-profile-section" id="penawaran">
       <div class="umkm-profile-section-head">
-        <div><span>PENAWARAN</span><h2>{kategori.penawaran}</h2><p>Informasi yang tersedia dari pemilik usaha, disusun agar mudah dibandingkan dan dipahami.</p></div>
+        <div><h2>{kategori.penawaran}</h2><p>Pilihan yang tersedia ditampilkan ringkas supaya warga cepat memahami layanan atau produk yang ditawarkan.</p></div>
+        <a href="#tentang">Lihat detail usaha →</a>
       </div>
 
-      {#if penawaran.length}
-        <div class="umkm-profile-offers">
-          {#each penawaran as item}
-            <article>
-              <span class="number">{String(item.nomor).padStart(2, "0")}</span>
-              <div><h3>{item.nama}</h3><p>{item.deskripsi}</p>{#if item.harga}<strong>{item.harga}</strong>{/if}</div>
-            </article>
-          {/each}
-        </div>
-      {:else}
-        <div class="umkm-profile-empty-section">Rincian produk atau layanan belum ditambahkan oleh pemilik usaha.</div>
-      {/if}
-    </section>
-
-    <div class="umkm-profile-content-grid">
-      <main>
-        <section class="umkm-profile-section" id="tentang">
-          <div class="umkm-profile-section-head"><div><span>TENTANG USAHA</span><h2>Kenali {u.nama}</h2></div></div>
-          <p class="umkm-profile-about">{deskripsiPemilik(u)}</p>
-        </section>
-
-        <section class="umkm-profile-section">
-          <div class="umkm-profile-section-head"><div><span>INFORMASI FAKTUAL</span><h2>Kenapa profil ini mudah dipercaya?</h2><p>Kami hanya menampilkan keunggulan yang dapat diturunkan dari data usaha yang benar-benar tersedia.</p></div></div>
-          <div class="umkm-profile-benefits">
-            {#each unggulan as item}
-              <article><span>{item.ikon}</span><div><h3>{item.judul}</h3><p>{item.teks}</p></div></article>
-            {/each}
-          </div>
-        </section>
-
-        {#if galeri.length > 1}
-          <section class="umkm-profile-section" id="galeri">
-            <div class="umkm-profile-section-head"><div><span>GALERI</span><h2>Lihat usaha lebih dekat</h2><p>Foto yang tersedia membantu warga memahami produk, hasil, proses, atau lokasi usaha.</p></div></div>
-            <div class="umkm-profile-gallery-grid">
-              {#each galeri.slice(0, 6) as foto, i}<button type="button" onclick={() => { mediaAktif = i; document.querySelector('.umkm-profile-cover')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><img src={foto} alt={`Foto ${u.nama} ${i + 1}`} /></button>{/each}
+      <div class="umkm-profile-offer-layout">
+        <div>
+          {#if penawaran.length}
+            <div class="umkm-profile-offers">
+              {#each penawaran.slice(0, 4) as item}
+                <article>
+                  {#if item.foto}<img class="offer-photo" src={item.foto} alt="" />{:else}<span class="number">{String(item.nomor).padStart(2, "0")}</span>{/if}
+                  <div><h3>{item.nama}</h3><p>{item.deskripsi}</p>{#if item.harga}<strong>{item.harga}</strong>{/if}</div>
+                </article>
+              {/each}
             </div>
-          </section>
-        {/if}
+          {:else}
+            <div class="umkm-profile-empty-section">Rincian produk atau layanan belum ditambahkan oleh pemilik usaha.</div>
+          {/if}
+        </div>
 
         {#if u.promo}
-          <section class="umkm-profile-promo" id="promo">
-            <span>PROMO AKTIF</span><div><h2>{u.promo}</h2><p>Konfirmasi syarat, ketersediaan, dan masa berlaku promo langsung kepada pemilik usaha sebelum memesan.</p></div>{#if wa}<a href={wa} target="_blank" rel="noopener noreferrer">Tanya promo →</a>{/if}
-          </section>
+          <aside class="umkm-profile-promo-card" id="promo">
+            <span>✦ PROMO {u.__demoAktif ? "CONTOH" : "AKTIF"}</span>
+            <h3>{u.promo}</h3>
+            <p>{u.promoKeterangan || "Konfirmasi syarat dan masa berlaku promo langsung kepada pemilik usaha."}</p>
+            {#if wa}<a href={wa} target="_blank" rel="noopener noreferrer">Tanya promo →</a>{/if}
+          </aside>
         {/if}
-      </main>
+      </div>
+    </section>
 
-      <aside class="umkm-profile-side" id="informasi">
-        <section>
-          <span class="eyebrow">INFORMASI USAHA</span>
-          <h2>Ringkas dan transparan</h2>
-          <dl>
-            <div><dt>Kategori</dt><dd>{u.katLabel || "Usaha warga"}</dd></div>
-            {#if harga.length}<div><dt>Kisaran harga</dt><dd>{teksHarga(harga)}</dd></div>{/if}
-            {#if u.jam}<div><dt>Jam operasional</dt><dd>{u.jam}</dd></div>{/if}
-            {#if u.alamat}<div><dt>Lokasi</dt><dd>{u.alamat}</dd></div>{/if}
-            {#if u.wa}<div><dt>WhatsApp</dt><dd>{u.wa}</dd></div>{/if}
-          </dl>
-        </section>
+    <section class="umkm-profile-story-grid" id="tentang">
+      <article>
+        <span>TENTANG USAHA</span>
+        <h2>Tentang {u.nama}</h2>
+        <p>{deskripsiPemilik(u)}</p>
+      </article>
 
-        <section class="umkm-profile-how">
-          <span class="eyebrow">CARA MENGHUBUNGI</span>
-          <h2>Dari lihat sampai konfirmasi</h2>
-          <ol>
-            <li><b>1</b><span>Lihat rincian {kategori.benda} yang tersedia.</span></li>
-            <li><b>2</b><span>Hubungi pemilik untuk menanyakan kebutuhan, harga, dan ketersediaan.</span></li>
-            <li><b>3</b><span>Konfirmasi detail transaksi langsung dengan pemilik sebelum melanjutkan.</span></li>
-          </ol>
-          {#if wa}<a class="side-wa" href={wa} target="_blank" rel="noopener noreferrer">Buka WhatsApp →</a>{/if}
-        </section>
-      </aside>
-    </div>
+      <article>
+        <span>KEUNGGULAN</span>
+        <h2>Kenapa layak dipertimbangkan?</h2>
+        <ul>
+          {#each unggulan as item}<li><b>✓</b><div><strong>{item.judul}</strong><small>{item.teks}</small></div></li>{/each}
+        </ul>
+      </article>
+
+      <article>
+        <span>CARA PEMESANAN</span>
+        <h2>Dari lihat sampai selesai</h2>
+        <ol>
+          {#each (Array.isArray(u.caraPesan) ? u.caraPesan : ["Lihat rincian yang tersedia", "Hubungi pemilik", "Konfirmasi harga dan kebutuhan", "Lanjutkan transaksi sesuai kesepakatan"]) as langkah, i}
+            <li><b>{i + 1}</b><span>{langkah}</span></li>
+          {/each}
+        </ol>
+      </article>
+    </section>
+
+    {#if galeri.length > 1}
+      <section class="umkm-profile-section" id="galeri">
+        <div class="umkm-profile-section-head"><div><h2>Galeri</h2><p>Foto membantu warga melihat produk, proses, hasil, atau suasana usaha sebelum menghubungi pemilik.</p></div><a href="#">Lihat semua foto →</a></div>
+        <div class="umkm-profile-gallery-strip">
+          {#each galeri.slice(0, 6) as foto, i}
+            <button type="button" onclick={() => { mediaAktif = i; document.querySelector('.umkm-profile-cover')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><img src={foto} alt={`Foto ${u.nama} ${i + 1}`} /></button>
+          {/each}
+        </div>
+      </section>
+    {/if}
+
+    {#if Array.isArray(u.faq) && u.faq.length}
+      <section class="umkm-profile-section umkm-profile-faq" id="faq">
+        <div class="umkm-profile-section-head"><div><h2>FAQ singkat</h2><p>Pertanyaan yang membantu warga memahami layanan sebelum menghubungi pemilik.</p></div></div>
+        <div class="faq-grid">
+          {#each u.faq as item}<details><summary>{item.tanya}</summary><p>{item.jawab}</p></details>{/each}
+        </div>
+      </section>
+    {/if}
 
     {#if terkait.length}
       <section class="umkm-profile-related">
-        <div class="umkm-profile-section-head"><div><span>DIREKTORI WARGA</span><h2>UMKM lainnya</h2><p>Temukan usaha warga lain di RW 02 Sukatani.</p></div><a href="#/umkm">Lihat semua →</a></div>
+        <div class="umkm-profile-section-head"><div><h2>UMKM lainnya</h2><p>Temukan usaha warga lain di RW 02 Sukatani.</p></div><a href="#/umkm">Lihat semua →</a></div>
         <div class="umkm-profile-related-grid">
           {#each terkait as item}
-            <a href={`#/umkm/${item.id}`}>
+            <a href={item.demo ? "#/umkm" : `#/umkm/${item.id}`}>
               {#if fotoUsaha(item)}<img src={fotoUsaha(item)} alt={`Foto ${item.nama}`} />{:else}<span class="placeholder">UMKM</span>{/if}
-              <div><strong>{item.nama}</strong><small>{item.katLabel || "Usaha warga"}</small></div>
+              <div><strong>{item.nama}</strong><small>{item.katLabel || "Usaha warga"}{item.demo ? " · contoh" : ""}</small></div>
             </a>
           {/each}
         </div>
       </section>
     {/if}
 
-    <p class="umkm-profile-disclaimer">Informasi produk, layanan, harga, promo, jam operasional, lokasi, dan kontak mengikuti data yang diberikan pemilik atau pengelola usaha. Konfirmasi detail terbaru langsung kepada pemilik sebelum bertransaksi.</p>
+    <p class="umkm-profile-disclaimer">{u.__demoAktif ? "MODE CONTOH aktif: sebagian field kosong diisi data dummy hanya untuk mengecek desain. " : ""}Informasi resmi tetap mengikuti data pemilik atau pengelola usaha dan perlu dikonfirmasi sebelum transaksi.</p>
   </div>
 {/if}
