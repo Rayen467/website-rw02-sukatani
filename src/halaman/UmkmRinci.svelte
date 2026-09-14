@@ -388,7 +388,7 @@
 
     {#if galeri.length > 1}
       <section class="umkm-profile-section" id="galeri">
-        <div class="umkm-profile-section-head"><div><h2>Galeri</h2><p>Foto membantu warga melihat produk, proses, hasil, atau suasana usaha sebelum menghubungi pemilik.</p></div><a href="#">Lihat semua foto →</a></div>
+        <div class="umkm-profile-section-head"><div><h2>Galeri</h2><p>Foto membantu warga melihat produk, proses, hasil, atau suasana usaha sebelum menghubungi pemilik.</p></div><a href="#/umkm">Lihat direktori UMKM →</a></div>
         <div class="umkm-profile-gallery-strip">
           {#each galeri.slice(0, 6) as foto, i}
             <button type="button" onclick={() => { mediaAktif = i; document.querySelector('.umkm-profile-cover')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><img src={foto} alt={`Foto ${u.nama} ${i + 1}`} /></button>
