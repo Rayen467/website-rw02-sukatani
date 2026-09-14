@@ -38,7 +38,7 @@
   const GRUP = [
     { label: "Menu utama", item: [["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]] },
     { label: "UMKM", item: [
-      ["umkm", "Pusat UMKM", "UMKM & legalitas, sertifikat, katalog & pendampingan", "05", TabUmkm]
+      ["umkm", "Pusat UMKM", "Profil publik, katalog, legalitas & pendampingan", "05", TabUmkm]
     ]},
     { label: "Operasional", item: [
       ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
@@ -208,9 +208,14 @@
     {/if}
 
     <div class="admin-content" role="region" aria-label={dipilih[1]}>
-      <Terpilih />
       {#if aktif === "umkm"}
         <UmkmProHub />
+        <details class="admin-umkm-internal">
+          <summary>Administrasi, legalitas & pendampingan UMKM</summary>
+          <div><Terpilih /></div>
+        </details>
+      {:else}
+        <Terpilih />
       {/if}
     </div>
   </div>
@@ -264,3 +269,7 @@
     </div>
   {/if}
 </div>
+
+<style>
+  .admin-umkm-internal{margin-top:14px;border:1px solid #dce7e3;border-radius:16px;background:#fff;overflow:hidden}.admin-umkm-internal>summary{padding:15px 18px;cursor:pointer;font-weight:850;color:#203a31;background:#f8fbfa}.admin-umkm-internal[open]>summary{border-bottom:1px solid #e4ece9}.admin-umkm-internal>div{padding:0 0 2px}
+</style>
