@@ -13,6 +13,8 @@ const angka = baca("src/halaman/kelola/TabAngka.svelte");
 const layanan = baca("src/halaman/kelola/TabLayanan.svelte");
 const profil = baca("src/halaman/kelola/TabProfil.svelte");
 const umkm = baca("src/halaman/kelola/TabUmkm.svelte");
+const umkmEditor = baca("src/komponen/kelola/UmkmEditorPublik.svelte");
+const umkmHub = baca("src/komponen/kelola/UmkmProHub.svelte");
 const lain = baca("src/halaman/kelola/TabLain.svelte");
 const kelola = baca("src/halaman/kelola/Kelola.svelte");
 const isi = baca("src/keadaan/isi.svelte.js");
@@ -38,10 +40,7 @@ test("semua koleksi yang dikelola Petugas mempunyai aturan eksplisit", () => {
     "fasum", "rutin", "bansos", "bansos_penerima", "jadwal"
   ];
   for (const namaKoleksi of koleksi) {
-    assert.ok(
-      rules.includes("match /" + namaKoleksi + "/{"),
-      "Firestore Rules belum punya blok untuk koleksi " + namaKoleksi
-    );
+    assert.ok(rules.includes("match /" + namaKoleksi + "/{"), "Firestore Rules belum punya blok untuk koleksi " + namaKoleksi);
   }
 });
 
@@ -105,18 +104,13 @@ test("edit kas mempertahankan format tanggal lama", () => {
 });
 
 test("tab Petugas utama tetap menggunakan konstanta koleksi", () => {
-  for (const [namaTab, sumber] of [
-    ["layanan", layanan],
-    ["profil", profil],
-    ["umkm", umkm],
-    ["tautan-polling", lain]
-  ]) {
+  for (const [namaTab, sumber] of [["layanan", layanan], ["profil", profil], ["umkm", umkm], ["tautan-polling", lain]]) {
     assert.match(sumber, /KOLEKSI|KONTEN/, namaTab + " harus memakai konstanta data");
   }
 });
 
 test("pusat UMKM punya menu khusus, legalitas, sertifikat, dan action berikutnya", () => {
-  assert.match(kelola, /UMKM & legalitas/);
+  assert.match(kelola, /legalitas/);
   assert.match(kelola, /TabUmkm/);
   assert.match(umkm, /KOLEKSI\.USAHA_ADMIN/);
   assert.match(umkm, /label:\s*"NIB"/);
@@ -125,6 +119,16 @@ test("pusat UMKM punya menu khusus, legalitas, sertifikat, dan action berikutnya
   assert.match(umkm, /BPOM MD\/ML/);
   assert.match(umkm, /Action berikutnya/);
   assert.match(umkm, /Isi saran action otomatis/);
+});
+
+test("dashboard UMKM mengelola field yang tampil pada profil publik", () => {
+  assert.match(umkmHub, /UmkmEditorPublik/);
+  for (const field of ["ringkas", "panjang", "heroQuote", "tagline", "hargaMulai", "hargaMaks", "promo", "jam", "wa", "alamat", "faqJson", "layananJson"]) {
+    assert.match(umkmEditor, new RegExp(field), `editor UMKM belum mengelola ${field}`);
+  }
+  assert.match(umkmEditor, /KOLEKSI\.USAHA_FOTO/);
+  assert.match(umkmEditor, /multiple accept="image\/jpeg,image\/png,image\/webp"/);
+  assert.match(umkmEditor, /Simpan & terbitkan/);
 });
 
 test("data legalitas UMKM dipisah dari katalog publik dan hanya untuk Petugas", () => {
