@@ -1,15 +1,9 @@
 /*
- * DATA DEMO DETAIL UMKM
+ * DATA DEMO + NORMALISASI DETAIL UMKM
  * ---------------------------------------------------------------------------
- * Tujuan: mengisi field yang belum tersedia supaya desain halaman detail UMKM
- * bisa diuji lengkap sebelum data asli dimasukkan dari Portal Petugas.
- *
- * CARA MEMATIKAN / MENGHAPUS:
- * 1) ubah DEMO_UMKM_AKTIF menjadi false, atau
- * 2) hapus file ini dan import/helper demo di UmkmRinci.svelte.
- *
- * Data asli SELALU menang atas data demo. Jadi saat field asli sudah diisi,
- * tampilan otomatis memakai data asli tanpa perlu mengubah layout.
+ * Data nyata dari Portal Petugas dinormalisasi lebih dulu (termasuk field JSON
+ * untuk daftar layanan, FAQ, keunggulan, dsb). Data demo hanya mengisi field
+ * yang memang masih kosong dan bisa dimatikan per UMKM lewat demoMatikan.
  */
 
 export const DEMO_UMKM_AKTIF = true;
@@ -47,39 +41,12 @@ const DEMO_PER_ID = {
       "Mendukung UMKM lokal"
     ],
     layanan: [
-      {
-        nama: "Cuci Reguler",
-        deskripsi: "Pembersihan dasar untuk pemakaian harian dan kotoran ringan.",
-        harga: 35000,
-        foto: FOTO_SEPATU[0],
-        label: "Populer"
-      },
-      {
-        nama: "Deep Cleaning",
-        deskripsi: "Pembersihan lebih menyeluruh untuk sepatu yang membutuhkan perhatian ekstra.",
-        harga: 50000,
-        foto: FOTO_SEPATU[1]
-      },
-      {
-        nama: "Perawatan Sepatu Putih",
-        deskripsi: "Perawatan untuk membantu menjaga tampilan sepatu berwarna terang.",
-        hargaMulai: 40000,
-        hargaMax: 50000,
-        foto: FOTO_SEPATU[2]
-      },
-      {
-        nama: "Konsultasi Kondisi",
-        deskripsi: "Kirim foto sepatu terlebih dahulu untuk menentukan layanan yang sesuai.",
-        hargaLabel: "Konsultasi",
-        foto: FOTO_SEPATU[3]
-      }
+      { nama: "Cuci Reguler", deskripsi: "Pembersihan dasar untuk pemakaian harian dan kotoran ringan.", harga: 35000, foto: FOTO_SEPATU[0], label: "Populer" },
+      { nama: "Deep Cleaning", deskripsi: "Pembersihan lebih menyeluruh untuk sepatu yang membutuhkan perhatian ekstra.", harga: 50000, foto: FOTO_SEPATU[1] },
+      { nama: "Perawatan Sepatu Putih", deskripsi: "Perawatan untuk membantu menjaga tampilan sepatu berwarna terang.", hargaMulai: 40000, hargaMax: 50000, foto: FOTO_SEPATU[2] },
+      { nama: "Konsultasi Kondisi", deskripsi: "Kirim foto sepatu terlebih dahulu untuk menentukan layanan yang sesuai.", hargaLabel: "Konsultasi", foto: FOTO_SEPATU[3] }
     ],
-    keunggulanDemo: [
-      "Hasil lebih bersih",
-      "Harga terjangkau",
-      "Proses rapi",
-      "Melayani warga RW 02"
-    ],
+    keunggulanDemo: ["Hasil lebih bersih", "Harga terjangkau", "Proses rapi", "Melayani warga RW 02"],
     caraPesan: [
       "Hubungi kami via WhatsApp",
       "Kirim foto dan jelaskan kondisi sepatu",
@@ -135,6 +102,38 @@ export const DEMO_TERKAIT = [
   { id: "demo-produk-rumahan", nama: "Produk Rumahan", kat: "kemasan", katLabel: "Produk Kemasan", sampul: "/website-rw02-sukatani/foto/usaha-keripik-sambal.jpg", demo: true }
 ];
 
+function bacaJson(nilai, fallback) {
+  if (Array.isArray(nilai) || (nilai && typeof nilai === "object")) return nilai;
+  if (!nilai) return fallback;
+  try { return JSON.parse(String(nilai)); } catch { return fallback; }
+}
+
+function normalisasi(asli) {
+  const hasil = { ...asli };
+  const pasangan = [
+    ["layananJson", "layanan", []],
+    ["highlightJson", "highlight", []],
+    ["keunggulanJson", "keunggulan", []],
+    ["caraPesanJson", "caraPesan", []],
+    ["metodePembayaranJson", "metodePembayaran", []],
+    ["faqJson", "faq", []],
+    ["testimoniJson", "testimoni", null]
+  ];
+  for (const [sumber, tujuan, fallback] of pasangan) {
+    if (hasil[sumber]) hasil[tujuan] = bacaJson(hasil[sumber], fallback);
+  }
+
+  if (hasil.sosialMediaJson) {
+    const detail = bacaJson(hasil.sosialMediaJson, []);
+    hasil.sosialMediaDetail = Array.isArray(detail) ? detail : [];
+    hasil.sosialMedia = hasil.sosialMediaDetail.map((x) => typeof x === "string" ? x : x?.nama).filter(Boolean);
+  }
+
+  if (hasil.terverifikasi === "true") hasil.terverifikasi = true;
+  if (hasil.terverifikasi === "false") hasil.terverifikasi = false;
+  return hasil;
+}
+
 function isiJikaKosong(asli, demo) {
   const hasil = { ...demo, ...asli };
   for (const [kunci, nilai] of Object.entries(demo || {})) {
@@ -146,10 +145,12 @@ function isiJikaKosong(asli, demo) {
 }
 
 export function terapkanDemoUmkm(id, asli) {
-  if (!asli || !DEMO_UMKM_AKTIF) return asli;
-  const kategori = DEMO_KATEGORI[String(asli.kat || "").toLowerCase()] || {};
+  if (!asli) return asli;
+  const nyata = normalisasi(asli);
+  if (!DEMO_UMKM_AKTIF || nyata.demoMatikan === "true") return nyata;
+  const kategori = DEMO_KATEGORI[String(nyata.kat || "").toLowerCase()] || {};
   const khusus = DEMO_PER_ID[id] || {};
-  const denganKategori = isiJikaKosong(asli, kategori);
+  const denganKategori = isiJikaKosong(nyata, kategori);
   const lengkap = isiJikaKosong(denganKategori, khusus);
   return { ...lengkap, __demoAktif: true };
 }
