@@ -365,7 +365,7 @@
                     {#if item.foto}<img class="offer-photo" src={item.foto} alt="" />{:else}<span class="number">{String(item.nomor).padStart(2, "0")}</span>{/if}
                     {#if item.label}<span class="offer-label">{item.label}</span>{/if}
                   </div>
-                  <div class="offer-body"><h3>{item.nama}</h3><p>{item.deskripsi}</p>{#if item.harga}<strong>{item.harga}</strong>{/if}<button type="button" aria-label={`Pilih ${item.nama}`}>+</button></div>
+                  <div class="offer-body"><h3>{item.nama}</h3><p>{item.deskripsi}</p>{#if item.harga}<strong>{item.harga}</strong>{/if}<button type="button" onclick={() => document.querySelector('.umkm-profile-actions .primary')?.click()} aria-label={`Pilih ${item.nama}`}>+</button></div>
                 </article>
               {/each}
             </div>
