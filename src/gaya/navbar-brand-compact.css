@@ -4,17 +4,17 @@
  * File ini dimuat paling akhir supaya menang dari override Beranda/mobile.
  * ======================================================================== */
 
+/* Default untuk halaman selain Beranda. */
 .situs .merek-visual,
-body:has(.beranda-hero) .situs .merek-visual,
 body:not(:has(.beranda-hero)) .situs .merek-visual {
   width: 132px !important;
   min-width: 132px !important;
+  max-width: 132px !important;
   height: 40px !important;
   gap: 7px !important;
 }
 
 .situs .merek-logo-ikon,
-body:has(.beranda-hero) .situs .merek-logo-ikon,
 body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
   width: 34px !important;
   height: 34px !important;
@@ -24,6 +24,7 @@ body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
 }
 
 .situs .merek-teks {
+  min-width: 0 !important;
   line-height: .96 !important;
 }
 
@@ -42,13 +43,58 @@ body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
 
 .situs .merek-teks small {
   margin-top: 4px !important;
+  max-width: 88px !important;
   font-size: 5.4px !important;
   line-height: 1 !important;
-  letter-spacing: .07em !important;
+  letter-spacing: .055em !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Beranda dibuat LEBIH kecil lagi karena berada di floating navbar di atas hero.
+   Sebelumnya aturan waktu.css membesarkannya kembali sampai ~190px. */
+body:has(.beranda-hero) .situs .merek-visual {
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+  height: 34px !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+}
+
+body:has(.beranda-hero) .situs .merek-logo-ikon {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  flex: 0 0 28px !important;
+}
+
+body:has(.beranda-hero) .situs .merek-teks strong {
+  font-size: 8px !important;
+}
+
+body:has(.beranda-hero) .situs .merek-teks b {
+  margin-top: 1px !important;
+  font-size: 10.5px !important;
+  letter-spacing: .08em !important;
+}
+
+body:has(.beranda-hero) .situs .merek-teks small {
+  margin-top: 3px !important;
+  max-width: 76px !important;
+  font-size: 4.4px !important;
+  letter-spacing: .045em !important;
 }
 
 @media (min-width: 861px) {
-  body:has(.beranda-hero) .situs-atas,
+  body:has(.beranda-hero) .situs-atas {
+    min-height: 48px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
   body:not(:has(.beranda-hero)) .situs-atas {
     min-height: 56px !important;
     padding-top: 5px !important;
@@ -58,16 +104,15 @@ body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
 
 @media (max-width: 860px) {
   .situs .merek-visual,
-  body:has(.beranda-hero) .situs .merek-visual,
   body:not(:has(.beranda-hero)) .situs .merek-visual {
     width: 118px !important;
     min-width: 118px !important;
+    max-width: 118px !important;
     height: 36px !important;
     gap: 6px !important;
   }
 
   .situs .merek-logo-ikon,
-  body:has(.beranda-hero) .situs .merek-logo-ikon,
   body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
     width: 30px !important;
     height: 30px !important;
@@ -79,19 +124,36 @@ body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
   .situs .merek-teks strong { font-size: 8.5px !important; }
   .situs .merek-teks b { font-size: 11px !important; }
   .situs .merek-teks small { font-size: 4.8px !important; }
-}
 
-@media (max-width: 420px) {
-  .situs .merek-visual,
-  body:has(.beranda-hero) .situs .merek-visual,
-  body:not(:has(.beranda-hero)) .situs .merek-visual {
-    width: 108px !important;
-    min-width: 108px !important;
+  body:has(.beranda-hero) .situs .merek-visual {
+    width: 104px !important;
+    min-width: 104px !important;
+    max-width: 104px !important;
+    height: 32px !important;
     gap: 5px !important;
   }
 
-  .situs .merek-logo-ikon,
-  body:has(.beranda-hero) .situs .merek-logo-ikon,
+  body:has(.beranda-hero) .situs .merek-logo-ikon {
+    width: 27px !important;
+    height: 27px !important;
+    max-width: 27px !important;
+    max-height: 27px !important;
+    flex: 0 0 27px !important;
+  }
+
+  body:has(.beranda-hero) .situs .merek-teks strong { font-size: 7.7px !important; }
+  body:has(.beranda-hero) .situs .merek-teks b { font-size: 10px !important; }
+  body:has(.beranda-hero) .situs .merek-teks small { font-size: 4.2px !important; max-width: 70px !important; }
+}
+
+@media (max-width: 420px) {
+  body:not(:has(.beranda-hero)) .situs .merek-visual {
+    width: 108px !important;
+    min-width: 108px !important;
+    max-width: 108px !important;
+    gap: 5px !important;
+  }
+
   body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
     width: 28px !important;
     height: 28px !important;
@@ -100,7 +162,22 @@ body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
     flex-basis: 28px !important;
   }
 
-  .situs .merek-teks strong { font-size: 8px !important; }
-  .situs .merek-teks b { font-size: 10.3px !important; }
-  .situs .merek-teks small { font-size: 4.5px !important; }
+  body:has(.beranda-hero) .situs .merek-visual {
+    width: 96px !important;
+    min-width: 96px !important;
+    max-width: 96px !important;
+    height: 30px !important;
+  }
+
+  body:has(.beranda-hero) .situs .merek-logo-ikon {
+    width: 25px !important;
+    height: 25px !important;
+    max-width: 25px !important;
+    max-height: 25px !important;
+    flex: 0 0 25px !important;
+  }
+
+  body:has(.beranda-hero) .situs .merek-teks strong { font-size: 7.2px !important; }
+  body:has(.beranda-hero) .situs .merek-teks b { font-size: 9.4px !important; }
+  body:has(.beranda-hero) .situs .merek-teks small { font-size: 4px !important; max-width: 64px !important; }
 }
