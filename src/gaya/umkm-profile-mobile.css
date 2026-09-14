@@ -1,0 +1,629 @@
+/* ========================================================================== 
+ * UNIVERSAL UMKM PROFILE — MOBILE
+ * --------------------------------------------------------------------------
+ * Dibuat khusus mengikuti mockup mobile yang disetujui: media lebih dominan,
+ * identitas usaha ringkas, CTA mudah disentuh, layanan berbentuk list, konten
+ * editorial, galeri 3 kolom, lalu informasi usaha di bagian bawah.
+ * File ini sengaja dipisah dari desktop agar iterasi mobile tidak merusak
+ * layout desktop yang sudah dikunci.
+ * ======================================================================= */
+
+@media (max-width: 760px) {
+  .umkm-profile {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 72px;
+    padding: 0 12px 28px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    overflow: visible;
+  }
+
+  /* Flatten hero agar urutan mobile dapat mengikuti mockup tanpa mengubah
+     susunan desktop: breadcrumb -> galeri -> ringkasan -> aksi -> tab -> isi. */
+  .umkm-profile-hero {
+    display: contents;
+  }
+
+  .umkm-profile-breadcrumb { order: 10; }
+  .umkm-profile-gallery { order: 20; }
+  .umkm-profile-summary { order: 30; }
+  .umkm-profile-toolbar { order: 40; }
+  .umkm-profile-section-nav { order: 50; }
+  .umkm-profile-section#penawaran { order: 60; }
+  .umkm-profile-story-grid { order: 70; }
+  .umkm-profile-section#galeri { order: 80; }
+  .umkm-profile-utility { order: 90; }
+  .umkm-profile-faq { order: 100; }
+  .umkm-profile-related { order: 110; }
+  .umkm-profile-disclaimer { order: 120; }
+
+  /* Breadcrumb ========================================================== */
+  .umkm-profile-breadcrumb {
+    gap: 7px;
+    margin: 10px 2px 12px;
+    padding: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    color: #6f7f7a;
+    font-size: 12px;
+    line-height: 1.25;
+    scrollbar-width: none;
+  }
+
+  .umkm-profile-breadcrumb::-webkit-scrollbar { display: none; }
+  .umkm-profile-breadcrumb > * { flex: 0 0 auto; }
+  .umkm-profile-breadcrumb strong { color: #183f37; }
+
+  /* Galeri utama ======================================================== */
+  .umkm-profile-gallery {
+    min-width: 0;
+    margin: 0 -12px;
+  }
+
+  .umkm-profile-cover {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1.42 / 1;
+    border: 0;
+    border-radius: 14px 14px 0 0;
+    box-shadow: none;
+    background: #e8efec;
+  }
+
+  .umkm-profile-cover img { object-position: center; }
+
+  .umkm-profile-count {
+    left: 16px;
+    bottom: 15px;
+    min-height: 32px;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: rgba(7, 41, 35, .77);
+    font-size: 12px;
+  }
+
+  .umkm-profile-thumbs {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin: 7px 12px 0;
+  }
+
+  .umkm-profile-thumbs button {
+    height: auto;
+    aspect-ratio: 1.05 / 1;
+    border-radius: 9px;
+  }
+
+  .umkm-profile-thumbs button:nth-child(n+6) { display: none; }
+
+  /* Ringkasan usaha ===================================================== */
+  .umkm-profile-summary {
+    display: block;
+    padding: 16px 2px 0;
+  }
+
+  .umkm-profile-badges {
+    gap: 7px;
+    margin: 0 0 10px;
+  }
+
+  .umkm-profile-badges span {
+    min-height: 31px;
+    padding: 0 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  /* Badge tengah dipadatkan seperti mockup mobile. */
+  .umkm-profile-badges span:nth-child(2) {
+    font-size: 0;
+  }
+
+  .umkm-profile-badges span:nth-child(2)::after {
+    content: "UMKM RW 02";
+    font-size: 11px;
+  }
+
+  .umkm-profile-summary h1 {
+    margin: 0;
+    max-width: 100%;
+    color: #0a2e29;
+    font-size: clamp(34px, 9vw, 42px);
+    line-height: 1.02;
+    letter-spacing: -.045em;
+  }
+
+  .umkm-profile-headline {
+    margin: 9px 0 0;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .umkm-profile-tagline {
+    max-width: none;
+    margin: 8px 0 0;
+    color: #4e6962;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .umkm-profile-proof {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 15px;
+  }
+
+  .umkm-profile-proof span {
+    min-height: 38px;
+    padding: 7px 9px;
+    border-radius: 11px;
+    background: #f0f8f4;
+    color: #315b50;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .umkm-profile-proof b {
+    min-width: 18px;
+    font-size: 9px;
+  }
+
+  .umkm-profile-price {
+    margin-top: 15px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .umkm-profile-price small {
+    color: #667b74;
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  .umkm-profile-price strong {
+    margin-top: 2px;
+    color: #075f4f;
+    font-size: 29px;
+    line-height: 1.12;
+    letter-spacing: -.035em;
+  }
+
+  .umkm-profile-price span {
+    max-width: none;
+    margin-top: 3px;
+    color: #6c7c77;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .umkm-profile-actions {
+    display: block;
+    margin-top: 16px;
+  }
+
+  .umkm-profile-actions .primary {
+    width: 100%;
+    min-height: 54px;
+    border-radius: 12px;
+    font-size: 0;
+    box-shadow: 0 12px 26px -20px rgba(3, 92, 68, .8);
+  }
+
+  .umkm-profile-actions .primary::before {
+    content: "◉  Hubungi via WhatsApp";
+    font-size: 15px;
+    font-weight: 850;
+  }
+
+  .umkm-profile-actions .primary span,
+  .umkm-profile-actions .secondary { display: none; }
+
+  /* Simpan + bagikan, dipindah secara visual tepat di bawah CTA utama. */
+  .umkm-profile-toolbar {
+    min-height: 0;
+    margin: 10px 2px 14px;
+    display: block;
+  }
+
+  .umkm-profile-toolbar > div:first-child,
+  .umkm-profile-demo { display: none; }
+
+  .umkm-profile-toolbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .umkm-profile-toolbar button {
+    min-height: 48px;
+    padding: 0 12px;
+    border-radius: 11px;
+    border-color: #d5e1dc;
+    background: #fff;
+    color: #173f36;
+    font-size: 13px;
+  }
+
+  /* Tab navigasi ======================================================== */
+  .umkm-profile-section-nav {
+    position: sticky;
+    top: 62px;
+    z-index: 12;
+    width: calc(100% + 24px);
+    margin: 0 -12px;
+    padding: 0 12px;
+    gap: 28px;
+    overflow-x: auto;
+    background: rgba(255, 255, 255, .96);
+    border-top: 1px solid #edf2ef;
+    border-bottom: 1px solid #dfe8e4;
+    backdrop-filter: blur(14px);
+    scrollbar-width: none;
+  }
+
+  .umkm-profile-section-nav::-webkit-scrollbar { display: none; }
+
+  .umkm-profile-section-nav a {
+    min-height: 51px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .umkm-profile-section-nav a:first-child { font-size: 0; }
+  .umkm-profile-section-nav a:first-child::after { content: "Layanan"; font-size: 12px; }
+  .umkm-profile-section-nav a:nth-child(2) { font-size: 0; }
+  .umkm-profile-section-nav a:nth-child(2)::after { content: "Tentang"; font-size: 12px; }
+
+  /* Layanan ============================================================= */
+  .umkm-profile-section {
+    padding: 22px 0;
+  }
+
+  .umkm-profile-section#penawaran {
+    border-bottom: 1px solid #e7eeeb;
+  }
+
+  .umkm-profile-section-head {
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .umkm-profile-section-head h2,
+  .umkm-profile-story-grid h2 {
+    font-size: 21px;
+  }
+
+  .umkm-profile-section-head p { display: none; }
+
+  .umkm-profile-section-head > a {
+    font-size: 0;
+  }
+
+  .umkm-profile-section-head > a::after {
+    content: "Lihat semua  →";
+    font-size: 11.5px;
+  }
+
+  .umkm-profile-offer-layout { display: block; }
+  .umkm-profile-promo-card { display: none; }
+
+  .umkm-profile-offers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .umkm-profile-offers article {
+    position: relative;
+    min-height: 108px;
+    display: grid;
+    grid-template-columns: 98px minmax(0, 1fr);
+    grid-template-rows: none;
+    align-items: stretch;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 22px -23px rgba(15, 64, 53, .45);
+  }
+
+  .umkm-profile-offers article::after {
+    content: "›";
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    color: #0b6756;
+    font-size: 29px;
+    line-height: 1;
+  }
+
+  .umkm-profile-offers .offer-photo {
+    width: 98px;
+    height: 100%;
+    min-height: 108px;
+    object-fit: cover;
+  }
+
+  .umkm-profile-offers article > .number {
+    width: 70px;
+    height: 70px;
+    margin: 18px 14px;
+    border-radius: 12px;
+  }
+
+  .umkm-profile-offers article > div {
+    padding: 13px 40px 12px 13px;
+  }
+
+  .umkm-profile-offers h3 {
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .umkm-profile-offers p {
+    -webkit-line-clamp: 2;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .umkm-profile-offers strong {
+    margin-top: 7px;
+    font-size: 14px;
+  }
+
+  /* Tentang + keunggulan =============================================== */
+  .umkm-profile-story-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0 22px;
+    border-bottom: 1px solid #e7eeeb;
+  }
+
+  .umkm-profile-story-grid > article {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .umkm-profile-story-grid > article > span { display: none; }
+
+  .umkm-profile-story-grid h2 {
+    margin: 0 0 8px;
+    color: #0e302a;
+    font-size: 22px;
+  }
+
+  .umkm-profile-story-grid > article > p {
+    margin: 0;
+    color: #455f59;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .umkm-profile-story-grid > article:first-child::after {
+    content: "🌿  Usaha lokal dari warga, untuk warga. Bersama mendukung UMKM RW 02.";
+    display: block;
+    margin-top: 14px;
+    padding: 15px 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eef9f4, #f8fcfa);
+    color: #21493f;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .umkm-profile-story-grid ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 9px;
+  }
+
+  .umkm-profile-story-grid ul li {
+    min-height: 82px;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px;
+    border-radius: 11px;
+    background: #f5f9f7;
+  }
+
+  .umkm-profile-story-grid ul li > b {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 11px;
+  }
+
+  .umkm-profile-story-grid li strong,
+  .umkm-profile-story-grid li span {
+    color: #23463e;
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+
+  .umkm-profile-story-grid li small {
+    margin-top: 3px;
+    font-size: 9.5px;
+    line-height: 1.35;
+  }
+
+  /* Cara pemesanan tetap tersedia di desktop, tetapi tidak mengambil ruang
+     pada profil mobile ringkas seperti mockup yang disetujui. */
+  .umkm-profile-story-grid > article:nth-child(3) { display: none; }
+
+  /* Galeri ============================================================= */
+  .umkm-profile-section#galeri {
+    padding-top: 22px;
+  }
+
+  .umkm-profile-gallery-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .umkm-profile-gallery-strip button {
+    position: relative;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+  }
+
+  .umkm-profile-gallery-strip button:nth-child(n+7) { display: none; }
+
+  .umkm-profile-gallery-strip button:nth-child(6)::after {
+    content: "+ Foto lainnya";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    background: rgba(9, 42, 48, .73);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  /* Informasi usaha — dipindah setelah galeri ========================== */
+  .umkm-profile-utility {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 23px 0 2px;
+  }
+
+  .umkm-profile-facts { order: 1; }
+  .umkm-profile-local-note { order: 2; }
+
+  .umkm-profile-facts {
+    position: relative;
+    display: block;
+    padding: 50px 14px 5px;
+    border-radius: 13px;
+    box-shadow: 0 10px 28px -26px rgba(18, 69, 57, .4);
+  }
+
+  .umkm-profile-facts::before {
+    content: "Informasi Usaha";
+    position: absolute;
+    top: 15px;
+    left: 14px;
+    color: #0d302a;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -.025em;
+  }
+
+  .umkm-profile-facts > div {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid #e9efec;
+  }
+
+  .umkm-profile-facts .fact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 14px;
+  }
+
+  .umkm-profile-facts small {
+    margin-bottom: 2px;
+    color: #263f39;
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .umkm-profile-facts strong,
+  .umkm-profile-facts p {
+    color: #6a7b76;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+
+  .umkm-profile-facts a {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
+  .umkm-profile-local-note {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 12px;
+    padding: 15px;
+    border-radius: 13px;
+  }
+
+  .umkm-profile-local-note > span {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+
+  .umkm-profile-local-note strong { font-size: 14px; }
+  .umkm-profile-local-note p { font-size: 11.5px; line-height: 1.4; }
+
+  /* FAQ + terkait ======================================================= */
+  .umkm-profile-faq .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .umkm-profile-faq summary {
+    padding: 13px 14px;
+    font-size: 12px;
+  }
+
+  .umkm-profile-faq details p {
+    font-size: 11px;
+  }
+
+  .umkm-profile-related {
+    padding-top: 24px;
+  }
+
+  .umkm-profile-related-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .umkm-profile-related-grid > a {
+    grid-template-columns: 84px minmax(0, 1fr);
+    min-height: 76px;
+  }
+
+  .umkm-profile-related-grid img,
+  .umkm-profile-related-grid .placeholder {
+    width: 84px;
+    height: 76px;
+  }
+
+  .umkm-profile-related-grid strong { font-size: 12px; }
+
+  .umkm-profile-disclaimer {
+    margin-top: 14px;
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 390px) {
+  .umkm-profile { padding-inline: 10px; }
+  .umkm-profile-gallery,
+  .umkm-profile-section-nav { margin-inline: -10px; width: calc(100% + 20px); }
+  .umkm-profile-thumbs { margin-inline: 10px; }
+  .umkm-profile-summary h1 { font-size: 33px; }
+  .umkm-profile-proof { grid-template-columns: 1fr; }
+  .umkm-profile-story-grid ul { grid-template-columns: 1fr; }
+}
