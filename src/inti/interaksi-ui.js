@@ -113,9 +113,9 @@ function terapkanBatasTipografi() {
   const batas = window.matchMedia(MEDIA_HP).matches ? BATAS_TEKS_HP : BATAS_TEKS_WEB;
 
   document.querySelectorAll("body *").forEach((elemen) => {
-    /* Identitas navbar sengaja memakai tipografi mikro agar brand tidak
-       mendominasi header. Jangan paksa elemen ini ke minimum 14/12px. */
-    if (elemen.closest(".merek-teks")) return;
+    /* Identitas navbar dan footer sengaja memakai tipografi mikro agar brand
+       tidak mendominasi header/kaki halaman. Jangan paksa ke minimum 14/12px. */
+    if (elemen.closest(".merek-teks, .kaki-logo-teks")) return;
     if (!punyaTeksLangsung(elemen)) return;
     const ukuran = Number.parseFloat(window.getComputedStyle(elemen).fontSize);
     if (!Number.isFinite(ukuran) || ukuran >= batas) return;
