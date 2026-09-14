@@ -1,0 +1,106 @@
+/* ===========================================================================
+ * NAVBAR — identitas RW lebih compact
+ * Logo + teks brand tidak perlu mendominasi ruang navigasi.
+ * File ini dimuat paling akhir supaya menang dari override Beranda/mobile.
+ * ======================================================================== */
+
+.situs .merek-visual,
+body:has(.beranda-hero) .situs .merek-visual,
+body:not(:has(.beranda-hero)) .situs .merek-visual {
+  width: 132px !important;
+  min-width: 132px !important;
+  height: 40px !important;
+  gap: 7px !important;
+}
+
+.situs .merek-logo-ikon,
+body:has(.beranda-hero) .situs .merek-logo-ikon,
+body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
+  width: 34px !important;
+  height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  flex: 0 0 34px !important;
+}
+
+.situs .merek-teks {
+  line-height: .96 !important;
+}
+
+.situs .merek-teks strong {
+  font-size: 9.5px !important;
+  line-height: 1 !important;
+  letter-spacing: .035em !important;
+}
+
+.situs .merek-teks b {
+  margin-top: 2px !important;
+  font-size: 12.5px !important;
+  line-height: 1 !important;
+  letter-spacing: .095em !important;
+}
+
+.situs .merek-teks small {
+  margin-top: 4px !important;
+  font-size: 5.4px !important;
+  line-height: 1 !important;
+  letter-spacing: .07em !important;
+}
+
+@media (min-width: 861px) {
+  body:has(.beranda-hero) .situs-atas,
+  body:not(:has(.beranda-hero)) .situs-atas {
+    min-height: 56px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .situs .merek-visual,
+  body:has(.beranda-hero) .situs .merek-visual,
+  body:not(:has(.beranda-hero)) .situs .merek-visual {
+    width: 118px !important;
+    min-width: 118px !important;
+    height: 36px !important;
+    gap: 6px !important;
+  }
+
+  .situs .merek-logo-ikon,
+  body:has(.beranda-hero) .situs .merek-logo-ikon,
+  body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
+    width: 30px !important;
+    height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    flex-basis: 30px !important;
+  }
+
+  .situs .merek-teks strong { font-size: 8.5px !important; }
+  .situs .merek-teks b { font-size: 11px !important; }
+  .situs .merek-teks small { font-size: 4.8px !important; }
+}
+
+@media (max-width: 420px) {
+  .situs .merek-visual,
+  body:has(.beranda-hero) .situs .merek-visual,
+  body:not(:has(.beranda-hero)) .situs .merek-visual {
+    width: 108px !important;
+    min-width: 108px !important;
+    gap: 5px !important;
+  }
+
+  .situs .merek-logo-ikon,
+  body:has(.beranda-hero) .situs .merek-logo-ikon,
+  body:not(:has(.beranda-hero)) .situs .merek-logo-ikon {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    flex-basis: 28px !important;
+  }
+
+  .situs .merek-teks strong { font-size: 8px !important; }
+  .situs .merek-teks b { font-size: 10.3px !important; }
+  .situs .merek-teks small { font-size: 4.5px !important; }
+}
