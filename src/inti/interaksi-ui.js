@@ -1,6 +1,4 @@
 import { KONTAK_KETUA_RW } from "./kontak-resmi.js";
-import { KONTEN } from "./nama.js";
-import { isi, konten } from "../keadaan/isi.svelte.js";
 
 const KUNCI_FAVORIT = "rw02-umkm-favorit";
 const MEDIA_HP = "(max-width: 680px)";
@@ -51,65 +49,6 @@ function sinkronFavorit() {
   });
 }
 
-/**
- * Foto "Informasi terbaru" harus berasal dari data berita yang memang
- * diunggah pengurus. Sebelumnya judul berita dicocokkan dengan kata kunci
- * lalu situs memasang foto kegiatan lain secara otomatis. Itu membuat
- * dokumentasi terlihat seperti foto asli berita padahal bukan.
- *
- * Sekarang: ada foto di dokumen pengumuman -> tampil. Tidak ada -> blok foto
- * dihapus dan kartu tetap rapi sebagai artikel teks.
- */
-function sinkronFotoBeranda() {
-  const kartu = document.querySelector(".home-latest-main");
-  if (!kartu) return;
-
-  const sumber = String(isi.pengumuman?.[0]?.foto || "").trim();
-  let bingkai = kartu.querySelector(".home-latest-photo");
-
-  if (!sumber) {
-    if (bingkai) bingkai.remove();
-    return;
-  }
-
-  if (!bingkai) {
-    bingkai = document.createElement("figure");
-    bingkai.className = "home-latest-photo";
-    const gambar = document.createElement("img");
-    gambar.loading = "lazy";
-    gambar.decoding = "async";
-    bingkai.appendChild(gambar);
-
-    const baca = kartu.querySelector(".home-read");
-    if (baca) kartu.insertBefore(bingkai, baca);
-    else kartu.appendChild(bingkai);
-  }
-
-  const gambar = bingkai.querySelector("img");
-  if (!gambar) return;
-  if (gambar.getAttribute("src") !== sumber) gambar.setAttribute("src", sumber);
-  const judul = kartu.querySelector("h4")?.textContent?.trim() || "Pengumuman RW 02";
-  gambar.setAttribute("alt", `Foto ${judul}`);
-}
-
-/** Tulisan utama halaman Kontak ikut dokumen konten/kontak agar Petugas
- * dapat mengubah copy publik tanpa menyentuh source code. Data operasional
- * seperti alamat dan jam sudah dibaca langsung oleh komponen Svelte. */
-function sinkronKontakPublik() {
-  const akar = document.querySelector(".kontak-final");
-  if (!akar) return;
-  const data = konten(KONTEN.KONTAK) || {};
-  const pasang = (selector, nilai) => {
-    if (!nilai) return;
-    const elemen = akar.querySelector(selector);
-    if (elemen && elemen.textContent !== nilai) elemen.textContent = nilai;
-  };
-  pasang(".kontak-final__hero-copy h1", data.heroJudul);
-  pasang(".kontak-final__hero-copy h2", data.heroSubjudul);
-  pasang(".kontak-final__hero-copy > p", data.heroTeks);
-  pasang(".kontak-final__hero-quote strong", data.heroKutipan);
-}
-
 function punyaTeksLangsung(elemen) {
   if (TAG_FORM_TEKS.has(elemen.tagName)) return true;
   return [...elemen.childNodes].some((node) =>
@@ -134,8 +73,6 @@ function terapkanBatasTipografi() {
   const batas = window.matchMedia(MEDIA_HP).matches ? BATAS_TEKS_HP : BATAS_TEKS_WEB;
 
   document.querySelectorAll("body *").forEach((elemen) => {
-    /* Identitas navbar dan footer sengaja memakai tipografi mikro agar brand
-       tidak mendominasi header/kaki halaman. Jangan paksa ke minimum 14/12px. */
     if (elemen.closest(".merek-teks, .kaki-logo-teks")) return;
     if (!punyaTeksLangsung(elemen)) return;
     const ukuran = Number.parseFloat(window.getComputedStyle(elemen).fontSize);
@@ -151,8 +88,6 @@ function jadwalkanBatasTipografi() {
   if (rafTipografi || typeof requestAnimationFrame === "undefined") return;
   rafTipografi = requestAnimationFrame(() => {
     rafTipografi = 0;
-    sinkronFotoBeranda();
-    sinkronKontakPublik();
     terapkanBatasTipografi();
   });
 }
@@ -221,15 +156,7 @@ export function aktifkanInteraksiUi() {
   if (sudahAktif || typeof document === "undefined") return;
   sudahAktif = true;
   document.addEventListener("click", tanganiKlik);
-  requestAnimationFrame(() => {
-    sinkronFavorit();
-    sinkronFotoBeranda();
-    sinkronKontakPublik();
-  });
+  requestAnimationFrame(sinkronFavorit);
   aktifkanBatasTipografi();
-  window.addEventListener("hashchange", () => requestAnimationFrame(() => {
-    sinkronFavorit();
-    sinkronFotoBeranda();
-    sinkronKontakPublik();
-  }));
+  window.addEventListener("hashchange", () => requestAnimationFrame(sinkronFavorit));
 }
