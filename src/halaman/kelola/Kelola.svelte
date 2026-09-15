@@ -7,6 +7,7 @@
   import UmkmProHub from "../../komponen/kelola/UmkmProHub.svelte";
   import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
+  import TabCrud from "./TabCrud.svelte";
   import TabUmkm from "./TabUmkm.svelte";
   import TabBeranda from "./TabBeranda.svelte";
   import TabLaporan from "./TabLaporan.svelte";
@@ -21,6 +22,7 @@
 
   const IKON = {
     dashboard: "⌂",
+    crud: "✎",
     kiriman: "▤",
     orang: "♙",
     layanan: "▣",
@@ -36,28 +38,31 @@
   };
 
   const GRUP = [
-    { label: "Menu utama", item: [["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard]] },
+    { label: "Menu utama", item: [
+      ["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard],
+      ["crud", "CRUD lengkap", "Tambah, lihat, ubah & hapus seluruh data", "02", TabCrud]
+    ]},
     { label: "UMKM", item: [
       ["umkm", "Pusat UMKM", "Profil publik, katalog, legalitas & pendampingan", "05", TabUmkm]
     ]},
     { label: "Operasional", item: [
-      ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "02", TabKiriman],
-      ["orang", "Warga & pengurus", "Verifikasi & akses akun", "03", TabOrang],
-      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "04", TabLayanan]
+      ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "03", TabKiriman],
+      ["orang", "Warga & pengurus", "Verifikasi & akses akun", "04", TabOrang],
+      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "06", TabLayanan]
     ]},
     { label: "Publikasi", item: [
-      ["terbit", "Berita & galeri", "Informasi publik", "06", TabTerbit],
-      ["beranda", "Beranda", "Konten halaman depan", "07", TabBeranda],
-      ["berkas", "Dokumen & video", "Arsip publik", "08", TabBerkas]
+      ["terbit", "Berita & galeri", "Informasi publik", "07", TabTerbit],
+      ["beranda", "Beranda", "Konten halaman depan", "08", TabBeranda],
+      ["berkas", "Dokumen & video", "Arsip publik", "09", TabBerkas]
     ]},
     { label: "Data & transparansi", item: [
-      ["angka", "Kas & program", "Keuangan dan program kerja", "09", TabAngka],
-      ["laporan", "Laporan", "Rekap siap cetak", "10", TabLaporan],
-      ["profil", "Profil & katalog", "Identitas dan kelembagaan", "11", TabProfil]
+      ["angka", "Kas & program", "Keuangan dan program kerja", "10", TabAngka],
+      ["laporan", "Laporan", "Rekap siap cetak", "11", TabLaporan],
+      ["profil", "Profil & katalog", "Identitas dan kelembagaan", "12", TabProfil]
     ]},
     { label: "Lainnya", item: [
-      ["lain", "Tautan & polling", "Partisipasi warga", "12", TabLain],
-      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "13", TabTampilan]
+      ["lain", "Tautan & polling", "Partisipasi warga", "13", TabLain],
+      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "14", TabTampilan]
     ]}
   ];
 
@@ -91,7 +96,7 @@
     if (!q) return;
     const tujuan = TAB.find((t) => `${t[1]} ${t[2]}`.toLowerCase().includes(q));
     if (!tujuan) {
-      beriTahu("Menu tidak ditemukan. Coba kata seperti layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
+      beriTahu("Menu tidak ditemukan. Coba kata seperti CRUD, layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
       return;
     }
     pencarian = "";
