@@ -1,0 +1,32 @@
+name: Bersihkan data demo satu kali
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "alat/bersihkan-demo-firestore.mjs"
+      - ".github/workflows/cleanup-demo-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Pasang Firebase Admin sementara
+        run: npm install --no-save firebase-admin
+
+      - name: Bersihkan data demo Firestore
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: node alat/bersihkan-demo-firestore.mjs
