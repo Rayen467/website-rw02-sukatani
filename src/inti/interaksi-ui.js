@@ -1,5 +1,6 @@
 import { KONTAK_KETUA_RW } from "./kontak-resmi.js";
-import { isi } from "../keadaan/isi.svelte.js";
+import { KONTEN } from "./nama.js";
+import { isi, konten } from "../keadaan/isi.svelte.js";
 
 const KUNCI_FAVORIT = "rw02-umkm-favorit";
 const MEDIA_HP = "(max-width: 680px)";
@@ -91,6 +92,24 @@ function sinkronFotoBeranda() {
   gambar.setAttribute("alt", `Foto ${judul}`);
 }
 
+/** Tulisan utama halaman Kontak ikut dokumen konten/kontak agar Petugas
+ * dapat mengubah copy publik tanpa menyentuh source code. Data operasional
+ * seperti alamat dan jam sudah dibaca langsung oleh komponen Svelte. */
+function sinkronKontakPublik() {
+  const akar = document.querySelector(".kontak-final");
+  if (!akar) return;
+  const data = konten(KONTEN.KONTAK) || {};
+  const pasang = (selector, nilai) => {
+    if (!nilai) return;
+    const elemen = akar.querySelector(selector);
+    if (elemen && elemen.textContent !== nilai) elemen.textContent = nilai;
+  };
+  pasang(".kontak-final__hero-copy h1", data.heroJudul);
+  pasang(".kontak-final__hero-copy h2", data.heroSubjudul);
+  pasang(".kontak-final__hero-copy > p", data.heroTeks);
+  pasang(".kontak-final__hero-quote strong", data.heroKutipan);
+}
+
 function punyaTeksLangsung(elemen) {
   if (TAG_FORM_TEKS.has(elemen.tagName)) return true;
   return [...elemen.childNodes].some((node) =>
@@ -133,6 +152,7 @@ function jadwalkanBatasTipografi() {
   rafTipografi = requestAnimationFrame(() => {
     rafTipografi = 0;
     sinkronFotoBeranda();
+    sinkronKontakPublik();
     terapkanBatasTipografi();
   });
 }
@@ -204,10 +224,12 @@ export function aktifkanInteraksiUi() {
   requestAnimationFrame(() => {
     sinkronFavorit();
     sinkronFotoBeranda();
+    sinkronKontakPublik();
   });
   aktifkanBatasTipografi();
   window.addEventListener("hashchange", () => requestAnimationFrame(() => {
     sinkronFavorit();
     sinkronFotoBeranda();
+    sinkronKontakPublik();
   }));
 }
