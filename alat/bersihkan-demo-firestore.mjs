@@ -1,10 +1,11 @@
-import admin from 'firebase-admin';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const raw = process.env.FIREBASE_SERVICE_ACCOUNT || process.env.GCP_SA_KEY || '';
 if (!raw) throw new Error('Service account Firebase tidak tersedia.');
 const serviceAccount = JSON.parse(raw);
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount), projectId: 'perumahansukatanirw02' });
-const db = admin.firestore();
+initializeApp({ credential: cert(serviceAccount), projectId: 'perumahansukatanirw02' });
+const db = getFirestore();
 
 const koleksi = [
   'pengumuman','galeri','program','kas','usaha','pengaduan','surat','reservasi','usaha_baru',
@@ -26,7 +27,11 @@ for (const nama of koleksi) {
     batch.delete(doc.ref);
     n++;
     dihapus++;
-    if (n >= 400) { await batch.commit(); batch = db.batch(); n = 0; }
+    if (n >= 400) {
+      await batch.commit();
+      batch = db.batch();
+      n = 0;
+    }
   }
   if (n) await batch.commit();
 }
