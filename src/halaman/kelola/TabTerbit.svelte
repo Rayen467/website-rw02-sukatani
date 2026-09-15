@@ -7,6 +7,7 @@
   import { tanggalHariIni } from "../../inti/format.js";
   import { kecilkanFoto, SISI_SAMPUL, SISI_FOTO_LAYAR } from "../../inti/peramban.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
+  import GaleriFotoKelola from "../../komponen/kelola/GaleriFotoKelola.svelte";
 
   let k = $state({ tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
   let g = $state({ judul: "", fn: "", jml: "" });
@@ -115,6 +116,8 @@
           { nama: "tipe", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "pengumuman", label: "Pengumuman" }, { nilai: "agenda", label: "Agenda" }] },
           { nama: "penting", label: "Sorotan penting", jenis: "pilih", pilihan: [{ nilai: "false", label: "Biasa" }, { nilai: "true", label: "Penting" }] },
           { nama: "tglText", label: "Tanggal tampil" },
+          { nama: "tanggal", label: "Tanggal kalender", jenis: "tanggal" },
+          { nama: "tgl", label: "Tanggal urut / arsip" },
           { nama: "ringkas", label: "Ringkasan", jenis: "panjang" },
           { nama: "isi", label: "Isi lengkap", jenis: "panjang" }
         ]}
@@ -169,6 +172,7 @@
         ]}
         saatHapus={hapusAlbum}
       />
+      <GaleriFotoKelola album={o} />
     {/each}
   {/if}
 </section>
