@@ -1,18 +1,11 @@
 import { KONTAK_KETUA_RW } from "./kontak-resmi.js";
+import { isi } from "../keadaan/isi.svelte.js";
 
 const KUNCI_FAVORIT = "rw02-umkm-favorit";
 const MEDIA_HP = "(max-width: 680px)";
 const BATAS_TEKS_WEB = 14;
 const BATAS_TEKS_HP = 12;
 const TAG_FORM_TEKS = new Set(["INPUT", "TEXTAREA", "SELECT", "OPTION", "BUTTON"]);
-const FOTO_BERANDA = [
-  [/posyandu|balita|imunisasi|kesehatan/i, "./foto/kegiatan-posyandu.jpg"],
-  [/kerja bakti|gotong royong|kebersihan/i, "./foto/kegiatan-kerja-bakti.jpg"],
-  [/saluran|drainase|genangan|air/i, "./foto/kegiatan-saluran-air.jpg"],
-  [/cat|pengecatan|gapura/i, "./foto/kegiatan-pengecatan.jpg"],
-  [/kemerdekaan|17 agustus|lomba/i, "./foto/kegiatan-kemerdekaan.jpg"],
-  [/rapat|sosialisasi|peluncuran|portal|musyawarah/i, "./foto/kegiatan-rapat-warga.jpg"]
-];
 let sudahAktif = false;
 let rafTipografi = 0;
 let pengamatTipografi = null;
@@ -57,18 +50,26 @@ function sinkronFavorit() {
   });
 }
 
-function fotoBerandaUntuk(judul) {
-  const teks = String(judul || "");
-  return FOTO_BERANDA.find(([pola]) => pola.test(teks))?.[1] || "./foto/kegiatan-rapat-warga.jpg";
-}
-
+/**
+ * Foto "Informasi terbaru" harus berasal dari data berita yang memang
+ * diunggah pengurus. Sebelumnya judul berita dicocokkan dengan kata kunci
+ * lalu situs memasang foto kegiatan lain secara otomatis. Itu membuat
+ * dokumentasi terlihat seperti foto asli berita padahal bukan.
+ *
+ * Sekarang: ada foto di dokumen pengumuman -> tampil. Tidak ada -> blok foto
+ * dihapus dan kartu tetap rapi sebagai artikel teks.
+ */
 function sinkronFotoBeranda() {
   const kartu = document.querySelector(".home-latest-main");
   if (!kartu) return;
 
-  const judul = kartu.querySelector("h4")?.textContent?.trim() || "Pengumuman RW 02";
-  const sumber = fotoBerandaUntuk(judul);
+  const sumber = String(isi.pengumuman?.[0]?.foto || "").trim();
   let bingkai = kartu.querySelector(".home-latest-photo");
+
+  if (!sumber) {
+    if (bingkai) bingkai.remove();
+    return;
+  }
 
   if (!bingkai) {
     bingkai = document.createElement("figure");
@@ -86,7 +87,8 @@ function sinkronFotoBeranda() {
   const gambar = bingkai.querySelector("img");
   if (!gambar) return;
   if (gambar.getAttribute("src") !== sumber) gambar.setAttribute("src", sumber);
-  gambar.setAttribute("alt", `Dokumentasi ${judul}`);
+  const judul = kartu.querySelector("h4")?.textContent?.trim() || "Pengumuman RW 02";
+  gambar.setAttribute("alt", `Foto ${judul}`);
 }
 
 function punyaTeksLangsung(elemen) {
