@@ -1,0 +1,91 @@
+/* Penyesuaian untuk Berita.svelte versi data-first. */
+.berita-data-first .berita-shortcut a:nth-child(2),
+.berita-data-first .berita-shortcut a:nth-child(4) { display: grid !important; }
+.berita-data-first .berita-shortcut { grid-template-columns: repeat(4,minmax(0,1fr)) !important; }
+.berita-data-first .berita-shortcut a { border-right: 0 !important; }
+.berita-data-first .berita-unggulan.tanpa-foto {
+  background: linear-gradient(145deg,#123e33,#0a6550) !important;
+}
+.berita-data-first .berita-list-item.tanpa-foto {
+  grid-template-columns: 112px minmax(0,1fr) 24px !important;
+}
+.berita-list-placeholder {
+  width: 112px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(145deg,#e6f3ed,#f6f8f5);
+  color: #0c6d54;
+  font-size: 18px;
+  font-weight: 900;
+}
+.berita-side-empty,
+.berita-section-empty {
+  padding: 26px;
+  border: 1px dashed #cddbd4;
+  border-radius: 18px;
+  background: rgba(255,255,255,.68);
+  color: #65726d;
+}
+.berita-side-empty strong,
+.berita-section-empty strong { display: block; color: #14221d; font-size: 15px; }
+.berita-side-empty p,
+.berita-section-empty p { margin: 7px 0 0; font-size: 13px; line-height: 1.6; }
+.galeri-berita-card.tanpa-foto {
+  background: linear-gradient(145deg,#dff3ea,#f7f9f6);
+}
+.berita-community {
+  display: grid;
+  grid-template-columns: minmax(0,1.05fr) minmax(340px,.95fr);
+  gap: 18px;
+  margin-top: 52px;
+}
+.berita-community-main,
+.berita-forum-live {
+  border: 1px solid #dfe6e1;
+  border-radius: 24px;
+  background: #fff;
+}
+.berita-community-main {
+  position: relative;
+  overflow: hidden;
+  padding: 34px;
+  background:
+    radial-gradient(circle at 93% 12%,rgba(216,239,120,.42),transparent 27%),
+    linear-gradient(145deg,#0b5e49,#0a4438);
+  color: #fff;
+}
+.berita-community-label { color: #d8ef78; font-size: 11px; font-weight: 850; letter-spacing: .13em; }
+.berita-community-main h2 { max-width: 13ch; margin: 10px 0 12px; color: #fff; font-size: clamp(30px,3vw,43px); line-height: 1.02; letter-spacing: -.045em; }
+.berita-community-main p { max-width: 58ch; margin: 0; color: rgba(255,255,255,.82); font-size: 14px; line-height: 1.7; }
+.berita-community-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.berita-community-actions a { min-height: 42px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid rgba(255,255,255,.22); border-radius: 12px; color: #fff; background: rgba(255,255,255,.08); font-size: 12px; font-weight: 750; text-decoration: none; }
+.berita-forum-live { padding: 22px; }
+.berita-forum-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #e4eae6; }
+.berita-forum-head span { color: #14221d; font-size: 16px; font-weight: 800; }
+.berita-forum-head a { color: #0c6d54; font-size: 12px; font-weight: 750; text-decoration: none; }
+.berita-forum-row { display: grid; grid-template-columns: 34px minmax(0,1fr) 16px; gap: 10px; align-items: center; min-height: 68px; padding: 10px 0; border-bottom: 1px solid #edf1ee; color: #14221d; text-decoration: none; }
+.berita-forum-row:last-child { border-bottom: 0; }
+.berita-forum-row > span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; background: #e4f4ed; color: #0c6d54; font-weight: 900; }
+.berita-forum-row b,.berita-forum-row small { display: block; }
+.berita-forum-row b { font-size: 13px; }
+.berita-forum-row small { margin-top: 3px; color: #71807a; font-size: 11px; }
+.berita-forum-row i { color: #0c6d54; font-style: normal; font-size: 19px; }
+.berita-forum-empty { padding: 32px 4px 12px; color: #71807a; font-size: 13px; }
+
+@media (max-width:1080px) {
+  .berita-data-first .berita-shortcut { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  .berita-community { grid-template-columns: 1fr; }
+}
+@media (max-width:760px) {
+  .berita-data-first .berita-shortcut { grid-template-columns: 1fr 1fr !important; }
+  .berita-data-first .berita-list-item.tanpa-foto { grid-template-columns: 92px minmax(0,1fr) 18px !important; }
+  .berita-list-placeholder { width: 92px; height: 78px; }
+  .berita-community-main { padding: 24px; }
+}
+@media (max-width:480px) {
+  .berita-data-first .berita-shortcut { grid-template-columns: 1fr !important; }
+  .berita-data-first .berita-list-item.tanpa-foto { grid-template-columns: 80px minmax(0,1fr) !important; }
+  .berita-list-placeholder { width: 80px; height: 72px; }
+}
