@@ -76,6 +76,10 @@ service cloud.firestore {
                         && request.resource.data.status in ['baru', 'aktif', 'ditolak']);
 
       allow delete: if false;
+
+      // Portal Petugas memiliki editor CRUD lengkap. Ini tidak menghapus
+      // akun Firebase Authentication; hanya profil warga di Firestore.
+      allow create, update, delete: if petugas();
     }
 
     // ---------- daftar pengurus ----------
@@ -128,6 +132,7 @@ service cloud.firestore {
                     && statusSah(request.resource.data.status);
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     match /pengaduan_kontak/{id} {
@@ -141,6 +146,7 @@ service cloud.firestore {
                          ['nama', 'wa', 'tiket', 'uid', 'dibuat']);
 
       allow update, delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     // ---------- pengajuan surat ----------
@@ -169,6 +175,7 @@ service cloud.firestore {
                     && statusSah(request.resource.data.status);
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     // ---------- reservasi fasilitas ----------
@@ -195,6 +202,7 @@ service cloud.firestore {
                     && statusSah(request.resource.data.status);
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     match /jadwal/{tanggal} {
@@ -226,6 +234,7 @@ service cloud.firestore {
                     && statusSah(request.resource.data.status);
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     // ---------- administrasi UMKM: PRIVAT ----------
@@ -252,6 +261,7 @@ service cloud.firestore {
                             && request.resource.data.keys().hasOnly(['pilihan', 'dibuat']);
 
       allow delete: if false;
+      allow read, delete: if petugas();
     }
 
     match /polling/{pollId} {
@@ -281,6 +291,7 @@ service cloud.firestore {
                     && request.resource.data.status == 'dihapus';
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     match /forum_komentar/{id} {
@@ -303,6 +314,7 @@ service cloud.firestore {
                     && request.resource.data.status == 'dihapus';
 
       allow delete: if false;
+      allow create, update, delete: if petugas();
     }
 
     // ---------- isi situs yang dikelola Petugas ----------
