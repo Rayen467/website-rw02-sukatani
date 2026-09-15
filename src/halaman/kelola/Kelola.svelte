@@ -15,6 +15,7 @@
   import TabAngka from "./TabAngka.svelte";
   import TabProfil from "./TabProfil.svelte";
   import TabLayanan from "./TabLayanan.svelte";
+  import TabKontak from "./TabKontak.svelte";
   import TabLain from "./TabLain.svelte";
   import TabBerkas from "./TabBerkas.svelte";
   import TabTampilan from "./TabTampilan.svelte";
@@ -33,38 +34,49 @@
     angka: "◇",
     laporan: "▥",
     profil: "◉",
+    kontak: "☎",
     lain: "◌",
     tampilan: "⚙"
   };
 
+  /* Urutan "Website warga" sengaja dibuat sama dengan navigasi publik.
+     Pengurus tidak perlu menerjemahkan nama teknis dashboard ke nama halaman
+     yang sedang mereka lihat di situs warga. */
   const GRUP = [
     { label: "Menu utama", item: [
       ["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard],
       ["crud", "Pusat Data", "Kelola seluruh data website dari satu tempat", "02", TabCrud]
     ]},
-    { label: "UMKM", item: [
-      ["umkm", "Pusat UMKM", "Profil publik, katalog, legalitas & pendampingan", "05", TabUmkm]
+    { label: "Website warga", item: [
+      ["beranda", "Beranda", "Teks halaman depan dan konten pembuka", "03", TabBeranda],
+      ["profil", "Profil", "Profil RW, pengurus, wilayah dan kelembagaan", "04", TabProfil],
+      ["layanan", "Layanan", "Jenis layanan, fasilitas dan jadwal warga", "05", TabLayanan],
+      ["terbit", "Berita", "Pengumuman, agenda, foto dan galeri", "06", TabTerbit],
+      ["angka", "Transparansi", "Kas, program kerja dan informasi transparansi", "07", TabAngka],
+      ["umkm", "UMKM", "Profil usaha, katalog, foto, promo dan legalitas", "08", TabUmkm],
+      ["kontak", "Kontak", "Alamat, jam pelayanan dan jalur komunikasi", "09", TabKontak]
     ]},
     { label: "Operasional", item: [
-      ["kiriman", "Layanan masuk", "Surat, aduan, reservasi", "03", TabKiriman],
-      ["orang", "Warga & pengurus", "Verifikasi & akses akun", "04", TabOrang],
-      ["layanan", "Layanan & fasilitas", "Jenis layanan & jadwal", "06", TabLayanan]
+      ["kiriman", "Layanan masuk", "Surat, aduan, reservasi dan pesan warga", "10", TabKiriman],
+      ["orang", "Warga & pengurus", "Verifikasi, profil dan akses akun", "11", TabOrang],
+      ["berkas", "Dokumen & video", "Arsip file dan media publik", "12", TabBerkas],
+      ["laporan", "Laporan", "Rekap data siap cetak", "13", TabLaporan]
     ]},
-    { label: "Publikasi", item: [
-      ["terbit", "Berita & galeri", "Informasi publik", "07", TabTerbit],
-      ["beranda", "Beranda", "Konten halaman depan", "08", TabBeranda],
-      ["berkas", "Dokumen & video", "Arsip publik", "09", TabBerkas]
-    ]},
-    { label: "Data & transparansi", item: [
-      ["angka", "Kas & program", "Keuangan dan program kerja", "10", TabAngka],
-      ["laporan", "Laporan", "Rekap siap cetak", "11", TabLaporan],
-      ["profil", "Profil & katalog", "Identitas dan kelembagaan", "12", TabProfil]
-    ]},
-    { label: "Lainnya", item: [
-      ["lain", "Tautan & polling", "Partisipasi warga", "13", TabLain],
-      ["tampilan", "Pengaturan tampilan", "Warna & tipografi", "14", TabTampilan]
+    { label: "Pengaturan", item: [
+      ["lain", "Tautan & polling", "Partisipasi dan tautan tambahan", "14", TabLain],
+      ["tampilan", "Pengaturan tampilan", "Warna dan tipografi", "15", TabTampilan]
     ]}
   ];
+
+  const TAUTAN_PUBLIK = Object.freeze({
+    beranda: "#/",
+    profil: "#/profil",
+    layanan: "#/layanan",
+    terbit: "#/berita",
+    angka: "#/transparansi",
+    umkm: "#/umkm",
+    kontak: "#/kontak"
+  });
 
   const TAB = GRUP.flatMap((g) => g.item);
   const NAV_HP = [
@@ -79,6 +91,8 @@
   const dipilih = $derived(TAB.find((t) => t[0] === aktif) || TAB[0]);
   const grupDipilih = $derived(GRUP.find((g) => g.item.some((t) => t[0] === aktif))?.label || "Portal Petugas");
   const Terpilih = $derived(dipilih[4]);
+  const tautanPublik = $derived(TAUTAN_PUBLIK[aktif] || "#/");
+  const punyaHalamanPublik = $derived(Boolean(TAUTAN_PUBLIK[aktif]));
   const galatData = $derived(Object.entries(galatMuatPengurus));
   const daftarPengurus = $derived(Array.isArray(isi.pengurus) ? isi.pengurus : []);
   const pengurusTop = $derived(daftarPengurus.slice(0, 3));
@@ -103,7 +117,7 @@
     if (!q) return;
     const tujuan = TAB.find((t) => `${t[1]} ${t[2]}`.toLowerCase().includes(q));
     if (!tujuan) {
-      beriTahu("Menu tidak ditemukan. Coba kata seperti pusat data, layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
+      beriTahu("Menu tidak ditemukan. Coba kata seperti Beranda, Profil, Layanan, Berita, Transparansi, UMKM, Kontak, warga, laporan, atau fasilitas.");
       return;
     }
     pencarian = "";
@@ -201,8 +215,8 @@
           {/if}
         </div>
 
-        <a class="tombol admin-ghost-button" href="#/">
-          Buka situs warga <span aria-hidden="true">↗</span>
+        <a class="tombol admin-ghost-button" href={tautanPublik} target="_blank" rel="noopener noreferrer">
+          {punyaHalamanPublik ? "Lihat halaman" : "Buka situs warga"} <span aria-hidden="true">↗</span>
         </a>
         <button class="tombol utama admin-refresh-button" type="button" onclick={() => muatPengurus()}>
           <span aria-hidden="true">↻</span> Segarkan data
