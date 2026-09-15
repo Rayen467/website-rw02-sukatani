@@ -40,7 +40,7 @@
   const GRUP = [
     { label: "Menu utama", item: [
       ["dashboard", "Ikhtisar", "Situasi layanan & data", "01", TabDashboard],
-      ["crud", "CRUD lengkap", "Tambah, lihat, ubah & hapus seluruh data", "02", TabCrud]
+      ["crud", "Pusat Data", "Kelola seluruh data website dari satu tempat", "02", TabCrud]
     ]},
     { label: "UMKM", item: [
       ["umkm", "Pusat UMKM", "Profil publik, katalog, legalitas & pendampingan", "05", TabUmkm]
@@ -77,10 +77,17 @@
   const dariAlamat = $derived(TAB.some((t) => t[0] === rute.bagian[1]) ? rute.bagian[1] : "dashboard");
   const aktif = $derived(dariAlamat);
   const dipilih = $derived(TAB.find((t) => t[0] === aktif) || TAB[0]);
+  const grupDipilih = $derived(GRUP.find((g) => g.item.some((t) => t[0] === aktif))?.label || "Portal Petugas");
   const Terpilih = $derived(dipilih[4]);
   const galatData = $derived(Object.entries(galatMuatPengurus));
-  const pengurusTop = $derived((Array.isArray(isi.pengurus) ? isi.pengurus : []).slice(0, 3));
-  const sisaPengurus = $derived(Math.max(0, (Array.isArray(isi.pengurus) ? isi.pengurus.length : 0) - pengurusTop.length));
+  const daftarPengurus = $derived(Array.isArray(isi.pengurus) ? isi.pengurus : []);
+  const pengurusTop = $derived(daftarPengurus.slice(0, 3));
+  const sisaPengurus = $derived(Math.max(0, daftarPengurus.length - pengurusTop.length));
+  const profilAkun = $derived(
+    daftarPengurus.find((o) => String(o?.email || o?.id || "").toLowerCase() === String(sesi.pengguna?.email || "").toLowerCase()) || null
+  );
+  const namaAkun = $derived(profilAkun?.nama || sesi.pengguna?.displayName || "Petugas RW 02");
+  const emailAkun = $derived(sesi.pengguna?.email || profilAkun?.email || "");
 
   let pencarian = $state("");
   let menuHpTerbuka = $state(false);
@@ -96,7 +103,7 @@
     if (!q) return;
     const tujuan = TAB.find((t) => `${t[1]} ${t[2]}`.toLowerCase().includes(q));
     if (!tujuan) {
-      beriTahu("Menu tidak ditemukan. Coba kata seperti CRUD, layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
+      beriTahu("Menu tidak ditemukan. Coba kata seperti pusat data, layanan, warga, UMKM, legalitas, berita, kas, laporan, atau fasilitas.");
       return;
     }
     pencarian = "";
@@ -126,12 +133,12 @@
   <aside class="admin-sidebar" aria-label="Navigasi Portal Petugas">
     <a class="admin-brand" href="#/" aria-label="Buka situs warga RW 02 Sukatani">
       <span class="admin-brand-logo-wrap" aria-hidden="true">
-        <img class="admin-brand-logo" src="./visual/brand/logo-icon.webp" alt="" />
+        <img class="admin-brand-logo" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3J2DcrlVJWc07vYNUqg33j72Wvv/f2bd27c4-a085-4824-923f-410a06b0adb2.png" alt="" />
       </span>
       <span class="admin-brand-copy">
         <strong>Portal Petugas</strong>
         <b>RW 02 Sukatani</b>
-        <small>Back-office internal</small>
+        <small>Pengelolaan internal</small>
       </span>
     </a>
 
@@ -153,10 +160,11 @@
     </div>
 
     <div class="admin-account">
-      <span class="admin-account-avatar" aria-hidden="true">{(sesi.pengguna?.email || namaPeran() || "P").slice(0, 1).toUpperCase()}</span>
+      <span class="admin-account-avatar" aria-hidden="true">{namaAkun.slice(0, 1).toUpperCase()}</span>
       <span class="admin-account-copy">
-        <strong>{sesi.pengguna?.email || "Petugas"}</strong>
-        <span>{namaPeran()} RW 02</span>
+        <strong title={namaAkun}>{namaAkun}</strong>
+        <span>{namaPeran()} · RW 02</span>
+        {#if emailAkun}<small title={emailAkun}>{emailAkun}</small>{/if}
       </span>
       <button class="admin-account-exit" type="button" onclick={keluarPengurus} title="Keluar dari akun" aria-label="Keluar dari akun">↪</button>
     </div>
@@ -165,19 +173,20 @@
   <div class="admin-main">
     <header class="admin-topbar">
       <div class="admin-topbar-copy">
+        <span class="admin-topbar-kicker">{grupDipilih}</span>
         <div class="admin-title-row"><h1>{dipilih[1]}</h1></div>
-        <p>{dipilih[2]} RW 02 Sukatani secara real-time</p>
+        <p>{dipilih[2]}</p>
       </div>
 
       <form class="admin-top-search" onsubmit={cariPortal} role="search">
         <span aria-hidden="true">⌕</span>
-        <input bind:value={pencarian} aria-label="Cari menu Portal Petugas" placeholder="Cari data, warga, atau layanan..." />
+        <input bind:value={pencarian} aria-label="Cari menu Portal Petugas" placeholder="Cari menu, data, atau layanan..." />
         <kbd>⌘ K</kbd>
       </form>
 
       <div class="admin-topbar-actions">
         <button class="admin-notification" type="button" onclick={bukaNotifikasi} title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Tidak ada peringatan data"} aria-label="Notifikasi data">
-          ♧
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
           {#if galatData.length}<i></i>{/if}
         </button>
 
