@@ -14,7 +14,15 @@
   let form = $state({ kategori: KATEGORI_PENGADUAN[0], lokasi: "", isi: "", nama: "", wa: "" });
   let mengirim = $state(false);
 
-  const semua = $derived(isi.pengaduan || []);
+  /*
+   * Pesan dari halaman Kontak lama pernah disimpan ke koleksi pengaduan
+   * dengan lokasi khusus. Data tersebut bersifat privat dan tidak boleh
+   * ikut tampil pada feed laporan publik. Filter ini menjadi pengaman untuk
+   * record lama sambil alur Kontak dipisahkan sepenuhnya.
+   */
+  const semua = $derived(
+    (isi.pengaduan || []).filter((p) => String(p?.lokasi || "") !== "Kontak Website RW 02")
+  );
   const daftar = $derived(saring === "all" ? semua : semua.filter((p) => p.status === saring));
   const tiketSaya = $derived(simpanan.baca("aduan-saya"));
 
