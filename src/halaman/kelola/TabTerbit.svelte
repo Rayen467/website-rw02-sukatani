@@ -10,6 +10,7 @@
   import GaleriFotoKelola from "../../komponen/kelola/GaleriFotoKelola.svelte";
 
   let k = $state({ tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
+  let fotoPengumuman = $state(null);
   let g = $state({ judul: "", fn: "", jml: "" });
   /* Banyak foto sekaligus. Satu kegiatan kerja bakti biasanya belasan
      sampai dua puluhan foto; memaksa pengurus mengunggah satu-satu berarti
@@ -18,13 +19,19 @@
   let kemajuan = $state("");
   let sibuk = $state("");
 
+  function olahFotoBerita(berkas) {
+    return kecilkanFoto(berkas, SISI_SAMPUL);
+  }
+
   async function terbitkan(e) {
     e.preventDefault();
     sibuk = "konten";
     try {
-      await tambahIsi(KOLEKSI.PENGUMUMAN, { ...k, tgl: k.tanggal || tanggalHariIni() });
-      beriTahu("Terbit. Sudah muncul di halaman Berita.");
+      const foto = fotoPengumuman ? await olahFotoBerita(fotoPengumuman) : "";
+      await tambahIsi(KOLEKSI.PENGUMUMAN, { ...k, foto, tgl: k.tanggal || tanggalHariIni() });
+      beriTahu("Terbit. Sudah muncul di Beranda dan halaman Berita.");
       k = { tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" };
+      fotoPengumuman = null;
       muatKoleksi(KOLEKSI.PENGUMUMAN);
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
@@ -78,9 +85,10 @@
 </script>
 
 <section class="blok">
-  <div class="kepala-bagian"><h2>Terbitkan pengumuman atau agenda</h2></div>
+  <div class="kepala-bagian"><h2>Kelola berita, pengumuman & agenda</h2></div>
   <div class="catatan" style="margin-bottom:18px">
-    <b>Langsung muncul di halaman Berita dan Kalender.</b> Tidak perlu mengubah kode situs.
+    <b>Konten di sini dipakai langsung oleh Beranda dan halaman Berita.</b>
+    Foto tidak lagi dipilih otomatis berdasarkan judul. Kalau berita memang punya dokumentasi, unggah fotonya di sini. Kalau tidak ada foto, Beranda akan menampilkan artikel tanpa gambar agar tidak menyesatkan.
   </div>
   <form class="isian-borang" onsubmit={terbitkan}>
     <div class="isian"><label for="k-tipe">Jenis</label>
@@ -99,6 +107,12 @@
     </div>
     <div class="isian"><label for="k-ringkas">Ringkasan satu kalimat</label><input id="k-ringkas" bind:value={k.ringkas} placeholder="Muncul di daftar berita" /></div>
     <div class="isian"><label for="k-isi">Isi lengkap</label><textarea id="k-isi" bind:value={k.isi} required></textarea></div>
+    <div class="isian">
+      <label for="k-foto">Foto / sampul berita</label>
+      <input id="k-foto" type="file" accept="image/*" onchange={(e) => (fotoPengumuman = e.currentTarget.files[0] || null)} />
+      <span class="petunjuk">Opsional. Gunakan foto asli kegiatan/informasi. Foto otomatis dikecilkan agar halaman tetap ringan.</span>
+      {#if fotoPengumuman}<span class="petunjuk"><b>Dipilih:</b> {fotoPengumuman.name}</span>{/if}
+    </div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === "konten"}>{sibuk === "konten" ? "Menerbitkan..." : "Terbitkan"}</button></div>
   </form>
 
@@ -109,9 +123,11 @@
         koleksi={KOLEKSI.PENGUMUMAN}
         id={o.id}
         judul={o.judul}
-        baris={[o.ringkas || o.isi || "", (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " \u00B7 " + (o.tglText || o.tgl || "-")]}
+        baris={[o.ringkas || o.isi || "", (o.tipe === "agenda" ? "Agenda" : "Pengumuman") + " · " + (o.tglText || o.tgl || "-")]}
         nilai={o}
+        olahFoto={olahFotoBerita}
         kolom={[
+          { nama: "foto", label: "Foto / sampul berita", jenis: "foto", petunjuk: "Pilih foto baru untuk mengganti foto lama. Bisa juga dihapus tanpa menghapus beritanya." },
           { nama: "judul", label: "Judul" },
           { nama: "tipe", label: "Jenis", jenis: "pilih", pilihan: [{ nilai: "pengumuman", label: "Pengumuman" }, { nilai: "agenda", label: "Agenda" }] },
           { nama: "penting", label: "Sorotan penting", jenis: "pilih", pilihan: [{ nilai: "false", label: "Biasa" }, { nilai: "true", label: "Penting" }] },
@@ -127,7 +143,7 @@
 </section>
 
 <section class="blok">
-  <div class="kepala-bagian"><h2>Arsip kegiatan</h2></div>
+  <div class="kepala-bagian"><h2>Arsip kegiatan & galeri</h2></div>
   <form class="isian-borang" onsubmit={tambahGaleri}>
     <div class="isian"><label for="g-judul">Nama kegiatan</label><input id="g-judul" bind:value={g.judul} required placeholder="Kerja Bakti Bulanan" /></div>
     <div class="isian">
@@ -140,7 +156,7 @@
       <label for="g-foto">Foto kegiatan</label>
       <input id="g-foto" type="file" accept="image/*" multiple onchange={(e) => (berkasFoto = [...e.target.files])} />
       <span class="petunjuk">
-        Boleh pilih banyak sekaligus &mdash; tahan Ctrl di komputer, atau ketuk beberapa foto di HP.
+        Boleh pilih banyak sekaligus — tahan Ctrl di komputer, atau ketuk beberapa foto di HP.
         Semuanya otomatis dikecilkan sebelum dikirim, jadi tidak boros kuota.
         Ambil mendatar supaya tidak terpotong.
       </span>
