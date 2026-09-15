@@ -391,10 +391,10 @@
     <p>Halaman ini menutup celah yang sebelumnya hanya bisa dibaca atau diganti statusnya. Editor khusus seperti UMKM, galeri foto, dokumen, pengurus, kas, dan profil tetap dipakai karena lebih aman untuk file dan data khusus.</p>
   </div>
   <div class="crud-links">
-    <a href="#/petugas/umkm">Pusat UMKM</a>
-    <a href="#/petugas/terbit">Berita & galeri</a>
-    <a href="#/petugas/berkas">Dokumen & video</a>
-    <a href="#/petugas/orang">Warga & pengurus</a>
+    <a href="#/kelola/umkm">Pusat UMKM</a>
+    <a href="#/kelola/terbit">Berita & galeri</a>
+    <a href="#/kelola/berkas">Dokumen & video</a>
+    <a href="#/kelola/orang">Warga & pengurus</a>
   </div>
 </section>
 
