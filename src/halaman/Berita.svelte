@@ -118,7 +118,7 @@
         <div class="berita-judul-row">
           <div>
             <span class="judul-ikon orange">▣</span>
-            <div><h2>Informasi Utama</h2><p>Publikasi terbaru dari pengurus RW 02.</p></div>
+            <div><h2>Berita Utama</h2><p>Publikasi terbaru dari pengurus RW 02.</p></div>
           </div>
         </div>
 
@@ -154,7 +154,7 @@
         <div class="berita-judul-row">
           <div>
             <span class="judul-ikon teal">▤</span>
-            <div><h2>Publikasi Lain</h2><p>Daftar informasi berdasarkan data yang tersedia.</p></div>
+            <div><h2>Berita Terbaru</h2><p>Daftar informasi berdasarkan data yang tersedia.</p></div>
           </div>
         </div>
 
