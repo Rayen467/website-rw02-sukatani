@@ -30,6 +30,7 @@ import {
 } from "../sumber/data.js";
 import {
   KONTEN,
+  KOLEKSI,
   KOLEKSI_UMUM,
   KOLEKSI_PENGURUS,
   KOLEKSI_KIRIMAN,
@@ -100,6 +101,17 @@ function teksGalat(err) {
   const kode = kodeGalat(err);
   const pesan = String((err && err.message) || "").trim();
   return kode || pesan || "gagal memuat";
+}
+
+function aktif(nilai) {
+  return nilai === true || String(nilai || "").toLowerCase() === "true";
+}
+
+/* Firestore sudah mengirim pengumuman dari yang terbaru. Sort stabil ini
+   hanya mengangkat satu item berstatus Utama ke posisi pertama; urutan
+   berita biasa di bawahnya tetap mengikuti tanggal terbit. */
+function utamakanPengumuman(daftar) {
+  return [...daftar].sort((a, b) => Number(aktif(b.utama)) - Number(aktif(a.utama)));
 }
 
 /**
@@ -181,7 +193,7 @@ export async function muatKoleksi(nama) {
   try {
     const hasil = await denganRetry(() => ambilKoleksi(nama));
     if (KOLEKSI_PENGURUS.includes(nama) && generasi !== generasiSesi) return;
-    isi[nama] = hasil;
+    isi[nama] = nama === KOLEKSI.PENGUMUMAN ? utamakanPengumuman(hasil) : hasil;
     if (KOLEKSI_PENGURUS.includes(nama)) delete galatMuatPengurus[nama];
   } catch (err) {
     /* Koleksi privat hanya dimuat setelah peran pengurus berhasil dibaca.
