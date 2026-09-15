@@ -6,7 +6,9 @@
     tambahIsi,
     simpanDokumen,
     simpanKonten,
-    pindahDokumen
+    pindahDokumen,
+    ubahDokumen,
+    hapusDokumen
   } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import { keSlug } from "../../inti/format.js";
@@ -28,6 +30,10 @@
     { nilai: STATUS.DITOLAK, label: "Ditolak" }
   ];
 
+  function kunciJadwal(tanggal, fasilitas) {
+    return `${tanggal || "tanggal"}--${keSlug(fasilitas || "fasilitas") || "fasilitas"}`;
+  }
+
   const MODUL = [
     {
       id: "jadwal", kelompok: "Operasional", label: "Jadwal fasilitas", koleksi: KOLEKSI.JADWAL, kunci: "jadwal",
@@ -37,7 +43,7 @@
         { nama: "tanggal", label: "Tanggal", jenis: "tanggal", wajib: true },
         { nama: "fasilitas", label: "Fasilitas", wajib: true }
       ],
-      idDari: (d) => `${d.tanggal || "tanggal"}--${keSlug(d.fasilitas || "fasilitas") || "fasilitas"}`,
+      idDari: (d) => kunciJadwal(d.tanggal, d.fasilitas),
       judul: (o) => o.fasilitas || "Jadwal fasilitas",
       baris: (o) => [o.tanggal || o.id]
     },
@@ -89,7 +95,7 @@
     },
     {
       id: "reservasi", kelompok: "Kiriman warga", label: "Reservasi fasilitas", koleksi: KOLEKSI.RESERVASI, kunci: "reservasi",
-      keterangan: "Koreksi tanggal, jam, fasilitas, acara, pemohon, kontak, dan status reservasi.",
+      keterangan: "Koreksi tanggal, jam, fasilitas, acara, pemohon, kontak, dan status. Kunci kalender ikut disinkronkan saat reservasi sedang diproses.",
       awal: { fasilitas: "", tanggal: "", jam: "", acara: "", nama: "", wa: "", status: STATUS.BARU, uid: "" },
       kolom: [
         { nama: "fasilitas", label: "Fasilitas", wajib: true },
@@ -138,7 +144,7 @@
     },
     {
       id: "forum-topik", kelompok: "Forum & moderasi", label: "Topik forum", koleksi: KOLEKSI.FORUM_TOPIK, kunci: "forum_topik",
-      keterangan: "Pengurus dapat memperbaiki topik, menyembunyikan, atau menghapus spam secara permanen.",
+      keterangan: "Pengurus dapat memperbaiki topik, menyembunyikan, atau menghapus spam secara permanen. Komentar ikut dibersihkan ketika topik dihapus permanen.",
       awal: { judul: "", isi: "", kategori: "Umum", nama: "Pengurus RW 02", rt: "", status: STATUS.AKTIF, uid: "" },
       kolom: [
         { nama: "judul", label: "Judul", wajib: true },
@@ -276,17 +282,68 @@
     }
   }
 
+  async function sinkronJadwalReservasi(lama, baruData) {
+    const statusLama = lama.status || STATUS.BARU;
+    const statusBaru = baruData.status || STATUS.BARU;
+    const lamaAktif = statusLama === STATUS.PROSES;
+    const baruAktif = statusBaru === STATUS.PROSES;
+    if (!lamaAktif && !baruAktif) return;
+
+    const kunciLama = kunciJadwal(lama.tanggal, lama.fasilitas);
+    const kunciBaru = kunciJadwal(baruData.tanggal, baruData.fasilitas);
+
+    if (lamaAktif && (!baruAktif || kunciLama !== kunciBaru)) {
+      await hapusDokumen(KOLEKSI.JADWAL, kunciLama);
+    }
+    if (baruAktif && (!lamaAktif || kunciLama !== kunciBaru)) {
+      await simpanDokumen(KOLEKSI.JADWAL, kunciBaru, {
+        tanggal: baruData.tanggal || "",
+        fasilitas: baruData.fasilitas || ""
+      }, false);
+    }
+    await muatKoleksi(KOLEKSI.JADWAL);
+  }
+
   async function ubahKhusus(id, perubahan, item) {
-    if (!modul.idDari) {
+    if (modul.id === "reservasi") {
       const lengkap = { ...item, ...perubahan };
-      delete lengkap.id;
-      await simpanDokumen(modul.koleksi, id, lengkap, false);
+      await sinkronJadwalReservasi(item, lengkap);
+      await ubahDokumen(modul.koleksi, id, perubahan);
       return;
     }
+
+    if (!modul.idDari) {
+      await ubahDokumen(modul.koleksi, id, perubahan);
+      return;
+    }
+
     const lengkap = { ...item, ...perubahan };
     delete lengkap.id;
+    delete lengkap.dibuat;
+    delete lengkap.diubah;
     const idTujuan = modul.idDari(lengkap);
     await pindahDokumen(modul.koleksi, id, idTujuan, lengkap);
+  }
+
+  async function hapusKhusus(id, item) {
+    if (modul.id === "pengaduan" && item.tiket) {
+      const kontak = (isi.pengaduan_kontak || []).filter((x) => x.tiket === item.tiket);
+      for (const k of kontak) await hapusDokumen(KOLEKSI.PENGADUAN_KONTAK, k.id);
+      if (kontak.length) await muatKoleksi(KOLEKSI.PENGADUAN_KONTAK);
+    }
+
+    if (modul.id === "forum-topik") {
+      const komentar = (isi.forum_komentar || []).filter((x) => x.topikId === id);
+      for (const k of komentar) await hapusDokumen(KOLEKSI.FORUM_KOMENTAR, k.id);
+      if (komentar.length) await muatKoleksi(KOLEKSI.FORUM_KOMENTAR);
+    }
+
+    if (modul.id === "reservasi" && (item.status || STATUS.BARU) === STATUS.PROSES) {
+      await hapusDokumen(KOLEKSI.JADWAL, kunciJadwal(item.tanggal, item.fasilitas));
+      await muatKoleksi(KOLEKSI.JADWAL);
+    }
+
+    await hapusDokumen(modul.koleksi, id);
   }
 
   function muatJsonDokumen() {
@@ -334,10 +391,10 @@
     <p>Halaman ini menutup celah yang sebelumnya hanya bisa dibaca atau diganti statusnya. Editor khusus seperti UMKM, galeri foto, dokumen, pengurus, kas, dan profil tetap dipakai karena lebih aman untuk file dan data khusus.</p>
   </div>
   <div class="crud-links">
-    <a href="#/kelola/umkm">Pusat UMKM</a>
-    <a href="#/kelola/terbit">Berita & galeri</a>
-    <a href="#/kelola/berkas">Dokumen & video</a>
-    <a href="#/kelola/orang">Warga & pengurus</a>
+    <a href="#/petugas/umkm">Pusat UMKM</a>
+    <a href="#/petugas/terbit">Berita & galeri</a>
+    <a href="#/petugas/berkas">Dokumen & video</a>
+    <a href="#/petugas/orang">Warga & pengurus</a>
   </div>
 </section>
 
@@ -401,7 +458,8 @@
               baris={modul.baris(o)}
               nilai={o}
               kolom={kolomLengkap(modul, o)}
-              saatUbah={modul.idDari ? (id, perubahan) => ubahKhusus(id, perubahan, o) : null}
+              saatUbah={(modul.idDari || modul.id === "reservasi") ? (id, perubahan) => ubahKhusus(id, perubahan, o) : null}
+              saatHapus={(id) => hapusKhusus(id, o)}
             />
             {#if o.uid}<small class="crud-owner">UID pemilik: {o.uid}</small>{/if}
           </div>
