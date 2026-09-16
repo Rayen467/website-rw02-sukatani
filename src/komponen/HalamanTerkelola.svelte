@@ -1,9 +1,12 @@
 <script>
-  import { konten } from "../keadaan/isi.svelte.js";
-  import { KONTEN } from "../inti/nama.js";
+  import { onMount } from "svelte";
+  import { konten, muatKonten } from "../keadaan/isi.svelte.js";
   import BlokHalaman from "./BlokHalaman.svelte";
 
+  const CMS_KEY = "cms_halaman";
   let { Komponen, kunciRute = null, halaman = "" } = $props();
+
+  onMount(() => { muatKonten(CMS_KEY); });
 
   function bacaJson(teks, bawaan) {
     try {
@@ -16,7 +19,7 @@
 
   const konfigurasi = $derived.by(() => {
     if (!halaman) return null;
-    const dok = konten(KONTEN.CMS_HALAMAN) || {};
+    const dok = konten(CMS_KEY) || {};
     const semua = bacaJson(dok.halaman, {});
     return semua[halaman] || null;
   });
