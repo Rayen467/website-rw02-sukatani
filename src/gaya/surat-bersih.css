@@ -1,0 +1,34 @@
+/* Menjaga kop surat tetap netral: tanpa emblem/placeholder dan tanpa banner merah. */
+.sb-logo,
+.sc-logo,
+.sb-draft,
+.sc-draft {
+  display: none !important;
+}
+
+.sb-kop,
+.sc-kop {
+  grid-template-columns: 1fr !important;
+  text-align: center !important;
+}
+
+.sb-kop > div,
+.sc-kop > div {
+  width: 100%;
+  text-align: center !important;
+}
+
+/* Hilangkan ruang kosong yang sebelumnya dipakai banner pratinjau. */
+.sb-paper,
+.sc-paper {
+  padding-top: 34px;
+}
+
+@media print {
+  .sb-logo,
+  .sc-logo,
+  .sb-draft,
+  .sc-draft {
+    display: none !important;
+  }
+}
