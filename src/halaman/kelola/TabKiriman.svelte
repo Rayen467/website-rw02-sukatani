@@ -1,26 +1,4 @@
 <script>
-  /**
-   * Tab Kiriman warga -- meja kerja harian petugas.
-   *
-   * Ini satu-satunya tab yang isinya datang dari warga, bukan dari
-   * pengurus. Karena itu yang dikejar di sini bukan kelengkapan borang,
-   * tapi KECEPATAN MENANGANI: yang baru masuk harus langsung terlihat,
-   * dan menutup satu kiriman harus cukup beberapa ketukan.
-   *
-   * Empat hal yang dulu tidak ada dan sekarang ada:
-   *
-   *   1. Surat bisa diproses. Dulu tabelnya cuma bisa dibaca, jadi status
-   *      pengajuan warga tertahan di "Diterima" selamanya walaupun suratnya
-   *      sudah jadi. Janji "status bisa dipantau" tidak berlaku untuk surat.
-   *   2. Catatan penanganan pengaduan. Kolomnya sudah lama ada, halaman
-   *      Pengaduan sudah menampilkannya ke warga, tapi tidak ada satu pun
-   *      layar yang bisa mengisinya.
-   *   3. Permohonan bisa ditolak. Dulu satu-satunya cara menutup permohonan
-   *      yang tidak bisa dipenuhi adalah menandainya "Selesai" -- berbohong
-   *      kepada warga yang memantau.
-   *   4. Saringan dan pencarian. Setelah beberapa bulan daftarnya ratusan
-   *      baris, dan yang baru masuk tenggelam di bawah.
-   */
   import { KOLEKSI, STATUS, PILIHAN_STATUS } from "../../inti/nama.js";
   import { keSlug, keCSV, namaUnduhan } from "../../inti/format.js";
   import { unduhTeks } from "../../inti/peramban.js";
@@ -29,14 +7,13 @@
   import { ubahStatus, ubahDokumen, setujuiReservasi, selesaikanReservasi, simpanDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
+  import MejaSurat from "./MejaSurat.svelte";
 
   const semuaPengaduan = $derived(isi.pengaduan || []);
   const kontakPengaduan = $derived(isi.pengaduan_kontak || []);
   const semuaSurat = $derived(isi.surat || []);
   const semuaReservasi = $derived(isi.reservasi || []);
   const usahaBaru = $derived(isi.usaha_baru || []);
-
-  /* --- Saringan bersama untuk keempat daftar -------------------------- */
 
   let saring = $state("baru");
   let cari = $state("");
@@ -47,19 +24,12 @@
     ...PILIHAN_STATUS.filter((p) => p.nilai !== STATUS.BARU).map((p) => [p.nilai, p.label])
   ];
 
-  /**
-   * Menyaring satu daftar berdasarkan status dan kata pencarian.
-   * Pencarian menyapu seluruh kolom teks dokumen, bukan kolom tertentu:
-   * petugas biasanya ingat sepotong isinya, bukan nama kolomnya.
-   */
   function pilih(daftar) {
     const kata = cari.trim().toLowerCase();
     return daftar.filter((d) => {
       if (saring !== "semua" && (d.status || STATUS.BARU) !== saring) return false;
       if (!kata) return true;
-      return Object.values(d).some(
-        (v) => typeof v === "string" && v.toLowerCase().includes(kata)
-      );
+      return Object.values(d).some((v) => typeof v === "string" && v.toLowerCase().includes(kata));
     });
   }
 
@@ -89,20 +59,17 @@
 
   function pesanWa(jenis, nomor, status) {
     const s = PILIHAN_STATUS.find((x) => x.nilai === status)?.label || status || "Diterima";
-    return "Halo, kami dari pengurus RW 02. Terkait " + jenis + " " + nomor +
-      ", status saat ini: " + s + ".";
+    return "Halo, kami dari pengurus RW 02. Terkait " + jenis + " " + nomor + ", status saat ini: " + s + ".";
   }
-
-  /* --- Tindakan ------------------------------------------------------- */
 
   let bentuk = $state({});
   let sibuk = $state("");
 
-  /** Nilai isian sebuah baris, dimulai dari nilai yang tersimpan. */
   function isian(d, kolom) {
     const k = d.id + ":" + kolom;
     return bentuk[k] !== undefined ? bentuk[k] : d[kolom] || (kolom === "status" ? STATUS.BARU : "");
   }
+
   function setIsian(d, kolom, nilai) {
     bentuk[d.id + ":" + kolom] = nilai;
   }
@@ -120,21 +87,12 @@
 
   const simpanPengaduan = (p) =>
     jalan(p.id, async () => {
-      /* Status dan catatan disimpan sekali jalan. Aturan Firestore memang
-         cuma mengizinkan kedua kolom itu -- isi laporan aslinya tidak bisa
-         diubah siapa pun, termasuk master admin. */
       await ubahDokumen(KOLEKSI.PENGADUAN, p.id, {
         status: isian(p, "status"),
         catatan: isian(p, "catatan")
       });
       muatKoleksi(KOLEKSI.PENGADUAN);
     }, "Pengaduan diperbarui. Warga melihat catatannya di halaman Pengaduan.");
-
-  const simpanSurat = (x) =>
-    jalan(x.id, async () => {
-      await ubahStatus(KOLEKSI.SURAT, x.id, isian(x, "status"));
-      muatKoleksi(KOLEKSI.SURAT);
-    }, "Status surat diperbarui. Pemohon melihatnya di halaman Akun Saya.");
 
   const setujuiPinjam = (r) =>
     jalan(r.id, async () => {
@@ -151,8 +109,6 @@
 
   const tolakPinjam = (r) =>
     jalan(r.id, async () => {
-      /* Tanggalnya sengaja TIDAK dikunci di kalender. Menolak berarti
-         fasilitasnya tetap kosong hari itu dan boleh dipinjam orang lain. */
       await ubahStatus(KOLEKSI.RESERVASI, r.id, STATUS.DITOLAK);
       muatKoleksi(KOLEKSI.RESERVASI);
     }, "Permohonan ditolak. Tanggalnya tetap terbuka untuk warga lain.");
@@ -180,15 +136,6 @@
       muatKoleksi(KOLEKSI.USAHA_BARU);
     }, "Usaha tampil di katalog warga.");
 
-  /* --- Ekspor --------------------------------------------------------- */
-
-  /**
-   * Mengunduh daftar sebagai CSV untuk dilaporkan ke desa.
-   *
-   * Yang diekspor adalah daftar YANG SEDANG TAMPIL, mengikuti saringan dan
-   * pencarian. Jadi "pengaduan yang belum ditangani bulan ini" cukup
-   * disaring dulu, lalu diunduh -- tidak perlu menyunting berkasnya lagi.
-   */
   function ekspor(nama, daftar, kolom) {
     if (!daftar.length) {
       beriTahu("Tidak ada baris untuk diekspor dengan saringan ini.");
@@ -236,12 +183,7 @@
           {#if p.lokasi}<p class="keterangan">{p.lokasi}</p>{/if}
           {#if kontak && kontak.wa}
             <p class="keterangan">Pelapor: {kontak.nama || "Tanpa nama"} · {kontak.wa}</p>
-            <a
-              class="tombol wa"
-              href={tautanWa(kontak.wa, pesanWa("pengaduan", p.tiket || p.id, isian(p, "status")))}
-              target="_blank"
-              rel="noreferrer"
-            >Hubungi via WhatsApp</a>
+            <a class="tombol wa" href={tautanWa(kontak.wa, pesanWa("pengaduan", p.tiket || p.id, isian(p, "status")))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
           {/if}
         </div>
         <div class="tindakan">
@@ -253,17 +195,10 @@
           </div>
           <div class="isian">
             <label for="pg-ct-{p.id}">Catatan penanganan</label>
-            <textarea
-              id="pg-ct-{p.id}"
-              value={isian(p, "catatan")}
-              oninput={(e) => setIsian(p, "catatan", e.currentTarget.value)}
-              placeholder="Sudah diteruskan ke kantor kelurahan, menunggu jadwal perbaikan"
-            ></textarea>
+            <textarea id="pg-ct-{p.id}" value={isian(p, "catatan")} oninput={(e) => setIsian(p, "catatan", e.currentTarget.value)} placeholder="Sudah diteruskan ke kantor kelurahan, menunggu jadwal perbaikan"></textarea>
             <span class="petunjuk">Terbaca warga di halaman Pengaduan. Tulis apa yang sudah dikerjakan, bukan janji.</span>
           </div>
-          <button class="tombol utama" type="button" onclick={() => simpanPengaduan(p)} disabled={sibuk === p.id}>
-            {sibuk === p.id ? "Menyimpan..." : "Simpan"}
-          </button>
+          <button class="tombol utama" type="button" onclick={() => simpanPengaduan(p)} disabled={sibuk === p.id}>{sibuk === p.id ? "Menyimpan..." : "Simpan"}</button>
         </div>
       </div>
     {/each}
@@ -274,42 +209,13 @@
 
 <section class="blok">
   <div class="kepala-bagian">
-    <h2>Pengajuan surat</h2>
-    <button class="tombol" type="button" onclick={() => ekspor("pengajuan-surat", surat, [["Antrean","antrean"],["Jenis","jenis"],["Nama","nama"],["RT","rt"],["Alamat","alamat"],["Keperluan","keperluan"],["Kontak","wa"],["Status","status"]])}>Unduh CSV</button>
+    <div>
+      <p class="alis">Administrasi warga</p>
+      <h2>Pengajuan surat</h2>
+    </div>
+    <button class="tombol" type="button" onclick={() => ekspor("pengajuan-surat", surat, [["Antrean","antrean"],["Jenis","jenis"],["Nama","nama"],["RT","rt"],["Alamat","alamat"],["Keperluan","keperluan"],["Kontak","wa"],["Petugas","petugasNama"],["Tahap","tahap"],["Status","status"]])}>Unduh CSV</button>
   </div>
-  {#if surat.length}
-    {#each surat as x}
-      <div class="baris-kelola tegak">
-        <div class="isi">
-          <b>{x.jenis} &middot; <span class="mono">{x.antrean || x.id}</span></b>
-          <p>{x.nama} &middot; {x.alamat || "-"} {x.rt || ""}</p>
-          {#if x.keperluan}<p class="keterangan">Keperluan: {x.keperluan}</p>{/if}
-          <p><Lencana status={x.status} /></p>
-          {#if x.wa}
-            <a class="tombol wa" href={tautanWa(x.wa, pesanWa("pengajuan surat", x.antrean || x.id, isian(x, "status")))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
-          {/if}
-        </div>
-        <div class="tindakan">
-          <div class="isian">
-            <label for="sr-st-{x.id}">Status</label>
-            <select id="sr-st-{x.id}" value={isian(x, "status")} onchange={(e) => setIsian(x, "status", e.currentTarget.value)}>
-              {#each PILIHAN_STATUS as s}<option value={s.nilai}>{s.label}</option>{/each}
-            </select>
-          </div>
-          <button class="tombol utama" type="button" onclick={() => simpanSurat(x)} disabled={sibuk === x.id}>
-            {sibuk === x.id ? "Menyimpan..." : "Simpan status"}
-          </button>
-        </div>
-      </div>
-    {/each}
-    <p class="verifikasi">
-      Nomor induk kependudukan tidak ditampilkan di daftar ini dan tidak ikut terunduh,
-      walau Anda berhak membukanya. Isinya hanya dibuka di konsol basis data saat surat
-      benar-benar dibuat, supaya tidak terpampang di layar yang bisa terlihat orang lain.
-    </p>
-  {:else}
-    <p class="kosong">Tidak ada pengajuan yang cocok dengan saringan ini.</p>
-  {/if}
+  <MejaSurat daftar={surat} />
 </section>
 
 <section class="blok">
@@ -324,9 +230,7 @@
           <b>{r.fasilitas}</b>
           <p>{r.tanggal} &middot; {r.jam || "-"} &middot; {r.acara || "-"}</p>
           <p>{r.nama}{r.wa ? " · " + r.wa : ""} <Lencana status={r.status} /></p>
-          {#if r.wa}
-            <a class="tombol wa" href={tautanWa(r.wa, pesanWa("permohonan fasilitas", r.fasilitas + " " + r.tanggal, r.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
-          {/if}
+          {#if r.wa}<a class="tombol wa" href={tautanWa(r.wa, pesanWa("permohonan fasilitas", r.fasilitas + " " + r.tanggal, r.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>{/if}
         </div>
         <div></div>
         <div class="baris-tombol">
@@ -334,19 +238,14 @@
             <button class="tombol utama" type="button" onclick={() => setujuiPinjam(r)} disabled={sibuk === r.id}>Setujui &amp; kunci tanggal</button>
             <button class="tombol" type="button" onclick={() => tolakPinjam(r)} disabled={sibuk === r.id}>Tolak</button>
           {:else if r.status === STATUS.PROSES}
-            <button class="tombol utama" type="button" onclick={() => selesaiPinjam(r)} disabled={sibuk === r.id}>
-              {sibuk === r.id ? "Menyimpan..." : "Tandai selesai"}
-            </button>
+            <button class="tombol utama" type="button" onclick={() => selesaiPinjam(r)} disabled={sibuk === r.id}>{sibuk === r.id ? "Menyimpan..." : "Tandai selesai"}</button>
           {:else}
             <span class="keterangan">sudah diputuskan</span>
           {/if}
         </div>
       </div>
     {/each}
-    <p class="verifikasi">
-      Menyetujui permohonan langsung mengunci tanggalnya di kalender ketersediaan yang dilihat warga.
-      Menolak tidak mengunci apa pun, jadi tanggal itu tetap terbuka untuk warga lain.
-    </p>
+    <p class="verifikasi">Menyetujui permohonan langsung mengunci tanggalnya di kalender ketersediaan yang dilihat warga. Menolak tidak mengunci apa pun.</p>
   {:else}
     <p class="kosong">Tidak ada permohonan yang cocok dengan saringan ini.</p>
   {/if}
@@ -364,9 +263,7 @@
           <b>{u.nama}</b>
           <p>{u.pemilik} &middot; {u.jenis}</p>
           <p>{u.produk || ""} <Lencana status={u.status} /></p>
-          {#if u.wa}
-            <a class="tombol wa" href={tautanWa(u.wa, pesanWa("pendaftaran UMKM", u.nama, u.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>
-          {/if}
+          {#if u.wa}<a class="tombol wa" href={tautanWa(u.wa, pesanWa("pendaftaran UMKM", u.nama, u.status))} target="_blank" rel="noreferrer">Hubungi via WhatsApp</a>{/if}
         </div>
         <div></div>
         <div class="baris-tombol">
