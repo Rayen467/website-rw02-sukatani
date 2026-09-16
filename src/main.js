@@ -5,6 +5,7 @@ import { aktifkanInteraksiKonten } from "./keadaan/interaksi-konten.js";
 import App from "./App.svelte";
 import "./gaya/global.css";
 import "./gaya/perbaikan-pengurus.css";
+import "./gaya/surat-bersih.css";
 
 const aplikasi = mount(App, { target: document.getElementById("app") });
 aktifkanInteraksiUi();
