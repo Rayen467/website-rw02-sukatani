@@ -11,13 +11,18 @@
 
   let k = $state({ tipe: "pengumuman", penting: false, judul: "", tglText: "", tanggal: "", ringkas: "", isi: "" });
   let fotoPengumuman = $state(null);
-  let g = $state({ judul: "", fn: "", jml: "" });
-  /* Banyak foto sekaligus. Satu kegiatan kerja bakti biasanya belasan
-     sampai dua puluhan foto; memaksa pengurus mengunggah satu-satu berarti
-     tidak akan pernah diunggah sama sekali. */
+  let g = $state({ judul: "", kategori: "kegiatan", tanggal: tanggalHariIni(), keterangan: "", fn: "", jml: "" });
   let berkasFoto = $state([]);
   let kemajuan = $state("");
   let sibuk = $state("");
+
+  const kategoriGaleri = [
+    { nilai: "kegiatan", label: "Kegiatan" },
+    { nilai: "pembangunan", label: "Pembangunan" },
+    { nilai: "acara", label: "Acara Warga" }
+  ];
+
+  const labelKategoriGaleri = (nilai) => kategoriGaleri.find((x) => x.nilai === nilai)?.label || "Belum dikategorikan";
 
   function olahFotoBerita(berkas) {
     return kecilkanFoto(berkas, SISI_SAMPUL);
@@ -45,17 +50,11 @@
       const fotoBesar = [];
       let sampul = "";
 
-      /* Foto dikecilkan satu per satu, bukan berbarengan. Dua puluh foto
-         yang digambar ke kanvas sekaligus membekukan HP kelas menengah.
-         Kemajuannya ditampilkan supaya pengurus tahu situsnya tidak macet. */
       for (let i = 0; i < berkasFoto.length; i++) {
         kemajuan = "Mengecilkan foto " + (i + 1) + " dari " + berkasFoto.length + "...";
         try {
           const besar = await kecilkanFoto(berkasFoto[i], SISI_FOTO_LAYAR);
           fotoBesar.push(besar);
-          /* Sampul dibuat terpisah dan jauh lebih kecil. Sampul ikut
-             terunduh setiap pengunjung membuka situs, jadi harus ringan;
-             foto ukuran penuh baru diambil kalau albumnya dibuka. */
           if (!sampul) sampul = await kecilkanFoto(berkasFoto[i], SISI_SAMPUL);
         } catch (err) {
           beriTahu("Foto ke-" + (i + 1) + " dilewati: " + err.message);
@@ -75,7 +74,7 @@
             : "Tersimpan dengan " + hasil.masuk + " foto."
           : "Kegiatan tercatat, belum ada fotonya."
       );
-      g = { judul: "", fn: "", jml: "" };
+      g = { judul: "", kategori: "kegiatan", tanggal: tanggalHariIni(), keterangan: "", fn: "", jml: "" };
       berkasFoto = [];
       muatKoleksi(KOLEKSI.GALERI);
     } catch (err) { beriTahu(pesanRamah(err)); }
@@ -144,8 +143,23 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Arsip kegiatan & galeri</h2></div>
+  <div class="catatan" style="margin-bottom:18px">
+    <b>Metadata galeri sekarang dipakai langsung oleh filter publik.</b>
+    Isi kategori dan tanggal sesuai kegiatan sebenarnya. Jangan menebak kategori atau tanggal lama; data yang belum diketahui boleh dibiarkan untuk dilengkapi kemudian.
+  </div>
   <form class="isian-borang" onsubmit={tambahGaleri}>
     <div class="isian"><label for="g-judul">Nama kegiatan</label><input id="g-judul" bind:value={g.judul} required placeholder="Kerja Bakti Bulanan" /></div>
+    <div class="isian">
+      <label for="g-kategori">Kategori galeri</label>
+      <select id="g-kategori" bind:value={g.kategori}>{#each kategoriGaleri as kategori}<option value={kategori.nilai}>{kategori.label}</option>{/each}</select>
+      <span class="petunjuk">Dipakai oleh filter Kegiatan, Pembangunan, dan Acara Warga pada halaman Galeri.</span>
+    </div>
+    <div class="isian">
+      <label for="g-tanggal">Tanggal kegiatan</label>
+      <input id="g-tanggal" type="date" bind:value={g.tanggal} />
+      <span class="petunjuk">Tanggal ini tampil pada kartu galeri dan dipakai untuk urutan terbaru/terlama.</span>
+    </div>
+    <div class="isian"><label for="g-keterangan">Keterangan singkat</label><textarea id="g-keterangan" bind:value={g.keterangan} placeholder="Ringkasan singkat kegiatan yang memang terjadi."></textarea></div>
     <div class="isian">
       <label for="g-fn">Nama berkas arsip</label>
       <input id="g-fn" bind:value={g.fn} placeholder="2026-09-14_Kerja-Bakti-Bulanan" />
@@ -179,11 +193,17 @@
         koleksi={KOLEKSI.GALERI}
         id={o.id}
         judul={o.judul}
-        baris={[o.fn || "-", (o.jumlahFoto || "0") + " foto" + (o.jml ? " · " + o.jml : "")]}
+        baris={[
+          [labelKategoriGaleri(o.kategori), o.tanggal || "Tanggal belum diisi"].filter(Boolean).join(" · "),
+          (o.jumlahFoto || "0") + " foto" + (o.jml ? " · " + o.jml : "")
+        ]}
         nilai={o}
         kolom={[
           { nama: "judul", label: "Nama kegiatan" },
-          { nama: "fn", label: "Keterangan" },
+          { nama: "kategori", label: "Kategori galeri", jenis: "pilih", pilihan: kategoriGaleri },
+          { nama: "tanggal", label: "Tanggal kegiatan", jenis: "tanggal" },
+          { nama: "keterangan", label: "Keterangan singkat", jenis: "panjang" },
+          { nama: "fn", label: "Nama berkas arsip / keterangan lama" },
           { nama: "jml", label: "Isi arsip" }
         ]}
         saatHapus={hapusAlbum}
