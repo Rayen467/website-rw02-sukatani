@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { sign } from "node:crypto";
 
 const project = process.argv[2] || process.env.FIREBASE_PROJECT || "perumahansukatanirw02";
+const bucket = process.env.FIREBASE_STORAGE_BUCKET || "perumahansukatanirw02.firebasestorage.app";
 const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 if (!credentialsPath) {
@@ -63,57 +64,62 @@ async function api(token, url, opsi = {}) {
   return { respons, data };
 }
 
-const token = await aksesToken();
-const aturan = await readFile("firestore.rules", "utf8");
-
-console.log(`Membuat ruleset Firestore untuk project ${project}...`);
-const ruleset = await api(
-  token,
-  `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/rulesets`,
-  {
-    method: "POST",
-    body: JSON.stringify({
-      source: {
-        files: [{ name: "firestore.rules", content: aturan }]
-      }
-    })
-  }
-);
-
-if (!ruleset.respons.ok || !ruleset.data?.name) {
-  throw new Error(`Ruleset ditolak (${ruleset.respons.status}): ${JSON.stringify(ruleset.data)}`);
-}
-
-const rulesetName = ruleset.data.name;
-const releaseName = `projects/${project}/releases/cloud.firestore`;
-console.log(`Ruleset valid: ${rulesetName.split("/").at(-1)}. Memperbarui release cloud.firestore...`);
-
-let rilis = await api(
-  token,
-  `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/releases/cloud.firestore`,
-  {
-    method: "PATCH",
-    body: JSON.stringify({
-      release: { name: releaseName, rulesetName },
-      updateMask: "rulesetName"
-    })
-  }
-);
-
-// Project Firestore baru mungkin belum memiliki named release tersebut.
-if (rilis.respons.status === 404) {
-  rilis = await api(
+async function buatDanRilis(token, namaFile, isiAturan, releaseId, label) {
+  console.log(`Membuat ruleset ${label} untuk project ${project}...`);
+  const ruleset = await api(
     token,
-    `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/releases`,
+    `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/rulesets`,
     {
       method: "POST",
-      body: JSON.stringify({ name: releaseName, rulesetName })
+      body: JSON.stringify({
+        source: {
+          files: [{ name: namaFile, content: isiAturan }]
+        }
+      })
     }
   );
+
+  if (!ruleset.respons.ok || !ruleset.data?.name) {
+    throw new Error(`Ruleset ${label} ditolak (${ruleset.respons.status}): ${JSON.stringify(ruleset.data)}`);
+  }
+
+  const rulesetName = ruleset.data.name;
+  const releaseName = `projects/${project}/releases/${releaseId}`;
+  console.log(`Ruleset ${label} valid: ${rulesetName.split("/").at(-1)}. Memperbarui ${releaseId}...`);
+
+  let rilis = await api(
+    token,
+    `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/releases/${releaseId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        release: { name: releaseName, rulesetName },
+        updateMask: "rulesetName"
+      })
+    }
+  );
+
+  if (rilis.respons.status === 404) {
+    rilis = await api(
+      token,
+      `https://firebaserules.googleapis.com/v1/projects/${encodeURIComponent(project)}/releases`,
+      {
+        method: "POST",
+        body: JSON.stringify({ name: releaseName, rulesetName })
+      }
+    );
+  }
+
+  if (!rilis.respons.ok) {
+    throw new Error(`Release ${label} gagal (${rilis.respons.status}): ${JSON.stringify(rilis.data)}`);
+  }
+
+  console.log(`Deploy complete: ${label} Security Rules sudah dirilis.`);
 }
 
-if (!rilis.respons.ok) {
-  throw new Error(`Release aturan gagal (${rilis.respons.status}): ${JSON.stringify(rilis.data)}`);
-}
+const token = await aksesToken();
+const firestoreRules = await readFile("firestore.rules", "utf8");
+const storageRules = await readFile("storage.rules", "utf8");
 
-console.log("Deploy complete: Firestore Security Rules sudah dirilis.");
+await buatDanRilis(token, "firestore.rules", firestoreRules, "cloud.firestore", "Firestore");
+await buatDanRilis(token, "storage.rules", storageRules, `firebase.storage/${bucket}`, "Cloud Storage");
