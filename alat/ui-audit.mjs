@@ -216,7 +216,7 @@ const fitur = [
   ["A2 Profil RW", ["src/halaman/Profil.svelte"], ["Visi &amp; Misi", "Batas Wilayah", "Perjalanan Permai Sukatani"]],
   ["A3 Struktur Pengurus", ["src/halaman/Pengurus.svelte", "src/inti/kontak-resmi.js"], ["Pengurus RW", "Ketua RT", "KONTAK_KETUA_RW", "Hubungi via Ketua RW"]],
   ["A4 Peta Wilayah", ["src/halaman/PetaWilayah.svelte", "src/komponen/Peta.svelte"], ["<Peta", "KETUA_RT_BAWAAN", "Batas tiap RT", "Balai Warga", "poligon"]],
-  ["B1 Pengajuan Surat", ["src/halaman/Surat.svelte", "src/halaman/SuratBorang.svelte", "src/halaman/SuratCetak.svelte"], ["nomorAntrean(\"SP\")", "window.print()", "Lihat dan cetak berkas"]],
+  ["B1 Pengajuan Surat", ["src/halaman/Surat.svelte", "src/halaman/SuratBorang.svelte", "src/halaman/SuratCetak.svelte"], ["nomorAntrean(\"SP\")", "window.print()", "Lihat berkas & simpan PDF"]],
   ["B2 Data Kependudukan", ["src/halaman/Kependudukan.svelte"], ["pengurus()", "Pendidikan terakhir", "Pekerjaan", "Pemeluk agama"]],
   ["B3 Pengaduan & Aspirasi", ["src/halaman/Pengaduan.svelte"], ["nomorAntrean(\"ADU\")", "Diproses", "Selesai"]],
   ["B4 Reservasi Fasilitas", ["src/halaman/Reservasi.svelte"], ["fasilitasTerpakai", "Ketersediaan", "Kirim permohonan"]],
