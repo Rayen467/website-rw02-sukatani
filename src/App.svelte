@@ -1,12 +1,5 @@
 <script>
-  /**
-   * Rangka situs.
-   *
-   * Situs warga, halaman masuk, dan panel Petugas sengaja memakai shell
-   * yang berbeda. Halaman masuk dibuat layar penuh agar pengalaman login
-   * tidak terganggu navbar/footer publik, sementara panel Petugas tetap
-   * menjadi back-office internal terpisah.
-   */
+  /** Rangka situs publik, akun, dan Portal Petugas. */
   import { onMount } from "svelte";
   import { mulaiRute, rute } from "./keadaan/rute.svelte.js";
   import { mulaiPantauan } from "./keadaan/mulai.js";
@@ -19,6 +12,7 @@
   import PesanSingkat from "./komponen/Pesan.svelte";
   import PengalihanAkun from "./komponen/PengalihanAkun.svelte";
   import UmkmLokasi from "./komponen/UmkmLokasi.svelte";
+  import HalamanTerkelola from "./komponen/HalamanTerkelola.svelte";
 
   import Beranda from "./halaman/Beranda.svelte";
   import Profil from "./halaman/Profil.svelte";
@@ -59,93 +53,50 @@
   onMount(() => {
     terapkanGaya(null);
     mulaiRute();
-
     const berhentiWaktu = mulaiWaktu();
     const berhentiPantauan = mulaiPantauan();
-
-    return () => {
-      berhentiWaktu?.();
-      berhentiPantauan?.();
-    };
+    return () => { berhentiWaktu?.(); berhentiPantauan?.(); };
   });
 
   const halaman = {
-    "": Beranda,
-    profil: Profil,
-    pengurus: Pengurus,
-    peta: PetaWilayah,
-    layanan: LayananWarga,
-    surat: Surat,
-    pengaduan: Pengaduan,
-    reservasi: Reservasi,
-    kependudukan: Kependudukan,
-    berita: Berita,
-    kalender: Kalender,
-    galeri: Galeri,
-    "galeri-berita": GaleriBerita,
-    transparansi: Transparansi,
-    forum: Forum,
-    kas: Kas,
-    program: Program,
-    umkm: Umkm,
-    "daftar-usaha": DaftarUsaha,
-    bansos: Bansos,
-    tautan: Tautan,
-    "majelis-taklim": MajelisTaklim,
-    "gor-nurani": GorNurani,
-    berkas: Berkas,
-    kontak: Kontak,
-    masuk: Masuk,
-    akun: Akun,
-    "keamanan-akun": KeamananAkun,
-    cari: Cari,
-    petugas: PintuKelola,
-    kelola: PintuKelola,
+    "": Beranda, profil: Profil, pengurus: Pengurus, peta: PetaWilayah, layanan: LayananWarga,
+    surat: Surat, pengaduan: Pengaduan, reservasi: Reservasi, kependudukan: Kependudukan,
+    berita: Berita, kalender: Kalender, galeri: Galeri, "galeri-berita": GaleriBerita,
+    transparansi: Transparansi, forum: Forum, kas: Kas, program: Program, umkm: Umkm,
+    "daftar-usaha": DaftarUsaha, bansos: Bansos, tautan: Tautan, "majelis-taklim": MajelisTaklim,
+    "gor-nurani": GorNurani, berkas: Berkas, kontak: Kontak, masuk: Masuk, akun: Akun,
+    "keamanan-akun": KeamananAkun, cari: Cari, petugas: PintuKelola, kelola: PintuKelola,
 
-    /*
-     * Jalur kompatibilitas untuk tautan/bookmark lama. Jalur ini tidak
-     * membuat salinan data atau halaman palsu; semuanya menunjuk ke halaman
-     * resmi yang sama supaya perubahan nama menu tidak menghasilkan 404.
-     */
-    "profil-rw": Profil,
-    "struktur-pengurus": Pengurus,
-    "peta-wilayah": PetaWilayah,
-    "layanan-warga": LayananWarga,
-    "pengajuan-surat": Surat,
-    "pengaduan-warga": Pengaduan,
-    "aspirasi-warga": Pengaduan,
-    "peminjaman-fasilitas": Reservasi,
-    "reservasi-fasilitas": Reservasi,
-    "data-warga": Kependudukan,
-    "data-kependudukan": Kependudukan,
-    "berita-pengumuman": Berita,
-    "kalender-kegiatan": Kalender,
-    "galeri-foto": Galeri,
-    "transparansi-keuangan": Transparansi,
-    "kas-rw": Kas,
-    "program-rw": Program,
-    "umkm-warga": Umkm,
-    "pendaftaran-umkm": DaftarUsaha,
-    "bantuan-sosial": Bansos,
-    "link-penting": Tautan,
-    "kontak-lokasi": Kontak,
-    "dashboard-warga": Akun
+    /* Alias lama supaya bookmark/chat lama tidak berubah menjadi 404. */
+    "profil-rw": Profil, "struktur-pengurus": Pengurus, "peta-wilayah": PetaWilayah,
+    "layanan-warga": LayananWarga, "pengajuan-surat": Surat, "pengaduan-warga": Pengaduan,
+    "aspirasi-warga": Pengaduan, "peminjaman-fasilitas": Reservasi, "reservasi-fasilitas": Reservasi,
+    "data-warga": Kependudukan, "data-kependudukan": Kependudukan, "berita-pengumuman": Berita,
+    "kalender-kegiatan": Kalender, "galeri-foto": Galeri, "transparansi-keuangan": Transparansi,
+    "kas-rw": Kas, "program-rw": Program, "umkm-warga": Umkm, "pendaftaran-umkm": DaftarUsaha,
+    "bantuan-sosial": Bansos, "link-penting": Tautan, "kontak-lokasi": Kontak, "dashboard-warga": Akun
   };
+
+  const CMS_RUTE = Object.freeze({
+    "": "beranda", profil: "profil", layanan: "layanan", berita: "berita",
+    transparansi: "transparansi", umkm: "umkm", kontak: "kontak", kalender: "kalender",
+    galeri: "galeri", program: "program", kas: "kas", bansos: "bansos", tautan: "tautan"
+  });
 
   const modePetugas = $derived(rute.bagian[0] === "petugas" || rute.bagian[0] === "kelola");
   const modeMasuk = $derived(rute.bagian[0] === "masuk");
 
   const pilihan = $derived.by(() => {
     const [satu, dua, tiga] = rute.bagian;
-
     if (satu === "surat" && tiga === "cetak") return { komponen: SuratCetak, kunci: dua };
     if (satu === "surat" && dua) return { komponen: SuratBorang, kunci: dua };
     if (satu === "berita" && dua) return { komponen: BeritaRinci, kunci: dua };
     if (satu === "umkm" && dua) return { komponen: UmkmRinci, kunci: dua };
-
     const K = halaman[satu || ""];
     return K ? { komponen: K, kunci: null } : { komponen: TidakAda, kunci: null };
   });
+
+  const cmsHalaman = $derived(pilihan.kunci ? "" : (CMS_RUTE[rute.bagian[0] || ""] || ""));
 </script>
 
 <a class="lompat" href="#utama">Lompat ke isi</a>
@@ -168,18 +119,14 @@
   </main>
 {:else}
   <Kepala />
-
   <main id="utama">
     <div class="wadah">
       {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
-        <pilihan.komponen kunci={pilihan.kunci} />
+        <HalamanTerkelola Komponen={pilihan.komponen} kunciRute={pilihan.kunci} halaman={cmsHalaman} />
       {/key}
-      {#if rute.bagian[0] === "umkm" && rute.bagian[1]}
-        <UmkmLokasi usahaId={rute.bagian[1]} />
-      {/if}
+      {#if rute.bagian[0] === "umkm" && rute.bagian[1]}<UmkmLokasi usahaId={rute.bagian[1]} />{/if}
     </div>
   </main>
-
   <Kaki />
 {/if}
 
