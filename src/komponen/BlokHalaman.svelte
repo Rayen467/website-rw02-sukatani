@@ -1,7 +1,7 @@
 <script>
   import { konten } from "../keadaan/isi.svelte.js";
-  import { KONTEN } from "../inti/nama.js";
 
+  const CMS_KEY = "cms_halaman";
   let { halaman = "", posisi = "semua" } = $props();
 
   function bacaJson(teks, bawaan) {
@@ -14,7 +14,7 @@
   }
 
   const blok = $derived.by(() => {
-    const dok = konten(KONTEN.CMS_HALAMAN) || {};
+    const dok = konten(CMS_KEY) || {};
     const semua = bacaJson(dok.blok, []);
     return semua
       .filter((b) => b && b.halaman === halaman && String(b.tampil) !== "false")
