@@ -4,7 +4,6 @@
   import { keDaftar } from "../inti/format.js";
 
   let cari = $state("");
-  let filterHari = $state("semua");
 
   const daftar = $derived(
     pakai("jenis_surat", JENIS_SURAT_BAWAAN).map((s, i) => ({
@@ -16,16 +15,13 @@
 
   const hasil = $derived.by(() => {
     const q = cari.trim().toLowerCase();
-    return daftar.filter((s) => {
-      const cocokCari = !q || [s.nama, ...(s.daftarSyarat || [])]
+    return daftar.filter((s) =>
+      !q || [s.nama, ...(s.daftarSyarat || [])]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
-        .includes(q);
-      const estimasi = String(s.estimasi || "").toLowerCase();
-      const cocokHari = filterHari === "semua" || estimasi.includes(filterHari);
-      return cocokCari && cocokHari;
-    });
+        .includes(q)
+    );
   });
 
   const ikon = ["▤", "⌂", "✓", "♡", "₿", "▣", "◎", "✿"];
@@ -74,7 +70,7 @@
           <div>
             <span class="section-kicker">PILIH LAYANAN</span>
             <h2 id="judul-jenis">Pilih jenis surat yang ingin diajukan</h2>
-            <p>Klik salah satu jenis surat untuk mulai. Syarat dan perkiraan waktu selesai langsung terlihat.</p>
+            <p>Klik salah satu jenis surat untuk mulai. Syarat utama langsung terlihat di setiap layanan.</p>
           </div>
 
           <label class="surat-search">
@@ -83,19 +79,12 @@
           </label>
         </div>
 
-        <div class="surat-filters" aria-label="Filter estimasi">
-          <button class:aktif={filterHari === "semua"} onclick={() => filterHari = "semua"}>Semua</button>
-          <button class:aktif={filterHari === "1 hari"} onclick={() => filterHari = "1 hari"}>± 1 hari kerja</button>
-          <button class:aktif={filterHari === "2 hari"} onclick={() => filterHari = "2 hari"}>± 2 hari kerja</button>
-        </div>
-
         {#if hasil.length}
           <div class="surat-grid">
             {#each hasil as s, i}
               <article class="surat-card">
                 <div class="surat-card-icon {warna[(s.indeks ?? i) % warna.length]}">{ikon[(s.indeks ?? i) % ikon.length]}</div>
                 <h3>{s.nama}</h3>
-                <div class="surat-estimasi"><span>◷</span> Perkiraan selesai {s.estimasi || "menyesuaikan"}</div>
                 {#if s.daftarSyarat.length}
                   <p class="surat-syarat">Syarat: {s.daftarSyarat.slice(0, 3).join(", ").toLowerCase()}{s.daftarSyarat.length > 3 ? "…" : "."}</p>
                 {:else}
@@ -108,8 +97,8 @@
         {:else}
           <div class="surat-empty">
             <strong>Jenis surat tidak ditemukan</strong>
-            <p>Coba gunakan kata kunci lain atau tampilkan semua estimasi.</p>
-            <button onclick={() => { cari = ""; filterHari = "semua"; }}>Reset pencarian</button>
+            <p>Coba gunakan kata kunci lain.</p>
+            <button onclick={() => { cari = ""; }}>Reset pencarian</button>
           </div>
         {/if}
       </div>
@@ -183,8 +172,8 @@
           <p>Belum. Pengajuan online membantu menyiapkan berkas. Surat tetap perlu tanda tangan dan pengesahan sesuai prosedur RT/RW.</p>
         </details>
         <details>
-          <summary>Berapa lama proses pengajuan?</summary>
-          <p>Perkiraan waktu terlihat pada setiap jenis surat. Waktu aktual dapat menyesuaikan kelengkapan data dan proses pengesahan.</p>
+          <summary>Apa yang perlu dibawa saat pengesahan?</summary>
+          <p>Bawa berkas yang sudah diunduh beserta dokumen pendukung sesuai jenis surat. Pengurus RT/RW akan memeriksa kelengkapannya.</p>
         </details>
         <details>
           <summary>Bagaimana jika saya salah mengisi data?</summary>
@@ -215,10 +204,9 @@
   .surat-main{padding:34px 0 76px}.jenis-area{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:22px;align-items:start}.jenis-utama{min-width:0}
   .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:16px}.section-head>div{min-width:0}.section-kicker{display:block;color:var(--sg);font-size:12px;font-weight:900;letter-spacing:.11em}.section-head h2,.faq-card h2{margin:5px 0 5px;font-size:30px;line-height:1.12;letter-spacing:-.035em}.section-head p{margin:0;color:#71807a;font-size:14px;line-height:1.55}
   .surat-search{width:min(360px,40%);min-height:48px;display:grid;grid-template-columns:28px 1fr;align-items:center;padding:0 13px;border:1px solid #d5e0db;border-radius:13px;background:#fff;box-shadow:0 10px 30px -28px rgba(20,69,53,.55)}.surat-search span{color:#74847e;font-size:20px}.surat-search input{min-width:0;width:100%;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;color:#23352e;font:inherit;font-size:14px}
-  .surat-filters{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin:-2px 0 17px}.surat-filters button{min-height:36px;padding:0 13px;border:1px solid #dce5e1;border-radius:999px;background:#fff;color:#64736d;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.surat-filters button.aktif{border-color:var(--sg);background:var(--sg);color:#fff}
   .surat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.surat-card{min-width:0;display:flex;flex-direction:column;padding:19px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 12px 30px -29px rgba(24,70,55,.5);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.surat-card:hover{transform:translateY(-3px);border-color:#b8d6ca;box-shadow:0 20px 42px -32px rgba(18,77,59,.58)}
   .surat-card-icon,.side-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;font-size:23px;font-weight:850}.surat-card-icon.hijau,.side-icon.hijau{background:#e4f6ee;color:#08725b}.surat-card-icon.oranye,.side-icon.oranye{background:#fff1d8;color:#bd7412}.surat-card-icon.biru,.side-icon.biru{background:#e5f0ff;color:#2f69bd}.surat-card-icon.merah,.side-icon.merah{background:#ffe5e7;color:#b94a55}
-  .surat-card h3{margin:14px 0 8px;font-size:17px;line-height:1.28;letter-spacing:-.015em}.surat-estimasi{display:flex;align-items:center;gap:7px;color:#0f765f;font-size:12.5px;font-weight:750}.surat-estimasi span{font-size:16px}.surat-syarat{flex:1;margin:11px 0 16px;color:#667872;font-size:13px;line-height:1.55}.surat-action{min-height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border:1px solid #a9d7c5;border-radius:10px;background:#f9fdfb;color:#08644f;font-size:13px;font-weight:850;text-decoration:none}.surat-action:hover{background:#eaf7f1}.surat-action span{font-size:18px}
+  .surat-card h3{margin:14px 0 8px;font-size:17px;line-height:1.28;letter-spacing:-.015em}.surat-syarat{flex:1;margin:11px 0 16px;color:#667872;font-size:13px;line-height:1.55}.surat-action{min-height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border:1px solid #a9d7c5;border-radius:10px;background:#f9fdfb;color:#08644f;font-size:13px;font-weight:850;text-decoration:none}.surat-action:hover{background:#eaf7f1}.surat-action span{font-size:18px}
   .surat-empty{padding:36px;border:1px dashed #cddbd5;border-radius:16px;background:#fff;text-align:center}.surat-empty strong{font-size:18px}.surat-empty p{color:#6e7d77}.surat-empty button{min-height:40px;padding:0 15px;border:0;border-radius:9px;background:var(--sg);color:#fff;font:inherit;font-weight:800;cursor:pointer}
 
   .surat-sidebar{display:grid;gap:12px;position:sticky;top:92px}.side-card{padding:19px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 12px 30px -30px rgba(20,64,51,.45)}.side-title{display:flex;align-items:center;gap:11px}.side-title .side-icon{width:42px;height:42px;border-radius:12px;font-size:19px}.side-title h3{margin:0;font-size:18px;letter-spacing:-.02em}.check-list{display:grid;gap:10px;margin:16px 0 0;padding:0;list-style:none}.check-list li{display:grid;grid-template-columns:22px 1fr;gap:7px;color:#53665f;font-size:13.5px;line-height:1.4}.check-list li span{width:20px;height:20px;display:grid;place-items:center;border-radius:50%;background:#e5f5ed;color:#08715a;font-size:11px;font-weight:900}.side-card>p{margin:13px 0 0;color:#60726b;font-size:13.5px;line-height:1.55}.side-card>a:not(.side-cta){display:inline-flex;margin-top:13px;color:var(--sg);font-size:12.5px;font-weight:800;text-decoration:none}.side-cta{min-height:40px;display:flex;align-items:center;justify-content:center;margin-top:15px;border-radius:10px;background:var(--sg);color:#fff;font-size:13px;font-weight:850;text-decoration:none}
@@ -228,6 +216,6 @@
   .faq-card h2{font-size:24px;margin-bottom:15px}.faq-card details{border-top:1px solid #e6ece9}.faq-card summary{padding:13px 2px;cursor:pointer;color:#31463e;font-size:13.5px;font-weight:750}.faq-card details p{margin:-3px 0 13px;color:#6c7c76;font-size:12.5px;line-height:1.55}.faq-help{display:flex;margin-top:12px;padding:12px;border-radius:10px;background:#eaf7f1;color:#0a654f;font-size:12.5px;font-weight:800;text-decoration:none}
 
   @media(max-width:1100px){.surat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.jenis-area{grid-template-columns:minmax(0,1fr) 280px}.hero-grid{grid-template-columns:1fr 330px;gap:30px}.hero-handwriting{display:none}.paper-card{right:65px}}
-  @media(max-width:860px){.surat-page{margin-top:-24px}.surat-shell{width:min(100% - 28px,1180px)}.surat-hero{padding-top:26px}.hero-grid{grid-template-columns:1fr}.hero-art{height:210px}.paper-card{left:50%;right:auto;top:0;width:160px;height:200px;transform:translateX(-50%) rotate(6deg);padding:22px 20px}.blob-a{left:50%;right:auto;transform:translateX(-50%) rotate(8deg);top:12px;width:230px;height:180px}.blob-b{left:55%;right:auto}.hero-copy h1{font-size:46px}.hero-lead{font-size:16px}.jenis-area{grid-template-columns:1fr}.surat-sidebar{position:static;grid-template-columns:repeat(3,1fr)}.surat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.alur-faq-grid{grid-template-columns:1fr}.section-head{align-items:stretch;flex-direction:column}.surat-search{width:100%}.surat-filters{justify-content:flex-start}}
+  @media(max-width:860px){.surat-page{margin-top:-24px}.surat-shell{width:min(100% - 28px,1180px)}.surat-hero{padding-top:26px}.hero-grid{grid-template-columns:1fr}.hero-art{height:210px}.paper-card{left:50%;right:auto;top:0;width:160px;height:200px;transform:translateX(-50%) rotate(6deg);padding:22px 20px}.blob-a{left:50%;right:auto;transform:translateX(-50%) rotate(8deg);top:12px;width:230px;height:180px}.blob-b{left:55%;right:auto}.hero-copy h1{font-size:46px}.hero-lead{font-size:16px}.jenis-area{grid-template-columns:1fr}.surat-sidebar{position:static;grid-template-columns:repeat(3,1fr)}.surat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.alur-faq-grid{grid-template-columns:1fr}.section-head{align-items:stretch;flex-direction:column}.surat-search{width:100%}}
   @media(max-width:620px){.surat-shell{width:calc(100% - 22px)}.surat-breadcrumb{font-size:12px;margin-bottom:19px}.surat-eyebrow{font-size:11px}.hero-copy h1{font-size:38px}.hero-lead{font-size:14px}.hero-note{grid-template-columns:29px 1fr;padding:13px}.hero-note p{font-size:12.5px}.hero-art{height:180px}.paper-card{width:140px;height:175px;padding:18px}.blob-a{width:200px;height:150px}.surat-main{padding-top:24px}.section-head h2{font-size:25px}.section-head p{font-size:12.5px}.surat-grid{grid-template-columns:1fr}.surat-card{padding:16px}.surat-card h3{font-size:16px}.surat-sidebar{grid-template-columns:1fr}.flow-grid{grid-template-columns:1fr;gap:12px}.flow-grid>i{transform:rotate(90deg)}.alur-card,.faq-card{padding:18px}.flow-grid article{display:grid;grid-template-columns:54px 28px 1fr;text-align:left;align-items:center;column-gap:8px}.flow-icon{width:52px;height:52px;margin:0}.flow-grid article b{margin:0}.flow-grid h3,.flow-grid p{grid-column:3}.flow-grid p{margin-top:3px}.flow-grid>i{font-size:18px;height:12px}}
 </style>
