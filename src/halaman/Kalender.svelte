@@ -7,6 +7,7 @@
 
   const KALENDER_KEY = "kalender";
   const kini = new Date();
+  const isoKini = `${kini.getFullYear()}-${String(kini.getMonth() + 1).padStart(2, "0")}-${String(kini.getDate()).padStart(2, "0")}`;
   let tahun = $state(kini.getFullYear());
   let bulan = $state(kini.getMonth());
   let terpilih = $state(null);
@@ -35,11 +36,31 @@
 
   const agendaBerita = $derived((isi.pengumuman || [])
     .filter((o) => o.tipe === "agenda" && o.tanggal)
-    .map((o) => ({ id: o.id, judul: o.judul, tanggalEfektif: o.tanggal, mulai: "", selesai: "", tempat: "", kategori: "Agenda berita", keterangan: o.ringkas || o.isi || "", sumber: "berita" })));
+    .map((o) => ({
+      id: o.id,
+      judul: o.judul,
+      tanggalEfektif: o.tanggal,
+      mulai: o.jamMulai || "",
+      selesai: o.jamSelesai || "",
+      tempat: o.tempat || "",
+      kategori: "Agenda berita",
+      keterangan: o.ringkas || o.isi || "",
+      sumber: "berita"
+    })));
 
   const jadwalFasilitas = $derived((isi.jadwal || [])
     .filter((o) => o.tanggal || /^\d{4}-\d{2}-\d{2}$/.test(String(o.id || "")))
-    .map((o) => ({ id: o.id, judul: o.fasilitas ? `Pemakaian ${o.fasilitas}` : "Jadwal fasilitas", tanggalEfektif: o.tanggal || o.id, mulai: o.jam || "", selesai: "", tempat: o.fasilitas || "", kategori: "Fasilitas", keterangan: "Jadwal penggunaan fasilitas RW.", sumber: "fasilitas" })));
+    .map((o) => ({
+      id: o.id,
+      judul: o.fasilitas ? `Pemakaian ${o.fasilitas}` : "Jadwal fasilitas",
+      tanggalEfektif: o.tanggal || o.id,
+      mulai: o.jam || "",
+      selesai: "",
+      tempat: o.fasilitas || "",
+      kategori: "Fasilitas",
+      keterangan: "Jadwal penggunaan fasilitas RW.",
+      sumber: "fasilitas"
+    })));
 
   const semuaAcara = $derived([...acaraKhusus, ...agendaBerita, ...jadwalFasilitas]);
 
@@ -56,18 +77,34 @@
     return hasil;
   });
 
-  const agendaBulan = $derived(sel.filter(Boolean).flatMap((s) => s.acara.map((a) => ({ ...a, tanggalEfektif: s.iso }))).sort((a, b) => String(a.tanggalEfektif).localeCompare(String(b.tanggalEfektif)) || String(a.mulai || "").localeCompare(String(b.mulai || ""))));
+  const agendaBulan = $derived(
+    sel.filter(Boolean)
+      .flatMap((s) => s.acara.map((a) => ({ ...a, tanggalEfektif: s.iso })))
+      .sort((a, b) => String(a.tanggalEfektif).localeCompare(String(b.tanggalEfektif)) || String(a.mulai || "").localeCompare(String(b.mulai || "")))
+  );
 
   function geser(n) {
     let b = bulan + n, t = tahun;
     if (b < 0) { b = 11; t--; }
     if (b > 11) { b = 0; t++; }
-    bulan = b; tahun = t; terpilih = null;
+    bulan = b;
+    tahun = t;
+    terpilih = null;
   }
 
-  function hariIni() { tahun = kini.getFullYear(); bulan = kini.getMonth(); terpilih = null; }
-  function labelSumber(a) { return a.sumber === "berita" ? "Agenda berita" : a.sumber === "fasilitas" ? "Jadwal fasilitas" : (a.kategori || "Kegiatan"); }
-  function waktuAcara(a) { return [a.mulai, a.selesai].filter(Boolean).join("–") || "Sepanjang hari / waktu belum diisi"; }
+  function hariIni() {
+    tahun = kini.getFullYear();
+    bulan = kini.getMonth();
+    terpilih = null;
+  }
+
+  function labelSumber(a) {
+    return a.sumber === "berita" ? "Agenda berita" : a.sumber === "fasilitas" ? "Jadwal fasilitas" : (a.kategori || "Kegiatan");
+  }
+
+  function waktuAcara(a) {
+    return [a.mulai, a.selesai].filter(Boolean).join("–") || "Sepanjang hari / waktu belum diisi";
+  }
 </script>
 
 <nav class="remah"><a href="#/">Beranda</a><span>›</span><span>Kalender Kegiatan</span></nav>
@@ -91,7 +128,7 @@
       {#each ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"] as h}<div class="hari">{h}</div>{/each}
       {#each sel as s}
         {#if s}
-          <div class:kal-hari-ini={s.iso === kini.toISOString().slice(0,10)} class:kal-ada={s.acara.length > 0} class="kalender-sel">
+          <div class:kal-hari-ini={s.iso === isoKini} class:kal-ada={s.acara.length > 0} class="kalender-sel">
             <span class="angka-hari">{s.hari}</span>
             <div class="kal-acara-list">
               {#each s.acara as a}
