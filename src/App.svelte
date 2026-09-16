@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { mulaiRute, rute } from "./keadaan/rute.svelte.js";
   import { mulaiPantauan } from "./keadaan/mulai.js";
+  import { isi } from "./keadaan/isi.svelte.js";
   import { sesi } from "./keadaan/sesi.svelte.js";
   import { terapkanGaya } from "./keadaan/tampilan.js";
   import { mulaiWaktu } from "./keadaan/waktu.svelte.js";
@@ -13,6 +14,7 @@
   import PengalihanAkun from "./komponen/PengalihanAkun.svelte";
   import UmkmLokasi from "./komponen/UmkmLokasi.svelte";
   import HalamanTerkelola from "./komponen/HalamanTerkelola.svelte";
+  import MemuatDetail from "./komponen/MemuatDetail.svelte";
 
   import Beranda from "./halaman/Beranda.svelte";
   import Profil from "./halaman/Profil.svelte";
@@ -25,7 +27,8 @@
   import Pengaduan from "./halaman/Pengaduan.svelte";
   import Reservasi from "./halaman/Reservasi.svelte";
   import Kependudukan from "./halaman/Kependudukan.svelte";
-  import Berita from "./halaman/Berita.svelte";
+  import Informasi from "./halaman/Informasi.svelte";
+  import Berita from "./halaman/BeritaPublik.svelte";
   import BeritaRinci from "./halaman/BeritaRinci.svelte";
   import Kalender from "./halaman/Kalender.svelte";
   import Galeri from "./halaman/Galeri.svelte";
@@ -76,6 +79,7 @@
     pengaduan: Pengaduan,
     reservasi: Reservasi,
     kependudukan: Kependudukan,
+    informasi: Informasi,
     berita: Berita,
     kalender: Kalender,
     galeri: Galeri,
@@ -111,9 +115,13 @@
     "reservasi-fasilitas": Reservasi,
     "data-warga": Kependudukan,
     "data-kependudukan": Kependudukan,
+    "informasi-komunikasi": Informasi,
     "berita-pengumuman": Berita,
     "kalender-kegiatan": Kalender,
     "galeri-foto": Galeri,
+    "galeri-video": Galeri,
+    "galeri-foto-video": Galeri,
+    "forum-polling": Forum,
     "transparansi-keuangan": Transparansi,
     "kas-rw": Kas,
     "program-rw": Program,
@@ -148,8 +156,16 @@
     const [satu, dua, tiga] = rute.bagian;
     if (satu === "surat" && tiga === "cetak") return { komponen: SuratCetak, kunci: dua };
     if (satu === "surat" && dua) return { komponen: SuratBorang, kunci: dua };
-    if (satu === "berita" && dua) return { komponen: BeritaRinci, kunci: dua };
-    if (satu === "umkm" && dua) return { komponen: UmkmRinci, kunci: dua };
+    if (satu === "berita" && dua) {
+      return isi.pengumuman === null
+        ? { komponen: MemuatDetail, kunci: null }
+        : { komponen: BeritaRinci, kunci: decodeURIComponent(dua) };
+    }
+    if (satu === "umkm" && dua) {
+      return isi.usaha === null
+        ? { komponen: MemuatDetail, kunci: null }
+        : { komponen: UmkmRinci, kunci: decodeURIComponent(dua) };
+    }
     const K = halaman[satu || ""];
     return K ? { komponen: K, kunci: null } : { komponen: TidakAda, kunci: null };
   });
