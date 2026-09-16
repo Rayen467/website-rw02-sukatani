@@ -168,7 +168,7 @@
         {/if}
 
         <button class="submit" type="submit" disabled={mengirim || bentrok}>
-          {mengirim ? "Mengirim..." : "Ajukan Reservasi"}<span>→</span>
+          {mengirim ? "Mengirim..." : "Kirim permohonan"}<span>→</span>
         </button>
 
         <a class="schedule-link" href="#jadwal">Atau lihat jadwal ketersediaan</a>
@@ -207,7 +207,7 @@
 
     <section class="availability-section" id="jadwal">
       <div class="availability-copy">
-        <span class="section-kicker">JADWAL FASILITAS</span>
+        <span class="section-kicker">Ketersediaan</span>
         <h2>Cek ketersediaan sebelum mengajukan</h2>
         <p>Tanggal bertanda hijau tua sudah memiliki jadwal. Kalender diperbarui otomatis ketika pengurus menyetujui permohonan.</p>
         <ul>
