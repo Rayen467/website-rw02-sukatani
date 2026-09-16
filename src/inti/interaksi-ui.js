@@ -5,6 +5,10 @@ const MEDIA_HP = "(max-width: 680px)";
 const BATAS_TEKS_WEB = 14;
 const BATAS_TEKS_HP = 12;
 const TAG_FORM_TEKS = new Set(["INPUT", "TEXTAREA", "SELECT", "OPTION", "BUTTON"]);
+const FRAGMENT_KONTAK = new Map([
+  ["#form-kontak", "form-kontak"],
+  ["#lokasi-kontak", "lokasi-kontak"]
+]);
 let sudahAktif = false;
 let rafTipografi = 0;
 let pengamatTipografi = null;
@@ -115,9 +119,73 @@ function bukaWaKetuaRw() {
   return true;
 }
 
+function gulirKeKontak(id) {
+  const tujuan = document.getElementById(id);
+  if (!tujuan) return false;
+  tujuan.scrollIntoView({ behavior: "smooth", block: "start" });
+  return true;
+}
+
+/*
+ * Situs memakai hash (#/...) sebagai router. Karena itu href="#form-kontak"
+ * atau href="#lokasi-kontak" tidak boleh dibiarkan mengganti hash: router
+ * akan menganggapnya sebagai alamat halaman baru. Delegasi ini menjaga hash
+ * tetap #/kontak dan hanya menggulir ke bagian yang dituju.
+ */
+function tanganiFragmentKontak(event, tautan) {
+  const href = tautan?.getAttribute("href") || "";
+  const id = FRAGMENT_KONTAK.get(href);
+  if (!id) return false;
+
+  event.preventDefault();
+
+  if (
+    href === "#form-kontak" &&
+    tautan.closest(".kontak-final__shortcuts") &&
+    tautan.textContent?.includes("Chat WhatsApp") &&
+    bukaWaKetuaRw()
+  ) {
+    return true;
+  }
+
+  gulirKeKontak(id);
+  return true;
+}
+
+function sinkronShortcutKontak() {
+  const jalan = () => {
+    const shortcut = [...document.querySelectorAll(".kontak-final__shortcuts a")];
+    if (!shortcut.length) return;
+
+    const email = shortcut.find((a) => a.textContent?.includes("Kirim Email"));
+    if (email?.getAttribute("href") === "#form-kontak") {
+      const kecil = email.querySelector("small");
+      if (kecil && kecil.textContent !== "Email resmi belum dicantumkan") {
+        kecil.textContent = "Email resmi belum dicantumkan";
+      }
+      email.setAttribute("title", "Email resmi RW belum dicantumkan. Gunakan formulir online.");
+    }
+
+    const sosial = shortcut.find((a) => a.textContent?.includes("Ikuti Media Sosial"));
+    if (sosial?.getAttribute("href") === "#/galeri") {
+      const judul = sosial.querySelector("strong");
+      const kecil = sosial.querySelector("small");
+      if (judul && judul.textContent !== "Galeri Kegiatan") judul.textContent = "Galeri Kegiatan";
+      if (kecil && kecil.textContent !== "Foto & video warga") kecil.textContent = "Foto & video warga";
+      sosial.setAttribute("title", "Buka dokumentasi foto dan video kegiatan warga");
+    }
+  };
+
+  if (typeof requestAnimationFrame === "undefined") jalan();
+  else requestAnimationFrame(jalan);
+}
+
 function tanganiKlik(event) {
   const target = event.target instanceof Element ? event.target : null;
   if (!target) return;
+
+  const tautan = target.closest("a");
+  if (tautan && tanganiFragmentKontak(event, tautan)) return;
 
   const cari = target.closest(".umkm-cari button");
   if (cari) {
@@ -138,17 +206,6 @@ function tanganiKlik(event) {
     else favorit.add(id);
     simpanFavorit(favorit);
     sinkronFavorit();
-    return;
-  }
-
-  const waCepat = target.closest(".kontak-final__shortcuts a");
-  if (
-    waCepat &&
-    waCepat.textContent?.includes("Chat WhatsApp") &&
-    waCepat.getAttribute("href") === "#form-kontak"
-  ) {
-    event.preventDefault();
-    bukaWaKetuaRw();
   }
 }
 
@@ -156,7 +213,13 @@ export function aktifkanInteraksiUi() {
   if (sudahAktif || typeof document === "undefined") return;
   sudahAktif = true;
   document.addEventListener("click", tanganiKlik);
-  requestAnimationFrame(sinkronFavorit);
+  requestAnimationFrame(() => {
+    sinkronFavorit();
+    sinkronShortcutKontak();
+  });
   aktifkanBatasTipografi();
-  window.addEventListener("hashchange", () => requestAnimationFrame(sinkronFavorit));
+  window.addEventListener("hashchange", () => requestAnimationFrame(() => {
+    sinkronFavorit();
+    sinkronShortcutKontak();
+  }));
 }
