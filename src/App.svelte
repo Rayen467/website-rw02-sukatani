@@ -55,32 +55,90 @@
     mulaiRute();
     const berhentiWaktu = mulaiWaktu();
     const berhentiPantauan = mulaiPantauan();
-    return () => { berhentiWaktu?.(); berhentiPantauan?.(); };
+    return () => {
+      berhentiWaktu?.();
+      berhentiPantauan?.();
+    };
   });
 
+  /*
+   * Satu rute satu baris sengaja dipertahankan. Selain lebih mudah diaudit
+   * manusia, alat audit UI juga membaca registry ini untuk memastikan tautan
+   * internal tidak mengarah ke halaman yang tidak ada.
+   */
   const halaman = {
-    "": Beranda, profil: Profil, pengurus: Pengurus, peta: PetaWilayah, layanan: LayananWarga,
-    surat: Surat, pengaduan: Pengaduan, reservasi: Reservasi, kependudukan: Kependudukan,
-    berita: Berita, kalender: Kalender, galeri: Galeri, "galeri-berita": GaleriBerita,
-    transparansi: Transparansi, forum: Forum, kas: Kas, program: Program, umkm: Umkm,
-    "daftar-usaha": DaftarUsaha, bansos: Bansos, tautan: Tautan, "majelis-taklim": MajelisTaklim,
-    "gor-nurani": GorNurani, berkas: Berkas, kontak: Kontak, masuk: Masuk, akun: Akun,
-    "keamanan-akun": KeamananAkun, cari: Cari, petugas: PintuKelola, kelola: PintuKelola,
+    "": Beranda,
+    profil: Profil,
+    pengurus: Pengurus,
+    peta: PetaWilayah,
+    layanan: LayananWarga,
+    surat: Surat,
+    pengaduan: Pengaduan,
+    reservasi: Reservasi,
+    kependudukan: Kependudukan,
+    berita: Berita,
+    kalender: Kalender,
+    galeri: Galeri,
+    "galeri-berita": GaleriBerita,
+    transparansi: Transparansi,
+    forum: Forum,
+    kas: Kas,
+    program: Program,
+    umkm: Umkm,
+    "daftar-usaha": DaftarUsaha,
+    bansos: Bansos,
+    tautan: Tautan,
+    "majelis-taklim": MajelisTaklim,
+    "gor-nurani": GorNurani,
+    berkas: Berkas,
+    kontak: Kontak,
+    masuk: Masuk,
+    akun: Akun,
+    "keamanan-akun": KeamananAkun,
+    cari: Cari,
+    petugas: PintuKelola,
+    kelola: PintuKelola,
 
     /* Alias lama supaya bookmark/chat lama tidak berubah menjadi 404. */
-    "profil-rw": Profil, "struktur-pengurus": Pengurus, "peta-wilayah": PetaWilayah,
-    "layanan-warga": LayananWarga, "pengajuan-surat": Surat, "pengaduan-warga": Pengaduan,
-    "aspirasi-warga": Pengaduan, "peminjaman-fasilitas": Reservasi, "reservasi-fasilitas": Reservasi,
-    "data-warga": Kependudukan, "data-kependudukan": Kependudukan, "berita-pengumuman": Berita,
-    "kalender-kegiatan": Kalender, "galeri-foto": Galeri, "transparansi-keuangan": Transparansi,
-    "kas-rw": Kas, "program-rw": Program, "umkm-warga": Umkm, "pendaftaran-umkm": DaftarUsaha,
-    "bantuan-sosial": Bansos, "link-penting": Tautan, "kontak-lokasi": Kontak, "dashboard-warga": Akun
+    "profil-rw": Profil,
+    "struktur-pengurus": Pengurus,
+    "peta-wilayah": PetaWilayah,
+    "layanan-warga": LayananWarga,
+    "pengajuan-surat": Surat,
+    "pengaduan-warga": Pengaduan,
+    "aspirasi-warga": Pengaduan,
+    "peminjaman-fasilitas": Reservasi,
+    "reservasi-fasilitas": Reservasi,
+    "data-warga": Kependudukan,
+    "data-kependudukan": Kependudukan,
+    "berita-pengumuman": Berita,
+    "kalender-kegiatan": Kalender,
+    "galeri-foto": Galeri,
+    "transparansi-keuangan": Transparansi,
+    "kas-rw": Kas,
+    "program-rw": Program,
+    "umkm-warga": Umkm,
+    "pendaftaran-umkm": DaftarUsaha,
+    "bantuan-sosial": Bansos,
+    "link-penting": Tautan,
+    "kontak-lokasi": Kontak,
+    "dashboard-warga": Akun
   };
 
   const CMS_RUTE = Object.freeze({
-    "": "beranda", profil: "profil", layanan: "layanan", berita: "berita",
-    transparansi: "transparansi", umkm: "umkm", kontak: "kontak", kalender: "kalender",
-    galeri: "galeri", program: "program", kas: "kas", bansos: "bansos", tautan: "tautan"
+    "": "beranda",
+    profil: "profil",
+    layanan: "layanan",
+    berita: "berita",
+    transparansi: "transparansi",
+    umkm: "umkm",
+    kontak: "kontak",
+    kalender: "kalender",
+    galeri: "galeri",
+    program: "program",
+    kas: "kas",
+    bansos: "bansos",
+    tautan: "tautan"
   });
 
   const modePetugas = $derived(rute.bagian[0] === "petugas" || rute.bagian[0] === "kelola");
@@ -124,7 +182,9 @@
       {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
         <HalamanTerkelola Komponen={pilihan.komponen} kunciRute={pilihan.kunci} halaman={cmsHalaman} />
       {/key}
-      {#if rute.bagian[0] === "umkm" && rute.bagian[1]}<UmkmLokasi usahaId={rute.bagian[1]} />{/if}
+      {#if rute.bagian[0] === "umkm" && rute.bagian[1]}
+        <UmkmLokasi usahaId={rute.bagian[1]} />
+      {/if}
     </div>
   </main>
   <Kaki />
