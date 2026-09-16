@@ -199,6 +199,17 @@ for (const file of berkas) {
 
 cek(delegasiAktif, "Penjaga interaksi UI belum diaktifkan di src/main.js");
 cek(interaksiUi.includes("KONTAK_KETUA_RW"), "Fallback WhatsApp Ketua RW belum terhubung pada penjaga UI");
+cek(
+  interaksiUi.includes("FRAGMENT_KONTAK") &&
+  interaksiUi.includes('"#form-kontak"') &&
+  interaksiUi.includes('"#lokasi-kontak"') &&
+  interaksiUi.includes("scrollIntoView"),
+  "Shortcut Kontak memakai fragment pada aplikasi hash-router tetapi belum punya delegasi scroll yang aman"
+);
+cek(
+  interaksiUi.includes("Galeri Kegiatan") && interaksiUi.includes("Ikuti Media Sosial"),
+  "Shortcut media sosial tanpa URL resmi belum dinetralisasi menjadi Galeri Kegiatan"
+);
 
 const fitur = [
   ["A1 Beranda", ["src/halaman/Beranda.svelte"], ["sambutan-rw", "isi.pengumuman", "#/berita"]],
