@@ -152,6 +152,21 @@ function tanganiFragmentKontak(event, tautan) {
   return true;
 }
 
+/*
+ * Fragment lokal umum juga harus aman pada hash router. Ini dipakai Berita,
+ * Galeri, Profil, dan halaman lain untuk lompat ke satu bagian tanpa
+ * mengubah #/rute menjadi #bagian lalu memicu halaman 404.
+ */
+function tanganiFragmentHalaman(event, tautan) {
+  const href = tautan?.getAttribute("href") || "";
+  if (!/^#[A-Za-z][\w-]*$/.test(href)) return false;
+  const tujuan = document.getElementById(href.slice(1));
+  if (!tujuan) return false;
+  event.preventDefault();
+  tujuan.scrollIntoView({ behavior: "smooth", block: "start" });
+  return true;
+}
+
 function sinkronShortcutKontak() {
   const jalan = () => {
     const shortcut = [...document.querySelectorAll(".kontak-final__shortcuts a")];
@@ -186,6 +201,7 @@ function tanganiKlik(event) {
 
   const tautan = target.closest("a");
   if (tautan && tanganiFragmentKontak(event, tautan)) return;
+  if (tautan && tanganiFragmentHalaman(event, tautan)) return;
 
   const cari = target.closest(".umkm-cari button");
   if (cari) {
