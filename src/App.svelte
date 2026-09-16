@@ -35,6 +35,7 @@
   import BeritaRinci from "./halaman/BeritaRinci.svelte";
   import Kalender from "./halaman/Kalender.svelte";
   import Galeri from "./halaman/Galeri.svelte";
+  import GaleriBerita from "./halaman/GaleriBerita.svelte";
   import Transparansi from "./halaman/TransparansiLengkap.svelte";
   import Forum from "./halaman/Forum.svelte";
   import Kas from "./halaman/Kas.svelte";
@@ -81,6 +82,7 @@
     berita: Berita,
     kalender: Kalender,
     galeri: Galeri,
+    "galeri-berita": GaleriBerita,
     transparansi: Transparansi,
     forum: Forum,
     kas: Kas,
@@ -98,7 +100,36 @@
     "keamanan-akun": KeamananAkun,
     cari: Cari,
     petugas: PintuKelola,
-    kelola: PintuKelola
+    kelola: PintuKelola,
+
+    /*
+     * Jalur kompatibilitas untuk tautan/bookmark lama. Jalur ini tidak
+     * membuat salinan data atau halaman palsu; semuanya menunjuk ke halaman
+     * resmi yang sama supaya perubahan nama menu tidak menghasilkan 404.
+     */
+    "profil-rw": Profil,
+    "struktur-pengurus": Pengurus,
+    "peta-wilayah": PetaWilayah,
+    "layanan-warga": LayananWarga,
+    "pengajuan-surat": Surat,
+    "pengaduan-warga": Pengaduan,
+    "aspirasi-warga": Pengaduan,
+    "peminjaman-fasilitas": Reservasi,
+    "reservasi-fasilitas": Reservasi,
+    "data-warga": Kependudukan,
+    "data-kependudukan": Kependudukan,
+    "berita-pengumuman": Berita,
+    "kalender-kegiatan": Kalender,
+    "galeri-foto": Galeri,
+    "transparansi-keuangan": Transparansi,
+    "kas-rw": Kas,
+    "program-rw": Program,
+    "umkm-warga": Umkm,
+    "pendaftaran-umkm": DaftarUsaha,
+    "bantuan-sosial": Bansos,
+    "link-penting": Tautan,
+    "kontak-lokasi": Kontak,
+    "dashboard-warga": Akun
   };
 
   const modePetugas = $derived(rute.bagian[0] === "petugas" || rute.bagian[0] === "kelola");
