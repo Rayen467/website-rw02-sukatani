@@ -55,7 +55,7 @@
   <section class="info-hero">
     <div class="info-shell info-hero-grid">
       <div class="info-copy">
-        <nav class="info-breadcrumb" aria-label="Breadcrumb"><a href="#/">Beranda</a><span>›</span><span>Informasi & Komunikasi</span></nav>
+        <nav class="info-breadcrumb" aria-label="Breadcrumb"><a href="#/">Beranda</a><span>›</span><span>Informasi &amp; Komunikasi</span></nav>
         <p class="eyebrow">C. INFORMASI &amp; KOMUNIKASI</p>
         <h1>Satu pintu informasi.<br /><em>Empat fungsi yang jelas.</em></h1>
         <p class="lead">Berita tidak lagi bercampur dengan video, kalender, atau forum. Pilih kebutuhan Anda, lalu masuk ke halaman yang memang dibuat khusus untuk fungsi tersebut.</p>
