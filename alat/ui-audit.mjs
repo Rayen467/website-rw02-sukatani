@@ -80,6 +80,12 @@ function tagPembuka(teks, namaTag) {
   return hasil;
 }
 
+/*
+ * Rute yang wajib tetap dikenali aplikasi. Selain rute utama, beberapa
+ * nama lama/sinonim sengaja dipertahankan sebagai jalur kompatibilitas.
+ * Tujuannya supaya bookmark lama atau tautan dari dokumen/chat warga tidak
+ * mendadak berubah menjadi halaman 404 setelah menu situs dirapikan.
+ */
 const rute = new Set([
   "",
   "profil",
@@ -93,6 +99,7 @@ const rute = new Set([
   "berita",
   "kalender",
   "galeri",
+  "galeri-berita",
   "transparansi",
   "forum",
   "kas",
@@ -107,8 +114,35 @@ const rute = new Set([
   "kontak",
   "masuk",
   "akun",
+  "keamanan-akun",
   "cari",
-  "kelola"
+  "petugas",
+  "kelola",
+
+  /* Jalur kompatibilitas / sebutan lama */
+  "profil-rw",
+  "struktur-pengurus",
+  "peta-wilayah",
+  "layanan-warga",
+  "pengajuan-surat",
+  "pengaduan-warga",
+  "aspirasi-warga",
+  "peminjaman-fasilitas",
+  "reservasi-fasilitas",
+  "data-warga",
+  "data-kependudukan",
+  "berita-pengumuman",
+  "kalender-kegiatan",
+  "galeri-foto",
+  "transparansi-keuangan",
+  "kas-rw",
+  "program-rw",
+  "umkm-warga",
+  "pendaftaran-umkm",
+  "bantuan-sosial",
+  "link-penting",
+  "kontak-lokasi",
+  "dashboard-warga"
 ]);
 
 const app = baca("src/App.svelte");
@@ -197,6 +231,7 @@ const fitur = [
   ["C1 Berita & Pengumuman", ["src/halaman/Berita.svelte"], ["isi.pengumuman", "Berita Utama", "Berita Terbaru"]],
   ["C2 Kalender Kegiatan", ["src/halaman/Kalender.svelte"], ["Kalender kegiatan", "geser(-1)", "geser(1)"]],
   ["C3 Galeri Foto & Video", ["src/halaman/Galeri.svelte"], ["Galeri foto &amp; video", "geser(-1)", "geser(1)"]],
+  ["C3b Berita & Galeri gabungan", ["src/halaman/GaleriBerita.svelte"], ["isi.pengumuman", "isi.galeri", "#/berita", "#/galeri"]],
   ["C4 Forum & Polling Online", ["src/halaman/Forum.svelte", "src/sumber/data.js", "firestore.rules"], ["pilihPolling", "kirimTopikForum", "kirimKomentarForum", "forum_topik", "forum_komentar", "Kirim Tanggapan"]],
   ["D1 Kas RW", ["src/halaman/Kas.svelte", "src/halaman/Transparansi.svelte"], ["Total pemasukan", "Total pengeluaran", "Saldo"]],
   ["D2 Program", ["src/halaman/Program.svelte", "src/halaman/Transparansi.svelte"], ["Rencana dan realisasi program", "status"]],
