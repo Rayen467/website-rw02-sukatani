@@ -1,10 +1,11 @@
-name: Sinkronkan aturan Firestore
+name: Sinkronkan aturan Firebase
 
 on:
   push:
     branches: [main]
     paths:
       - "firestore.rules"
+      - "storage.rules"
       - "firebase.json"
       - ".firebaserc"
       - "alat/deploy-firestore-rules.mjs"
@@ -35,9 +36,12 @@ jobs:
           grep -q 'match /login_petugas/{username}' firestore.rules
           grep -q 'allow list: if false;' firestore.rules
           grep -q 'match /usaha_bukti/{id}' firestore.rules
-          echo "Aturan privat bansos, alias login Petugas, dan bukti UMKM ditemukan."
+          grep -q 'match /video-kegiatan/{namaFile}' storage.rules
+          grep -q 'request.resource.contentType.matches' storage.rules
+          grep -q '"storage"' firebase.json
+          echo "Aturan Firestore dan Storage ditemukan."
 
-      - name: Deploy aturan Firestore
+      - name: Deploy aturan Firebase
         shell: bash
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -47,9 +51,9 @@ jobs:
           set -euo pipefail
           PROJECT="perumahansukatanirw02"
 
-          # Untuk service account, gunakan Firebase Rules Management API resmi
-          # langsung. Ini membutuhkan firebaserules.* saja dan tidak memerlukan
-          # Service Usage Viewer yang sebelumnya membuat Firebase CLI gagal 403.
+          # Service account menggunakan Rules Management API langsung agar
+          # tidak bergantung pada Service Usage Viewer. Skrip merilis aturan
+          # Firestore dan Cloud Storage dalam satu proses.
           if [[ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]]; then
             printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
             export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
@@ -59,7 +63,7 @@ jobs:
             export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
             node alat/deploy-firestore-rules.mjs "$PROJECT"
           elif [[ -n "${FIREBASE_TOKEN:-}" ]]; then
-            npx --yes firebase-tools@latest deploy --only firestore:rules --project "$PROJECT" --token "$FIREBASE_TOKEN" --non-interactive
+            npx --yes firebase-tools@latest deploy --only firestore:rules,storage --project "$PROJECT" --token "$FIREBASE_TOKEN" --non-interactive
           else
             echo "::error::Belum ada FIREBASE_SERVICE_ACCOUNT, GCP_SA_KEY, atau FIREBASE_TOKEN di GitHub Secrets."
             exit 1
