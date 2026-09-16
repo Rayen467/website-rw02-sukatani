@@ -80,12 +80,6 @@ function tagPembuka(teks, namaTag) {
   return hasil;
 }
 
-/*
- * Rute yang wajib tetap dikenali aplikasi. Selain rute utama, beberapa
- * nama lama/sinonim sengaja dipertahankan sebagai jalur kompatibilitas.
- * Tujuannya supaya bookmark lama atau tautan dari dokumen/chat warga tidak
- * mendadak berubah menjadi halaman 404 setelah menu situs dirapikan.
- */
 const rute = new Set([
   "",
   "profil",
@@ -117,33 +111,17 @@ const rute = new Set([
   "keamanan-akun",
   "cari",
   "petugas",
-  "kelola",
-
-  /* Jalur kompatibilitas / sebutan lama */
-  "profil-rw",
-  "struktur-pengurus",
-  "peta-wilayah",
-  "layanan-warga",
-  "pengajuan-surat",
-  "pengaduan-warga",
-  "aspirasi-warga",
-  "peminjaman-fasilitas",
-  "reservasi-fasilitas",
-  "data-warga",
-  "data-kependudukan",
-  "berita-pengumuman",
-  "kalender-kegiatan",
-  "galeri-foto",
-  "transparansi-keuangan",
-  "kas-rw",
-  "program-rw",
-  "umkm-warga",
-  "pendaftaran-umkm",
-  "bantuan-sosial",
-  "link-penting",
-  "kontak-lokasi",
-  "dashboard-warga"
+  "kelola"
 ]);
+
+const aliasRute = [
+  "profil-rw", "struktur-pengurus", "peta-wilayah", "layanan-warga",
+  "pengajuan-surat", "pengaduan-warga", "aspirasi-warga", "peminjaman-fasilitas",
+  "reservasi-fasilitas", "data-warga", "data-kependudukan", "berita-pengumuman",
+  "kalender-kegiatan", "galeri-foto", "transparansi-keuangan", "kas-rw", "program-rw",
+  "umkm-warga", "pendaftaran-umkm", "bantuan-sosial", "link-penting", "kontak-lokasi",
+  "dashboard-warga"
+];
 
 const app = baca("src/App.svelte");
 const main = baca("src/main.js");
@@ -155,6 +133,9 @@ for (const nama of rute) {
   const biasa = new RegExp(`(^|\\n)\\s*${nama.replaceAll("-", "\\-")}\\s*:`, "m");
   const kutip = app.includes(`\"${nama}\":`);
   cek(biasa.test(app) || kutip, `Rute #/${nama} belum terdaftar di src/App.svelte`);
+}
+for (const nama of aliasRute) {
+  cek(app.includes(`\"${nama}\":`) || app.includes(`${nama}:`), `Alias rute lama #/${nama} belum ditangani di src/App.svelte`);
 }
 
 const berkas = semuaBerkas(src);
@@ -195,7 +176,7 @@ for (const file of berkas) {
 
     if (href.startsWith("#/") && !href.includes("{")) {
       const bagian = href.slice(2).split(/[/?#]/)[0] || "";
-      cek(rute.has(bagian), `${namaFile}: tautan internal ${href} menuju rute yang tidak ada`);
+      cek(rute.has(bagian) || aliasRute.includes(bagian), `${namaFile}: tautan internal ${href} menuju rute yang tidak ada`);
     } else if (/^#[A-Za-z][\w-]*$/.test(href)) {
       const id = href.slice(1);
       const polaId = new RegExp(`\\bid\\s*=\\s*[\"']${id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[\"']`);
@@ -230,8 +211,8 @@ const fitur = [
   ["B4 Reservasi Fasilitas", ["src/halaman/Reservasi.svelte"], ["fasilitasTerpakai", "Ketersediaan", "Kirim permohonan"]],
   ["C1 Berita & Pengumuman", ["src/halaman/Berita.svelte"], ["isi.pengumuman", "Berita Utama", "Berita Terbaru"]],
   ["C2 Kalender Kegiatan", ["src/halaman/Kalender.svelte"], ["Kalender kegiatan", "geser(-1)", "geser(1)"]],
-  ["C3 Galeri Foto & Video", ["src/halaman/Galeri.svelte"], ["Galeri foto &amp; video", "geser(-1)", "geser(1)"]],
-  ["C3b Berita & Galeri gabungan", ["src/halaman/GaleriBerita.svelte"], ["isi.pengumuman", "isi.galeri", "#/berita", "#/galeri"]],
+  ["C3 Galeri Foto & Video", ["src/halaman/Galeri.svelte"], ["Galeri Foto &amp; Video", "geser(-1)", "geser(1)"]],
+  ["C3b Berita & Galeri gabungan", ["src/halaman/GaleriBerita.svelte"], ["Berita &amp; Galeri RW 02", "isi.pengumuman", "isi.galeri"]],
   ["C4 Forum & Polling Online", ["src/halaman/Forum.svelte", "src/sumber/data.js", "firestore.rules"], ["pilihPolling", "kirimTopikForum", "kirimKomentarForum", "forum_topik", "forum_komentar", "Kirim Tanggapan"]],
   ["D1 Kas RW", ["src/halaman/Kas.svelte", "src/halaman/Transparansi.svelte"], ["Total pemasukan", "Total pengeluaran", "Saldo"]],
   ["D2 Program", ["src/halaman/Program.svelte", "src/halaman/Transparansi.svelte"], ["Rencana dan realisasi program", "status"]],
