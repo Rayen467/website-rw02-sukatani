@@ -7,6 +7,8 @@ import App from "./App.svelte";
 import "./gaya/global.css";
 import "./gaya/perbaikan-pengurus.css";
 import "./gaya/surat-bersih.css";
+/* Lapisan terakhir: rules tipografi wajib seluruh situs. */
+import "./gaya/tipografi-wajib.css";
 
 const aplikasi = mount(App, { target: document.getElementById("app") });
 aktifkanInteraksiUi();

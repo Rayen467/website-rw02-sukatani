@@ -5,6 +5,9 @@
  *  Bagian 2 dari 8. Dimuat lewat src/gaya/global.css.
  *
  *  Penyetelan awal peramban, tipografi, dan tautan.
+ *  Font resmi situs dikunci di tipografi-wajib.css:
+ *    - Sora    = display/headline
+ *    - Poppins = body/UI
  */
 
 * {
@@ -15,24 +18,31 @@ body {
   margin: 0;
   background: var(--dasar);
   color: var(--tinta);
-  font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.62;
+  font-family: var(--font-body, "Poppins", "Segoe UI", system-ui, sans-serif);
+  font-size: 15.5px;
+  line-height: 1.7;
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
-  font-family: "Archivo", "Arial Narrow", Arial, sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display, "Sora", "Segoe UI", system-ui, sans-serif);
   margin: 0;
-  line-height: 1.16;
-  letter-spacing: -0.018em;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
 p { margin: 0; }
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
-button { font-family: inherit; }
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body, "Poppins", "Segoe UI", system-ui, sans-serif);
+}
 
 :focus-visible {
   outline: 2px solid var(--action);
@@ -41,7 +51,7 @@ button { font-family: inherit; }
 }
 
 .mono {
-  font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  font-family: var(--font-body, "Poppins", "Segoe UI", system-ui, sans-serif);
   font-variant-numeric: tabular-nums;
 }
 
