@@ -18,6 +18,7 @@
   import Kaki from "./komponen/Kaki.svelte";
   import PesanSingkat from "./komponen/Pesan.svelte";
   import PengalihanAkun from "./komponen/PengalihanAkun.svelte";
+  import UmkmLokasi from "./komponen/UmkmLokasi.svelte";
 
   import Beranda from "./halaman/Beranda.svelte";
   import Profil from "./halaman/Profil.svelte";
@@ -142,6 +143,9 @@
       {#key rute.jalur + ':' + (sesi.pengguna?.uid || '') + ':' + (sesi.peran || '')}
         <pilihan.komponen kunci={pilihan.kunci} />
       {/key}
+      {#if rute.bagian[0] === "umkm" && rute.bagian[1]}
+        <UmkmLokasi usahaId={rute.bagian[1]} />
+      {/if}
     </div>
   </main>
 
