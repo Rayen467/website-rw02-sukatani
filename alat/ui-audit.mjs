@@ -90,6 +90,7 @@ const rute = new Set([
   "pengaduan",
   "reservasi",
   "kependudukan",
+  "informasi",
   "berita",
   "kalender",
   "galeri",
@@ -117,8 +118,8 @@ const rute = new Set([
 const aliasRute = [
   "profil-rw", "struktur-pengurus", "peta-wilayah", "layanan-warga",
   "pengajuan-surat", "pengaduan-warga", "aspirasi-warga", "peminjaman-fasilitas",
-  "reservasi-fasilitas", "data-warga", "data-kependudukan", "berita-pengumuman",
-  "kalender-kegiatan", "galeri-foto", "transparansi-keuangan", "kas-rw", "program-rw",
+  "reservasi-fasilitas", "data-warga", "data-kependudukan", "informasi-komunikasi", "berita-pengumuman",
+  "kalender-kegiatan", "galeri-foto", "galeri-video", "galeri-foto-video", "transparansi-keuangan", "kas-rw", "program-rw",
   "umkm-warga", "pendaftaran-umkm", "bantuan-sosial", "link-penting", "kontak-lokasi",
   "dashboard-warga"
 ];
@@ -220,7 +221,8 @@ const fitur = [
   ["B2 Data Kependudukan", ["src/halaman/Kependudukan.svelte"], ["pengurus()", "Pendidikan terakhir", "Pekerjaan", "Pemeluk agama"]],
   ["B3 Pengaduan & Aspirasi", ["src/halaman/Pengaduan.svelte"], ["nomorAntrean(\"ADU\")", "Diproses", "Selesai"]],
   ["B4 Reservasi Fasilitas", ["src/halaman/Reservasi.svelte"], ["fasilitasTerpakai", "Ketersediaan", "Kirim permohonan"]],
-  ["C1 Berita & Pengumuman", ["src/halaman/Berita.svelte"], ["isi.pengumuman", "Berita Utama", "Berita Terbaru"]],
+  ["C0 Informasi & Komunikasi", ["src/halaman/Informasi.svelte"], ["Informasi &amp; Komunikasi", "Berita & Pengumuman", "Kalender Kegiatan", "Galeri Foto & Video", "Forum / Polling Online"]],
+  ["C1 Berita & Pengumuman", ["src/halaman/BeritaPublik.svelte"], ["isi.pengumuman", "Berita & Pengumuman", "Buka Kalender"]],
   ["C2 Kalender Kegiatan", ["src/halaman/Kalender.svelte"], ["Kalender kegiatan", "geser(-1)", "geser(1)"]],
   ["C3 Galeri Foto & Video", ["src/halaman/Galeri.svelte"], ["Galeri Foto &amp; Video", "geser(-1)", "geser(1)"]],
   ["C3b Berita & Galeri gabungan", ["src/halaman/GaleriBerita.svelte"], ["Berita &amp; Galeri RW 02", "isi.pengumuman", "isi.galeri"]],
