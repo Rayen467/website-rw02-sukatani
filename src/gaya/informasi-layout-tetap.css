@@ -1,0 +1,295 @@
+/*
+ * Informasi & Komunikasi — layout stabil.
+ * Prinsip: ukuran kartu ditentukan oleh layout, bukan panjang tulisan.
+ * Teks panjang dipadatkan / dipotong secara visual dan tetap bisa dibuka
+ * lewat halaman detail, kalender, galeri, atau forum.
+ */
+
+.kabar-page .menu-cepat > a{
+  height:76px;
+  min-height:76px;
+  max-height:76px;
+  overflow:hidden;
+}
+.kabar-page .menu-cepat strong{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  line-height:1.15;
+}
+.kabar-page .menu-cepat small{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Berita utama dan berita terbaru selalu memakai tinggi visual yang sama. */
+.kabar-page .berita-grid{
+  align-items:stretch;
+}
+.kabar-page .berita-utama-wrap,
+.kabar-page .berita-terbaru-wrap{
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto 400px;
+  align-content:start;
+}
+.kabar-page .berita-utama-card{
+  height:400px;
+  min-height:400px;
+  max-height:400px;
+}
+.kabar-page .berita-terbaru-list{
+  height:400px;
+  min-height:400px;
+  max-height:400px;
+  display:grid;
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  gap:8px;
+  overflow:hidden;
+}
+.kabar-page .berita-mini{
+  height:100%;
+  min-height:0;
+  max-height:none;
+  overflow:hidden;
+}
+.kabar-page .mini-thumb{
+  height:100%;
+  min-height:0;
+  max-height:76px;
+}
+.kabar-page .mini-copy{
+  overflow:hidden;
+}
+.kabar-page .mini-copy small{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .mini-copy strong{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+.kabar-page .mini-copy em{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .berita-utama-copy h3{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  max-height:2.18em;
+}
+.kabar-page .berita-utama-copy > p{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+
+/* Agenda: semua kartu satu ukuran; tombol selalu menempel di bawah. */
+.kabar-page .agenda-cards{
+  grid-auto-rows:132px;
+}
+.kabar-page .agenda-card{
+  height:132px;
+  min-height:132px;
+  max-height:132px;
+  overflow:hidden;
+}
+.kabar-page .agenda-card-copy{
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.kabar-page .agenda-card-copy h3{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:2.4em;
+  max-height:2.4em;
+}
+.kabar-page .agenda-card-copy p{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .agenda-card-copy > a{
+  margin-top:auto;
+  align-self:flex-start;
+}
+
+/* Galeri tetap menjadi strip yang rapi walau judul dokumentasi panjang. */
+.kabar-page .galeri-strip{
+  grid-auto-rows:145px;
+  align-items:stretch;
+}
+.kabar-page .galeri-item{
+  height:145px;
+  min-height:145px;
+  max-height:145px;
+  aspect-ratio:auto;
+  overflow:hidden;
+}
+.kabar-page .galeri-item strong{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:2.35em;
+}
+.kabar-page .galeri-item small{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Polling, forum, dan kartu kontribusi memiliki tinggi panel yang sama. */
+.kabar-page .warga-grid{
+  align-items:stretch;
+}
+.kabar-page .polling-card,
+.kabar-page .forum-card{
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto 280px;
+  align-content:start;
+}
+.kabar-page .polling-card .panel-putih,
+.kabar-page .forum-card .panel-putih{
+  box-sizing:border-box;
+  height:280px;
+  min-height:280px;
+  max-height:280px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.kabar-page .poll-head{
+  min-height:26px;
+}
+.kabar-page .poll-head small{
+  max-width:58%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .panel-putih > h3{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:2.45em;
+  max-height:2.45em;
+}
+.kabar-page .poll-list{
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  min-height:0;
+  overflow:hidden;
+}
+.kabar-page .poll-row{
+  min-height:0;
+  overflow:hidden;
+}
+.kabar-page .poll-label{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .panel-putih > footer{
+  margin-top:auto;
+}
+.kabar-page .buat-diskusi{
+  flex:0 0 auto;
+  min-height:58px;
+  max-height:58px;
+  overflow:hidden;
+}
+.kabar-page .buat-diskusi strong,
+.kabar-page .buat-diskusi small{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.kabar-page .topik-list{
+  min-height:0;
+  overflow:hidden;
+  grid-template-rows:auto repeat(5,22px);
+}
+.kabar-page .topik-list > a{
+  min-height:22px;
+  max-height:22px;
+  overflow:hidden;
+}
+.kabar-page .kontribusi-card{
+  box-sizing:border-box;
+  height:322px;
+  min-height:322px;
+  max-height:322px;
+  overflow:hidden;
+}
+
+/* Kepadatan teks ditentukan oleh JS dari panjang isi, bukan mengubah ukuran kartu. */
+.kabar-page .teks-padat{font-size:.9em !important;letter-spacing:-.012em}
+.kabar-page .teks-sangat-padat{font-size:.8em !important;letter-spacing:-.018em;line-height:1.12 !important}
+.kabar-page .berita-utama-copy h3.teks-padat{font-size:clamp(22px,2.55vw,31px) !important}
+.kabar-page .berita-utama-copy h3.teks-sangat-padat{font-size:clamp(19px,2.2vw,27px) !important}
+.kabar-page .mini-copy strong.teks-padat{font-size:12px !important}
+.kabar-page .mini-copy strong.teks-sangat-padat{font-size:11px !important}
+.kabar-page .agenda-card-copy h3.teks-padat{font-size:10px !important}
+.kabar-page .agenda-card-copy h3.teks-sangat-padat{font-size:9px !important}
+.kabar-page .panel-putih > h3.teks-padat{font-size:12px !important}
+.kabar-page .panel-putih > h3.teks-sangat-padat{font-size:11px !important}
+.kabar-page .galeri-item strong.teks-padat{font-size:9px !important}
+.kabar-page .galeri-item strong.teks-sangat-padat{font-size:8px !important}
+
+@media(max-width:1040px){
+  .kabar-page .berita-utama-wrap,
+  .kabar-page .berita-terbaru-wrap{grid-template-rows:auto 390px}
+  .kabar-page .berita-utama-card,
+  .kabar-page .berita-terbaru-list{height:390px;min-height:390px;max-height:390px}
+  .kabar-page .agenda-cards{grid-auto-rows:126px}
+  .kabar-page .agenda-card{height:126px;min-height:126px;max-height:126px}
+  .kabar-page .galeri-strip{grid-auto-rows:152px}
+  .kabar-page .galeri-item{height:152px;min-height:152px;max-height:152px}
+  .kabar-page .kontribusi-card{height:190px;min-height:190px;max-height:190px}
+}
+
+@media(max-width:800px){
+  .kabar-page .menu-cepat > a{height:74px;min-height:74px;max-height:74px}
+  .kabar-page .berita-utama-wrap,
+  .kabar-page .berita-terbaru-wrap{grid-template-rows:auto 380px}
+  .kabar-page .berita-utama-card,
+  .kabar-page .berita-terbaru-list{height:380px;min-height:380px;max-height:380px}
+  .kabar-page .polling-card,
+  .kabar-page .forum-card{grid-template-rows:auto 292px}
+  .kabar-page .polling-card .panel-putih,
+  .kabar-page .forum-card .panel-putih{height:292px;min-height:292px;max-height:292px}
+  .kabar-page .kontribusi-card{height:210px;min-height:210px;max-height:210px}
+}
+
+@media(max-width:520px){
+  .kabar-page .menu-cepat > a{height:70px;min-height:70px;max-height:70px}
+  .kabar-page .berita-utama-wrap{grid-template-rows:auto 430px}
+  .kabar-page .berita-utama-card{height:430px;min-height:430px;max-height:430px}
+  .kabar-page .berita-terbaru-wrap{grid-template-rows:auto 360px}
+  .kabar-page .berita-terbaru-list{height:360px;min-height:360px;max-height:360px}
+  .kabar-page .agenda-cards{grid-auto-rows:122px}
+  .kabar-page .agenda-card{height:122px;min-height:122px;max-height:122px}
+  .kabar-page .galeri-strip{grid-auto-rows:132px}
+  .kabar-page .galeri-item{height:132px;min-height:132px;max-height:132px}
+  .kabar-page .polling-card,
+  .kabar-page .forum-card{grid-template-rows:auto 310px}
+  .kabar-page .polling-card .panel-putih,
+  .kabar-page .forum-card .panel-putih{height:310px;min-height:310px;max-height:310px}
+  .kabar-page .kontribusi-card{height:210px;min-height:210px;max-height:210px}
+}
