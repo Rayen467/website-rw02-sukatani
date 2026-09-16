@@ -1,17 +1,17 @@
 <script>
-  import { KONTEN } from "../../inti/nama.js";
+  import { onMount } from "svelte";
   import { isi, muatKonten } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { simpanKonten } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
 
+  const CMS_KEY = "cms_halaman";
   const PILIHAN = [
     ["beranda", "Beranda"], ["profil", "Profil"], ["layanan", "Layanan"],
     ["berita", "Berita"], ["transparansi", "Transparansi"], ["umkm", "UMKM"],
     ["kontak", "Kontak"], ["kalender", "Kalender"], ["galeri", "Galeri"],
     ["program", "Program"], ["kas", "Kas"], ["bansos", "Bansos"], ["tautan", "Tautan"]
   ];
-
   const MODE = [
     { nilai: "normal", label: "Normal + blok tambahan" },
     { nilai: "custom", label: "Halaman kustom penuh" }
@@ -29,86 +29,52 @@
   let sibuk = $state(false);
   let terakhirDimuat = $state("");
 
-  const dokumen = $derived(isi.konten?.[KONTEN.CMS_HALAMAN] || {});
+  onMount(() => { muatKonten(CMS_KEY); });
+  const dokumen = $derived(isi.konten?.[CMS_KEY] || {});
 
   function semuaHalaman() { return bacaJson(dokumen.halaman, {}); }
   function semuaBlok() { return bacaJson(dokumen.blok, []); }
 
   function muatForm() {
     const cfg = semuaHalaman()[dipilih] || {};
-    form = {
-      aktif: String(cfg.aktif ?? "true"),
-      mode: cfg.mode || "normal",
-      alis: cfg.alis || "",
-      judul: cfg.judul || "",
-      subjudul: cfg.subjudul || ""
-    };
-    blok = semuaBlok()
-      .filter((b) => b?.halaman === dipilih)
-      .sort((a, b) => Number(a.urutan || 0) - Number(b.urutan || 0))
-      .map((b) => ({ ...b }));
+    form = { aktif: String(cfg.aktif ?? "true"), mode: cfg.mode || "normal", alis: cfg.alis || "", judul: cfg.judul || "", subjudul: cfg.subjudul || "" };
+    blok = semuaBlok().filter((b) => b?.halaman === dipilih).sort((a, b) => Number(a.urutan || 0) - Number(b.urutan || 0)).map((b) => ({ ...b }));
   }
 
   $effect(() => {
     const versi = `${dokumen.diubah?.seconds || ""}|${dokumen.halaman || ""}|${dokumen.blok || ""}`;
-    if (versi && versi !== terakhirDimuat && !sibuk) {
-      terakhirDimuat = versi;
-      muatForm();
-    }
+    if (versi && versi !== terakhirDimuat && !sibuk) { terakhirDimuat = versi; muatForm(); }
   });
 
-  function gantiHalaman(e) {
-    dipilih = e.currentTarget.value;
-    muatForm();
-  }
-
-  function idBaru() {
-    return globalThis.crypto?.randomUUID?.() || `blok-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-  }
-
+  function gantiHalaman(e) { dipilih = e.currentTarget.value; muatForm(); }
+  function idBaru() { return globalThis.crypto?.randomUUID?.() || `blok-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; }
   function tambahBlok() {
-    if (!baru.judul.trim() && !baru.isi.trim() && !baru.gambar.trim()) {
-      beriTahu("Isi judul, teks, atau gambar blok terlebih dahulu.");
-      return;
-    }
+    if (!baru.judul.trim() && !baru.isi.trim() && !baru.gambar.trim()) { beriTahu("Isi judul, teks, atau gambar blok terlebih dahulu."); return; }
     blok = [...blok, { ...baru, id: idBaru(), halaman: dipilih, urutan: blok.length + 1 }];
     baru = { jenis: "teks", posisi: "bawah", alis: "", judul: "", isi: "", gambar: "", alt: "", tombol: "", url: "", tampil: "true" };
   }
-
   function hapusBlok(id) { blok = blok.filter((b) => b.id !== id); }
-  function naik(i) {
-    if (i <= 0) return;
-    const salin = [...blok]; [salin[i - 1], salin[i]] = [salin[i], salin[i - 1]]; blok = salin;
-  }
-  function turun(i) {
-    if (i >= blok.length - 1) return;
-    const salin = [...blok]; [salin[i], salin[i + 1]] = [salin[i + 1], salin[i]]; blok = salin;
-  }
+  function naik(i) { if (i <= 0) return; const salin = [...blok]; [salin[i - 1], salin[i]] = [salin[i], salin[i - 1]]; blok = salin; }
+  function turun(i) { if (i >= blok.length - 1) return; const salin = [...blok]; [salin[i], salin[i + 1]] = [salin[i + 1], salin[i]]; blok = salin; }
 
   async function simpan() {
     sibuk = true;
     try {
       const halaman = semuaHalaman();
       halaman[dipilih] = { ...form };
-
       const blokLain = semuaBlok().filter((b) => b?.halaman !== dipilih);
       const blokHalaman = blok.map((b, i) => ({ ...b, halaman: dipilih, urutan: i + 1 }));
-      await simpanKonten(KONTEN.CMS_HALAMAN, {
-        halaman: JSON.stringify(halaman),
-        blok: JSON.stringify([...blokLain, ...blokHalaman])
-      });
-      await muatKonten(KONTEN.CMS_HALAMAN);
+      await simpanKonten(CMS_KEY, { halaman: JSON.stringify(halaman), blok: JSON.stringify([...blokLain, ...blokHalaman]) });
+      await muatKonten(CMS_KEY);
       beriTahu("Pengaturan halaman tersimpan. Perubahan publik langsung memakai data ini.");
-    } catch (err) {
-      beriTahu(err?.code ? pesanRamah(err) : (err?.message || "Belum berhasil menyimpan editor halaman."));
-    } finally { sibuk = false; }
+    } catch (err) { beriTahu(err?.code ? pesanRamah(err) : (err?.message || "Belum berhasil menyimpan editor halaman.")); }
+    finally { sibuk = false; }
   }
 </script>
 
 <section class="blok">
-  <div class="kepala-bagian"><div><h2>Editor halaman tanpa coding</h2><p>Atur tampilan halaman publik, tambah blok informasi, atau nonaktifkan halaman sementara.</p></div></div>
-  <div class="catatan" style="margin-bottom:18px"><b>Mode Normal</b> mempertahankan fitur bawaan seperti formulir, data UMKM, berita, kas, dan kalender lalu menambahkan blok Anda di atas/bawah. <b>Mode Kustom</b> mengganti isi utama halaman dengan blok yang Anda susun sendiri. Untuk halaman layanan interaktif, gunakan Mode Normal agar fitur tidak hilang.</div>
-
+  <div class="kepala-bagian"><div><h2>Editor halaman tanpa coding</h2><p>Atur halaman publik, tambah blok, sembunyikan blok, atau nonaktifkan halaman sementara.</p></div></div>
+  <div class="catatan" style="margin-bottom:18px"><b>Mode Normal</b> mempertahankan formulir dan data bawaan lalu menambahkan blok di atas/bawah. <b>Mode Kustom</b> mengganti isi utama dengan blok yang Anda susun. Untuk Layanan, UMKM, Kontak, Kalender, dan halaman interaktif lain, gunakan Mode Normal agar fungsi tetap tersedia.</div>
   <div class="isian-borang">
     <div class="isian"><label for="cms-page">Halaman</label><select id="cms-page" value={dipilih} onchange={gantiHalaman}>{#each PILIHAN as p}<option value={p[0]}>{p[1]}</option>{/each}</select></div>
     <div class="isian"><label for="cms-mode">Mode</label><select id="cms-mode" bind:value={form.mode}>{#each MODE as m}<option value={m.nilai}>{m.label}</option>{/each}</select></div>
@@ -129,7 +95,7 @@
     <div class="isian wide"><label for="cb-isi">Isi</label><textarea id="cb-isi" bind:value={baru.isi}></textarea></div>
     <div class="isian"><label for="cb-gambar">URL gambar</label><input id="cb-gambar" bind:value={baru.gambar} inputmode="url" placeholder="https://..." /></div>
     <div class="isian"><label for="cb-alt">Teks alternatif gambar</label><input id="cb-alt" bind:value={baru.alt} /></div>
-    <div class="isian"><label for="cb-tombol">Teks tombol</label><input id="cb-tombol" bind:value={baru.tombol} placeholder="Lihat selengkapnya" /></div>
+    <div class="isian"><label for="cb-tombol">Teks tombol</label><input id="cb-tombol" bind:value={baru.tombol} /></div>
     <div class="isian"><label for="cb-url">Alamat tombol</label><input id="cb-url" bind:value={baru.url} placeholder="#/layanan atau https://..." /></div>
     <div><button class="tombol" type="submit">+ Tambah blok</button></div>
   </form>
@@ -160,8 +126,6 @@
   </section>
 {/if}
 
-<div class="cms-savebar"><div><b>Perubahan belum diterapkan sebelum disimpan.</b><span>Editor ini tidak menyentuh data layanan warga seperti surat, aduan, kas, atau UMKM.</span></div><button class="tombol utama" type="button" onclick={simpan} disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan halaman"}</button></div>
+<div class="cms-savebar"><div><b>Perubahan belum diterapkan sebelum disimpan.</b><span>Data surat, aduan, kas, UMKM, dan layanan lain tidak ikut dihapus saat Anda mengubah layout.</span></div><button class="tombol utama" type="button" onclick={simpan} disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan halaman"}</button></div>
 
-<style>
-  .cms-editor-list{display:grid;gap:14px}.cms-editor-card{padding:18px;border:1px solid #d9e6df;border-radius:14px;background:#fff}.cms-editor-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}.cms-editor-head span{font-size:12px;color:#6f8079}.isian-borang.ringkas{margin-bottom:14px}.cms-savebar{position:sticky;bottom:14px;z-index:5;display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:18px;padding:14px 16px;border:1px solid #a9d0c1;border-radius:14px;background:rgba(245,252,249,.96);box-shadow:0 12px 30px rgba(10,70,55,.12);backdrop-filter:blur(10px)}.cms-savebar div{display:grid;gap:2px}.cms-savebar span{font-size:12px;color:#66766f}@media(max-width:720px){.cms-savebar{align-items:stretch;flex-direction:column}.cms-editor-head{flex-direction:column}}
-</style>
+<style>.cms-editor-list{display:grid;gap:14px}.cms-editor-card{padding:18px;border:1px solid #d9e6df;border-radius:14px;background:#fff}.cms-editor-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}.cms-editor-head span{font-size:12px;color:#6f8079}.isian-borang.ringkas{margin-bottom:14px}.cms-savebar{position:sticky;bottom:14px;z-index:5;display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:18px;padding:14px 16px;border:1px solid #a9d0c1;border-radius:14px;background:rgba(245,252,249,.96);box-shadow:0 12px 30px rgba(10,70,55,.12);backdrop-filter:blur(10px)}.cms-savebar div{display:grid;gap:2px}.cms-savebar span{font-size:12px;color:#66766f}@media(max-width:720px){.cms-savebar{align-items:stretch;flex-direction:column}.cms-editor-head{flex-direction:column}}</style>
