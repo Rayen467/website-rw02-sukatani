@@ -1,7 +1,6 @@
 <script>
-  import { KONTEN } from "../inti/nama.js";
-  import { pakai, kontenNilai } from "../keadaan/isi.svelte.js";
-  import { JENIS_SURAT_BAWAAN, IDENTITAS_BAWAAN } from "../inti/bawaan.js";
+  import { pakai } from "../keadaan/isi.svelte.js";
+  import { JENIS_SURAT_BAWAAN } from "../inti/bawaan.js";
   import TidakAda from "./TidakAda.svelte";
 
   let { kunci } = $props();
@@ -13,75 +12,82 @@
       const mentah = localStorage.getItem("surat-terakhir");
       const d = mentah ? JSON.parse(mentah) : null;
       isian = d && d.jenis === kunci ? d : null;
-    } catch (e) { isian = null; }
+    } catch (e) {
+      isian = null;
+    }
   });
-
-  const titik = "\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026";
-  const namaRW = $derived(kontenNilai(KONTEN.IDENTITAS, "namaRW", IDENTITAS_BAWAAN.namaRW));
 </script>
 
 {#if !surat}
   <TidakAda />
 {:else}
-  <nav class="remah tanpa-cetak"><a href="#/">Beranda</a><span>&rsaquo;</span><a href="#/surat">Pengajuan Surat</a><span>&rsaquo;</span><span>Berkas</span></nav>
+  <nav class="remah tanpa-cetak"><a href="#/">Beranda</a><span>&rsaquo;</span><a href="#/surat">Pengajuan Surat</a><span>&rsaquo;</span><span>Bukti Pengajuan</span></nav>
 
   <div class="tanpa-cetak">
     <div class="kepala-halaman">
-      <p class="alis">Berkas surat</p>
-      <h1>Berkas {surat.nama}</h1>
+      <p class="alis">Bukti pengajuan layanan</p>
+      <h1>{surat.nama}</h1>
       <p>
         {#if isian}
-          Nomor antrean <b class="mono">{isian.antrean}</b>. Cetak berkas ini, lalu bawa beserta syaratnya kepada Ketua RT.
+          Pengajuan Anda sudah tercatat dengan nomor antrean <b class="mono">{isian.antrean}</b>.
+          Dokumen di bawah adalah bukti pengajuan, bukan surat resmi yang sudah disahkan.
         {:else}
-          Belum ada pengajuan tersimpan di perangkat ini, jadi berkas di bawah masih kosong. Isi formulirnya lebih dulu agar keterangannya terisi otomatis.
+          Belum ada pengajuan tersimpan di perangkat ini. Isi formulir lebih dulu agar bukti pengajuan terisi otomatis.
         {/if}
       </p>
     </div>
 
     <div class="baris-tombol" style="margin-bottom:20px">
-      <button class="tombol utama" type="button" onclick={() => window.print()}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6" /><path d="M6 18H4a1 1 0 0 1-1-1v-6h18v6a1 1 0 0 1-1 1h-2" /><path d="M6 14h12v7H6z" /></svg>
-        Cetak atau simpan PDF
-      </button>
+      <button class="tombol utama" type="button" onclick={() => window.print()}>Cetak / simpan PDF</button>
+      <a class="tombol" href="#/akun">Lacak di Akun Saya</a>
       <a class="tombol" href="#/surat/{surat.id}">Kembali ke formulir</a>
     </div>
 
     <div class="catatan" style="margin-bottom:20px">
-      <b>Cara menyimpan PDF.</b> Tekan tombol di atas, lalu pada jendela cetak pilih tujuan <b>Simpan sebagai PDF</b>.
+      <b>Penting.</b> Surat resmi baru disiapkan Petugas setelah data diverifikasi, nomor surat ditetapkan, dan proses tanda tangan/stempel selesai.
     </div>
   </div>
 
-  <div class="surat">
+  <div class="surat bukti-pengajuan">
+    <div class="draft-cap">BUKTI PENGAJUAN · BELUM MERUPAKAN SURAT RESMI</div>
+
     <div class="kop">
-      <b>RUKUN WARGA {namaRW.replace(/^RW\s*/i, "")}</b>
-      <span>PERUM PERMAI SUKATANI &mdash; KELURAHAN SUKATANI, KECAMATAN RAJEG</span>
-      <span>KABUPATEN TANGERANG, PROVINSI BANTEN 15540</span>
+      <b>PORTAL LAYANAN WARGA RW 02</b>
+      <span>PERUM PERMAI SUKATANI — KECAMATAN RAJEG</span>
+      <span>KABUPATEN TANGERANG, BANTEN</span>
     </div>
 
-    <h2>{surat.nama.toUpperCase()}</h2>
-    <div class="nomor">Nomor: {isian ? isian.antrean : titik}</div>
+    <h2>BUKTI PENGAJUAN LAYANAN</h2>
+    <div class="nomor">Nomor antrean: {isian ? isian.antrean : "...................."}</div>
 
-    <p>Yang bertanda tangan di bawah ini, Ketua Rukun Warga Perum Permai Sukatani, Kelurahan Sukatani, Kecamatan Rajeg, Kabupaten Tangerang, menerangkan bahwa:</p>
+    <p>Bukti ini menerangkan bahwa sistem layanan RW 02 telah menerima pengajuan dengan rincian berikut:</p>
 
     <table><tbody>
-      <tr><td>Nama</td><td>: {isian ? isian.nama : titik}</td></tr>
-      <tr><td>Nomor induk kependudukan</td><td>: {isian ? isian.nik : titik}</td></tr>
-      <tr><td>Tempat, tanggal lahir</td><td>: {isian && isian.ttl ? isian.ttl : titik}</td></tr>
-      <tr><td>Alamat</td><td>: {isian ? isian.alamat + ", " + isian.rt : titik}</td></tr>
+      <tr><td>Jenis layanan</td><td>: {surat.nama}</td></tr>
+      <tr><td>Nama pemohon</td><td>: {isian ? isian.nama : "-"}</td></tr>
+      <tr><td>NIK</td><td>: {isian ? isian.nik : "-"}</td></tr>
+      <tr><td>Tempat, tanggal lahir</td><td>: {isian && isian.ttl ? isian.ttl : "-"}</td></tr>
+      <tr><td>Alamat</td><td>: {isian ? `${isian.alamat}, ${isian.rt}` : "-"}</td></tr>
+      <tr><td>Keperluan</td><td>: {isian && isian.keperluan ? isian.keperluan : "-"}</td></tr>
+      <tr><td>WhatsApp</td><td>: {isian && isian.wa ? isian.wa : "-"}</td></tr>
     </tbody></table>
 
-    <p>Adalah benar warga yang berdomisili di lingkungan kami. Surat keterangan ini dibuat untuk keperluan {isian && isian.keperluan ? isian.keperluan : titik}.</p>
-    <p>Demikian surat keterangan ini dibuat dengan sebenarnya, untuk dipergunakan sebagaimana mestinya.</p>
-
-    <div class="ttd">
-      <div>
-        <div>Sukatani, {titik}</div>
-        <div>Ketua {namaRW}</div>
-        <div class="ruang"></div>
-        <div>( {titik} )</div>
-      </div>
+    <div class="alur-box">
+      <b>Alur berikutnya</b>
+      <ol>
+        <li>Petugas menerima dan memeriksa pengajuan.</li>
+        <li>Data diverifikasi dan Petugas menetapkan penanggung jawab.</li>
+        <li>Nomor surat resmi disiapkan bila pengajuan memenuhi persyaratan.</li>
+        <li>Surat ditandatangani/stempel sesuai prosedur RW.</li>
+        <li>Status akhir dapat dipantau melalui Dashboard Warga.</li>
+      </ol>
     </div>
 
-    <p class="kaki">Penomoran dan stempel mengikuti ketentuan yang berlaku di RW dan kantor kelurahan.</p>
+    <p class="kaki">Simpan nomor antrean ini. NIK dan data pribadi pada bukti ini hanya untuk keperluan pemohon dan Petugas yang berwenang.</p>
   </div>
 {/if}
+
+<style>
+  .bukti-pengajuan{position:relative}.draft-cap{margin:-4px 0 18px;padding:8px 10px;border:1px solid #d9b8b8;background:#fff7f7;color:#914343;text-align:center;font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.06em}.alur-box{margin:24px 0;padding:16px 18px;border:1px solid #dbe5df;border-radius:10px;background:#f7faf8;font-family:system-ui,sans-serif}.alur-box b{font-size:12px}.alur-box ol{margin:8px 0 0;padding-left:18px}.alur-box li{margin:5px 0;font-size:11px;line-height:1.45}
+  @media print{.draft-cap{display:block!important}}
+</style>
