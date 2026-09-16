@@ -5,6 +5,7 @@
   import { tambahIsi } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
+  import TabKalender from "./TabKalender.svelte";
 
   let js = $state({ nama: "", estimasi: "", syarat: "" });
   let fs = $state({ nama: "", kapasitas: "", ket: "" });
@@ -26,10 +27,7 @@
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Jenis surat yang dilayani</h2></div>
-  <div class="catatan" style="margin-bottom:18px">
-    <b>Menambah jenis surat di sini langsung menambah pilihannya di halaman Pengajuan Surat.</b>
-    Warga bisa langsung mengajukannya, dan berkas cetaknya ikut menyesuaikan judul.
-  </div>
+  <div class="catatan" style="margin-bottom:18px"><b>Menambah jenis surat di sini langsung menambah pilihannya di halaman Pengajuan Surat.</b> Warga bisa langsung mengajukannya, dan berkas cetaknya ikut menyesuaikan judul.</div>
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); tambah(KOLEKSI.JENIS_SURAT, js, () => (js = { nama: "", estimasi: "", syarat: "" })); }}>
     <div class="isian"><label for="js-nama">Nama surat</label><input id="js-nama" bind:value={js.nama} required placeholder="Surat Keterangan Domisili" /></div>
     <div class="isian"><label for="js-estimasi">Perkiraan selesai</label><input id="js-estimasi" bind:value={js.estimasi} placeholder="1 hari kerja" /></div>
@@ -37,21 +35,9 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.JENIS_SURAT}>Tambahkan</button></div>
   </form>
   {#each isi.jenis_surat || [] as o}
-    <BarisKelola
-      koleksi={KOLEKSI.JENIS_SURAT}
-      id={o.id}
-      judul={o.nama} baris={[o.estimasi || "-", String(o.syarat || "").split("\n").join(" \u00B7 ")]}
-      nilai={o}
-      kolom={[
-        { nama: "nama", label: "Nama surat" },
-        { nama: "estimasi", label: "Perkiraan waktu" },
-        { nama: "syarat", label: "Syarat", jenis: "panjang" }
-      ]}
-    />
+    <BarisKelola koleksi={KOLEKSI.JENIS_SURAT} id={o.id} judul={o.nama} baris={[o.estimasi || "-", String(o.syarat || "").split("\n").join(" · ")]} nilai={o} kolom={[{ nama: "nama", label: "Nama surat" },{ nama: "estimasi", label: "Perkiraan waktu" },{ nama: "syarat", label: "Syarat", jenis: "panjang" }]} />
   {/each}
-  {#if !(isi.jenis_surat || []).length}
-    <p class="verifikasi">Belum ada yang ditambahkan. Selama kosong, halaman publik memakai delapan jenis surat bawaan.</p>
-  {/if}
+  {#if !(isi.jenis_surat || []).length}<p class="verifikasi">Belum ada yang ditambahkan. Selama kosong, halaman publik memakai delapan jenis surat bawaan.</p>{/if}
 </section>
 
 <section class="blok">
@@ -63,17 +49,7 @@
     <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.FASILITAS}>Tambahkan</button></div>
   </form>
   {#each isi.fasilitas || [] as o}
-    <BarisKelola
-      koleksi={KOLEKSI.FASILITAS}
-      id={o.id}
-      judul={o.nama} baris={[o.kapasitas || "-", o.ket || ""]}
-      nilai={o}
-      kolom={[
-        { nama: "nama", label: "Nama fasilitas" },
-        { nama: "kapasitas", label: "Kapasitas" },
-        { nama: "ket", label: "Keterangan", jenis: "panjang" }
-      ]}
-    />
+    <BarisKelola koleksi={KOLEKSI.FASILITAS} id={o.id} judul={o.nama} baris={[o.kapasitas || "-", o.ket || ""]} nilai={o} kolom={[{ nama: "nama", label: "Nama fasilitas" },{ nama: "kapasitas", label: "Kapasitas" },{ nama: "ket", label: "Keterangan", jenis: "panjang" }]} />
   {/each}
 </section>
 
@@ -83,27 +59,12 @@
     <div class="isian"><label for="fu-nama">Nama fasilitas</label><input id="fu-nama" bind:value={fu.nama} required placeholder="Musala" /></div>
     <div class="isian"><label for="fu-jenis">Jenis</label><input id="fu-jenis" bind:value={fu.jenis} placeholder="Ibadah" /></div>
     <div class="isian"><label for="fu-rt">Lokasi</label><input id="fu-rt" bind:value={fu.rt} placeholder="RT 01" /></div>
-    <div class="isian">
-      <label for="fu-koordinat">Koordinat peta</label>
-      <input id="fu-koordinat" bind:value={fu.koordinat} placeholder="-6.129217,106.497767" />
-      <span class="petunjuk">Opsional. Kalau diisi, fasilitas akan muncul sebagai titik di peta wilayah.</span>
-    </div>
+    <div class="isian"><label for="fu-koordinat">Koordinat peta</label><input id="fu-koordinat" bind:value={fu.koordinat} placeholder="-6.129217,106.497767" /><span class="petunjuk">Opsional. Kalau diisi, fasilitas akan muncul sebagai titik di peta wilayah.</span></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.FASUM}>Tambahkan</button></div>
     <p class="catatan-borang">Tampil di tabel halaman Peta Wilayah. Jika koordinat diisi, titiknya juga muncul langsung di peta.</p>
   </form>
   {#each isi.fasum || [] as o}
-    <BarisKelola
-      koleksi={KOLEKSI.FASUM}
-      id={o.id}
-      judul={o.nama} baris={[(o.jenis || "-") + " \u00B7 " + (o.rt || "-")]}
-      nilai={o}
-      kolom={[
-        { nama: "nama", label: "Nama fasilitas" },
-        { nama: "jenis", label: "Jenis" },
-        { nama: "rt", label: "Lokasi" },
-        { nama: "koordinat", label: "Koordinat peta" }
-      ]}
-    />
+    <BarisKelola koleksi={KOLEKSI.FASUM} id={o.id} judul={o.nama} baris={[(o.jenis || "-") + " · " + (o.rt || "-")]} nilai={o} kolom={[{ nama: "nama", label: "Nama fasilitas" },{ nama: "jenis", label: "Jenis" },{ nama: "rt", label: "Lokasi" },{ nama: "koordinat", label: "Koordinat peta" }]} />
   {/each}
 </section>
 
@@ -114,19 +75,11 @@
     <div class="isian"><label for="ru-waktu">Waktu</label><input id="ru-waktu" bind:value={ru.waktu} placeholder="Setiap Selasa pertama, 08.00" /></div>
     <div class="isian"><label for="ru-tempat">Tempat</label><input id="ru-tempat" bind:value={ru.tempat} placeholder="Balai warga" /></div>
     <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.RUTIN}>Tambahkan</button></div>
-    <p class="catatan-borang">Cukup diisi sekali. Muncul di tabel Kegiatan Rutin pada halaman Kalender, jadi tidak perlu diumumkan berulang tiap bulan.</p>
+    <p class="catatan-borang">Kegiatan rutin tampil di bawah kalender. Acara dengan tanggal tertentu dikelola pada bagian Kalender & acara di bawah.</p>
   </form>
   {#each isi.rutin || [] as o}
-    <BarisKelola
-      koleksi={KOLEKSI.RUTIN}
-      id={o.id}
-      judul={o.kegiatan} baris={[(o.waktu || "-") + " \u00B7 " + (o.tempat || "-")]}
-      nilai={o}
-      kolom={[
-        { nama: "kegiatan", label: "Kegiatan" },
-        { nama: "waktu", label: "Waktu" },
-        { nama: "tempat", label: "Tempat" }
-      ]}
-    />
+    <BarisKelola koleksi={KOLEKSI.RUTIN} id={o.id} judul={o.kegiatan} baris={[(o.waktu || "-") + " · " + (o.tempat || "-")]} nilai={o} kolom={[{ nama: "kegiatan", label: "Kegiatan" },{ nama: "waktu", label: "Waktu" },{ nama: "tempat", label: "Tempat" }]} />
   {/each}
 </section>
+
+<TabKalender />
