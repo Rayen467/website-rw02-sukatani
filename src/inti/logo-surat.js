@@ -1,32 +1,10 @@
 const BASE = import.meta.env.BASE_URL;
 
-/*
- * Kedua aset logo surat saat ini berupa SVG pembungkus yang menyimpan
- * gambar WebP di dalam <image href="data:image/webp;base64,...">.
- * Pada beberapa browser, SVG seperti itu dapat tampil sebagai ikon gambar
- * rusak ketika SVG tersebut dipakai lagi lewat <img>. Untuk surat, ambil
- * WebP yang tertanam dan gunakan data-URI-nya secara langsung.
- */
-async function muatLogoSurat(namaBerkas) {
-  const alamatSvg = `${BASE}visual/brand/${namaBerkas}.svg`;
+// Aset kop surat disimpan langsung di folder public supaya browser dan
+// hasil cetak/PDF memakai file PNG asli, tanpa pembungkus SVG/data-URI.
+// BASE_URL penting karena situs dipasang di GitHub Pages pada subpath repo.
+export const LOGO_KABUPATEN_TANGERANG =
+  `${BASE}ChatGPT%20Image%20Sep%2018%2C%202026%2C%2012_19_52%20AM.png`;
 
-  try {
-    const respons = await fetch(alamatSvg, { cache: "force-cache" });
-    if (!respons.ok) return alamatSvg;
-
-    const svg = await respons.text();
-    const cocok = svg.match(/(?:href|xlink:href)=["'](data:image\/webp;base64,[^"']+)["']/i);
-    return cocok?.[1] || alamatSvg;
-  } catch (err) {
-    console.warn(`Logo surat gagal dimuat: ${namaBerkas}`, err);
-    return alamatSvg;
-  }
-}
-
-const [logoKabupaten, logoRw] = await Promise.all([
-  muatLogoSurat("logo-kabupaten-tangerang"),
-  muatLogoSurat("logo-rw02-sukatani")
-]);
-
-export const LOGO_KABUPATEN_TANGERANG = logoKabupaten;
-export const LOGO_RW_SUKATANI = logoRw;
+export const LOGO_RW_SUKATANI =
+  `${BASE}Logo_RW02_Sukatani_Kop_Surat_4K_Transparan%20%281%29.png`;
