@@ -1,8 +1,9 @@
 <script>
   import { KOLEKSI } from "../../inti/nama.js";
+  import { JENIS_SURAT_BAWAAN } from "../../inti/bawaan.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { tambahIsi } from "../../sumber/data.js";
+  import { tambahIsi, simpanDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
   import TabKalender from "./TabKalender.svelte";
@@ -12,6 +13,11 @@
   let fu = $state({ nama: "", jenis: "", rt: "", koordinat: "" });
   let ru = $state({ kegiatan: "", waktu: "", tempat: "" });
   let sibuk = $state("");
+
+  function syaratKeTeks(syarat) {
+    if (Array.isArray(syarat)) return syarat.filter(Boolean).join("\n");
+    return String(syarat || "").trim();
+  }
 
   async function tambah(koleksi, isian, kosongkan) {
     sibuk = koleksi;
@@ -23,21 +29,82 @@
     } catch (err) { beriTahu(pesanRamah(err)); }
     sibuk = "";
   }
+
+  /*
+   * Saat koleksi jenis_surat masih kosong, halaman warga memakai daftar
+   * bawaan dari kode. Itu nyaman untuk awal, tetapi daftar bawaan tidak dapat
+   * diedit dari Portal Petugas karena belum menjadi dokumen Firestore.
+   * Tombol ini menyalin delapan layanan bawaan apa adanya ke Firestore.
+   * Setelah itu setiap jenis surat (termasuk persyaratannya) dapat diedit
+   * bebas melalui BarisKelola di bawah tanpa menyentuh kode.
+   */
+  async function aktifkanEditorSurat() {
+    if ((isi.jenis_surat || []).length) return;
+    sibuk = "salin-surat-bawaan";
+    try {
+      for (const surat of JENIS_SURAT_BAWAAN) {
+        await simpanDokumen(
+          KOLEKSI.JENIS_SURAT,
+          surat.id,
+          {
+            nama: surat.nama,
+            estimasi: surat.estimasi || "",
+            syarat: syaratKeTeks(surat.syarat)
+          },
+          false
+        );
+      }
+      await muatKoleksi(KOLEKSI.JENIS_SURAT);
+      beriTahu("Delapan layanan bawaan sudah siap diedit. Persyaratan sekarang bisa dikustom bebas.");
+    } catch (err) {
+      beriTahu(err.code ? pesanRamah(err) : (err.message || "Gagal menyiapkan editor persyaratan."));
+    }
+    sibuk = "";
+  }
 </script>
 
 <section class="blok">
-  <div class="kepala-bagian"><h2>Jenis surat yang dilayani</h2></div>
-  <div class="catatan" style="margin-bottom:18px"><b>Menambah jenis surat di sini langsung menambah pilihannya di halaman Pengajuan Surat.</b> Warga bisa langsung mengajukannya, dan berkas cetaknya ikut menyesuaikan judul.</div>
+  <div class="kepala-bagian"><h2>Jenis surat & persyaratan</h2></div>
+  <div class="catatan" style="margin-bottom:18px">
+    <b>Persyaratan benar-benar bisa dikustom.</b> KTP dan Kartu Keluarga boleh tetap menjadi syarat standar, tetapi pengurus bebas menambah, mengganti, atau menghapus syarat lain sesuai keperluan surat — misalnya Buku Nikah, Ijazah, pas foto, surat lahir, surat kematian, bukti usaha, atau dokumen pendukung lainnya. Tulis satu persyaratan per baris.
+  </div>
+
+  {#if !(isi.jenis_surat || []).length}
+    <div class="catatan" style="margin-bottom:18px">
+      Saat ini halaman warga masih memakai delapan layanan bawaan. Supaya persyaratan delapan layanan itu bisa diedit satu per satu, salin dulu daftar bawaan ke editor Portal Petugas.
+      <div style="margin-top:12px">
+        <button class="tombol utama" type="button" onclick={aktifkanEditorSurat} disabled={sibuk === "salin-surat-bawaan"}>
+          {sibuk === "salin-surat-bawaan" ? "Menyiapkan..." : "Aktifkan editor 8 layanan bawaan"}
+        </button>
+      </div>
+    </div>
+  {/if}
+
   <form class="isian-borang" onsubmit={(e) => { e.preventDefault(); tambah(KOLEKSI.JENIS_SURAT, js, () => (js = { nama: "", estimasi: "", syarat: "" })); }}>
-    <div class="isian"><label for="js-nama">Nama surat</label><input id="js-nama" bind:value={js.nama} required placeholder="Surat Keterangan Domisili" /></div>
+    <div class="isian"><label for="js-nama">Nama surat</label><input id="js-nama" bind:value={js.nama} required placeholder="Surat Pengantar untuk keperluan ..." /></div>
     <div class="isian"><label for="js-estimasi">Perkiraan selesai</label><input id="js-estimasi" bind:value={js.estimasi} placeholder="1 hari kerja" /></div>
-    <div class="isian"><label for="js-syarat">Syarat berkas</label><textarea id="js-syarat" bind:value={js.syarat} placeholder="Fotokopi KTP pemohon&#10;Fotokopi Kartu Keluarga"></textarea><span class="petunjuk">Satu syarat per baris.</span></div>
-    <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.JENIS_SURAT}>Tambahkan</button></div>
+    <div class="isian">
+      <label for="js-syarat">Persyaratan custom</label>
+      <textarea id="js-syarat" bind:value={js.syarat} placeholder="Fotokopi KTP pemohon&#10;Fotokopi Kartu Keluarga&#10;Fotokopi Buku Nikah&#10;Fotokopi Ijazah"></textarea>
+      <span class="petunjuk">Bebas diisi dokumen apa pun. Satu persyaratan per baris; tidak ada daftar yang dikunci sistem.</span>
+    </div>
+    <div><button class="tombol utama" type="submit" disabled={sibuk === KOLEKSI.JENIS_SURAT}>Tambahkan jenis surat</button></div>
   </form>
+
   {#each isi.jenis_surat || [] as o}
-    <BarisKelola koleksi={KOLEKSI.JENIS_SURAT} id={o.id} judul={o.nama} baris={[o.estimasi || "-", String(o.syarat || "").split("\n").join(" · ")]} nilai={o} kolom={[{ nama: "nama", label: "Nama surat" },{ nama: "estimasi", label: "Perkiraan waktu" },{ nama: "syarat", label: "Syarat", jenis: "panjang" }]} />
+    <BarisKelola
+      koleksi={KOLEKSI.JENIS_SURAT}
+      id={o.id}
+      judul={o.nama}
+      baris={[o.estimasi || "-", syaratKeTeks(o.syarat).split("\n").filter(Boolean).join(" · ")]}
+      nilai={{ ...o, syarat: syaratKeTeks(o.syarat) }}
+      kolom={[
+        { nama: "nama", label: "Nama surat" },
+        { nama: "estimasi", label: "Perkiraan waktu" },
+        { nama: "syarat", label: "Persyaratan custom — satu per baris", jenis: "panjang" }
+      ]}
+    />
   {/each}
-  {#if !(isi.jenis_surat || []).length}<p class="verifikasi">Belum ada yang ditambahkan. Selama kosong, halaman publik memakai delapan jenis surat bawaan.</p>{/if}
 </section>
 
 <section class="blok">
