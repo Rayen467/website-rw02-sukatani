@@ -3,6 +3,7 @@ import "./inti/kontak-resmi.js";
 import { aktifkanInteraksiUi } from "./inti/interaksi-ui.js";
 import { aktifkanPeningkatanPortal } from "./inti/peningkatan-portal.js";
 import { aktifkanValidasiDokumen } from "./inti/validasi-dokumen.js";
+import { aktifkanHapusMassalKas } from "./inti/hapus-massal-kas.js";
 import { aktifkanInteraksiKonten } from "./keadaan/interaksi-konten.js";
 import App from "./App.svelte";
 import "./gaya/global.css";
@@ -16,5 +17,6 @@ aktifkanInteraksiUi();
 aktifkanInteraksiKonten();
 aktifkanPeningkatanPortal();
 aktifkanValidasiDokumen();
+aktifkanHapusMassalKas();
 
 export default aplikasi;
