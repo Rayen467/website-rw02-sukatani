@@ -137,13 +137,45 @@ export function kosongkanIsiPribadi() {
  * ------------------------------------------------------------------------- */
 
 /**
+ * Semua jenis layanan di RW 02 pada halaman surat adalah SURAT PENGANTAR.
+ * Data lama di Firestore masih mungkin memakai nama seperti
+ * "Surat Keterangan Domisili". Nama dinormalisasi saat dibaca supaya
+ * halaman warga, formulir, dan berkas tetap memakai istilah yang benar
+ * tanpa harus menunggu seluruh data lama diedit satu per satu.
+ */
+function namaSuratPengantar(nama) {
+  const n = String(nama || "").trim();
+  if (!n) return n;
+
+  if (/^Surat Pengantar untuk\b/i.test(n)) return n;
+
+  if (/^Surat Pengantar\b/i.test(n)) {
+    const tujuan = n.replace(/^Surat Pengantar\s*/i, "").trim();
+    return tujuan ? `Surat Pengantar untuk ${tujuan}` : "Surat Pengantar";
+  }
+
+  return `Surat Pengantar untuk ${n}`;
+}
+
+function rapikanJenisSurat(daftar) {
+  return daftar.map((surat) => ({
+    ...surat,
+    nama: namaSuratPengantar(surat?.nama)
+  }));
+}
+
+/**
  * Memakai isi dari server bila ada; kalau belum, memakai daftar bawaan.
  * Ini yang membuat situs tetap terpakai sejak hari pertama, sebelum
  * pengurus sempat mengisi apa pun.
  */
 export function pakai(kunci, bawaan) {
   const v = isi[kunci];
-  return v && v.length ? v : bawaan;
+  const dipakai = v && v.length ? v : bawaan;
+
+  return kunci === "jenis_surat" && Array.isArray(dipakai)
+    ? rapikanJenisSurat(dipakai)
+    : dipakai;
 }
 
 /** Membaca satu dokumen tetap, misalnya konten profil. */
