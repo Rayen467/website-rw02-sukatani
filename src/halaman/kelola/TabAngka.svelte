@@ -7,6 +7,7 @@
   import { rupiah, angkaDari } from "../../inti/format.js";
   import BarisKelola from "../../komponen/BarisKelola.svelte";
   import TempelMassal from "../../komponen/TempelMassal.svelte";
+  import ImporExcelKas from "../../komponen/ImporExcelKas.svelte";
 
   /* Contoh tempelan, memakai TAB sebagai pemisah karena itu yang keluar
      kalau baris disalin dari Excel atau Google Sheets. Disusun di sini,
@@ -69,6 +70,16 @@
     <div class="angka"><span class="label">Jumlah transaksi</span><span class="besar">{kas.length}</span></div>
   </div>
 </section>
+
+<ImporExcelKas
+  kasSekarang={kas}
+  saatSimpan={async (baris) => {
+    await tambahIsi(KOLEKSI.KAS, baris);
+  }}
+  setelahSimpan={async () => {
+    await muatKoleksi(KOLEKSI.KAS);
+  }}
+/>
 
 <section class="blok">
   <div class="kepala-bagian"><h2>Catat transaksi kas</h2></div>
