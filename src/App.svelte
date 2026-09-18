@@ -24,6 +24,7 @@
   import LayananWarga from "./halaman/LayananWarga.svelte";
   import SuratBorang from "./halaman/SuratBorang.svelte";
   import SuratCetak from "./halaman/SuratCetak.svelte";
+  import SuratPengajuan from "./halaman/SuratPengajuan.svelte";
   import Pengaduan from "./halaman/Pengaduan.svelte";
   import Reservasi from "./halaman/Reservasi.svelte";
   import Kependudukan from "./halaman/Kependudukan.svelte";
@@ -77,6 +78,7 @@
     peta: PetaWilayah,
     layanan: LayananWarga,
     surat: Surat,
+    "surat-pengajuan": SuratPengajuan,
     pengaduan: Pengaduan,
     reservasi: Reservasi,
     kependudukan: Kependudukan,
@@ -156,6 +158,7 @@
 
   const pilihan = $derived.by(() => {
     const [satu, dua, tiga] = rute.bagian;
+    if (satu === "surat-pengajuan" && dua) return { komponen: SuratPengajuan, kunci: decodeURIComponent(dua) };
     if (satu === "surat" && tiga === "cetak") return { komponen: SuratCetak, kunci: dua };
     if (satu === "surat" && dua) return { komponen: SuratBorang, kunci: dua };
     if (satu === "berita" && dua) {
