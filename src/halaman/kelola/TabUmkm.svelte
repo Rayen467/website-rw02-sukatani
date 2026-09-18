@@ -9,6 +9,7 @@
   const daftar = (nilai) => Array.isArray(nilai) ? nilai : [];
   const usaha = $derived(daftar(isi.usaha));
   const usahaAdmin = $derived(daftar(isi.usaha_admin));
+  const usahaPemilik = $derived(daftar(isi.usaha_pemilik));
   const pendaftar = $derived(daftar(isi.usaha_baru));
   const pendaftarBaru = $derived(pendaftar.filter((x) => (x.status || STATUS.BARU) === STATUS.BARU));
 
@@ -68,6 +69,10 @@
 
   function adminUntuk(id) {
     return usahaAdmin.find((x) => x.id === id || x.usahaId === id) || null;
+  }
+
+  function pemilikUntuk(id) {
+    return usahaPemilik.find((x) => x.id === id || x.usahaId === id) || null;
   }
 
   function nilaiStatus(a, kunci) {
@@ -184,15 +189,44 @@
         aksiBerikutnya: "Verifikasi NIB, KBLI, dan perizinan dasar usaha.",
         diperbarui: new Date().toISOString()
       }, false);
+      if (u.uid) {
+        await simpanDokumen(KOLEKSI.USAHA_PEMILIK, idUsaha, {
+          usahaId: idUsaha,
+          uid: u.uid,
+          pendaftaranId: u.id
+        }, false);
+      }
       await ubahStatus(KOLEKSI.USAHA_BARU, u.id, STATUS.SELESAI);
       await Promise.all([
         muatKoleksi(KOLEKSI.USAHA),
         muatKoleksi(KOLEKSI.USAHA_ADMIN),
+        muatKoleksi(KOLEKSI.USAHA_PEMILIK),
         muatKoleksi(KOLEKSI.USAHA_BARU)
       ]);
       terpilih = idUsaha;
       form = { ...AWAL, ...(adminUntuk(idUsaha) || {}), pemilik: u.pemilik || "" };
       beriTahu("UMKM dipublikasikan dan profil legalitas internal dibuat.");
+    } catch (err) {
+      beriTahu(pesanRamah(err));
+    }
+    sibuk = "";
+  }
+
+  async function hubungkanPemilik(u) {
+    const calon = calonPendaftaran(u.id);
+    if (!calon?.uid) {
+      beriTahu("Pendaftaran pemilik untuk UMKM ini belum ditemukan.");
+      return;
+    }
+    sibuk = "pemilik:" + u.id;
+    try {
+      await simpanDokumen(KOLEKSI.USAHA_PEMILIK, u.id, {
+        usahaId: u.id,
+        uid: calon.uid,
+        pendaftaranId: calon.id
+      }, false);
+      await muatKoleksi(KOLEKSI.USAHA_PEMILIK);
+      beriTahu("Akses pemilik aktif. Warga pemilik sekarang bisa mengelola profil UMKM sendiri.");
     } catch (err) {
       beriTahu(pesanRamah(err));
     }
@@ -275,12 +309,23 @@
       {#each terlihat as u}
         {@const a = adminUntuk(u.id)}
         {@const skor = skorAdministrasi(u.id)}
+        {@const akses = pemilikUntuk(u.id)}
+        {@const calon = calonPendaftaran(u.id)}
         <article class:active={terpilih === u.id} class="umkm-row">
           <div class="umkm-avatar">{String(u.nama || "U").slice(0, 1).toUpperCase()}</div>
           <div class="umkm-main"><h4>{u.nama || u.id}</h4><p>{a?.pemilik || u.ringkas || "Pemilik belum dicatat"}</p><small>{u.katLabel || u.kat || "Kategori belum diisi"}{u.alamat ? " · " + u.alamat : ""}</small></div>
           <div class="umkm-legal-mini"><span class={`status-${a?.nibStatus || "belum"}`}>NIB: {labelStatus(a?.nibStatus || "belum")}</span><span>KBLI: {a?.kbliKode || "-"}</span></div>
           <div class="umkm-score"><div style={`--score:${skor}%`}><b>{skor}%</b></div><small>Kelengkapan</small></div>
-          <button type="button" class="tombol" onclick={() => pilihUsaha(u)}>Kelola legalitas</button>
+          <div class="umkm-row-actions">
+            <button type="button" class="tombol" onclick={() => pilihUsaha(u)}>Kelola legalitas</button>
+            {#if akses}
+              <span class="umkm-owner-ready">Pemilik bisa edit</span>
+            {:else if calon?.uid}
+              <button type="button" class="tombol" onclick={() => hubungkanPemilik(u)} disabled={sibuk === "pemilik:" + u.id}>
+                {sibuk === "pemilik:" + u.id ? "Menghubungkan..." : "Hubungkan pemilik"}
+              </button>
+            {/if}
+          </div>
         </article>
       {/each}
     </div>
@@ -388,8 +433,8 @@
   .umkm-panel{margin-top:14px;padding:18px}.umkm-panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}.umkm-panel-head h3{font-size:20px}.umkm-panel-head>span{padding:5px 9px;border-radius:99px;background:#eff7f4;color:#557069;font-size:14px;font-weight:700}
   .umkm-pending-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.umkm-pending-card{padding:15px;border:1px solid #e3ebe8;border-radius:12px;background:#fbfdfc}.umkm-pending-top{display:flex;justify-content:space-between;gap:8px}.umkm-pending-top>span{padding:4px 8px;border-radius:99px;background:#fff2d8;color:#966412;font-size:14px;font-weight:750}.umkm-pending-top small{color:#71807b}.umkm-pending-card h4{margin:10px 0 5px;font-size:17px}.umkm-pending-card>p{min-height:42px;margin:0;color:#66736f;line-height:1.48}.umkm-pending-card dl{margin:12px 0;display:grid;gap:6px}.umkm-pending-card dl div{display:grid;grid-template-columns:76px 1fr;gap:8px}.umkm-pending-card dt{color:#87918e}.umkm-pending-card dd{margin:0;color:#30423c}.umkm-actions{display:flex;flex-wrap:wrap;gap:8px}
   .umkm-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:12px;margin-bottom:12px}.umkm-toolbar label,.umkm-form-grid label,.umkm-doc-card label,.umkm-readiness-grid label{display:grid;gap:6px}.umkm-toolbar label>span,.umkm-form-grid label>span,.umkm-doc-card label>span,.umkm-readiness-grid label>span{color:#485b54;font-weight:700;font-size:14px}.umkm-toolbar input,.umkm-toolbar select,.umkm-form-grid input,.umkm-form-grid select,.umkm-form-grid textarea,.umkm-doc-card input,.umkm-doc-card select,.umkm-readiness-grid select{width:100%;min-height:42px;padding:9px 11px;border:1px solid #d6e1dd;border-radius:8px;background:#fff;color:#1c2a25;font-size:14px}.umkm-form-grid textarea{min-height:94px;resize:vertical}
-  .umkm-list{display:grid}.umkm-row{display:grid;grid-template-columns:44px minmax(180px,1.3fr) minmax(220px,.9fr) 92px auto;align-items:center;gap:12px;padding:12px 6px;border-top:1px solid #edf1ef}.umkm-row:first-child{border-top:0}.umkm-row.active{background:#f1faf6}.umkm-avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:10px;background:#e6f5ef;color:#08755c;font-size:17px;font-weight:800}.umkm-main{min-width:0}.umkm-main h4{margin:0 0 2px;font-size:16px}.umkm-main p,.umkm-main small{display:block;margin:0;color:#68756f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.umkm-legal-mini{display:grid;gap:4px}.umkm-legal-mini span{font-size:14px;color:#63716c}.umkm-legal-mini .status-aktif{color:#08775d;font-weight:700}.umkm-legal-mini .status-proses{color:#9a6815}.umkm-legal-mini .status-perbarui{color:#ad3948}.umkm-score{display:grid;justify-items:center;gap:3px}.umkm-score>div{--score:0%;width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:conic-gradient(#0b765f var(--score),#e9efed 0);position:relative}.umkm-score>div:after{content:"";position:absolute;inset:6px;border-radius:50%;background:#fff}.umkm-score b{position:relative;z-index:1;font-size:14px}.umkm-score small{font-size:14px;color:#77837f}.umkm-score.big>div{width:82px;height:82px}.umkm-score.big>div:after{inset:8px}.umkm-score.big b{font-size:18px}.umkm-empty{padding:26px;text-align:center;color:#73807c;background:#f8fbfa;border-radius:10px}
+  .umkm-list{display:grid}.umkm-row{display:grid;grid-template-columns:44px minmax(180px,1.3fr) minmax(220px,.9fr) 92px auto;align-items:center;gap:12px;padding:12px 6px;border-top:1px solid #edf1ef}.umkm-row:first-child{border-top:0}.umkm-row.active{background:#f1faf6}.umkm-avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:10px;background:#e6f5ef;color:#08755c;font-size:17px;font-weight:800}.umkm-main{min-width:0}.umkm-main h4{margin:0 0 2px;font-size:16px}.umkm-main p,.umkm-main small{display:block;margin:0;color:#68756f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.umkm-legal-mini{display:grid;gap:4px}.umkm-legal-mini span{font-size:14px;color:#63716c}.umkm-legal-mini .status-aktif{color:#08775d;font-weight:700}.umkm-legal-mini .status-proses{color:#9a6815}.umkm-legal-mini .status-perbarui{color:#ad3948}.umkm-score{display:grid;justify-items:center;gap:3px}.umkm-score>div{--score:0%;width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:conic-gradient(#0b765f var(--score),#e9efed 0);position:relative}.umkm-score>div:after{content:"";position:absolute;inset:6px;border-radius:50%;background:#fff}.umkm-score b{position:relative;z-index:1;font-size:14px}.umkm-score small{font-size:14px;color:#77837f}.umkm-score.big>div{width:82px;height:82px}.umkm-score.big>div:after{inset:8px}.umkm-score.big b{font-size:18px}.umkm-row-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.umkm-owner-ready{padding:5px 9px;border-radius:999px;background:#e6f6ef;color:#08745c;font-size:12px;font-weight:800}.umkm-empty{padding:26px;text-align:center;color:#73807c;background:#f8fbfa;border-radius:10px}
   .umkm-editor{margin-top:14px;overflow:hidden}.umkm-editor-head{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:20px 22px;background:#f1faf6;border-bottom:1px solid #dcebe5}.umkm-editor-head h3{font-size:22px}.umkm-editor-head p{max-width:760px;margin:5px 0 0;color:#67756f;line-height:1.5}.umkm-editor form{padding:0 22px 22px}.umkm-section{padding:20px 0;border-top:1px solid #edf1ef}.umkm-section:first-child{border-top:0}.umkm-section-head{display:grid;grid-template-columns:38px 1fr;gap:12px;margin-bottom:14px}.umkm-section-head>span{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:#e4f5ee;color:#08745c;font-weight:800}.umkm-section-head h4{margin:0;font-size:18px;color:#192a24}.umkm-section-head p{margin:3px 0 0;color:#71807a;line-height:1.45}.umkm-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.umkm-form-grid .wide{grid-column:1/-1}.umkm-doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.umkm-doc-card{display:grid;grid-template-columns:minmax(0,1fr) 190px 220px;gap:12px;align-items:end;padding:14px;border:1px solid #e1e9e6;border-radius:11px;background:#fbfdfc}.umkm-doc-card h5{margin:0;font-size:16px}.umkm-doc-card p{margin:4px 0 0;color:#73807c;font-size:14px;line-height:1.42}.umkm-doc-card label:last-child:nth-child(4){grid-column:2/-1}.umkm-readiness-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.umkm-editor-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:14px}
-  @media(max-width:1280px){.umkm-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-pending-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-doc-grid{grid-template-columns:1fr}.umkm-readiness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-row{grid-template-columns:44px minmax(180px,1fr) minmax(180px,.8fr) 82px}.umkm-row>button{grid-column:2/-1;justify-self:start}}
-  @media(max-width:760px){.umkm-head,.umkm-editor-head{flex-direction:column}.umkm-head-links{justify-content:flex-start}.umkm-kpi,.umkm-pending-grid,.umkm-form-grid,.umkm-readiness-grid,.umkm-toolbar{grid-template-columns:1fr}.umkm-doc-card{grid-template-columns:1fr}.umkm-row{grid-template-columns:42px 1fr}.umkm-legal-mini,.umkm-score,.umkm-row>button{grid-column:2}.umkm-form-grid .wide{grid-column:auto}.umkm-editor form{padding-inline:14px}.umkm-panel{padding:14px}}
+  @media(max-width:1280px){.umkm-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-pending-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-doc-grid{grid-template-columns:1fr}.umkm-readiness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.umkm-row{grid-template-columns:44px minmax(180px,1fr) minmax(180px,.8fr) 82px}.umkm-row-actions{grid-column:2/-1;justify-self:start}}
+  @media(max-width:760px){.umkm-head,.umkm-editor-head{flex-direction:column}.umkm-head-links{justify-content:flex-start}.umkm-kpi,.umkm-pending-grid,.umkm-form-grid,.umkm-readiness-grid,.umkm-toolbar{grid-template-columns:1fr}.umkm-doc-card{grid-template-columns:1fr}.umkm-row{grid-template-columns:42px 1fr}.umkm-legal-mini,.umkm-score,.umkm-row-actions{grid-column:2}.umkm-form-grid .wide{grid-column:auto}.umkm-editor form{padding-inline:14px}.umkm-panel{padding:14px}}
 </style>
