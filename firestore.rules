@@ -162,10 +162,8 @@ service cloud.firestore {
       allow create: if masuk()
                     && teksWajar(request.resource.data.jenis, 60)
                     && teksWajar(request.resource.data.nama, 120)
-                    && teksWajar(request.resource.data.nik, 16)
-                    && request.resource.data.nik.size() == 16
-                    && teksWajar(request.resource.data.kk, 16)
-                    && request.resource.data.kk.size() == 16
+                    && teksWajar(request.resource.data.nik, 32)
+                    && teksWajar(request.resource.data.kk, 32)
                     && teksWajar(request.resource.data.alamat, 200)
                     && teksBoleh(request.resource.data.ttl, 120)
                     && teksBoleh(request.resource.data.rt, 20)
