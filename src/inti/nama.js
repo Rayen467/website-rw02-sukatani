@@ -97,6 +97,8 @@ export const KOLEKSI = Object.freeze({
   RESERVASI: "reservasi",
   USAHA_BARU: "usaha_baru",
 
+  /* Pemetaan privat antara akun warga dan UMKM yang sudah dipublikasikan.\n     Koleksi ini tidak masuk katalog publik; dipakai Rules untuk memastikan\n     hanya pemilik yang sah yang boleh mengubah profil usahanya sendiri. */\n  USAHA_PEMILIK: "usaha_pemilik",
+
   /* Administrasi UMKM -- legalitas, sertifikat, nomor referensi, dan catatan
      pendampingan. Sengaja DIPISAH dari koleksi usaha karena katalog usaha
      bersifat publik. Koleksi ini hanya boleh dibaca/ditulis Petugas. */
@@ -170,6 +172,7 @@ export const KOLEKSI_PENGURUS = Object.freeze([
   KOLEKSI.SURAT,
   KOLEKSI.RESERVASI,
   KOLEKSI.USAHA_BARU,
+  KOLEKSI.USAHA_PEMILIK,
   KOLEKSI.USAHA_ADMIN,
   KOLEKSI.WARGA,
   KOLEKSI.PENGURUS,
@@ -180,7 +183,8 @@ export const KOLEKSI_PENGURUS = Object.freeze([
 export const KOLEKSI_KIRIMAN = Object.freeze([
   KOLEKSI.SURAT,
   KOLEKSI.RESERVASI,
-  KOLEKSI.USAHA_BARU
+  KOLEKSI.USAHA_BARU,
+  KOLEKSI.USAHA_PEMILIK
 ]);
 
 /** Semua dokumen tetap, dimuat sekaligus saat situs dibuka. */
@@ -196,6 +200,7 @@ export const TANPA_URUTAN = Object.freeze([
   KOLEKSI.WARGA,
   KOLEKSI.BATAS_RT,
   KOLEKSI.USAHA,
+  KOLEKSI.USAHA_PEMILIK,
   KOLEKSI.USAHA_ADMIN,
   KOLEKSI.JADWAL,
   KOLEKSI.TAUTAN,
@@ -233,6 +238,7 @@ export const JALUR = Object.freeze({
   KAS: "/kas",
   PROGRAM: "/program",
   UMKM: "/umkm",
+  UMKM_SAYA: "/umkm-saya",
   DAFTAR_USAHA: "/daftar-usaha",
   BANSOS: "/bansos",
   TAUTAN: "/tautan",
