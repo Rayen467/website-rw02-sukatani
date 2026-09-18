@@ -87,6 +87,7 @@ const rute = new Set([
   "peta",
   "layanan",
   "surat",
+  "surat-pengajuan",
   "pengaduan",
   "reservasi",
   "kependudukan",
