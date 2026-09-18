@@ -14,6 +14,24 @@ import { konfigurasi } from "./firebase.js";
 let authPembuatPetugas = null;
 let janjiAuthPembuat = null;
 
+function setelanVerifikasiPetugas() {
+  const bawaan = "https://rayen467.github.io/website-rw02-sukatani/";
+  let pangkal = bawaan;
+
+  if (typeof window !== "undefined" && window.location?.origin) {
+    const pathname = window.location.pathname || "/website-rw02-sukatani/";
+    const direktori = pathname.endsWith("/")
+      ? pathname
+      : pathname.replace(/[^/]*$/, "");
+    pangkal = window.location.origin + direktori;
+  }
+
+  return {
+    url: pangkal + "#/kelola",
+    handleCodeInApp: false
+  };
+}
+
 function galat(kode, pesan) {
   const err = new Error(pesan || kode);
   err.code = kode;
@@ -59,7 +77,7 @@ export async function daftarPetugas(email, sandi, nama) {
     if (nama) await updateProfile(penggunaBaru, { displayName: String(nama).trim() });
 
     try {
-      await sendEmailVerification(penggunaBaru);
+      await sendEmailVerification(penggunaBaru, setelanVerifikasiPetugas());
     } catch (penyebab) {
       try { await deleteUser(penggunaBaru); } catch { /* rollback best effort */ }
       penggunaBaru = null;
