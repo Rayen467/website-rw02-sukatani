@@ -32,6 +32,8 @@
   const reservasi = $derived(isi.reservasi || []);
   const usaha = $derived(isi.usaha_baru || []);
 
+  const punyaAksesUmkm = $derived((isi.usaha_pemilik || []).length > 0 || (isi.usaha_baru || []).length > 0);
+
   const total = $derived(surat.length + reservasi.length + usaha.length);
   const menunggu = $derived(
     [...surat, ...reservasi, ...usaha].filter((x) =>
@@ -296,6 +298,15 @@
           <p>Ajukan usaha untuk ditinjau pengurus dan masuk ke direktori UMKM RW.</p>
           <span class="tombol">Daftar UMKM</span>
         </a>
+
+        {#if punyaAksesUmkm}
+          <a class="kartu tindakan" href="#/umkm-saya">
+            <p class="alis">UMKM saya</p>
+            <h3>Kelola Profil Usaha</h3>
+            <p>Perbarui produk, kontak, alamat, jam operasional, dan informasi publik usaha milik akun Anda.</p>
+            <span class="tombol utama">Kelola UMKM</span>
+          </a>
+        {/if}
 
         <a class="kartu tindakan" href="#/forum">
           <p class="alis">Partisipasi</p>
