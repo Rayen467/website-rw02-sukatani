@@ -31,6 +31,29 @@ auth.languageCode = "id";
 export const PANJANG_SANDI_MIN = 15;
 export const PANJANG_SANDI_MAKS = 128;
 
+/**
+ * Tujuan setelah tautan email selesai diproses Firebase.
+ * Warga dan Petugas sengaja memakai tujuan berbeda supaya tombol lanjut
+ * tidak kembali ke halaman umum atau ke portal aktor yang salah.
+ */
+function setelanAksiEmail(jalur) {
+  const bawaan = "https://rayen467.github.io/website-rw02-sukatani/";
+  let pangkal = bawaan;
+
+  if (typeof window !== "undefined" && window.location?.origin) {
+    const pathname = window.location.pathname || "/website-rw02-sukatani/";
+    const direktori = pathname.endsWith("/")
+      ? pathname
+      : pathname.replace(/[^/]*$/, "");
+    pangkal = window.location.origin + direktori;
+  }
+
+  return {
+    url: pangkal + "#" + jalur,
+    handleCodeInApp: false
+  };
+}
+
 /** Memasang pemantauan. Mengembalikan fungsi untuk melepasnya lagi. */
 export function pantau(saatBerubah) {
   return onIdTokenChanged(auth, saatBerubah);
@@ -88,7 +111,7 @@ export async function daftarAkun(email, sandi, nama) {
   const hasil = await createUserWithEmailAndPassword(auth, email, sandi);
   if (nama) await updateProfile(hasil.user, { displayName: nama });
   try {
-    await sendEmailVerification(hasil.user);
+    await sendEmailVerification(hasil.user, setelanAksiEmail("/dashboard-warga"));
   } catch (penyebab) {
     const err = new Error(
       "Akun sudah dibuat, tetapi tautan verifikasi belum terkirim. Buka Akun Saya dan pilih Kirim ulang tautan.",
@@ -113,7 +136,7 @@ export async function lupaSandi(email) {
 
 export function kirimUlangVerifikasi() {
   if (!auth.currentUser) throw new Error("belum masuk");
-  return sendEmailVerification(auth.currentUser);
+  return sendEmailVerification(auth.currentUser, setelanAksiEmail("/dashboard-warga"));
 }
 
 export async function periksaVerifikasi() {
