@@ -163,7 +163,20 @@ service cloud.firestore {
                     && teksWajar(request.resource.data.jenis, 60)
                     && teksWajar(request.resource.data.nama, 120)
                     && teksWajar(request.resource.data.nik, 16)
-                    && request.resource.data.nik.matches('^[0-9]{16}
+                    && request.resource.data.nik.size() == 16
+                    && teksWajar(request.resource.data.kk, 16)
+                    && request.resource.data.kk.size() == 16
+                    && teksWajar(request.resource.data.alamat, 200)
+                    && teksBoleh(request.resource.data.ttl, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && teksBoleh(request.resource.data.keperluan, 500)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['jenis', 'nama', 'nik', 'kk', 'ttl', 'alamat', 'rt', 'keperluan',
+                          'wa', 'antrean', 'uid', 'status', 'dibuat']);
 
       allow update: if petugas()
                     && request.resource.data.diff(resource.data)
