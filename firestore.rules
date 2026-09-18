@@ -25,6 +25,12 @@ service cloud.firestore {
         && resource.data.uid == request.auth.uid;
     }
 
+    function pemilikUsaha(slug) {
+      return masuk()
+        && exists(/databases/$(database)/documents/usaha_pemilik/$(slug))
+        && get(/databases/$(database)/documents/usaha_pemilik/$(slug)).data.uid == request.auth.uid;
+    }
+
     function teksWajar(nilai, maks) {
       return nilai is string && nilai.size() > 0 && nilai.size() <= maks;
     }
@@ -237,6 +243,14 @@ service cloud.firestore {
       allow create, update, delete: if petugas();
     }
 
+    // ---------- pemilik UMKM: PRIVAT ----------
+    // Dokumen ini menghubungkan satu profil katalog ke UID warga pemilik.
+    // UID tidak ditaruh di koleksi usaha karena koleksi usaha bersifat publik.
+    match /usaha_pemilik/{slug} {
+      allow read: if petugas() || pemilik();
+      allow create, update, delete: if petugas();
+    }
+
     // ---------- administrasi UMKM: PRIVAT ----------
     // Legalitas, nomor referensi sertifikat, perpajakan, dan catatan
     // pendampingan tidak disimpan di katalog publik usaha.
@@ -350,7 +364,29 @@ service cloud.firestore {
 
     match /usaha/{slug} {
       allow read: if true;
-      allow write: if petugas();
+
+      // Petugas tetap punya hak penuh. Pemilik yang sudah dihubungkan oleh
+      // Petugas boleh memperbarui profil PUBLIK usahanya sendiri langsung.
+      // Data legalitas tetap berada di usaha_admin dan tidak pernah terbuka
+      // untuk editor warga.
+      allow update: if petugas()
+                    || (pemilikUsaha(slug)
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly([
+                               'nama', 'kat', 'katLabel', 'ringkas', 'panjang',
+                               'wa', 'alamat', 'jam', 'maps'
+                             ])
+                        && teksWajar(request.resource.data.nama, 120)
+                        && teksWajar(request.resource.data.kat, 40)
+                        && teksWajar(request.resource.data.katLabel, 80)
+                        && teksBoleh(request.resource.data.ringkas, 400)
+                        && teksBoleh(request.resource.data.panjang, 3000)
+                        && teksBoleh(request.resource.data.wa, 30)
+                        && teksBoleh(request.resource.data.alamat, 200)
+                        && teksBoleh(request.resource.data.jam, 80)
+                        && teksBoleh(request.resource.data.maps, 500));
+
+      allow create, delete: if petugas();
     }
 
     match /usaha_foto/{slug} {
