@@ -44,12 +44,26 @@
     [...surat, ...reservasi, ...usaha].filter((x) => x.status === STATUS.SELESAI).length
   );
 
+  function tahapSurat(v) {
+    const map = {
+      diterima: "Diterima",
+      ditugaskan: "Ditugaskan",
+      verifikasi: "Verifikasi data",
+      menunggu_ttd: "Menunggu tanda tangan",
+      menunggu_cap: "Menunggu ACC / cap RW",
+      siap: "Sudah ACC · siap diserahkan",
+      selesai: "Selesai",
+      ditolak: "Ditolak"
+    };
+    return map[v] || "Diterima";
+  }
+
   const riwayat = $derived([
     ["Pengajuan surat", surat, (x) => ({
       judul: x.jenis,
-      ket: "Nomor antrean " + (x.antrean || "-"),
+      ket: "Nomor antrean " + (x.antrean || "-") + " · " + tahapSurat(x.tahap),
       status: x.status,
-      href: "#/surat"
+      href: "#/surat-pengajuan/" + encodeURIComponent(x.id)
     })],
     ["Permohonan fasilitas", reservasi, (x) => ({
       judul: x.fasilitas,
@@ -358,6 +372,7 @@
                 <div>
                   <h3>{b.judul || "-"}</h3>
                   <p>{b.ket}</p>
+                  {#if bagian[0] === "Pengajuan surat"}<span class="warga-lihat-surat">Lihat surat / simpan PDF →</span>{/if}
                 </div>
                 <Lencana status={b.status} />
               </a>
