@@ -97,7 +97,10 @@ export const KOLEKSI = Object.freeze({
   RESERVASI: "reservasi",
   USAHA_BARU: "usaha_baru",
 
-  /* Pemetaan privat antara akun warga dan UMKM yang sudah dipublikasikan.\n     Koleksi ini tidak masuk katalog publik; dipakai Rules untuk memastikan\n     hanya pemilik yang sah yang boleh mengubah profil usahanya sendiri. */\n  USAHA_PEMILIK: "usaha_pemilik",
+  /* Pemetaan privat antara akun warga dan UMKM yang sudah dipublikasikan.
+     Koleksi ini tidak masuk katalog publik; dipakai Rules untuk memastikan
+     hanya pemilik yang sah yang boleh mengubah profil usahanya sendiri. */
+  USAHA_PEMILIK: "usaha_pemilik",
 
   /* Administrasi UMKM -- legalitas, sertifikat, nomor referensi, dan catatan
      pendampingan. Sengaja DIPISAH dari koleksi usaha karena katalog usaha
