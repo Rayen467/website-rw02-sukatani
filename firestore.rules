@@ -162,7 +162,590 @@ service cloud.firestore {
       allow create: if masuk()
                     && teksWajar(request.resource.data.jenis, 60)
                     && teksWajar(request.resource.data.nama, 120)
-                    && teksWajar(request.resource.data.nik, 32)
+                    && teksWajar(request.resource.data.nik, 16)
+                    && request.resource.data.nik.matches('^[0-9]{16}
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- reservasi fasilitas ----------
+    match /reservasi/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.fasilitas, 80)
+                    && teksWajar(request.resource.data.tanggal, 10)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.jam, 60)
+                    && teksBoleh(request.resource.data.acara, 200)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['fasilitas', 'tanggal', 'jam', 'acara', 'nama', 'wa',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    match /jadwal/{tanggal} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- pendaftaran usaha warga ----------
+    match /usaha_baru/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksWajar(request.resource.data.pemilik, 120)
+                    && teksWajar(request.resource.data.jenis, 60)
+                    && teksBoleh(request.resource.data.produk, 800)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && teksBoleh(request.resource.data.alamat, 200)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['nama', 'pemilik', 'jenis', 'produk', 'wa', 'alamat',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- pemilik UMKM: PRIVAT ----------
+    // Dokumen ini menghubungkan satu profil katalog ke UID warga pemilik.
+    // UID tidak ditaruh di koleksi usaha karena koleksi usaha bersifat publik.
+    match /usaha_pemilik/{slug} {
+      allow read: if petugas() || pemilik();
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- administrasi UMKM: PRIVAT ----------
+    // Legalitas, nomor referensi sertifikat, perpajakan, dan catatan
+    // pendampingan tidak disimpan di katalog publik usaha.
+    match /usaha_admin/{slug} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    // Bukti file sertifikat/legalitas dan metadata verifikasi juga privat.
+    // Berkas tidak pernah boleh dibaca dari katalog publik UMKM.
+    match /usaha_bukti/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    // ---------- polling warga ----------
+    match /polling/{pollId}/suara/{uid} {
+      allow read: if masuk();
+
+      allow create, update: if akuSendiri(uid)
+                            && request.resource.data.pilihan is int
+                            && request.resource.data.pilihan >= 0
+                            && request.resource.data.pilihan < 20
+                            && request.resource.data.keys().hasOnly(['pilihan', 'dibuat']);
+
+      allow delete: if false;
+      allow read, delete: if petugas();
+    }
+
+    match /polling/{pollId} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- forum warga ----------
+    match /forum_topik/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.judul, 160)
+                    && teksWajar(request.resource.data.isi, 3000)
+                    && teksWajar(request.resource.data.kategori, 40)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['judul', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    match /forum_komentar/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.topikId, 160)
+                    && teksWajar(request.resource.data.isi, 1500)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['topikId', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- isi situs yang dikelola Petugas ----------
+    function isiSah(maksJudul, maksIsi) {
+      return teksWajar(request.resource.data.judul, maksJudul)
+        && teksBoleh(request.resource.data.isi, maksIsi);
+    }
+
+    match /pengumuman/{id} {
+      allow read: if true;
+      allow create, update: if petugas()
+        && isiSah(200, 6000)
+        && request.resource.data.tipe in ['pengumuman', 'agenda']
+        && teksBoleh(request.resource.data.ringkas, 400)
+        && teksBoleh(request.resource.data.tglText, 80);
+      allow delete: if petugas();
+    }
+
+    match /galeri/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /kas/{periode} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /program/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /usaha/{slug} {
+      allow read: if true;
+
+      // Petugas tetap punya hak penuh. Pemilik yang sudah dihubungkan oleh
+      // Petugas boleh memperbarui profil PUBLIK usahanya sendiri langsung.
+      // Data legalitas tetap berada di usaha_admin dan tidak pernah terbuka
+      // untuk editor warga.
+      allow update: if petugas()
+                    || (pemilikUsaha(slug)
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly([
+                               'nama', 'kat', 'katLabel', 'ringkas', 'panjang',
+                               'wa', 'alamat', 'jam', 'maps'
+                             ])
+                        && teksWajar(request.resource.data.nama, 120)
+                        && teksWajar(request.resource.data.kat, 40)
+                        && teksWajar(request.resource.data.katLabel, 80)
+                        && teksBoleh(request.resource.data.ringkas, 400)
+                        && teksBoleh(request.resource.data.panjang, 3000)
+                        && teksBoleh(request.resource.data.wa, 30)
+                        && teksBoleh(request.resource.data.alamat, 200)
+                        && teksBoleh(request.resource.data.jam, 80)
+                        && teksBoleh(request.resource.data.maps, 500));
+
+      allow create, delete: if petugas();
+    }
+
+    match /usaha_foto/{slug} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /konten/{bagian} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /pengurus_tampil/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /batas_rt/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /tautan/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /berkas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /berkas_isi/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /galeri_foto/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /jenis_surat/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /fasilitas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /fasum/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /rutin/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /bansos/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /bansos_penerima/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+)
+                    && teksWajar(request.resource.data.kk, 16)
+                    && request.resource.data.kk.matches('^[0-9]{16}
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- reservasi fasilitas ----------
+    match /reservasi/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.fasilitas, 80)
+                    && teksWajar(request.resource.data.tanggal, 10)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.jam, 60)
+                    && teksBoleh(request.resource.data.acara, 200)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['fasilitas', 'tanggal', 'jam', 'acara', 'nama', 'wa',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    match /jadwal/{tanggal} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- pendaftaran usaha warga ----------
+    match /usaha_baru/{id} {
+      allow read: if petugas() || pemilik();
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksWajar(request.resource.data.pemilik, 120)
+                    && teksWajar(request.resource.data.jenis, 60)
+                    && teksBoleh(request.resource.data.produk, 800)
+                    && teksBoleh(request.resource.data.wa, 30)
+                    && teksBoleh(request.resource.data.alamat, 200)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'baru'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['nama', 'pemilik', 'jenis', 'produk', 'wa', 'alamat',
+                          'uid', 'status', 'dibuat']);
+
+      allow update: if petugas()
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && statusSah(request.resource.data.status);
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- pemilik UMKM: PRIVAT ----------
+    // Dokumen ini menghubungkan satu profil katalog ke UID warga pemilik.
+    // UID tidak ditaruh di koleksi usaha karena koleksi usaha bersifat publik.
+    match /usaha_pemilik/{slug} {
+      allow read: if petugas() || pemilik();
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- administrasi UMKM: PRIVAT ----------
+    // Legalitas, nomor referensi sertifikat, perpajakan, dan catatan
+    // pendampingan tidak disimpan di katalog publik usaha.
+    match /usaha_admin/{slug} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    // Bukti file sertifikat/legalitas dan metadata verifikasi juga privat.
+    // Berkas tidak pernah boleh dibaca dari katalog publik UMKM.
+    match /usaha_bukti/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    // ---------- polling warga ----------
+    match /polling/{pollId}/suara/{uid} {
+      allow read: if masuk();
+
+      allow create, update: if akuSendiri(uid)
+                            && request.resource.data.pilihan is int
+                            && request.resource.data.pilihan >= 0
+                            && request.resource.data.pilihan < 20
+                            && request.resource.data.keys().hasOnly(['pilihan', 'dibuat']);
+
+      allow delete: if false;
+      allow read, delete: if petugas();
+    }
+
+    match /polling/{pollId} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    // ---------- forum warga ----------
+    match /forum_topik/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.judul, 160)
+                    && teksWajar(request.resource.data.isi, 3000)
+                    && teksWajar(request.resource.data.kategori, 40)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['judul', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    match /forum_komentar/{id} {
+      allow read: if true;
+
+      allow create: if masuk()
+                    && teksWajar(request.resource.data.topikId, 160)
+                    && teksWajar(request.resource.data.isi, 1500)
+                    && teksWajar(request.resource.data.nama, 120)
+                    && teksBoleh(request.resource.data.rt, 20)
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'aktif'
+                    && waktuJujur()
+                    && request.resource.data.keys().hasOnly(
+                         ['topikId', 'isi', 'kategori', 'nama', 'rt', 'uid', 'status', 'dibuat']);
+
+      allow update: if (masuk() && resource.data.uid == request.auth.uid || petugas())
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'dihapus';
+
+      allow delete: if false;
+      allow create, update, delete: if petugas();
+    }
+
+    // ---------- isi situs yang dikelola Petugas ----------
+    function isiSah(maksJudul, maksIsi) {
+      return teksWajar(request.resource.data.judul, maksJudul)
+        && teksBoleh(request.resource.data.isi, maksIsi);
+    }
+
+    match /pengumuman/{id} {
+      allow read: if true;
+      allow create, update: if petugas()
+        && isiSah(200, 6000)
+        && request.resource.data.tipe in ['pengumuman', 'agenda']
+        && teksBoleh(request.resource.data.ringkas, 400)
+        && teksBoleh(request.resource.data.tglText, 80);
+      allow delete: if petugas();
+    }
+
+    match /galeri/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /kas/{periode} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /program/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /usaha/{slug} {
+      allow read: if true;
+
+      // Petugas tetap punya hak penuh. Pemilik yang sudah dihubungkan oleh
+      // Petugas boleh memperbarui profil PUBLIK usahanya sendiri langsung.
+      // Data legalitas tetap berada di usaha_admin dan tidak pernah terbuka
+      // untuk editor warga.
+      allow update: if petugas()
+                    || (pemilikUsaha(slug)
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly([
+                               'nama', 'kat', 'katLabel', 'ringkas', 'panjang',
+                               'wa', 'alamat', 'jam', 'maps'
+                             ])
+                        && teksWajar(request.resource.data.nama, 120)
+                        && teksWajar(request.resource.data.kat, 40)
+                        && teksWajar(request.resource.data.katLabel, 80)
+                        && teksBoleh(request.resource.data.ringkas, 400)
+                        && teksBoleh(request.resource.data.panjang, 3000)
+                        && teksBoleh(request.resource.data.wa, 30)
+                        && teksBoleh(request.resource.data.alamat, 200)
+                        && teksBoleh(request.resource.data.jam, 80)
+                        && teksBoleh(request.resource.data.maps, 500));
+
+      allow create, delete: if petugas();
+    }
+
+    match /usaha_foto/{slug} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /konten/{bagian} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /pengurus_tampil/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /batas_rt/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /tautan/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /berkas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /berkas_isi/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /galeri_foto/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /jenis_surat/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /fasilitas/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /fasum/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /rutin/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /bansos/{id} {
+      allow read: if true;
+      allow write: if petugas();
+    }
+
+    match /bansos_penerima/{id} {
+      allow read, create, update, delete: if petugas();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+)
                     && teksWajar(request.resource.data.alamat, 200)
                     && teksBoleh(request.resource.data.ttl, 120)
                     && teksBoleh(request.resource.data.rt, 20)
@@ -172,7 +755,7 @@ service cloud.firestore {
                     && request.resource.data.status == 'baru'
                     && waktuJujur()
                     && request.resource.data.keys().hasOnly(
-                         ['jenis', 'nama', 'nik', 'ttl', 'alamat', 'rt', 'keperluan',
+                         ['jenis', 'nama', 'nik', 'kk', 'ttl', 'alamat', 'rt', 'keperluan',
                           'wa', 'antrean', 'uid', 'status', 'dibuat']);
 
       allow update: if petugas()
