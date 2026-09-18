@@ -73,7 +73,7 @@
     <p class="sp-alis">ARSIP SURAT</p>
     <h1>Surat tidak ditemukan</h1>
     <p>Pengajuan ini tidak tersedia untuk akun yang sedang masuk, atau datanya belum selesai dimuat.</p>
-    <a class="sp-btn" href={pengurus() ? "#/kelola/layanan-masuk" : "#/akun"}>Kembali</a>
+    <a class="sp-btn" href={pengurus() ? "#/kelola/kiriman" : "#/akun"}>Kembali</a>
   </section>
 {:else}
   <div class="sp-page">
@@ -88,7 +88,7 @@
       </div>
       <div class="sp-actions">
         <button class="sp-btn utama" type="button" onclick={cetak}>Cetak / Simpan PDF</button>
-        <a class="sp-btn" href={pengurus() ? "#/kelola/layanan-masuk" : "#/akun"}>{pengurus() ? "Kembali ke Petugas" : "Kembali ke Dashboard Warga"}</a>
+        <a class="sp-btn" href={pengurus() ? "#/kelola/kiriman" : "#/akun"}>{pengurus() ? "Kembali ke Petugas" : "Kembali ke Dashboard Warga"}</a>
       </div>
     </section>
 
