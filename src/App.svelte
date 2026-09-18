@@ -39,6 +39,7 @@
   import Program from "./halaman/Program.svelte";
   import Umkm from "./halaman/Umkm.svelte";
   import UmkmRinci from "./halaman/UmkmRinci.svelte";
+  import UmkmSaya from "./halaman/UmkmSaya.svelte";
   import DaftarUsaha from "./halaman/DaftarUsaha.svelte";
   import Bansos from "./halaman/Bansos.svelte";
   import Tautan from "./halaman/Tautan.svelte";
@@ -89,6 +90,7 @@
     kas: Kas,
     program: Program,
     umkm: Umkm,
+    "umkm-saya": UmkmSaya,
     "daftar-usaha": DaftarUsaha,
     bansos: Bansos,
     tautan: Tautan,
