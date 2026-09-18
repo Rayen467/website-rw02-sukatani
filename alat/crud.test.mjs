@@ -97,3 +97,13 @@ test("rules memberi Petugas CRUD penuh pada data operasional yang dikelola", () 
     assert.match(blok, /allow create, update, delete: if petugas\(\)/, `${koleksi} belum CRUD penuh untuk Petugas`);
   }
 });
+
+test("pengajuan surat menerima nomor KK dari formulir warga", () => {
+  const mulai = rules.indexOf("match /surat/{id}");
+  assert.notEqual(mulai, -1, "rules tidak punya blok surat");
+  const berikut = rules.indexOf("\n    match /", mulai + 1);
+  const blok = rules.slice(mulai, berikut === -1 ? rules.length : berikut);
+  assert.match(blok, /request\.resource\.data\.kk/);
+  assert.match(blok, /'nik', 'kk', 'ttl'/);
+  assert.match(blok, /kk\.matches\('\^\[0-9\]\{16\}\$'\)/);
+});
