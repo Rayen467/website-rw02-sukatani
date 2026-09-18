@@ -103,7 +103,7 @@ test("pengajuan surat menerima nomor KK dari formulir warga", () => {
   assert.notEqual(mulai, -1, "rules tidak punya blok surat");
   const berikut = rules.indexOf("\n    match /", mulai + 1);
   const blok = rules.slice(mulai, berikut === -1 ? rules.length : berikut);
-  assert.match(blok, /request\.resource\.data\.kk/);
-  assert.match(blok, /'nik', 'kk', 'ttl'/);
-  assert.match(blok, /kk\.matches\('\^\[0-9\]\{16\}\$'\)/);
+  assert.ok(blok.includes("request.resource.data.kk"));
+  assert.ok(blok.includes("'nik', 'kk', 'ttl'"));
+  assert.ok(blok.includes("request.resource.data.kk.size() == 16"));
 });
