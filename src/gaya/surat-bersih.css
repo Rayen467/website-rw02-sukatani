@@ -24,11 +24,17 @@
   padding-top: 34px;
 }
 
+/*
+ * Watermark status boleh terlihat saat preview di layar, tetapi tidak boleh
+ * ikut ke dokumen resmi ketika warga/petugas mencetak atau Simpan sebagai PDF.
+ */
 @media print {
   .sb-logo,
   .sc-logo,
   .sb-draft,
-  .sc-draft {
+  .sc-draft,
+  .sp-watermark,
+  .draft-mark {
     display: none !important;
   }
 }
