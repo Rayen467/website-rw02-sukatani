@@ -100,6 +100,7 @@ const rute = new Set([
   "kas",
   "program",
   "umkm",
+  "umkm-saya",
   "daftar-usaha",
   "bansos",
   "tautan",
