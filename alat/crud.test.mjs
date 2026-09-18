@@ -105,5 +105,5 @@ test("pengajuan surat menerima nomor KK dari formulir warga", () => {
   const blok = rules.slice(mulai, berikut === -1 ? rules.length : berikut);
   assert.ok(blok.includes("request.resource.data.kk"));
   assert.ok(blok.includes("'nik', 'kk', 'ttl'"));
-  assert.ok(blok.includes("request.resource.data.kk.size() == 16"));
+  assert.ok(blok.includes("teksWajar(request.resource.data.kk, 32)"));
 });
