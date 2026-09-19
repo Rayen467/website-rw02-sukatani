@@ -39,7 +39,8 @@ import {
   orderBy,
   limit,
   serverTimestamp,
-  writeBatch
+  writeBatch,
+  runTransaction
 } from "firebase/firestore/lite";
 import { db } from "./firebase.js";
 import { penggunaSekarang } from "./akun.js";
@@ -201,9 +202,20 @@ export function simpanDokumen(koleksi, id, isi, tambahWaktu = true) {
   return setDoc(doc(db, koleksi, id), isian);
 }
 
-/** Mengubah status kiriman saja. Isi laporannya tidak ikut tersentuh. */
+/** Mengubah status kiriman dan mencatat kapan status terakhir berubah. */
 export function ubahStatus(koleksi, id, status) {
-  return updateDoc(doc(db, koleksi, id), { status });
+  return updateDoc(doc(db, koleksi, id), { status, diubah: serverTimestamp() });
+}
+
+/**
+ * Mengubah data operasional layanan warga sambil mencatat waktu perubahan.
+ * Dipakai untuk status/tahap/catatan layanan, bukan untuk editor konten umum.
+ */
+export function ubahLayanan(koleksi, id, isi) {
+  return updateDoc(doc(db, koleksi, id), {
+    ...bersihkan(isi),
+    diubah: serverTimestamp()
+  });
 }
 
 /**
@@ -306,40 +318,65 @@ export function hapusKomentarForum(id) {
 }
 
 /**
- * Menyetujui peminjaman sekaligus mengunci tanggalnya di kalender warga.
+ * Menyetujui peminjaman sekaligus mengunci tanggalnya secara atomik.
  *
- * Dua tulisan sekaligus supaya pengurus tidak perlu ingat mengisi kalender
- * secara terpisah. Kalau langkah kedua gagal, yang pertama sudah terlanjur
- * tersimpan -- itu diterima: peminjaman disetujui tapi kalender belum
- * terisi masih bisa dibetulkan tangan, sedangkan kebalikannya tidak.
+ * Reservasi dan kunci kalender sekarang berada dalam satu transaksi. Kalau
+ * dua petugas mencoba menyetujui fasilitas yang sama pada tanggal yang sama,
+ * hanya transaksi pertama yang boleh berhasil; transaksi berikutnya membaca
+ * kunci kalender yang sudah ada lalu berhenti tanpa mengubah status reservasi.
  */
-export async function setujuiReservasi(id, tanggal, fasilitas) {
-  await updateDoc(doc(db, KOLEKSI.RESERVASI, id), { status: STATUS.PROSES });
-  if (tanggal) {
-    /*
-     * Kunci kalender dibuat per TANGGAL + FASILITAS, bukan tanggal saja.
-     * Dengan begitu GOR Nurani dipakai pada hari tertentu tidak ikut
-     * mengunci tenda, kursi, atau fasilitas RW lain pada tanggal yang sama.
-     * Dokumen jadwal lama yang id-nya hanya tanggal tetap kompatibel karena
-     * halaman kalender membaca kolom tanggal bila ada dan jatuh ke id lama.
-     */
-    const nama = String(fasilitas || "");
-    const kunci = tanggal + "--" + (keSlug(nama) || "fasilitas");
-    await setDoc(doc(db, KOLEKSI.JADWAL, kunci), {
-      tanggal: String(tanggal),
-      fasilitas: nama,
-      dibuat: serverTimestamp()
-    });
+export async function setujuiReservasi(id, tanggal, fasilitas, jam = "") {
+  const reservasiRef = doc(db, KOLEKSI.RESERVASI, id);
+  const nama = String(fasilitas || "");
+  const tgl = String(tanggal || "");
+
+  if (!tgl) {
+    await updateDoc(reservasiRef, { status: STATUS.PROSES, diubah: serverTimestamp() });
+    return;
   }
+
+  const kunci = tgl + "--" + (keSlug(nama) || "fasilitas");
+  const jadwalRef = doc(db, KOLEKSI.JADWAL, kunci);
+
+  await runTransaction(db, async (transaksi) => {
+    const reservasiSnap = await transaksi.get(reservasiRef);
+    if (!reservasiSnap.exists()) throw new Error("Permohonan reservasi tidak ditemukan.");
+
+    const jadwalSnap = await transaksi.get(jadwalRef);
+    if (jadwalSnap.exists()) {
+      const pemilikKunci = String(jadwalSnap.data()?.reservasiId || "");
+      if (!pemilikKunci || pemilikKunci !== id) {
+        throw new Error(`${nama || "Fasilitas"} sudah dikunci pada tanggal ${tgl}.`);
+      }
+    }
+
+    transaksi.update(reservasiRef, {
+      status: STATUS.PROSES,
+      diubah: serverTimestamp()
+    });
+
+    transaksi.set(jadwalRef, {
+      tanggal: tgl,
+      fasilitas: nama,
+      jam: String(jam || ""),
+      reservasiId: id,
+      dibuat: jadwalSnap.exists() && jadwalSnap.data()?.dibuat
+        ? jadwalSnap.data().dibuat
+        : serverTimestamp(),
+      diubah: serverTimestamp()
+    });
+  });
 }
 
 /** Menutup reservasi yang sudah selesai dipakai. Kunci kalender sengaja
  * tetap dipertahankan sebagai catatan bahwa fasilitas memang terpakai pada
  * tanggal tersebut; kalender bulan lampau tidak perlu dibuka kembali. */
 export function selesaikanReservasi(id) {
-  return updateDoc(doc(db, KOLEKSI.RESERVASI, id), { status: STATUS.SELESAI });
+  return updateDoc(doc(db, KOLEKSI.RESERVASI, id), {
+    status: STATUS.SELESAI,
+    diubah: serverTimestamp()
+  });
 }
-
 
 /**
  * Menyimpan satu berkas: keterangannya di koleksi berkas, isinya di
