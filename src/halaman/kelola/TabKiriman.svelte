@@ -4,7 +4,7 @@
   import { unduhTeks } from "../../inti/peramban.js";
   import { isi, muatKoleksi } from "../../keadaan/isi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
-  import { ubahStatus, ubahDokumen, setujuiReservasi, selesaikanReservasi, simpanDokumen } from "../../sumber/data.js";
+  import { ambilDokumen, ubahStatus, ubahLayanan, setujuiReservasi, selesaikanReservasi, simpanDokumen } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
   import MejaSurat from "./MejaSurat.svelte";
@@ -87,7 +87,7 @@
 
   const simpanPengaduan = (p) =>
     jalan(p.id, async () => {
-      await ubahDokumen(KOLEKSI.PENGADUAN, p.id, {
+      await ubahLayanan(KOLEKSI.PENGADUAN, p.id, {
         status: isian(p, "status"),
         catatan: isian(p, "catatan")
       });
@@ -96,7 +96,7 @@
 
   const setujuiPinjam = (r) =>
     jalan(r.id, async () => {
-      await setujuiReservasi(r.id, r.tanggal, r.fasilitas);
+      await setujuiReservasi(r.id, r.tanggal, r.fasilitas, r.jam);
       muatKoleksi(KOLEKSI.RESERVASI);
       muatKoleksi(KOLEKSI.JADWAL);
     }, "Disetujui. Tanggal " + r.tanggal + " terkunci di kalender warga.");
@@ -122,7 +122,10 @@
   const keKatalog = (u) =>
     jalan(u.id, async () => {
       const kat = String(u.jenis || "").toLowerCase();
-      await simpanDokumen(KOLEKSI.USAHA, keSlug(u.nama) || "usaha", {
+      const dasarId = keSlug(u.nama) || "usaha";
+      const sudahAda = await ambilDokumen(KOLEKSI.USAHA, dasarId);
+      const idUsaha = sudahAda ? `${dasarId}-${String(u.id).slice(0, 6)}` : dasarId;
+      await simpanDokumen(KOLEKSI.USAHA, idUsaha, {
         nama: u.nama,
         kat: kat.includes("siap") ? "siapsaji" : kat.includes("kemasan") ? "kemasan" : kat.includes("jasa") ? "jasa" : "retail",
         katLabel: u.jenis,
@@ -245,7 +248,7 @@
         </div>
       </div>
     {/each}
-    <p class="verifikasi">Menyetujui permohonan langsung mengunci tanggalnya di kalender ketersediaan yang dilihat warga. Menolak tidak mengunci apa pun.</p>
+    <p class="verifikasi">Menyetujui permohonan langsung mengunci tanggalnya di kalender ketersediaan yang dilihat warga. Sistem melakukan pengecekan atomik agar fasilitas yang sama tidak dapat disetujui dua kali pada tanggal yang sama.</p>
   {:else}
     <p class="kosong">Tidak ada permohonan yang cocok dengan saringan ini.</p>
   {/if}
@@ -276,7 +279,7 @@
         </div>
       </div>
     {/each}
-    <p class="verifikasi">Menekan tombol itu menyalin keterangannya ke katalog usaha yang terbuka untuk warga.</p>
+    <p class="verifikasi">Menekan tombol itu menyalin keterangannya ke katalog usaha yang terbuka untuk warga. Jika nama usaha sama dengan entri yang sudah ada, sistem membuat ID unik agar katalog lama tidak tertimpa.</p>
   {:else}
     <p class="kosong">Tidak ada pendaftaran yang cocok dengan saringan ini.</p>
   {/if}
