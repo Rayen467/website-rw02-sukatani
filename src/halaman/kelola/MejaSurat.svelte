@@ -3,7 +3,7 @@
   import { sesi } from "../../keadaan/sesi.svelte.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
   import { KOLEKSI, STATUS } from "../../inti/nama.js";
-  import { ubahDokumen } from "../../sumber/data.js";
+  import { ubahLayanan } from "../../sumber/data.js";
   import { pesanRamah } from "../../sumber/firebase.js";
   import Lencana from "../../komponen/Lencana.svelte";
 
@@ -97,7 +97,7 @@
     try {
       const email = String(nilai(x, "petugasEmail", x.petugasEmail || "")).trim().toLowerCase();
       const tahap = String(nilai(x, "tahap", x.tahap || (email ? "ditugaskan" : "diterima")));
-      await ubahDokumen(KOLEKSI.SURAT, x.id, {
+      await ubahLayanan(KOLEKSI.SURAT, x.id, {
         petugasEmail: email,
         petugasNama: email ? namaPetugas(email) : "",
         tahap,
