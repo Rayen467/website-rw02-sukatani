@@ -195,6 +195,58 @@ function sinkronShortcutKontak() {
   else requestAnimationFrame(jalan);
 }
 
+/* Penjelasan Data Kependudukan pada halaman Layanan harus sama dengan
+   aturan halaman aslinya: data tersebut khusus pengurus. Jangan membuat
+   warga mengira kartu itu membuka data perorangan atau statistik privat. */
+function sinkronKartuDataKependudukan() {
+  const kartu = document.querySelector(".layanan-modern .layanan-kartu.data");
+  if (!kartu) return;
+
+  const deskripsi = kartu.querySelector(".layanan-kartu-copy p");
+  const aksi = kartu.querySelector(".layanan-kartu-aksi");
+  if (deskripsi) {
+    deskripsi.textContent = "Rekap kependudukan dikelola khusus oleh pengurus. Data pribadi warga tidak dibuka kepada publik.";
+  }
+  if (aksi) {
+    aksi.innerHTML = "Akses khusus pengurus <span>→</span>";
+    aksi.setAttribute("title", "Halaman Data Kependudukan hanya dapat dibuka oleh akun pengurus");
+  }
+}
+
+/* Transportasi Warga sebelumnya hanya memantul kembali ke halaman Layanan.
+   Sekarang dibuat sebagai layanan bantuan nyata: warga diarahkan ke Kontak,
+   tempat pengurus dapat meneruskan kebutuhan ke koordinator transportasi. */
+function sinkronTransportasiWarga() {
+  document.querySelectorAll("a").forEach((tautan) => {
+    if (!tautan.textContent?.includes("Transportasi Warga")) return;
+    if (!tautan.closest(".kontak-final")) return;
+    tautan.setAttribute("href", "#form-kontak");
+    tautan.setAttribute("title", "Hubungi pengurus untuk layanan Transportasi Warga");
+  });
+
+  const grid = document.querySelector(".layanan-modern .layanan-pendukung-grid");
+  if (!grid || grid.querySelector("[data-rw-transportasi]")) return;
+
+  const kartu = document.createElement("a");
+  kartu.className = "layanan-pendukung-kartu transportasi";
+  kartu.href = "#/kontak";
+  kartu.setAttribute("data-rw-transportasi", "true");
+  kartu.setAttribute("title", "Hubungi pengurus untuk layanan Transportasi Warga");
+  kartu.innerHTML = `
+    <span class="pendukung-ikon" aria-hidden="true">↔</span>
+    <span class="pendukung-copy">
+      <strong>Transportasi Warga</strong>
+      <small>Hubungi pengurus untuk kebutuhan transportasi dan koordinasi dengan koordinator warga.</small>
+    </span>
+    <span class="pendukung-panah">→</span>`;
+  grid.appendChild(kartu);
+}
+
+function sinkronLayananTambahan() {
+  sinkronKartuDataKependudukan();
+  sinkronTransportasiWarga();
+}
+
 function tanganiKlik(event) {
   const target = event.target instanceof Element ? event.target : null;
   if (!target) return;
@@ -232,10 +284,12 @@ export function aktifkanInteraksiUi() {
   requestAnimationFrame(() => {
     sinkronFavorit();
     sinkronShortcutKontak();
+    sinkronLayananTambahan();
   });
   aktifkanBatasTipografi();
   window.addEventListener("hashchange", () => requestAnimationFrame(() => {
     sinkronFavorit();
     sinkronShortcutKontak();
+    sinkronLayananTambahan();
   }));
 }
