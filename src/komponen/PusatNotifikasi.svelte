@@ -1,5 +1,6 @@
 <script>
   import { isi, muatKoleksi, muatMilikSaya } from "../keadaan/isi.svelte.js";
+  import { segarkanProfilWarga } from "../keadaan/mulai.js";
   import { sesi, pengurus, namaPeran } from "../keadaan/sesi.svelte.js";
   import { KOLEKSI, STATUS } from "../inti/nama.js";
   import { pergi } from "../keadaan/rute.svelte.js";
@@ -38,7 +39,7 @@
   });
 
   function waktuMillis(data) {
-    const nilai = data?.dibuat || data?.diubah || data?.tanggal || null;
+    const nilai = data?.diubah || data?.dibuat || data?.tanggal || null;
     if (!nilai) return 0;
     if (typeof nilai?.toDate === "function") return nilai.toDate().getTime();
     if (typeof nilai?.seconds === "number") return nilai.seconds * 1000;
@@ -82,6 +83,20 @@
     return String(status || "diperbarui").replace(/_/g, " ");
   }
 
+  function namaTahapSurat(tahap, status) {
+    const map = {
+      diterima: "sudah diterima",
+      ditugaskan: "sudah ditugaskan ke petugas",
+      verifikasi: "sedang diverifikasi",
+      menunggu_ttd: "menunggu tanda tangan",
+      menunggu_cap: "menunggu ACC / cap RW",
+      siap: "sudah ACC dan siap diserahkan",
+      selesai: "sudah selesai",
+      ditolak: "ditolak"
+    };
+    return map[tahap] || namaStatus(status);
+  }
+
   function tambah(hasil, data) {
     hasil.push({
       ...data,
@@ -96,7 +111,7 @@
     /* Pengumuman RW berlaku untuk semua pengunjung, termasuk yang belum masuk. */
     for (const item of (isi.pengumuman || []).slice(0, 8)) {
       tambah(hasil, {
-        id: `pengumuman:${item.id}`,
+        id: `pengumuman:${item.id}:${waktuMillis(item)}`,
         jenis: "pengumuman",
         label: "Pengumuman RW",
         judul: item.judul || item.nama || "Informasi terbaru RW 02",
@@ -116,7 +131,7 @@
           label: "Layanan Surat",
           judul: "Pengajuan surat baru",
           isi: item.keperluan || item.jenis || item.jenisSurat || item.nama || "Ada pengajuan surat yang menunggu pemeriksaan.",
-          alamat: "/kelola",
+          alamat: "/kelola/kiriman",
           waktu: waktuMillis(item)
         });
       }
@@ -129,7 +144,7 @@
           label: "Reservasi",
           judul: "Reservasi fasilitas baru",
           isi: item.fasilitas || item.keperluan || item.nama || "Ada permintaan reservasi yang menunggu pemeriksaan.",
-          alamat: "/kelola",
+          alamat: "/kelola/kiriman",
           waktu: waktuMillis(item)
         });
       }
@@ -142,7 +157,7 @@
           label: "UMKM Warga",
           judul: "Pendaftaran UMKM baru",
           isi: item.namaUsaha || item.nama || item.jenisUsaha || "Ada UMKM warga yang menunggu pemeriksaan.",
-          alamat: "/kelola",
+          alamat: "/kelola/kiriman",
           waktu: waktuMillis(item)
         });
       }
@@ -155,7 +170,7 @@
           label: "Pengaduan Warga",
           judul: "Pengaduan baru masuk",
           isi: item.judul || item.kategori || item.isi || item.keterangan || "Ada laporan warga yang perlu diperiksa.",
-          alamat: "/kelola",
+          alamat: "/kelola/kiriman",
           waktu: waktuMillis(item)
         });
       }
@@ -168,7 +183,7 @@
           label: "Data Warga",
           judul: "Pendaftaran warga baru",
           isi: item.nama || item.email || item.alamat || "Ada akun warga yang menunggu verifikasi.",
-          alamat: "/kelola",
+          alamat: "/kelola/orang",
           waktu: waktuMillis(item)
         });
       }
@@ -176,12 +191,25 @@
       /* Warga hanya melihat perubahan pada kiriman miliknya sendiri. Data ini
          memang sudah difilter menurut uid oleh muatMilikSaya(). */
       for (const item of isi.surat || []) {
+        const tahap = item.tahap || item.status || "baru";
         tambah(hasil, {
-          id: `warga:surat:${item.id}:${item.status || "baru"}`,
+          id: `warga:surat:${item.id}:${tahap}`,
           jenis: "surat",
           label: "Pengajuan Surat",
-          judul: `Pengajuan surat ${namaStatus(item.status)}`,
+          judul: `Pengajuan surat ${namaTahapSurat(item.tahap, item.status)}`,
           isi: item.keperluan || item.jenis || item.jenisSurat || "Lihat perkembangan pengajuan surat Anda.",
+          alamat: `/surat-pengajuan/${encodeURIComponent(item.id)}`,
+          waktu: waktuMillis(item)
+        });
+      }
+
+      for (const item of isi.pengaduan_saya || []) {
+        tambah(hasil, {
+          id: `warga:pengaduan:${item.id}:${item.status || "baru"}`,
+          jenis: "pengaduan",
+          label: "Pengaduan & Aspirasi",
+          judul: `Pengaduan ${namaStatus(item.status)}`,
+          isi: item.catatan || item.kategori || item.isi || "Lihat perkembangan pengaduan Anda.",
           alamat: "/akun",
           waktu: waktuMillis(item)
         });
@@ -268,7 +296,8 @@
       } else if (sesi.pengguna?.uid) {
         await Promise.all([
           muatKoleksi(KOLEKSI.PENGUMUMAN),
-          muatMilikSaya(sesi.pengguna.uid)
+          muatMilikSaya(sesi.pengguna.uid),
+          segarkanProfilWarga()
         ]);
       } else {
         await muatKoleksi(KOLEKSI.PENGUMUMAN);
