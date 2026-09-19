@@ -11,6 +11,7 @@
   let form = $state({ nama: "", pemilik: "", jenis: JENIS_USAHA[0].label, produk: "", wa: "", alamat: "" });
   let mengirim = $state(false);
   let sibukVerifikasi = $state(false);
+  let izinWaPublik = $state(false);
 
   async function kirim(e) {
     e.preventDefault();
@@ -24,11 +25,16 @@
       pergi("/akun");
       return;
     }
+    if (form.wa.trim() && !izinWaPublik) {
+      beriTahu("Centang izin publikasi WhatsApp, atau kosongkan nomor WhatsApp sebelum mengirim.");
+      return;
+    }
     mengirim = true;
     try {
       await kirimWarga(KOLEKSI.USAHA_BARU, form);
       beriTahu("Pendaftaran terkirim. Pengurus akan meninjau sebelum ditampilkan.");
       form = { nama: "", pemilik: "", jenis: JENIS_USAHA[0].label, produk: "", wa: "", alamat: "" };
+      izinWaPublik = false;
     } catch (err) {
       beriTahu(pesanRamah(err));
     }
@@ -98,9 +104,15 @@
     <div class="isian"><label for="u-produk">Produk atau layanan utama</label><textarea id="u-produk" bind:value={form.produk} placeholder="Sebutkan produk utama beserta kisaran harganya."></textarea></div>
     <div class="isian">
       <label for="u-wa">Nomor WhatsApp usaha</label>
-      <input id="u-wa" bind:value={form.wa} inputmode="tel" />
-      <span class="petunjuk">Nomor hanya ditampilkan di situs bila Anda mengizinkannya.</span>
+      <input id="u-wa" bind:value={form.wa} inputmode="tel" placeholder="08xxxxxxxxxx" />
+      <span class="petunjuk">Boleh dikosongkan. Jika diisi dan pendaftaran disetujui, nomor dapat tampil sebagai kontak publik usaha.</span>
     </div>
+    {#if form.wa.trim()}
+      <label class="catatan" style="display:flex;align-items:flex-start;gap:10px;margin:0">
+        <input type="checkbox" bind:checked={izinWaPublik} style="margin-top:3px" />
+        <span><b>Saya mengizinkan nomor WhatsApp di atas ditampilkan di direktori UMKM RW 02</b> agar warga dapat menghubungi usaha saya.</span>
+      </label>
+    {/if}
     <div class="isian"><label for="u-alamat">Alamat di dalam kawasan</label><input id="u-alamat" bind:value={form.alamat} placeholder="Blok dan nomor rumah" /></div>
     <div><button class="tombol utama" type="submit" disabled={mengirim}>{mengirim ? "Mengirim..." : "Kirim pendaftaran"}</button></div>
   </form>
