@@ -6,6 +6,7 @@
   import { rute, pergi } from "../keadaan/rute.svelte.js";
   import TombolTema from "./TombolTema.svelte";
   import TombolAkun from "./TombolAkun.svelte";
+  import PusatNotifikasi from "./PusatNotifikasi.svelte";
 
   let menuTerbuka = $state(null);
   let laciTerbuka = $state(false);
@@ -150,6 +151,7 @@
       </form>
 
       <TombolAkun />
+      <PusatNotifikasi />
       <TombolTema />
 
       <button
