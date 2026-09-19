@@ -30,6 +30,7 @@ import {
 } from "../sumber/data.js";
 import {
   KONTEN,
+  KOLEKSI,
   KOLEKSI_UMUM,
   KOLEKSI_PENGURUS,
   KOLEKSI_KIRIMAN,
@@ -71,6 +72,9 @@ export const isi = $state({
   warga: null,
   pengurus: null,
   bansos_penerima: null,
+
+  /* --- Hanya riwayat akun warga yang sedang masuk ---------------------- */
+  pengaduan_saya: null,
 
   /* --- Dokumen tetap, satu bagian satu kunci -------------------------- */
   konten: {},
@@ -130,6 +134,7 @@ export function kosongkanIsiPribadi() {
     isi[nama] = null;
     delete galatMuatPengurus[nama];
   }
+  isi.pengaduan_saya = null;
   isi.suara = null;
 }
 
@@ -260,6 +265,14 @@ export async function muatMilikSaya(uid) {
       if (generasi !== generasiSesi) return;
       isi[nama] = hasil;
     } catch (err) {}
+  }
+
+  if (generasi !== generasiSesi) return;
+  try {
+    const aduanSaya = await denganRetry(() => ambilMilikSaya(KOLEKSI.PENGADUAN, uid), 1);
+    if (generasi === generasiSesi) isi.pengaduan_saya = aduanSaya;
+  } catch (err) {
+    if (generasi === generasiSesi) isi.pengaduan_saya = [];
   }
 }
 
