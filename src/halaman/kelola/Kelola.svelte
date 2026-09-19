@@ -4,6 +4,7 @@
   import { rute, pergi } from "../../keadaan/rute.svelte.js";
   import { keluar } from "../../sumber/akun.js";
   import { beriTahu } from "../../keadaan/pesan.svelte.js";
+  import PusatNotifikasi from "../../komponen/PusatNotifikasi.svelte";
   import UmkmProHub from "../../komponen/kelola/UmkmProHub.svelte";
   import TabDashboard from "./TabDashboard.svelte";
   import TabKiriman from "./TabKiriman.svelte";
@@ -125,14 +126,6 @@
     pergi(`/${pangkal}/${tujuan[0]}`);
   }
 
-  function bukaNotifikasi() {
-    if (galatData.length) {
-      beriTahu(`Ada ${galatData.length} sumber data yang perlu perhatian: ${galatData.map(([nama]) => nama).join(", ")}.`);
-      return;
-    }
-    beriTahu("Tidak ada peringatan data. Semua sumber yang termuat dalam kondisi normal.");
-  }
-
   async function keluarPengurus() {
     menuHpTerbuka = false;
     await keluar();
@@ -199,10 +192,9 @@
       </form>
 
       <div class="admin-topbar-actions">
-        <button class="admin-notification" type="button" onclick={bukaNotifikasi} title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Tidak ada peringatan data"} aria-label="Notifikasi data">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
-          {#if galatData.length}<i></i>{/if}
-        </button>
+        <div class="admin-notification-slot" title={galatData.length ? `${galatData.length} sumber data perlu perhatian` : "Notifikasi layanan warga"}>
+          <PusatNotifikasi />
+        </div>
 
         <div class="admin-team" aria-label="Petugas aktif">
           {#if pengurusTop.length}
@@ -300,4 +292,8 @@
 
 <style>
   .admin-umkm-internal{margin-top:14px;border:1px solid #dce7e3;border-radius:16px;background:#fff;overflow:hidden}.admin-umkm-internal>summary{padding:15px 18px;cursor:pointer;font-weight:850;color:#203a31;background:#f8fbfa}.admin-umkm-internal[open]>summary{border-bottom:1px solid #e4ece9}.admin-umkm-internal>div{padding:0 0 2px}
+  .admin-notification-slot{position:relative;display:flex;align-items:center;justify-content:center;z-index:30}
+  .admin-notification-slot :global(.tombol-notifikasi){width:40px;height:40px;padding:0;justify-content:center;border:1px solid #d9e5e0;border-radius:12px;background:#fff;color:#315b4e}
+  .admin-notification-slot :global(.tombol-notifikasi .teks-label){display:none}
+  .admin-notification-slot :global(.panel-notifikasi){z-index:120}
 </style>
