@@ -111,11 +111,16 @@ function aktifkanBatasTipografi() {
   }
 }
 
-function bukaWaKetuaRw() {
+function bukaWaKetuaRw(pesan = "") {
   const nomor = nomorWa(KONTAK_KETUA_RW);
   if (!nomor) return false;
-  const jendela = window.open(`https://wa.me/${nomor}`, "_blank", "noopener,noreferrer");
-  if (jendela) jendela.opener = null;
+  const url = `https://wa.me/${nomor}${pesan ? `?text=${encodeURIComponent(pesan)}` : ""}`;
+  const jendela = window.open(url, "_blank", "noopener,noreferrer");
+  if (jendela) {
+    jendela.opener = null;
+    return true;
+  }
+  window.location.href = url;
   return true;
 }
 
@@ -195,6 +200,66 @@ function sinkronShortcutKontak() {
   else requestAnimationFrame(jalan);
 }
 
+/* Form kontak tidak lagi menulis isi pesan pribadi ke koleksi pengaduan yang
+   bersifat publik. Pesan dibentuk di perangkat warga lalu dibuka sebagai
+   draft WhatsApp ke kontak resmi RW. Warga tetap menekan Kirim di WhatsApp,
+   sedangkan website tidak menyimpan salinan nama, kontak, atau isi pesannya. */
+function sinkronFormKontakPrivat() {
+  const form = document.querySelector(".kontak-final__form");
+  if (!form) return;
+  form.setAttribute("data-rw-kontak-privat", "true");
+
+  const tombol = form.querySelector('button[type="submit"]');
+  if (tombol) tombol.textContent = "➤  Lanjutkan ke WhatsApp";
+
+  const catatan = form.querySelector(".kontak-final__form-note");
+  if (catatan) {
+    catatan.textContent = "Pesan dibuka sebagai draft WhatsApp ke kontak resmi RW dan tidak disimpan di database website.";
+  }
+
+  const file = form.querySelector('input[type="file"]');
+  const fileWrap = file?.closest(".kontak-final__file");
+  const fileHint = fileWrap?.querySelector("small");
+  if (fileHint && !file?.files?.length) {
+    fileHint.textContent = "Lampiran dapat ditambahkan setelah WhatsApp terbuka";
+  }
+}
+
+function pesanDariFormKontak(form) {
+  const teks = [...form.querySelectorAll('input:not([type="file"])')];
+  const nama = String(teks[0]?.value || "").trim();
+  const kontak = String(teks[1]?.value || "").trim();
+  const kategori = String(form.querySelector("select")?.value || "Pertanyaan Umum").trim();
+  const pesan = String(form.querySelector("textarea")?.value || "").trim();
+  const lampiran = form.querySelector('input[type="file"]')?.files?.[0]?.name || "";
+
+  return [
+    "Halo Pengurus RW 02 Sukatani, saya menghubungi melalui website warga.",
+    "",
+    `Nama: ${nama}`,
+    `Kontak balasan: ${kontak}`,
+    `Kategori: ${kategori}`,
+    "",
+    pesan,
+    lampiran ? `\nLampiran yang ingin saya kirim: ${lampiran} (akan saya tambahkan di WhatsApp).` : ""
+  ].filter((x) => x !== "").join("\n");
+}
+
+function tanganiSubmitKontak(event) {
+  const form = event.target instanceof HTMLFormElement ? event.target : null;
+  if (!form?.matches(".kontak-final__form")) return;
+
+  /* Listener dipasang pada fase capture supaya handler Svelte lama yang
+     menulis ke Firestore tidak sempat berjalan. */
+  event.preventDefault();
+  event.stopImmediatePropagation();
+
+  const pesan = pesanDariFormKontak(form);
+  if (!bukaWaKetuaRw(pesan)) {
+    window.alert("Kontak resmi RW belum tersedia. Silakan gunakan menu Pengaduan & Aspirasi.");
+  }
+}
+
 /* Penjelasan Data Kependudukan pada halaman Layanan harus sama dengan
    aturan halaman aslinya: data tersebut khusus pengurus. Jangan membuat
    warga mengira kartu itu membuka data perorangan atau statistik privat. */
@@ -245,6 +310,7 @@ function sinkronTransportasiWarga() {
 function sinkronLayananTambahan() {
   sinkronKartuDataKependudukan();
   sinkronTransportasiWarga();
+  sinkronFormKontakPrivat();
 }
 
 function tanganiKlik(event) {
@@ -281,6 +347,7 @@ export function aktifkanInteraksiUi() {
   if (sudahAktif || typeof document === "undefined") return;
   sudahAktif = true;
   document.addEventListener("click", tanganiKlik);
+  document.addEventListener("submit", tanganiSubmitKontak, true);
   requestAnimationFrame(() => {
     sinkronFavorit();
     sinkronShortcutKontak();
