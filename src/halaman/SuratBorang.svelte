@@ -23,6 +23,7 @@
   let form = $state({ nama: "", nik: "", kk: "", ttl: "", alamat: "", rt: RT_BAWAAN[0], keperluan: "", wa: "" });
   let mengirim = $state(false);
   let antrean = $state("");
+  let pengajuanId = $state("");
 
   const tanggalSurat = new Intl.DateTimeFormat("id-ID", {
     day: "numeric",
@@ -81,13 +82,12 @@
     mengirim = true;
     const nomor = nomorAntrean("SP");
     try {
-      await kirimWarga(KOLEKSI.SURAT, { jenis: surat.nama, antrean: nomor, ...form });
+      const acuan = await kirimWarga(KOLEKSI.SURAT, { jenis: surat.nama, antrean: nomor, ...form });
       antrean = nomor;
-      try {
-        localStorage.setItem("surat-terakhir", JSON.stringify({ jenis: kunci, antrean: nomor, ...form }));
-      } catch (err) {}
+      pengajuanId = acuan.id;
+      try { localStorage.removeItem("surat-terakhir"); } catch (_) {}
       beriTahu("Pengajuan terkirim. Nomor antrean " + nomor + ".");
-      if (sesi.pengguna) muatMilikSaya(sesi.pengguna.uid);
+      if (sesi.pengguna) await muatMilikSaya(sesi.pengguna.uid);
     } catch (err) {
       beriTahu(pesanRamah(err));
     }
@@ -135,7 +135,9 @@
             <h2>Nomor antrean Anda <b>{antrean}</b></h2>
             <p>Data sudah masuk ke Petugas RW. Simpan nomor antrean ini untuk memudahkan pelacakan.</p>
             <div class="sb-success-actions">
-              <a class="sb-btn utama" href="#/surat/{surat.id}/cetak">Lihat berkas & simpan PDF</a>
+              {#if pengajuanId}
+                <a class="sb-btn utama" href={"#/surat-pengajuan/" + encodeURIComponent(pengajuanId)}>Lihat berkas & simpan PDF</a>
+              {/if}
               <a class="sb-btn" href="#/akun">Lacak di Akun Saya</a>
             </div>
           </div>
@@ -257,7 +259,8 @@
 {/if}
 
 <style>
-  .sb-page{--g:#08715a;--g2:#0f8c6e;--ink:#122821;--muted:#667a72;--line:#dce7e2;--soft:#f1f8f5;width:100vw;margin-left:calc(50% - 50vw);margin-top:-32px;margin-bottom:-64px;background:#f7faf8;color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;min-height:100vh}
+  .sb-page{--g:#08715a;--g2:#0f8c6e;--ink:#122821;--muted:#667a72;--line:#dce7e2;--soft:#f1f8f5;width:100vw;margin-left:calc(50% - 50vw);margin-top:-32px;margin-bottom:-64px;background:#f7faf8;color:var(--ink);font-family:"Poppins",system-ui,sans-serif;min-height:100vh}
+  .sb-page h1,.sb-page h2,.sb-page h3{font-family:"Sora",system-ui,sans-serif}
   .sb-shell{width:min(1240px,calc(100% - 40px));margin-inline:auto}
   .sb-hero{padding:24px 0 28px;background:radial-gradient(circle at 75% 20%,rgba(171,226,202,.38),transparent 28%),linear-gradient(110deg,#f8fcfa,#eef9f4);border-bottom:1px solid #dce9e3}.sb-breadcrumb{display:flex;gap:8px;align-items:center;margin-bottom:22px;color:#758981;font-size:13px}.sb-breadcrumb a{color:inherit;text-decoration:none}.sb-breadcrumb a:hover{color:var(--g)}
   .sb-hero-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:18px;align-items:center}.sb-title-icon,.sb-head-icon{display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#0d8d6b,#08715a);color:white;box-shadow:0 14px 28px -18px rgba(7,113,90,.65)}.sb-title-icon{width:62px;height:62px;font-size:28px}.sb-kicker{color:var(--g);font-size:12px;font-weight:900;letter-spacing:.1em}.sb-hero h1{margin:4px 0 6px;font-size:clamp(30px,3.2vw,45px);line-height:1.04;letter-spacing:-.04em}.sb-hero p{margin:0;color:#647970;font-size:15px}.sb-back{min-height:42px;display:flex;align-items:center;padding:0 14px;border:1px solid #bcd8cd;border-radius:12px;background:#fff;color:#0a684f;font-size:13px;font-weight:800;text-decoration:none}
