@@ -13,6 +13,12 @@ import "./gaya/surat-bersih.css";
 /* Lapisan terakhir: rules tipografi wajib seluruh situs. */
 import "./gaya/tipografi-wajib.css";
 
+/* Versi lama menyimpan salinan formulir surat lengkap (termasuk NIK/KK)
+   di localStorage untuk halaman cetak. Alur baru membaca dokumen langsung
+   dari Firestore milik akun yang berhak. Bersihkan sisa lama sekali saat
+   aplikasi dibuka agar data sensitif tidak tertinggal di perangkat bersama. */
+try { localStorage.removeItem("surat-terakhir"); } catch (_) {}
+
 const aplikasi = mount(App, { target: document.getElementById("app") });
 aktifkanInteraksiUi();
 aktifkanInteraksiKonten();
