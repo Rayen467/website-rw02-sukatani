@@ -29,19 +29,21 @@
   });
 
   const surat = $derived(isi.surat || []);
+  const pengaduan = $derived(isi.pengaduan_saya || []);
   const reservasi = $derived(isi.reservasi || []);
   const usaha = $derived(isi.usaha_baru || []);
 
   const punyaAksesUmkm = $derived((isi.usaha_pemilik || []).length > 0 || (isi.usaha_baru || []).length > 0);
+  const semuaKiriman = $derived([...surat, ...pengaduan, ...reservasi, ...usaha]);
 
-  const total = $derived(surat.length + reservasi.length + usaha.length);
+  const total = $derived(semuaKiriman.length);
   const menunggu = $derived(
-    [...surat, ...reservasi, ...usaha].filter((x) =>
+    semuaKiriman.filter((x) =>
       !x.status || x.status === STATUS.BARU || x.status === STATUS.PROSES
     ).length
   );
   const selesai = $derived(
-    [...surat, ...reservasi, ...usaha].filter((x) => x.status === STATUS.SELESAI).length
+    semuaKiriman.filter((x) => x.status === STATUS.SELESAI).length
   );
 
   function tahapSurat(v) {
@@ -58,12 +60,25 @@
     return map[v] || "Diterima";
   }
 
+  function hrefRiwayat(nama) {
+    if (nama === "Pengajuan surat") return "#/surat";
+    if (nama === "Pengaduan & aspirasi") return "#/pengaduan";
+    if (nama === "Permohonan fasilitas") return "#/reservasi";
+    return "#/daftar-usaha";
+  }
+
   const riwayat = $derived([
     ["Pengajuan surat", surat, (x) => ({
       judul: x.jenis,
       ket: "Nomor antrean " + (x.antrean || "-") + " · " + tahapSurat(x.tahap),
       status: x.status,
       href: "#/surat-pengajuan/" + encodeURIComponent(x.id)
+    })],
+    ["Pengaduan & aspirasi", pengaduan, (x) => ({
+      judul: x.kategori || "Pengaduan warga",
+      ket: "Tiket " + (x.tiket || x.id || "-") + (x.catatan ? " · " + x.catatan : ""),
+      status: x.status,
+      href: "#/pengaduan"
     })],
     ["Permohonan fasilitas", reservasi, (x) => ({
       judul: x.fasilitas,
@@ -359,7 +374,7 @@
       <section class="blok">
         <div class="kepala-bagian">
           <h2>{bagian[0]}</h2>
-          <a class="tombol" href={bagian[0] === "Pengajuan surat" ? "#/surat" : bagian[0] === "Permohonan fasilitas" ? "#/reservasi" : "#/daftar-usaha"}>
+          <a class="tombol" href={hrefRiwayat(bagian[0])}>
             Buka layanan
           </a>
         </div>
