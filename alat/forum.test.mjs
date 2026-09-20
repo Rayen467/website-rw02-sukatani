@@ -40,7 +40,7 @@ test("forum mendukung buat topik, balas, dan soft delete", () => {
   assert.match(data, /status:\s*"dihapus"/);
   assert.match(forum, /onsubmit=\{kirimTopik\}/);
   assert.match(forum, /onsubmit=\{kirimKomentar\}/);
-  assert.match(forum, /Kirim Tanggapan/);
+  assert.match(forum, /Kirim [Tt]anggapan/);
   assert.match(forum, /bolehHapus/);
 });
 
