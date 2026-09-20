@@ -228,7 +228,7 @@ const fitur = [
   ["C2 Kalender Kegiatan", ["src/halaman/Kalender.svelte"], ["Kalender kegiatan", "geser(-1)", "geser(1)"]],
   ["C3 Galeri Foto & Video", ["src/halaman/Galeri.svelte"], ["Galeri Foto &amp; Video", "geser(-1)", "geser(1)"]],
   ["C3b Berita & Galeri gabungan", ["src/halaman/GaleriBerita.svelte"], ["Berita &amp; Galeri RW 02", "isi.pengumuman", "isi.galeri"]],
-  ["C4 Forum & Polling Online", ["src/halaman/Forum.svelte", "src/sumber/data.js", "firestore.rules"], ["pilihPolling", "kirimTopikForum", "kirimKomentarForum", "forum_topik", "forum_komentar", "Kirim Tanggapan"]],
+  ["C4 Forum & Polling Online", ["src/halaman/Forum.svelte", "src/sumber/data.js", "firestore.rules"], ["pilihPolling", "kirimTopikForum", "kirimKomentarForum", "forum_topik", "forum_komentar", "Kirim tanggapan"]],
   ["D1 Kas RW", ["src/halaman/Kas.svelte", "src/halaman/Transparansi.svelte"], ["Total pemasukan", "Total pengeluaran", "Saldo"]],
   ["D2 Program", ["src/halaman/Program.svelte", "src/halaman/Transparansi.svelte"], ["Rencana dan realisasi program", "status"]],
   ["E1 Direktori UMKM", ["src/halaman/Umkm.svelte", "src/halaman/DaftarUsaha.svelte"], ["UMKM", "Kirim pendaftaran"]],
